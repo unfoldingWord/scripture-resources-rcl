@@ -1,0 +1,60 @@
+{
+  "name": "scripture-resources-rcl",
+  "description": "A React Component Library for Rendering Scripture Resources.",
+  "homepage": "https://unfoldingword-box3.github.io/scripture-resources-rcl/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unfoldingWord-box3/scripture-resources-rcl"
+  },
+  "version": "0.0.0",
+  "private": false,
+  "license": "MIT",
+  "dependencies": {
+    "@material-ui/core": "^4.4.2",
+    "@material-ui/icons": "^4.4.1",
+    "@material-ui/lab": "^4.0.0-alpha.26",
+    "@material-ui/styles": "^4.4.1",
+    "axios-cache-adapter": "^2.4.1",
+    "js-yaml-parser": "^1.0.0",
+    "jszip": "^3.2.2",
+    "localforage": "^1.7.3",
+    "usfm-js": "^2.0.2"
+  },
+  "scripts": {
+    "start": "styleguidist server",
+    "styleguide:build": "styleguidist build",
+    "predeploy": "yarn styleguide:build",
+    "deploy": "gh-pages -d styleguide",
+    "postpublish": "yarn deploy",
+    "test": "react-scripts test",
+    "build": "react-scripts build",
+    "prepublishOnly": "rm -fr ./dist & babel ./src --out-dir ./dist -s inline"
+  },
+  "eslintConfig": {
+    "extends": "react-app",
+    "plugins": [
+      "react-hooks"
+    ]
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "eslint-config-react-app": "^5.0.1",
+    "eslint-plugin-react-hooks": "^1.0.1",
+    "ghpages": "^0.0.10",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "^3.1.1",
+    "react-styleguidist": "^9.1.16"
+  }
+}
