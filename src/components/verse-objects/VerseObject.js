@@ -6,18 +6,20 @@ import {
   TextObject,
   WordObject,
   AlignedWordsObject,
+  SectionObject,
 } from '.';
 
 function VerseObject({
   verseObject,
   originalWords=[],
+  inline,
 }) {
   const {type} = verseObject;
   let component;
 
   switch (type) {
     case 'text':
-      component = <TextObject verseObject={verseObject} />;
+      component = <TextObject verseObject={verseObject} inline={inline} />;
       break;
     case 'quote':
       component = <TextObject verseObject={verseObject} />;
@@ -43,10 +45,10 @@ function VerseObject({
       }
       break;
     case 'section':
-      component = <span/>;
+      component = <SectionObject verseObject={verseObject} />;
       break;
     case 'paragraph':
-      component = <span/>;
+      component = <div/>;
       break;
     case 'footnote':
       component = <sup>f</sup>;
@@ -86,6 +88,7 @@ VerseObject.propTypes = {
     occurrences: PropTypes.number,
   }).isRequired,
   originalWords: PropTypes.array,
+  inline: PropTypes.bool,
 };
 
 export default VerseObject;

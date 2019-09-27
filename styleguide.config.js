@@ -12,19 +12,46 @@ let sections = [
     content: 'README.md',
   },
   {
-    name: 'Verse Objects',
+    name: 'Chapters',
+    content: 'src/components/chapters/_readme.md',
     components: () => {
       const componentNames = [
-        'verse-object',
-        'text-object',
-        'word-object',
-        'milestone-object',
-        'aligned-words-object',
-        'original-word-object',
+        'Chapters',
+        'Chapter',
       ];
       return componentNames.map(componentName => {
-        const filename = upperFirst(camelCase(componentName));
-        return Path.resolve(__dirname, `src/components/verse-object`, `${filename}.js`)
+        return Path.resolve(__dirname, `src/components/chapters`, `${componentName}.js`)
+      });
+    }
+  },
+  {
+    name: 'Verses',
+    content: 'src/components/verses/_readme.md',
+    components: () => {
+      const componentNames = [
+        'Verses',
+        'Verse',
+      ];
+      return componentNames.map(componentName => {
+        return Path.resolve(__dirname, `src/components/verses`, `${componentName}.js`)
+      });
+    }
+  },
+  {
+    name: 'Verse Objects',
+    content: 'src/components/verse-objects/_readme.md',
+    components: () => {
+      const componentNames = [
+        'VerseObjects',
+        'VerseObject',
+        'TextObject',
+        'WordObject',
+        'MilestoneObject',
+        'AlignedWordsObject',
+        'OriginalWordObject',
+      ];
+      return componentNames.map(componentName => {
+        return Path.resolve(__dirname, `src/components/verse-objects`, `${componentName}.js`)
       });
     }
   },
