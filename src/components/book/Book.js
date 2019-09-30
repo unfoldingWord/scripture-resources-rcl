@@ -13,7 +13,8 @@ import {
 export const Book = ({
   headers,
   chapters,
-  ...props
+  inline,
+  renderOffscreen,
 }) => {
   const classes = useStyles();
 
@@ -23,7 +24,8 @@ export const Book = ({
   const _chapters = (
     <Chapters
       chapters={chapters}
-      {...props}
+      inline={inline}
+      renderOffscreen={renderOffscreen}
     />
   );
 
@@ -39,6 +41,9 @@ export const Book = ({
 Book.propTypes = {
   headers: PropTypes.array.isRequired,
   chapters: PropTypes.object.isRequired,
+  inline: PropTypes.bool,
+  /** set to true to bypass rendering only when visible */
+  renderOffscreen: PropTypes.bool, 
 };
 
 const useStyles = makeStyles(theme => ({

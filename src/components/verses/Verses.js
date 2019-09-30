@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 
-import { Verse } from './Verse';
+import { Verse } from '.';
 
 export const Verses = ({
   verses,
-  ...props
+  inline,
 }) => {
   const classes = useStyles();
   let [_verses, setVerses] = useState();
@@ -17,14 +17,16 @@ export const Verses = ({
     let __verses = [];
     Object.keys(verses).forEach((verseKey, index) => {
       const {verseObjects} = verses[verseKey];
-      const verse = <Verse key={index} verseKey={verseKey} verseObjects={verseObjects} {...props} />;
+      const verse = (
+        <Verse key={index} verseKey={verseKey} verseObjects={verseObjects} inline={inline} />
+      );
       if (verseKey === 'front') setFront(verse);
       else if (verseKey === 'back') setBack(verse);
       else __verses.push(verse);
     });
 
     setVerses(__verses);
-  }, [verses, props]);
+  }, [verses, inline]);
 
   return (
     <div className={classes.verses} dir='auto'>
@@ -37,6 +39,7 @@ export const Verses = ({
 
 Verses.propTypes = {
   verses: PropTypes.object.isRequired,
+  inline: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({
