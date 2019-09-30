@@ -7,6 +7,8 @@ import {
   WordObject,
   AlignedWordsObject,
   SectionObject,
+  FootnoteObject,
+  UnsupportedObject,
 } from '.';
 
 function VerseObject({
@@ -51,17 +53,11 @@ function VerseObject({
       component = <div/>;
       break;
     case 'footnote':
-      component = <sup>f</sup>;
+      component = <FootnoteObject verseObject={verseObject} />;
       break;
     default:
       debugger
-      component = (
-        <span>
-          <sup>*</sup>
-          <TextObject verseObject={verseObject} />
-          <sup>*</sup>
-        </span>
-      );
+      component = <UnsupportedObject verseObject={verseObject} />;
       break;
   };
 

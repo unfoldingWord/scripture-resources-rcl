@@ -12,12 +12,24 @@ let sections = [
     content: 'README.md',
   },
   {
-    name: 'Chapters',
+    name: 'Book ',
+    content: 'src/components/book/_readme.md',
+    components: () => {
+      const componentNames = [
+        'Book',
+      ];
+      return componentNames.map(componentName => {
+        return Path.resolve(__dirname, `src/components/book`, `${componentName}.js`)
+      });
+    }
+  },
+  {
+    name: 'Chapters ',
     content: 'src/components/chapters/_readme.md',
     components: () => {
       const componentNames = [
-        'Chapters',
         'Chapter',
+        'Chapters',
       ];
       return componentNames.map(componentName => {
         return Path.resolve(__dirname, `src/components/chapters`, `${componentName}.js`)
@@ -25,12 +37,12 @@ let sections = [
     }
   },
   {
-    name: 'Verses',
+    name: 'Verses ',
     content: 'src/components/verses/_readme.md',
     components: () => {
       const componentNames = [
-        'Verses',
         'Verse',
+        'Verses',
       ];
       return componentNames.map(componentName => {
         return Path.resolve(__dirname, `src/components/verses`, `${componentName}.js`)
@@ -49,6 +61,8 @@ let sections = [
         'MilestoneObject',
         'AlignedWordsObject',
         'OriginalWordObject',
+        'SectionObject',
+        'FootnoteObject',
       ];
       return componentNames.map(componentName => {
         return Path.resolve(__dirname, `src/components/verse-objects`, `${componentName}.js`)

@@ -1,0 +1,1 @@
+Book will render Chapters component.

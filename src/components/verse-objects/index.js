@@ -6,3 +6,5 @@ export {default as AlignedWordsObject} from './AlignedWordsObject';
 export {default as OriginalWordObject} from './OriginalWordObject';
 export {default as MilestoneObject} from './MilestoneObject';
 export {default as SectionObject} from './SectionObject';
+export {default as FootnoteObject} from './FootnoteObject';
+export {default as UnsupportedObject} from './UnsupportedObject';

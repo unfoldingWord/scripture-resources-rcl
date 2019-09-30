@@ -6,7 +6,7 @@ import { Chapter } from './Chapter';
 
 export const Chapters = ({
   chapters,
-  inline,
+  ...props
 }) => {
   const classes = useStyles();
   let front, back;
@@ -14,7 +14,7 @@ export const Chapters = ({
   Object.keys(chapters).forEach((chapterKey, index) => {
     const chapter = chapters[chapterKey];
     const _chapter = (
-      <Chapter key={index} chapterKey={chapterKey} chapter={chapter} inline={inline} />
+      <Chapter key={index} chapterKey={chapterKey} chapter={chapter} {...props} />
     );
     if (chapterKey === 'front') front = _chapter;
     else if (chapterKey === 'back') back = _chapter;
@@ -31,7 +31,6 @@ export const Chapters = ({
 
 Chapters.propTypes = {
   chapters: PropTypes.object.isRequired,
-  inline: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({
