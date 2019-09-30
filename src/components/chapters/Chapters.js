@@ -6,8 +6,9 @@ import { Chapter } from './Chapter';
 
 export const Chapters = ({
   chapters,
-  inline,
+  paragraphs,
   renderOffscreen,
+  showUnsupported,
 }) => {
   const classes = useStyles();
   const [_chapters, setChapters] = useState([]);
@@ -20,14 +21,15 @@ export const Chapters = ({
           key={chapterKey}
           chapterKey={chapterKey}
           chapter={chapter}
-          inline={inline}
+          paragraphs={paragraphs}
           renderOffscreen={renderOffscreen}
+          showUnsupported={showUnsupported}
         />
       );
       return _chapter
     });
     setChapters(__chapters);
-  }, [chapters, inline, renderOffscreen]);
+  }, [chapters, paragraphs, renderOffscreen, showUnsupported]);
 
   return (
     <div className={classes.chapters} dir='auto'>
@@ -38,9 +40,12 @@ export const Chapters = ({
 
 Chapters.propTypes = {
   chapters: PropTypes.object.isRequired,
-  inline: PropTypes.bool,
-  /** set to true to bypass rendering only when visible */
-  renderOffscreen: PropTypes.bool, 
+  /** render verses paragraphs, use explicit paragraphs */
+  paragraphs: PropTypes.bool,
+  /** bypass rendering only when visible */
+  renderOffscreen: PropTypes.bool,
+  /** render unsupported usfm markers */ 
+  showUnsupported: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({

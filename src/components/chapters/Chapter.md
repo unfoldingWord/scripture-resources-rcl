@@ -7,5 +7,5 @@ const {chapters} = usfmJSON;
 const chapterKey = '1';
 const chapter = chapters[chapterKey];
 
-<Chapter chapterKey={chapterKey} chapter={chapter} inline={true} />
+<Chapter chapterKey={chapterKey} chapter={chapter} paragraphs showUnsupported />
 ```

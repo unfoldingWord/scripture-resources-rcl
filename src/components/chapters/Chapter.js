@@ -14,8 +14,9 @@ import { Verses } from '../verses/Verses';
 export const Chapter = ({
   chapterKey,
   chapter,
-  inline,
+  paragraphs,
   renderOffscreen,
+  showUnsupported,
 }) => {
   const classes = useStyles();
   const height = Object.keys(chapter).length * 20;
@@ -29,10 +30,16 @@ export const Chapter = ({
 
   useEffect(() => {
     if (viewed) {
-      const _verses = <Verses verses={chapter} inline={inline} />;
+      const _verses = (
+        <Verses
+          verses={chapter}
+          paragraphs={paragraphs}
+          showUnsupported={showUnsupported}
+        />
+      );
       setVerses(_verses);
     }
-  }, [chapterKey, chapter, inline, viewed]);
+  }, [chapterKey, chapter, paragraphs, viewed, showUnsupported]);
 
   return (
     <div className={classes.chapter} dir='auto'>
@@ -49,9 +56,12 @@ export const Chapter = ({
 Chapter.propTypes = {
   chapterKey: PropTypes.string.isRequired,
   chapter: PropTypes.object.isRequired,
-  inline: PropTypes.bool,
-  /** set to true to bypass rendering only when visible */
-  renderOffscreen: PropTypes.bool, 
+  /** render verses paragraphs, use explicit paragraphs */
+  paragraphs: PropTypes.bool,
+  /** bypass rendering only when visible */
+  renderOffscreen: PropTypes.bool,
+  /** render unsupported usfm markers */ 
+  showUnsupported: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({

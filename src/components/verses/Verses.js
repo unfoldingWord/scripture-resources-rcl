@@ -6,7 +6,8 @@ import { Verse } from '.';
 
 export const Verses = ({
   verses,
-  inline,
+  paragraphs,
+  showUnsupported,
 }) => {
   const classes = useStyles();
   let [_verses, setVerses] = useState();
@@ -18,7 +19,13 @@ export const Verses = ({
     Object.keys(verses).forEach((verseKey, index) => {
       const {verseObjects} = verses[verseKey];
       const verse = (
-        <Verse key={index} verseKey={verseKey} verseObjects={verseObjects} inline={inline} />
+        <Verse
+          key={index}
+          verseKey={verseKey}
+          verseObjects={verseObjects}
+          paragraphs={paragraphs}
+          showUnsupported={showUnsupported}
+        />
       );
       if (verseKey === 'front') setFront(verse);
       else if (verseKey === 'back') setBack(verse);
@@ -26,7 +33,7 @@ export const Verses = ({
     });
 
     setVerses(__verses);
-  }, [verses, inline]);
+  }, [verses, paragraphs, showUnsupported]);
 
   return (
     <div className={classes.verses} dir='auto'>
@@ -39,7 +46,12 @@ export const Verses = ({
 
 Verses.propTypes = {
   verses: PropTypes.object.isRequired,
-  inline: PropTypes.bool,
+  /** render verses paragraphs, use explicit paragraphs */
+  paragraphs: PropTypes.bool,
+  /** bypass rendering only when visible */
+  renderOffscreen: PropTypes.bool,
+  /** render unsupported usfm markers */ 
+  showUnsupported: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({

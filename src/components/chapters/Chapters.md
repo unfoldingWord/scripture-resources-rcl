@@ -5,5 +5,5 @@ import usfm from '../mocks/hi_tit.usfm.js';
 const usfmJSON = usfmJS.toJSON(usfm);
 const {chapters} = usfmJSON;
 
-<Chapters chapters={chapters} inline={true} />
+<Chapters chapters={chapters} paragraphs showUnsupported />
 ```

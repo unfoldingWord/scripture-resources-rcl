@@ -14,14 +14,15 @@ import {
 function VerseObject({
   verseObject,
   originalWords=[],
-  inline,
+  paragraphs,
+  showUnsupported,
 }) {
   const {type} = verseObject;
   let component;
 
   switch (type) {
     case 'text':
-      component = <TextObject verseObject={verseObject} inline={inline} />;
+      component = <TextObject verseObject={verseObject} paragraphs={paragraphs} />;
       break;
     case 'quote':
       component = <TextObject verseObject={verseObject} />;
@@ -56,8 +57,7 @@ function VerseObject({
       component = <FootnoteObject verseObject={verseObject} />;
       break;
     default:
-      debugger
-      component = <UnsupportedObject verseObject={verseObject} />;
+      if (showUnsupported) component = <UnsupportedObject verseObject={verseObject} />;
       break;
   };
 
@@ -84,7 +84,10 @@ VerseObject.propTypes = {
     occurrences: PropTypes.number,
   }).isRequired,
   originalWords: PropTypes.array,
-  inline: PropTypes.bool,
+  /** render verses paragraphs, use explicit paragraphs */
+  paragraphs: PropTypes.bool,
+  /** render unsupported usfm markers */ 
+  showUnsupported: PropTypes.bool,
 };
 
 export default VerseObject;

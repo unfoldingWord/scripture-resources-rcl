@@ -5,14 +5,16 @@ import {VerseObject} from '.';
 
 export const VerseObjects = ({
   verseObjects,
-  inline,
+  paragraphs,
+  showUnsupported,
 }) => {
 
   const verseObjectComponents = verseObjects.map((verseObject, index) =>
     <VerseObject
       key={index}
       verseObject={verseObject}
-      inline={inline}
+      paragraphs={paragraphs}
+      showUnsupported={showUnsupported}
     />
   );
 
@@ -25,7 +27,10 @@ export const VerseObjects = ({
 
 VerseObjects.propTypes = {
   verseObjects: PropTypes.array.isRequired,
-  inline: PropTypes.bool,
+  /** render verses paragraphs, use explicit paragraphs */
+  paragraphs: PropTypes.bool,
+  /** render unsupported usfm markers */ 
+  showUnsupported: PropTypes.bool,
 };
 
 export default VerseObjects;

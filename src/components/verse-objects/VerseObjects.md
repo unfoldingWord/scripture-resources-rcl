@@ -122,5 +122,5 @@ const verseObjects = [
   }
 ];
 
-<VerseObjects verseObjects={verseObjects} />
+<VerseObjects verseObjects={verseObjects} showUnsupported />
 ```

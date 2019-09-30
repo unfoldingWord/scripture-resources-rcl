@@ -61,7 +61,11 @@ function MilestoneObject ({
       break;
   }
 
-  return component;
+  return (
+    <>
+      {component}
+    </>
+  );
 };
 
 MilestoneObject.propTypes = {

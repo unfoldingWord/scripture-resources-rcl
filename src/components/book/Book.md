@@ -5,5 +5,5 @@ import usfm from '../mocks/en_psa.usfm.js';
 const usfmJSON = usfmJS.toJSON(usfm);
 const {headers, chapters} = usfmJSON;
 
-<Book headers={headers} chapters={chapters} inline={true} />
+<Book headers={headers} chapters={chapters} paragraphs showUnsupported />
 ```

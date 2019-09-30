@@ -17,5 +17,5 @@ const verseObjects = [
   }
 ];
 
-<Verse verseKey={verseKey} verseObjects={verseObjects} />
+<Verse verseKey={verseKey} verseObjects={verseObjects} showUnsupported />
 ```

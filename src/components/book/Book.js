@@ -13,19 +13,21 @@ import {
 export const Book = ({
   headers,
   chapters,
-  inline,
+  paragraphs,
   renderOffscreen,
+  showUnsupported,
 }) => {
   const classes = useStyles();
 
-  const bookHeaders = <VerseObjects verseObjects={headers} />;
+  const bookHeaders = <VerseObjects verseObjects={headers} showUnsupported={showUnsupported} />;
   const bookName = headers.filter(header => header.tag === 'h')[0].content;
 
   const _chapters = (
     <Chapters
       chapters={chapters}
-      inline={inline}
+      paragraphs={paragraphs}
       renderOffscreen={renderOffscreen}
+      showUnsupported={showUnsupported}
     />
   );
 
@@ -41,9 +43,12 @@ export const Book = ({
 Book.propTypes = {
   headers: PropTypes.array.isRequired,
   chapters: PropTypes.object.isRequired,
-  inline: PropTypes.bool,
-  /** set to true to bypass rendering only when visible */
-  renderOffscreen: PropTypes.bool, 
+  /** render verses paragraphs, use explicit paragraphs */
+  paragraphs: PropTypes.bool,
+  /** bypass rendering only when visible */
+  renderOffscreen: PropTypes.bool,
+  /** render unsupported usfm markers */ 
+  showUnsupported: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({

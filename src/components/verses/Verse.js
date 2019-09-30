@@ -10,7 +10,8 @@ import {VerseObjects} from '../verse-objects';
 export const Verse = ({
   verseKey,
   verseObjects,
-  inline,
+  paragraphs,
+  showUnsupported,
 }) => {
   const classes = useStyles();
   const width = `${((Math.random() +1)/2 * 100).toFixed(0)}%`;
@@ -25,11 +26,15 @@ export const Verse = ({
     const _verse = (
       <>
         {verseNumber}
-        <VerseObjects verseObjects={verseObjects} inline={inline} />
+        <VerseObjects
+          verseObjects={verseObjects}
+          paragraphs={paragraphs}
+          showUnsupported={showUnsupported}
+        />
       </>
     );
     setVerse(_verse);
-  }, [verseKey, verseObjects, inline]);
+  }, [verseKey, verseObjects, paragraphs, showUnsupported]);
 
   return (
     <span className={classes.verse} dir='auto'>
@@ -41,7 +46,12 @@ export const Verse = ({
 Verse.propTypes = {
   verseKey: PropTypes.string.isRequired,
   verseObjects: PropTypes.array.isRequired,
-  inline: PropTypes.bool,
+  /** render verses paragraphs, use explicit paragraphs */
+  paragraphs: PropTypes.bool,
+  /** bypass rendering only when visible */
+  renderOffscreen: PropTypes.bool,
+  /** render unsupported usfm markers */ 
+  showUnsupported: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({

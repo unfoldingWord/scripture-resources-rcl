@@ -149,7 +149,7 @@ const styles = {
         }
       },
       '& .rsg-logo-name, & .rsg-logo-version': {
-        display: 'inline-block',
+        display: 'paragraphs-block',
         verticalAlign: 'middle',
         pointerEvents: 'none'
       },
