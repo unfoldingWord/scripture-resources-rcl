@@ -18,7 +18,7 @@
     "js-yaml-parser": "^1.0.0",
     "jszip": "^3.2.2",
     "localforage": "^1.7.3",
-    "react-visibility-sensor": "^5.1.1",
+    "react-waypoint": "^9.0.2",
     "usfm-js": "^2.0.2"
   },
   "scripts": {

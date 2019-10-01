@@ -28,7 +28,7 @@ function FootnoteObject ({
     <>
       <Badge
         className={classes.badge}
-        badgeContent={verseObject.tag}
+        badgeContent="fn"
         color="primary"
         aria-describedby={id}
         variant="standard"

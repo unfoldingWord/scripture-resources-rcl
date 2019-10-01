@@ -63,6 +63,7 @@ let sections = [
         'OriginalWordObject',
         'SectionObject',
         'FootnoteObject',
+        'UnsupportedObject'
       ];
       return componentNames.map(componentName => {
         return Path.resolve(__dirname, `src/components/verse-objects`, `${componentName}.js`)

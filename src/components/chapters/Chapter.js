@@ -7,7 +7,7 @@ import {
 import {
   Skeleton,
 } from '@material-ui/lab';
-import VisibilitySensor from 'react-visibility-sensor';
+import {Waypoint} from 'react-waypoint';
 
 import { Verses } from '../verses/Verses';
 
@@ -19,14 +19,19 @@ export const Chapter = ({
   showUnsupported,
 }) => {
   const classes = useStyles();
-  const height = Object.keys(chapter).length * 20;
-  const skeleton = <Skeleton height={height} width='100%' className={classes.skeleton} />;
-  const [verses, setVerses] = useState(skeleton);
   const [viewed, setViewed] = useState(renderOffscreen);
-
+  
   const onVisibility = (isVisible) => {
     if (isVisible) setViewed(true);
-  }
+  };
+  const height = Object.keys(chapter).length * 20;
+  const skeleton = (
+    <>
+      <Waypoint onEnter={onVisibility} />
+      <Skeleton height={height} width='100%' className={classes.skeleton} />
+    </>
+  );
+  const [verses, setVerses] = useState(skeleton);
 
   useEffect(() => {
     if (viewed) {
@@ -44,11 +49,7 @@ export const Chapter = ({
   return (
     <div className={classes.chapter} dir='auto'>
       <Typography variant='h3'>{chapterKey}</Typography>
-      <VisibilitySensor onChange={onVisibility} partialVisibility={true}>
-        <>
-          {verses}
-        </>
-      </VisibilitySensor>
+      {verses}
     </div>
   );
 };

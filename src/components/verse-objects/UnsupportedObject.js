@@ -62,9 +62,9 @@ function UnsupportedObject ({
 
 UnsupportedObject.propTypes = {
   verseObject: PropTypes.shape({
-    tag: PropTypes.string,
-    type: PropTypes.string,
+    tag: PropTypes.string.isRequired,
     content: PropTypes.string,
+    text: PropTypes.string,
   }).isRequired,
 };
 
