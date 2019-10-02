@@ -10,7 +10,7 @@ function TextObject ({
     let _line;
     if (paragraphs && index === (lines.length - 1)) _line = <Fragment key={index}>{line} </Fragment>;
     else if (index === 0) _line = <Fragment key={index}>{line}</Fragment>;
-    else _line = <Fragment key={index}>{[<br/>, line]}</Fragment>;
+    else _line = <Fragment key={index}>{[<br key={Math.random()}/>, line]}</Fragment>;
     return _line;
   });
 

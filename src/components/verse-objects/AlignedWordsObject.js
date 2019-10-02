@@ -27,7 +27,7 @@ function AlignedWordsObject ({
   
   const open = Boolean(anchorEl);
   return (
-    <span>
+    <>
       <span
         aria-owns={open ? 'mouse-over-popover' : undefined}
         aria-haspopup="true"
@@ -66,7 +66,7 @@ function AlignedWordsObject ({
         )
       }
       </Popover>
-    </span>
+    </>
   );
 }
 

@@ -5,9 +5,9 @@ export const WordObject = ({
   verseObject,
 }) => {
   return (
-    <span>
+    <>
       {verseObject.text || verseObject.content}
-    </span>
+    </>
   );
 };
 

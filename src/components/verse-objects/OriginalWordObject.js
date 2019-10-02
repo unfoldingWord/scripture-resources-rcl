@@ -24,11 +24,11 @@ function OriginalWordObject ({
   return (
     <div>
       <Typography>
-        <span><strong>{verseObject.text || verseObject.content}</strong> -</span>
-        <span> <em>lemma:</em> {verseObject.lemma}</span>
-        <span> <em>strong:</em> {verseObject.strong}</span>
+        <><strong>{verseObject.text || verseObject.content}</strong> -</>
+        <> <em>lemma:</em> {verseObject.lemma}</>
+        <> <em>strong:</em> {verseObject.strong}</>
         <br/>
-        <span> <em>morph:</em> {verseObject.morph}</span>
+        <> <em>morph:</em> {verseObject.morph}</>
       </Typography>
       {
         senses.map((sense, index) =>
@@ -36,12 +36,12 @@ function OriginalWordObject ({
             <sup>{index + 1}</sup>
             {
               sense.gloss ?
-              <span> <em>Gloss:</em> {sense.gloss}</span>
+              <> <em>Gloss:</em> {sense.gloss}</>
               : ''
             }
             {
               sense.definition ?
-              <span> <em>Definition:</em> {sense.definition}</span>
+              <> <em>Definition:</em> {sense.definition}</>
               : ''
             }
           </Typography>

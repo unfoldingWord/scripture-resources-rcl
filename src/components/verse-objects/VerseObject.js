@@ -61,13 +61,11 @@ function VerseObject({
       break;
   };
 
-  const verseObjectJSON = JSON.stringify(verseObject);
-
   return (
-    <span data-verse-object={verseObjectJSON}>
+    <>
       {component}
       {verseObject.nextChar}
-    </span>
+    </>
   );
 };
 

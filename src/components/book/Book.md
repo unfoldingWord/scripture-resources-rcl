@@ -26,3 +26,17 @@ const {headers, chapters} = usfmJSON;
   <Book headers={headers} chapters={chapters} paragraphs showUnsupported />
 </div>
 ```
+
+## Hebrew Example
+
+```js
+var usfmJS = require('usfm-js');
+import usfm from '../mocks/uhb_rut.usfm.js';
+
+const usfmJSON = usfmJS.toJSON(usfm);
+const {headers, chapters} = usfmJSON;
+
+<div style={{height: '300px', overflow: 'scroll'}}>
+  <Book headers={headers} chapters={chapters} paragraphs showUnsupported />
+</div>
+```

@@ -23,6 +23,7 @@ export const Verse = ({
     if (!['front','back'].includes(verseKey)) {
       verseNumber = <sup>{verseKey} </sup>;
     }
+
     const _verse = (
       <>
         {verseNumber}
@@ -36,10 +37,13 @@ export const Verse = ({
     setVerse(_verse);
   }, [verseKey, verseObjects, paragraphs, showUnsupported]);
 
+  const style = {};
+  if (paragraphs) style.display = 'inline';
+
   return (
-    <span className={classes.verse} dir='auto'>
+    <div className={classes.verse} style={style} dir="auto">
       {verse}
-    </span>
+    </div>
   );
 };
 
