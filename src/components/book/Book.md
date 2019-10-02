@@ -35,8 +35,9 @@ import usfm from '../mocks/uhb_rut.usfm.js';
 
 const usfmJSON = usfmJS.toJSON(usfm);
 const {headers, chapters} = usfmJSON;
+const direction = 'rtl';
 
 <div style={{height: '300px', overflow: 'scroll'}}>
-  <Book headers={headers} chapters={chapters} paragraphs showUnsupported />
+  <Book headers={headers} chapters={chapters} paragraphs showUnsupported direction={direction} />
 </div>
 ```

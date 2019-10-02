@@ -16,6 +16,7 @@ export const Book = ({
   paragraphs,
   renderOffscreen,
   showUnsupported,
+  direction,
 }) => {
   const classes = useStyles();
 
@@ -28,6 +29,7 @@ export const Book = ({
       paragraphs={paragraphs}
       renderOffscreen={renderOffscreen}
       showUnsupported={showUnsupported}
+      direction={direction}
     />
   );
 
@@ -49,6 +51,8 @@ Book.propTypes = {
   renderOffscreen: PropTypes.bool,
   /** render unsupported usfm markers */ 
   showUnsupported: PropTypes.bool,
+  /** override text direction detection */
+  direction: PropTypes.string,
 };
 
 const useStyles = makeStyles(theme => ({

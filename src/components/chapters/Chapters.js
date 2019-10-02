@@ -9,6 +9,7 @@ export const Chapters = ({
   paragraphs,
   renderOffscreen,
   showUnsupported,
+  direction,
 }) => {
   const classes = useStyles();
   const [_chapters, setChapters] = useState([]);
@@ -24,12 +25,13 @@ export const Chapters = ({
           paragraphs={paragraphs}
           renderOffscreen={renderOffscreen}
           showUnsupported={showUnsupported}
+          direction={direction}
         />
       );
       return _chapter
     });
     setChapters(__chapters);
-  }, [chapters, paragraphs, renderOffscreen, showUnsupported]);
+  }, [chapters, paragraphs, renderOffscreen, direction, showUnsupported]);
 
   return (
     <div className={classes.chapters} dir='auto'>
@@ -46,6 +48,8 @@ Chapters.propTypes = {
   renderOffscreen: PropTypes.bool,
   /** render unsupported usfm markers */ 
   showUnsupported: PropTypes.bool,
+  /** override text direction detection */
+  direction: PropTypes.string,
 };
 
 const useStyles = makeStyles(theme => ({

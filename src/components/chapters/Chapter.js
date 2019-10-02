@@ -17,6 +17,7 @@ export const Chapter = ({
   paragraphs,
   renderOffscreen,
   showUnsupported,
+  direction,
 }) => {
   const classes = useStyles();
   const [viewed, setViewed] = useState(renderOffscreen);
@@ -40,14 +41,15 @@ export const Chapter = ({
           verses={chapter}
           paragraphs={paragraphs}
           showUnsupported={showUnsupported}
+          direction={direction}
         />
       );
       setVerses(_verses);
     }
-  }, [chapterKey, chapter, paragraphs, viewed, showUnsupported]);
+  }, [chapterKey, chapter, paragraphs, viewed, showUnsupported, direction]);
 
   return (
-    <div className={classes.chapter} dir='auto'>
+    <div className={classes.chapter} dir={direction}>
       <Typography variant='h3'>{chapterKey}</Typography>
       {verses}
     </div>
@@ -63,6 +65,8 @@ Chapter.propTypes = {
   renderOffscreen: PropTypes.bool,
   /** render unsupported usfm markers */ 
   showUnsupported: PropTypes.bool,
+  /** override text direction detection */
+  direction: PropTypes.string,
 };
 
 const useStyles = makeStyles(theme => ({
