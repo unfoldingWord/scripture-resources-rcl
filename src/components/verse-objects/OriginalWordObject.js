@@ -1,52 +1,32 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Typography,
 } from '@material-ui/core';
 
-import * as lexicon from '../../core/lexicon';
-
 function OriginalWordObject ({
   verseObject,
   verseObject: {
+    content,
+    text,
     strong,
+    lemma,
+    morph,
   }
 }) {
-  const [senses, setSenses] = useState([]);
 
-  useEffect(()=> {
-    lexicon.senses({strong})
-    .then(senses => {
-      setSenses(senses);
-    }).catch(console.log);
-  }, [strong]);
-
+  const _text = text || content;
+  const _lemma = lemma ? <><br/><em>lemma:</em> {lemma}</> : '';
+  const _strong = strong ? <><br/><em>strong:</em> {strong}</> : '';
+  const _morph = morph ? <><br/><em>morph:</em> {morph}</> : '';
   return (
     <div>
       <Typography>
-        <><strong>{verseObject.text || verseObject.content}</strong> -</>
-        <> <em>lemma:</em> {verseObject.lemma}</>
-        <> <em>strong:</em> {verseObject.strong}</>
-        <br/>
-        <> <em>morph:</em> {verseObject.morph}</>
+        <><strong>{_text}</strong></>
+        {_lemma}
+        {_strong}
+        {_morph}
       </Typography>
-      {
-        senses.map((sense, index) =>
-          <Typography key={index}>
-            <sup>{index + 1}</sup>
-            {
-              sense.gloss ?
-              <> <em>Gloss:</em> {sense.gloss}</>
-              : ''
-            }
-            {
-              sense.definition ?
-              <> <em>Definition:</em> {sense.definition}</>
-              : ''
-            }
-          </Typography>
-        )
-      }
     </div>
   );
 };

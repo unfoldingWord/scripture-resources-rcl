@@ -72,6 +72,8 @@ const useStyles = makeStyles(theme => ({
   },
   badge: {
     margin: theme.spacing(1),
+    top: theme.spacing(1),
+    right: theme.spacing(0.25),
   },
 }));
 
