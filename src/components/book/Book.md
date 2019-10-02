@@ -4,12 +4,11 @@
 var usfmJS = require('usfm-js');
 import usfm from '../mocks/en_psa.usfm.js';
 
-const usfmJSON = usfmJS.toJSON(usfm);
-const {headers, chapters} = usfmJSON;
+const book = usfmJS.toJSON(usfm);
 
 let element;
 <div style={{height: '300px', overflow: 'scroll'}}>
-  <Book headers={headers} chapters={chapters} containmentElement={element} paragraphs showUnsupported />
+  <Book book={book} containmentElement={element} paragraphs showUnsupported />
 </div>
 ```
 
@@ -19,11 +18,10 @@ let element;
 var usfmJS = require('usfm-js');
 import usfm from '../mocks/en_rev.usfm.js';
 
-const usfmJSON = usfmJS.toJSON(usfm);
-const {headers, chapters} = usfmJSON;
+const book = usfmJS.toJSON(usfm);
 
 <div style={{height: '300px', overflow: 'scroll'}}>
-  <Book headers={headers} chapters={chapters} paragraphs showUnsupported />
+  <Book book={book} paragraphs showUnsupported />
 </div>
 ```
 
@@ -33,11 +31,10 @@ const {headers, chapters} = usfmJSON;
 var usfmJS = require('usfm-js');
 import usfm from '../mocks/uhb_rut.usfm.js';
 
-const usfmJSON = usfmJS.toJSON(usfm);
-const {headers, chapters} = usfmJSON;
+const book = usfmJS.toJSON(usfm);
 const direction = 'rtl';
 
 <div style={{height: '300px', overflow: 'scroll'}}>
-  <Book headers={headers} chapters={chapters} paragraphs showUnsupported direction={direction} />
+  <Book book={book} showUnsupported direction={direction} />
 </div>
 ```

@@ -11,8 +11,10 @@ import {
 } from '..';
 
 export const Book = ({
-  headers,
-  chapters,
+  book: {
+    headers,
+    chapters,
+  },
   paragraphs,
   renderOffscreen,
   showUnsupported,
@@ -45,8 +47,10 @@ export const Book = ({
 };
 
 Book.propTypes = {
-  headers: PropTypes.array.isRequired,
-  chapters: PropTypes.object.isRequired,
+  book: PropTypes.shape({
+    headers: PropTypes.array.isRequired,
+    chapters: PropTypes.object.isRequired,
+  }),
   /** render verses paragraphs, use explicit paragraphs */
   paragraphs: PropTypes.bool,
   /** bypass rendering only when visible */
