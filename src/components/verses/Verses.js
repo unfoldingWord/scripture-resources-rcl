@@ -10,6 +10,7 @@ export const Verses = ({
   paragraphs,
   showUnsupported,
   direction,
+  disableWordPopover,
 }) => {
   const classes = useStyles();
   let [_verses, setVerses] = useState();
@@ -37,6 +38,7 @@ export const Verses = ({
           verseObjects={verseObjects}
           paragraphs={paragraphs}
           showUnsupported={showUnsupported}
+          disableWordPopover={disableWordPopover}
         />
       );
       if (verseKey === 'front') setFront(verse);
@@ -45,7 +47,7 @@ export const Verses = ({
     });
 
     setVerses(__verses);
-  }, [verses, paragraphs, showUnsupported]);
+  }, [verses, paragraphs, showUnsupported, disableWordPopover]);
 
   return (
     <div className={classes.verses} dir={dir}>
@@ -66,6 +68,8 @@ Verses.propTypes = {
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
+  /** disable popovers for aligned and original language words */
+  disableWordPopover: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({

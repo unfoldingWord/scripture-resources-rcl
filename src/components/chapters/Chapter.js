@@ -18,6 +18,7 @@ export const Chapter = ({
   renderOffscreen,
   showUnsupported,
   direction,
+  disableWordPopover,
 }) => {
   const classes = useStyles();
   const [viewed, setViewed] = useState(renderOffscreen);
@@ -42,11 +43,12 @@ export const Chapter = ({
           paragraphs={paragraphs}
           showUnsupported={showUnsupported}
           direction={direction}
+          disableWordPopover={disableWordPopover}
         />
       );
       setVerses(_verses);
     }
-  }, [chapterKey, chapter, paragraphs, viewed, showUnsupported, direction]);
+  }, [chapterKey, chapter, paragraphs, viewed, showUnsupported, disableWordPopover, direction]);
 
   return (
     <div className={classes.chapter} dir={direction}>
@@ -67,6 +69,8 @@ Chapter.propTypes = {
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
+  /** disable popovers for aligned and original language words */
+  disableWordPopover: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({

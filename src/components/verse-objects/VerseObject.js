@@ -16,6 +16,7 @@ function VerseObject({
   originalWords=[],
   paragraphs,
   showUnsupported,
+  disableWordPopover,
 }) {
   const {type} = verseObject;
   let component;
@@ -32,6 +33,7 @@ function VerseObject({
         <MilestoneObject
           verseObject={verseObject}
           originalWords={originalWords}
+          disableWordPopover={disableWordPopover}
         />
       );
       break;
@@ -41,10 +43,11 @@ function VerseObject({
           <AlignedWordsObject
             children={[verseObject]}
             originalWords={[verseObject]}
+            disableWordPopover={disableWordPopover}
           />
         );
       } else {
-        component = <WordObject verseObject={verseObject} />;
+        component = <WordObject verseObject={verseObject} disableWordPopover={disableWordPopover} />;
       }
       break;
     case 'section':
@@ -86,6 +89,8 @@ VerseObject.propTypes = {
   paragraphs: PropTypes.bool,
   /** render unsupported usfm markers */ 
   showUnsupported: PropTypes.bool,
+  /** disable popovers for aligned and original language words */
+  disableWordPopover: PropTypes.bool,
 };
 
 export default VerseObject;

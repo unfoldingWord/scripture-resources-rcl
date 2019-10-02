@@ -12,6 +12,7 @@ export const Verse = ({
   verseObjects,
   paragraphs,
   showUnsupported,
+  disableWordPopover,
 }) => {
   const classes = useStyles();
   const width = `${((Math.random() +1)/2 * 100).toFixed(0)}%`;
@@ -31,11 +32,12 @@ export const Verse = ({
           verseObjects={verseObjects}
           paragraphs={paragraphs}
           showUnsupported={showUnsupported}
+          disableWordPopover={disableWordPopover}
         />
       </>
     );
     setVerse(_verse);
-  }, [verseKey, verseObjects, paragraphs, showUnsupported]);
+  }, [verseKey, verseObjects, paragraphs, showUnsupported, disableWordPopover]);
 
   const style = {};
   if (paragraphs) style.display = 'inline';
@@ -56,6 +58,8 @@ Verse.propTypes = {
   renderOffscreen: PropTypes.bool,
   /** render unsupported usfm markers */ 
   showUnsupported: PropTypes.bool,
+  /** disable popovers for aligned and original language words */
+  disableWordPopover: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({

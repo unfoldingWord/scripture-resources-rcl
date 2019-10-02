@@ -7,6 +7,7 @@ export const VerseObjects = ({
   verseObjects,
   paragraphs,
   showUnsupported,
+  disableWordPopover,
 }) => {
 
   const verseObjectComponents = verseObjects.map((verseObject, index) =>
@@ -15,6 +16,7 @@ export const VerseObjects = ({
       verseObject={verseObject}
       paragraphs={paragraphs}
       showUnsupported={showUnsupported}
+      disableWordPopover={disableWordPopover}
     />
   );
 
@@ -31,6 +33,8 @@ VerseObjects.propTypes = {
   paragraphs: PropTypes.bool,
   /** render unsupported usfm markers */ 
   showUnsupported: PropTypes.bool,
+  /** disable popovers for aligned and original language words */
+  disableWordPopover: PropTypes.bool,
 };
 
 export default VerseObjects;

@@ -17,6 +17,7 @@ export const Book = ({
   renderOffscreen,
   showUnsupported,
   direction,
+  disableWordPopover,
 }) => {
   const classes = useStyles();
 
@@ -30,6 +31,7 @@ export const Book = ({
       renderOffscreen={renderOffscreen}
       showUnsupported={showUnsupported}
       direction={direction}
+      disableWordPopover={disableWordPopover}
     />
   );
 
@@ -53,6 +55,8 @@ Book.propTypes = {
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
+  /** disable popovers for aligned and original language words */
+  disableWordPopover: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({
