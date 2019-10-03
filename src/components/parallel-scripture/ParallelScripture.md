@@ -25,5 +25,5 @@ const books = [
 ];
 
 
-<ParallelScripture titles={titles} books={books} height='250px' title='Titus' />
+<ParallelScripture titles={titles} books={books} height='250px' title='Titus' disableWordPopover />
 ```

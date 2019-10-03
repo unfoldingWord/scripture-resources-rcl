@@ -55,6 +55,7 @@ function ParallelScripture ({
         Toolbar: props => (
           <MTableToolbar {...props} classes={{ root: classes.toolbar }} />
         ),
+        Container: props => <div {...props} />,
       }}
     />
   );
@@ -76,6 +77,14 @@ ParallelScripture.propTypes = {
     chapter: PropTypes.number,
     verse: PropTypes.number,
   }),
+  /** bypass rendering only when visible */
+  renderOffscreen: PropTypes.bool,
+  /** render unsupported usfm markers */ 
+  showUnsupported: PropTypes.bool,
+  /** override text direction detection */
+  direction: PropTypes.string,
+  /** disable popovers for aligned and original language words */
+  disableWordPopover: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({
