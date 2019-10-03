@@ -1,5 +1,6 @@
 ```js
-var usfmJS = require('usfm-js');
+import {Chapters} from "scripture-resources-rcl";
+import usfmJS from 'usfm-js';
 import usfm from '../mocks/hi_tit.usfm.js';
 
 const usfmJSON = usfmJS.toJSON(usfm);

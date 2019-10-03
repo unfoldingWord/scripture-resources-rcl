@@ -15,12 +15,12 @@ function AlignedWordsObject ({
   originalWords,
   disableWordPopover,
 }) {
-  const [anchorEl, setAnchorEl] = useState();
+  const [anchorEl, setAnchorEl] = useState(null);
   const classes = useStyles();
 
-  const handlePopoverOpen = event => { setAnchorEl(event.currentTarget); };
+  const handleOpen = event => { setAnchorEl(event.currentTarget); };
 
-  const handlePopoverClose = () => { setAnchorEl(null); };
+  const handleClose = () => { setAnchorEl(null); };
 
   const words = children.map((verseObject, index) =>
     <WordObject key={index} verseObject={verseObject} disableWordPopover={disableWordPopover} />
@@ -30,28 +30,30 @@ function AlignedWordsObject ({
 
   if (!disableWordPopover) {
     const open = Boolean(anchorEl);
+    const id = open ? 'popover' : undefined;
     const _originalWords = originalWords.map((verseObject, index) =>
       <OriginalWordObject key={index} verseObject={verseObject} />
     );
     component = (
       <>
         <span
-          aria-owns={open ? 'mouse-over-popover' : undefined}
+          aria-describedby={id}
           aria-haspopup="true"
-          onMouseEnter={handlePopoverOpen}
-          onMouseLeave={handlePopoverClose}
+          onMouseEnter={handleOpen}
+          onMouseLeave={handleClose}
           className={(open ? classes.open : classes.closed)}
         >
           {words}
         </span>
         <Popover
-          id="mouse-over-popover"
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
           className={classes.popover}
           classes={{
             paper: classes.paper,
           }}
-          open={open}
-          anchorEl={anchorEl}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
@@ -60,10 +62,11 @@ function AlignedWordsObject ({
             vertical: 'top',
             horizontal: 'left',
           }}
-          onClose={handlePopoverClose}
           disableRestoreFocus
         >
-        {_originalWords}
+          <>
+            {_originalWords}
+          </>
         </Popover>
       </>
     );

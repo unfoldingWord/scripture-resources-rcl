@@ -13,7 +13,7 @@ function FootnoteObject ({
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = event => {
+  const handleOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -32,7 +32,7 @@ function FootnoteObject ({
         color="primary"
         aria-describedby={id}
         variant="standard"
-        onClick={handleClick}
+        onClick={handleOpen}
       >
         <span>&nbsp;</span>
       </Badge>
@@ -42,7 +42,7 @@ function FootnoteObject ({
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'left',
         }}
         transformOrigin={{

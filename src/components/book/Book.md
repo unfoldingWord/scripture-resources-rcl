@@ -1,22 +1,23 @@
 ## Large Book for testing performance
 
 ```js
-var usfmJS = require('usfm-js');
+import {Book} from "scripture-resources-rcl";
+import usfmJS from 'usfm-js';
 import usfm from '../mocks/en_psa.usfm.js';
 
 const book = usfmJS.toJSON(usfm);
 
-let element;
 <div style={{height: '300px', overflow: 'scroll'}}>
-  <Book book={book} containmentElement={element} paragraphs showUnsupported />
+  <Book book={book} paragraphs showUnsupported />
 </div>
 ```
 
 ## Aligned Example
 
 ```js
-var usfmJS = require('usfm-js');
-import usfm from '../mocks/en_rev.usfm.js';
+import {Book} from "scripture-resources-rcl";
+import usfmJS from 'usfm-js';
+import usfm from '../mocks/hi_aligned_rev.usfm.js';
 
 const book = usfmJS.toJSON(usfm);
 
@@ -28,7 +29,8 @@ const book = usfmJS.toJSON(usfm);
 ## Hebrew Example
 
 ```js
-var usfmJS = require('usfm-js');
+import {Book} from "scripture-resources-rcl";
+import usfmJS from 'usfm-js';
 import usfm from '../mocks/uhb_rut.usfm.js';
 
 const book = usfmJS.toJSON(usfm);

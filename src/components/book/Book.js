@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
-import {
-  Typography,
-} from '@material-ui/core';
 
 import {
+  BookHeaders,
   Chapters,
-  VerseObjects,
 } from '..';
 
 export const Book = ({
@@ -23,8 +20,9 @@ export const Book = ({
 }) => {
   const classes = useStyles();
 
-  const bookHeaders = <VerseObjects verseObjects={headers} showUnsupported={showUnsupported} />;
-  const bookName = headers.filter(header => header.tag === 'h')[0].content;
+  const bookHeaders = (
+    <BookHeaders headers={headers} direction={direction} showUnsupported={showUnsupported} />
+  );
 
   const _chapters = (
     <Chapters
@@ -38,8 +36,7 @@ export const Book = ({
   );
 
   return (
-    <div className={classes.book} dir='auto'>
-      <Typography variant='h2' className={classes.bookName}>{bookName}</Typography>
+    <div className={classes.book} dir={direction || 'auto'}>
       {bookHeaders}
       {_chapters}
     </div>

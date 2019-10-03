@@ -20,14 +20,12 @@ function OriginalWordObject ({
   const _strong = strong ? <><br/><em>strong:</em> {strong}</> : '';
   const _morph = morph ? <><br/><em>morph:</em> {morph}</> : '';
   return (
-    <div>
-      <Typography>
-        <><strong>{_text}</strong></>
-        {_lemma}
-        {_strong}
-        {_morph}
-      </Typography>
-    </div>
+    <Typography>
+      <strong>{_text}</strong>
+      {_lemma}
+      {_strong}
+      {_morph}
+    </Typography>
   );
 };
 

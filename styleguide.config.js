@@ -12,10 +12,23 @@ let sections = [
     content: 'README.md',
   },
   {
+    name: 'Parallel Scripture ',
+    content: 'src/components/parallel-scripture/_readme.md',
+    components: () => {
+      const componentNames = [
+        'ParallelScripture',
+      ];
+      return componentNames.map(componentName => {
+        return Path.resolve(__dirname, `src/components/parallel-scripture`, `${componentName}.js`)
+      });
+    }
+  },
+  {
     name: 'Book ',
     content: 'src/components/book/_readme.md',
     components: () => {
       const componentNames = [
+        'BookHeaders',
         'Book',
       ];
       return componentNames.map(componentName => {
@@ -96,4 +109,7 @@ module.exports = {
   exampleMode: 'expand',
   pagePerSection: true,
   sections,
+  moduleAliases: {
+    "scripture-resources-rcl": Path.resolve(__dirname, "src"),
+  }
 };

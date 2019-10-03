@@ -11,13 +11,14 @@
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^4.4.2",
-    "@material-ui/icons": "^4.4.1",
+    "@material-ui/icons": "^4.4.3",
     "@material-ui/lab": "^4.0.0-alpha.26",
     "@material-ui/styles": "^4.4.1",
     "axios-cache-adapter": "^2.4.1",
     "js-yaml-parser": "^1.0.0",
     "jszip": "^3.2.2",
     "localforage": "^1.7.3",
+    "material-table": "^1.51.0",
     "react-waypoint": "^9.0.2",
     "usfm-js": "^2.0.2"
   },
