@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import MaterialTable, {MTableToolbar} from 'material-table';
 
-import {Verse} from '..';
+import {Verse, Row} from '..';
 import {dataFromBooks, tableIcons} from './helpers';
 
 function ParallelScripture ({
@@ -11,31 +11,47 @@ function ParallelScripture ({
   titles,
   books,
   height,
-  ...props
+  reference,
 }) {
   const classes = useStyles();
-  const data = dataFromBooks(books);
+  const [data, setData] = useState([]);
+  const [columns, setColumns] = useState([]);
 
-  const columns = titles.map((title, index) => ({
-    title,
-    field: `${index}`,
-    cellStyle: {
-      borderBottom: 'none',
-      verticalAlign: 'top',
-      padding: '4px 8px',
-      minWidth: '15em',
-    },
-    render: (rowData) => {
-      const [chapterKey, verseKey] = rowData.referenceId.split(':');
-      const verse = books[index].chapters[chapterKey][verseKey];
-      let row = <></>;
-      if (verse) {
-        const {verseObjects} = verse;
-        row = <Verse verseObjects={verseObjects} verseKey={rowData.referenceId} {...props} />;
-      }
-      return row;
-    },
-  }));
+  useEffect(() => {
+    const _data = dataFromBooks(books);
+
+    const _columns = titles.map((title, index) => ({
+      title,
+      field: `${index}`,
+      cellStyle: {
+        borderBottom: 'none',
+        verticalAlign: 'top',
+        padding: '4px 8px',
+        minWidth: '15em',
+      },
+      render: (rowData) => {
+        const {referenceId} = rowData;
+        const [chapterKey, verseKey] = referenceId.split(':');
+        const verse = books[index].chapters[chapterKey][verseKey];
+        let cell = <></>;
+        if (verse) {
+          const {verseObjects} = verse;
+          cell = (
+            <Verse
+              verseObjects={verseObjects}
+              verseKey={referenceId}
+              renderOffscreen
+              disableWordPopover
+            />
+          );
+        }
+        return cell;
+      },
+    }));
+
+    setData(_data);
+    setColumns(_columns);
+  }, [titles, books]);
 
   return (
     <MaterialTable
@@ -52,10 +68,9 @@ function ParallelScripture ({
       }}
       style={{}}
       components={{
-        Toolbar: props => (
-          <MTableToolbar {...props} classes={{ root: classes.toolbar }} />
-        ),
+        Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
         Container: props => <div {...props} />,
+        Row: props => <Row {...props} reference={reference} />,
       }}
     />
   );
@@ -73,7 +88,7 @@ ParallelScripture.propTypes = {
   ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({
-    book: PropTypes.string,
+    bookId: PropTypes.string,
     chapter: PropTypes.number,
     verse: PropTypes.number,
   }),

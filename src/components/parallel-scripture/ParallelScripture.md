@@ -24,6 +24,11 @@ const books = [
   usfmJS.toJSON(bhd_tit),
 ];
 
+const reference = {
+  bookId: 'tit',
+  chapter: 1,
+  verse: 2,
+};
 
-<ParallelScripture titles={titles} books={books} height='250px' title='Titus' disableWordPopover />
+<ParallelScripture titles={titles} books={books} height='250px' title='Titus' reference={reference} />
 ```
