@@ -6,6 +6,7 @@ import {Waypoint} from 'react-waypoint';
 function Row ({
   renderOffscreen,
   reference,
+  filter,
   ...props
 }) {
   const onVisibility = (isVisible) => {
@@ -30,12 +31,12 @@ function Row ({
   }, [props, viewed]);
 
   useEffect(() => {
-    if (reference && referenceId) {
+    if (!filter && reference && referenceId) {
       const id = reference.chapter + ':' + reference.verse;
       const element = document.getElementById(id);
-      if (element) element.scrollIntoView();
+      if (element) element.scrollIntoView(true);
     }
-  }, [reference, referenceId, viewed]);
+  }, [reference, referenceId, viewed, filter]);
 
   return (
     <>

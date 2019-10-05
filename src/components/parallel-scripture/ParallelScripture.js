@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
+import {ShortText} from '@material-ui/icons';
 import MaterialTable, {MTableToolbar} from 'material-table';
 
 import {Verse, Row} from '..';
-import {dataFromBooks, tableIcons} from './helpers';
+import {dataFromBooks, dataFromReference, tableIcons} from './helpers';
 
 function ParallelScripture ({
   title,
@@ -15,10 +16,15 @@ function ParallelScripture ({
 }) {
   const classes = useStyles();
   const [data, setData] = useState([]);
+  const [referenceData, setReferenceData] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [filter, setFilter] = useState(!!reference);
 
   useEffect(() => {
-    const _data = dataFromBooks(books);
+    const _referenceData = dataFromReference({books, reference});
+    setReferenceData(_referenceData);
+    const _data = dataFromBooks({books});
+    setData(_data);
 
     const _columns = titles.map((title, index) => ({
       title,
@@ -48,19 +54,17 @@ function ParallelScripture ({
         return cell;
       },
     }));
-
-    setData(_data);
     setColumns(_columns);
-  }, [titles, books]);
+  }, [titles, books, reference]);
 
   return (
     <MaterialTable
       title={title || 'Parallel Scripture'}
       columns={columns}
-      data={data}
+      data={filter ? referenceData : data}
       icons={tableIcons}
       options={{
-        search: true,
+        search: !filter,
         sorting: false,
         paging: false,
         headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
@@ -70,8 +74,16 @@ function ParallelScripture ({
       components={{
         Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
         Container: props => <div {...props} />,
-        Row: props => <Row {...props} reference={reference} />,
+        Row: props => <Row {...props} reference={reference} filter={filter} />,
       }}
+      actions={[
+        {
+          icon: () => <ShortText />,
+          tooltip: 'Toggle Reference View',
+          isFreeAction: true,
+          onClick: (event) => setFilter(!filter),
+        }
+      ]}
     />
   );
 }
@@ -100,12 +112,13 @@ ParallelScripture.propTypes = {
   direction: PropTypes.string,
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
+  /** filter the view to the reference */
+  filter: PropTypes.bool,
 };
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
     minHeight: 'unset',
-    paddingTop: theme.spacing(0.5),
   },
 }));
 

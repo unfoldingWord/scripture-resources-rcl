@@ -37,7 +37,7 @@ export const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-export const referenceIdsFromBooks = (books) => {
+export const referenceIdsFromBooks = ({books}) => {
   const referenceIds = new Set([]);
   books.forEach((book) => {
     const bookIndex = {};
@@ -54,10 +54,10 @@ export const referenceIdsFromBooks = (books) => {
   return [...referenceIds];
 };
 
-export const dataFromBooks = (books) => {
-  const referenceIds = referenceIdsFromBooks(books);
+export const dataFromBooks = ({books}) => {
+  const referenceIds = referenceIdsFromBooks({books});
   const data = referenceIds.map(referenceId => {
-    const row = {referenceId};
+    let row = {referenceId};
     books.forEach((_, index) => {
       const [chapterKey, verseKey] = referenceId.split(':');
       const verse = books[index].chapters[chapterKey][verseKey];
@@ -66,5 +66,23 @@ export const dataFromBooks = (books) => {
     return row;
   });
   return data;
+};
+
+export const dataFromReference = ({books, reference}) => {
+  const referenceId = referenceIdFromReference(reference);
+  let row = {referenceId};
+  books.forEach((_, index) => {
+    const verse = books[index].chapters[reference.chapter][reference.verse];
+    if (verse) row[index] = JSON.stringify({referenceId, ...verse});
+  });
+  const data = [row];
+  return data;
+};
+
+export const referenceIdFromReference = (reference) => reference.chapter + ':' + reference.verse;
+
+export const referenceFromReferenceId = (referenceId) => {
+  const [chapter, verse] = referenceId.split(':');
+  return {chapter, verse};
 };
 

@@ -30,5 +30,7 @@ const reference = {
   verse: 2,
 };
 
-<ParallelScripture titles={titles} books={books} height='250px' title='Titus' reference={reference} />
+<div style={{border: '1px #ebf1f3 solid'}}>
+  <ParallelScripture titles={titles} books={books} height='250px' title='Titus' reference={reference} />
+</div>
 ```
