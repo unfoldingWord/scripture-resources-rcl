@@ -14,11 +14,13 @@ function Row ({
   };
   const [viewed, setViewed] = useState(renderOffscreen);
   const skeleton = (
-    <div id={props.data.referenceId}>
-      <Waypoint onEnter={onVisibility} />
-      <Skeleton height={110} width='100%' />
-      <Waypoint onEnter={onVisibility} />
-    </div>
+    <tr id={props.data.referenceId}>
+      <td>
+        <Waypoint onEnter={onVisibility} />
+        <Skeleton height={110} width='100%' />
+        <Waypoint onEnter={onVisibility} />
+      </td>
+    </tr>
   );
   const [row, setRow] = useState(skeleton);
   const {referenceId} = props.data;

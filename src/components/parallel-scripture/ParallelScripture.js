@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
-import {ShortText} from '@material-ui/icons';
+import {ShortText, Subject} from '@material-ui/icons';
 import MaterialTable, {MTableToolbar} from 'material-table';
 
 import {Verse, Row} from '..';
 import {dataFromBooks, dataFromReference, tableIcons} from './helpers';
+import {SelectionsContextProvider} from './Selections.context';
 
 function ParallelScripture ({
   title,
@@ -58,33 +59,35 @@ function ParallelScripture ({
   }, [titles, books, reference]);
 
   return (
-    <MaterialTable
-      title={title || 'Parallel Scripture'}
-      columns={columns}
-      data={filter ? referenceData : data}
-      icons={tableIcons}
-      options={{
-        search: !filter,
-        sorting: false,
-        paging: false,
-        headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
-        maxBodyHeight: height,
-      }}
-      style={{}}
-      components={{
-        Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
-        Container: props => <div {...props} />,
-        Row: props => <Row {...props} reference={reference} filter={filter} />,
-      }}
-      actions={[
-        {
-          icon: () => <ShortText />,
-          tooltip: 'Toggle Reference View',
-          isFreeAction: true,
-          onClick: (event) => setFilter(!filter),
-        }
-      ]}
-    />
+    <SelectionsContextProvider>
+      <MaterialTable
+        title={title || 'Parallel Scripture'}
+        columns={columns}
+        data={filter ? referenceData : data}
+        icons={tableIcons}
+        options={{
+          search: !filter,
+          sorting: false,
+          paging: false,
+          headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
+          maxBodyHeight: height,
+        }}
+        style={{}}
+        components={{
+          Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
+          Container: props => <div {...props} />,
+          Row: props => <Row {...props} reference={reference} filter={filter} />,
+        }}
+        actions={[
+          {
+            icon: () => filter ? <ShortText /> : <Subject/>,
+            tooltip: 'Toggle Reference View',
+            isFreeAction: true,
+            onClick: (event) => setFilter(!filter),
+          }
+        ]}
+      />
+    </SelectionsContextProvider>
   );
 }
 

@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import {
-  Popover,
-} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import {Popover} from '@material-ui/core';
+
+import {SelectionsContext} from '../parallel-scripture/Selections.context'; 
 
 import {
   WordObject,
@@ -15,15 +15,29 @@ function AlignedWordsObject ({
   originalWords,
   disableWordPopover,
 }) {
-  const [anchorEl, setAnchorEl] = useState(null);
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  
   const handleOpen = event => { setAnchorEl(event.currentTarget); };
-
   const handleClose = () => { setAnchorEl(null); };
 
+  let onClick = () => {};
+  let selected;
+  const selectionsContext = useContext(SelectionsContext);
+  if (selectionsContext) {
+    const {isSelected, addSelections, removeSelections} = selectionsContext;
+    selected = isSelected(originalWords);
+    onClick = () => {
+      if (selected) removeSelections(originalWords);
+      else addSelections(originalWords);
+    };
+  }
+
   const words = children.map((verseObject, index) =>
-    <WordObject key={index} verseObject={verseObject} disableWordPopover={disableWordPopover} />
+    <span onClick={onClick} key={index} className={selected ? classes.selected : undefined}>
+      <WordObject verseObject={verseObject} disableWordPopover={disableWordPopover} />
+    </span>
   );
 
   let component = words;
@@ -97,6 +111,9 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: theme.spacing(1),
+  },
+  selected: {
+    backgroundColor: 'yellow',
   },
 }));
 
