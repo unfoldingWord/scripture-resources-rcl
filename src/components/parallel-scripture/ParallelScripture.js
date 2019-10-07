@@ -6,7 +6,10 @@ import MaterialTable, {MTableToolbar} from 'material-table';
 
 import {Verse, Row} from '..';
 import {dataFromBooks, dataFromReference, tableIcons} from './helpers';
-import {SelectionsContextProvider} from './Selections.context';
+import withSelections from './withSelections';
+import {SelectionsProvider} from './Selections.context';
+
+const Selectionable = withSelections(SelectionsProvider);
 
 function ParallelScripture ({
   title,
@@ -14,6 +17,8 @@ function ParallelScripture ({
   books,
   height,
   reference,
+  selections,
+  onSelection,
 }) {
   const classes = useStyles();
   const [data, setData] = useState([]);
@@ -59,35 +64,40 @@ function ParallelScripture ({
   }, [titles, books, reference]);
 
   return (
-    <SelectionsContextProvider>
-      <MaterialTable
-        title={title || 'Parallel Scripture'}
-        columns={columns}
-        data={filter ? referenceData : data}
-        icons={tableIcons}
-        options={{
-          search: !filter,
-          sorting: false,
-          paging: false,
-          headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
-          maxBodyHeight: height,
-        }}
-        style={{}}
-        components={{
-          Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
-          Container: props => <div {...props} />,
-          Row: props => <Row {...props} reference={reference} filter={filter} />,
-        }}
-        actions={[
-          {
-            icon: () => filter ? <ShortText /> : <Subject/>,
-            tooltip: 'Toggle Reference View',
-            isFreeAction: true,
-            onClick: (event) => setFilter(!filter),
-          }
-        ]}
-      />
-    </SelectionsContextProvider>
+    <MaterialTable
+      title={title || 'Parallel Scripture'}
+      columns={columns}
+      data={filter ? referenceData : data}
+      icons={tableIcons}
+      options={{
+        search: !filter,
+        sorting: false,
+        paging: false,
+        headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
+        maxBodyHeight: height,
+      }}
+      style={{}}
+      components={{
+        Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
+        Container: props => <div {...props} />,
+        Row: props => (
+          <Selectionable selections={selections} onSelection={onSelection}>
+            <Row {...props}
+              reference={reference}
+              filter={filter}
+            />
+          </Selectionable>
+        ),
+      }}
+      actions={[
+        {
+          icon: () => filter ? <ShortText /> : <Subject/>,
+          tooltip: 'Toggle Reference View',
+          isFreeAction: true,
+          onClick: (event) => setFilter(!filter),
+        }
+      ]}
+    />
   );
 }
 
@@ -117,6 +127,8 @@ ParallelScripture.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** filter the view to the reference */
   filter: PropTypes.bool,
+  /** callback to return selections when changes made */
+  onSelection: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({

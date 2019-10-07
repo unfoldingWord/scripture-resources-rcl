@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import {Skeleton} from '@material-ui/lab';
 import {MTableBodyRow} from 'material-table';
 import {Waypoint} from 'react-waypoint';
@@ -47,5 +48,18 @@ function Row ({
     </>
   );
 }
+
+Row.propTypes = {
+    /** the reference to scroll into view */
+    reference: PropTypes.shape({
+      bookId: PropTypes.string,
+      chapter: PropTypes.number,
+      verse: PropTypes.number,
+    }),
+    /** bypass rendering only when visible */
+    renderOffscreen: PropTypes.bool,
+    /** filter the view to the reference */
+    filter: PropTypes.bool,
+};
 
 export default Row

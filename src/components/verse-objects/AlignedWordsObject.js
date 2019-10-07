@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {Popover} from '@material-ui/core';
 
-import {SelectionsContext} from '../parallel-scripture/Selections.context'; 
+import SelectionsContext from '../parallel-scripture/Selections.context';
 
 import {
   WordObject,
@@ -17,7 +17,6 @@ function AlignedWordsObject ({
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-
   
   const handleOpen = event => { setAnchorEl(event.currentTarget); };
   const handleClose = () => { setAnchorEl(null); };
@@ -26,8 +25,8 @@ function AlignedWordsObject ({
   let selected;
   const selectionsContext = useContext(SelectionsContext);
   if (selectionsContext) {
-    const {isSelected, addSelections, removeSelections} = selectionsContext;
-    selected = isSelected(originalWords);
+    const {areSelected, addSelections, removeSelections} = selectionsContext;
+    selected = areSelected(originalWords);
     onClick = () => {
       if (selected) removeSelections(originalWords);
       else addSelections(originalWords);

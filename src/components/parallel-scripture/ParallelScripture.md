@@ -30,7 +30,21 @@ const reference = {
   verse: 2,
 };
 
-<div style={{border: '1px #ebf1f3 solid'}}>
-  <ParallelScripture titles={titles} books={books} height='250px' title='Titus' reference={reference} />
-</div>
+const [selections, setSelections] = React.useState([]);
+const _selections = selections.map(selection => selection.text).join(' ');
+
+<>
+  <p>Selections: {_selections}</p>
+  <div style={{border: '1px #ebf1f3 solid'}}>
+    <ParallelScripture
+      titles={titles}
+      books={books}
+      height='250px'
+      title='Titus'
+      reference={reference}
+      selections={selections}
+      onSelection={setSelections}
+    />
+  </div>
+</>
 ```
