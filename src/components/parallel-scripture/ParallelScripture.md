@@ -10,8 +10,8 @@ import bhd_tit from '../mocks/bhd_tit.usfm.js';
 
 const titles = [
   'UGNT - Greek',
-  'English - ULT',
-  'Hindi - IRV',
+  'English - ULT (aligned)',
+  'Hindi - IRV (aligned)',
   'Hindi - ULB',
   'Bhadrawahi - ULB',
 ];
