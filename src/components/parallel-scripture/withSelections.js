@@ -1,22 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 
-const stringify = (array) => array.map(object => JSON.stringify(object));
+// const stringify = (array) => array.map(object => JSON.stringify(object));
 const parsify = (array) => array.map(string => JSON.parse(string));
 
 function withSelections(Component){
   return function SelectionsComponent({
-    selections,
-    onSelection,
+    onQuote,
+    quoteVerseObjects,
     ...props
   }) {
-    const [selects, setSelects] = useState(stringify(selections));
+    const [selections, setSelections] = useState([]);
 
-    const updateSelections = (_selections) => {
-      if (onSelection) onSelection(parsify(_selections));
-      setSelects(_selections);
-    };
+    // const wordsFromMilestone = ({milestone, quotedWords=[]}) => {
+    //   const _selections = selections.map(selection => selection.text);
+    //   if (_selections.include(milestone.content)) {
+    //     if (milestone.children[0].type === 'word') {
+    //       const words = milestone.children;
+    //       words.forEach(word => quotedWords.push(word.text));
+    //     }
+    //   }
+    // };
+
+    useEffect(() => {
+      const quoteFromVerse = () => {
+        let quotedWords = [];
+        const _selections = selections.map(selection => JSON.parse(selection).text);
+        quoteVerseObjects.forEach(verseObject => {
+          const {text} = verseObject;
+          if (_selections.includes(text)) quotedWords.push(text);
+        });
+        return quotedWords;
+      };
+
+      if (quoteVerseObjects && onQuote) {
+        const quote = quoteFromVerse().join(' ');
+        onQuote(quote);
+      }
+    }, [selections]);
 
     const selectionFromWord = (word) => {
       const {content, text} = word;
@@ -26,7 +48,7 @@ function withSelections(Component){
 
     const isSelected = (word) => {
       const selection = word => selectionFromWord(word);
-      const selected = selects.includes(selection);
+      const selected = selections.includes(selection);
       return selected;
     };
 
@@ -34,44 +56,44 @@ function withSelections(Component){
       let selected = false;
       const _selections = words.map(word => selectionFromWord(word));
       _selections.forEach(selection => {
-        if (selects.includes(selection)) selected = true;
+        if (selections.includes(selection)) selected = true;
       });
       return selected;
     };
 
     const addSelection = (word) => {
-      let _selections = new Set(selects);
+      let _selections = new Set(selections);
       const selection = selectionFromWord(word);
       _selections.add(selection);
-      updateSelections([..._selections]);
+      setSelections([..._selections]);
     };
 
     const addSelections = (words) => {
-      let _selections = new Set(selects);
+      let _selections = new Set(selections);
       words.forEach(word => {
         const selection = selectionFromWord(word);
         _selections.add(selection);
       });
-      updateSelections([..._selections]);
+      setSelections([..._selections]);
     };
 
     const removeSelection = (word) => {
       const selection = selectionFromWord(word);
-      const _selections = new Set(selects);
+      const _selections = new Set(selections);
       _selections.delete(selection);
-      updateSelections([..._selections]);
+      setSelections([..._selections]);
     };
 
     const removeSelections = (words) => {
-      let _selections = new Set(selects);
+      let _selections = new Set(selections);
       words.forEach(word => {
         const selection = selectionFromWord(word);
         _selections.delete(selection);
       });
-      updateSelections([..._selections]);
+      setSelections([..._selections]);
     };
 
-    const _selections = deepFreeze(parsify(selects));
+    const _selections = deepFreeze(parsify(selections));
 
     const value = {
       selections: _selections,
@@ -90,8 +112,8 @@ function withSelections(Component){
 }
 
 withSelections.propTypes = {
-  selections: PropTypes.array,
-  onSelections: PropTypes.func,
+  quoteVerseObjects: PropTypes.array,
+  onQuote: PropTypes.func,
 };
 
 withSelections.defaultProps = {

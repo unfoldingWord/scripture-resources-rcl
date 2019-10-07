@@ -19,6 +19,8 @@ function ParallelScripture ({
   reference,
   selections,
   onSelection,
+  onQuote,
+  quoteVerseObjects,
 }) {
   const classes = useStyles();
   const [data, setData] = useState([]);
@@ -64,40 +66,43 @@ function ParallelScripture ({
   }, [titles, books, reference]);
 
   return (
-    <MaterialTable
-      title={title || 'Parallel Scripture'}
-      columns={columns}
-      data={filter ? referenceData : data}
-      icons={tableIcons}
-      options={{
-        search: !filter,
-        sorting: false,
-        paging: false,
-        headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
-        maxBodyHeight: height,
-      }}
-      style={{}}
-      components={{
-        Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
-        Container: props => <div {...props} />,
-        Row: props => (
-          <Selectionable selections={selections} onSelection={onSelection}>
+    <Selectionable
+      onQuote={onQuote}
+      quoteVerseObjects={quoteVerseObjects}
+    >
+      <MaterialTable
+        title={title || 'Parallel Scripture'}
+        columns={columns}
+        data={filter ? referenceData : data}
+        icons={tableIcons}
+        options={{
+          search: !filter,
+          sorting: false,
+          paging: false,
+          headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
+          maxBodyHeight: height,
+        }}
+        style={{}}
+        components={{
+          Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
+          Container: props => <div {...props} />,
+          Row: props => (
             <Row {...props}
               reference={reference}
               filter={filter}
             />
-          </Selectionable>
-        ),
-      }}
-      actions={[
-        {
-          icon: () => filter ? <ShortText /> : <Subject/>,
-          tooltip: 'Toggle Reference View',
-          isFreeAction: true,
-          onClick: (event) => setFilter(!filter),
-        }
-      ]}
-    />
+          ),
+        }}
+        actions={[
+          {
+            icon: () => filter ? <ShortText /> : <Subject/>,
+            tooltip: 'Toggle Reference View',
+            isFreeAction: true,
+            onClick: (event) => setFilter(!filter),
+          }
+        ]}
+      />
+    </Selectionable>
   );
 }
 
@@ -127,8 +132,10 @@ ParallelScripture.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** filter the view to the reference */
   filter: PropTypes.bool,
-  /** callback to return selections when changes made */
-  onSelection: PropTypes.func,
+  /** the verseObjects of the verse to get the quote from */
+  quoteVerseObjects: PropTypes.array,
+  /** callback to return the quote when selections made */
+  onQuote: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({

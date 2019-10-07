@@ -30,11 +30,11 @@ const reference = {
   verse: 2,
 };
 
-const [selections, setSelections] = React.useState([]);
-const _selections = selections.map(selection => selection.text).join(' ');
+const [quote, setQuote] = React.useState();
+const quoteVerseObjects = books[0].chapters[reference.chapter][reference.verse].verseObjects;
 
 <>
-  <p>Selections: {_selections}</p>
+  <p>Quote: {quote}</p>
   <div style={{border: '1px #ebf1f3 solid'}}>
     <ParallelScripture
       titles={titles}
@@ -42,8 +42,8 @@ const _selections = selections.map(selection => selection.text).join(' ');
       height='250px'
       title='Titus'
       reference={reference}
-      selections={selections}
-      onSelection={setSelections}
+      quoteVerseObjects={quoteVerseObjects}
+      onQuote={setQuote}
     />
   </div>
 </>
