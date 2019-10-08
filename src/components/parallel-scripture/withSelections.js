@@ -25,17 +25,23 @@ function withSelections(Component){
 
     useEffect(() => {
       const quoteFromVerse = () => {
-        let quotedWords = [];
+        let quotedWords = new Array(quoteVerseObjects.length);
         const _selections = selections.map(selection => JSON.parse(selection).text);
-        quoteVerseObjects.forEach(verseObject => {
-          const {text} = verseObject;
-          if (_selections.includes(text)) quotedWords.push(text);
+        quoteVerseObjects.forEach((verseObject, index) => {
+          const {type, text} = verseObject;
+          if (type === 'word') {
+            const match = _selections.includes(text);
+            const quotedWord = match ? text : '…';
+            quotedWords.push(quotedWord);
+          }
         });
-        return quotedWords;
+        const quote = quotedWords.join(' ')
+        .replace(/( ?… ?)+/g,' … ').replace(/(^[… ]+|[… ]+$)/g, '');
+        return quote;
       };
 
       if (quoteVerseObjects && onQuote) {
-        const quote = quoteFromVerse().join(' ');
+        const quote = quoteFromVerse();
         onQuote(quote);
       }
     }, [selections]);

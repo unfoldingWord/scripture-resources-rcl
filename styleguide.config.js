@@ -4,8 +4,6 @@ const camelCase = require('lodash/camelCase');
 const { name, version, repository } = require('./package.json');
 const { styles, theme } = require('./styleguide.styles');
 
-
-
 let sections = [
   {
     name: 'README',
@@ -91,6 +89,13 @@ let sections = [
 
 module.exports = {
   title: `${upperFirst(camelCase(name))} v${version}`,
+  template: {
+    head: {
+      scripts: [
+        {src: "http://localhost:8097"}
+      ]
+    }
+  },
   ribbon: {
     url: repository.url,
     text: 'View on GitHub'
