@@ -30,12 +30,12 @@ const reference = {
   verse: 2,
 };
 
+const [component, setComponent] = React.useState(<></>)
 const [quote, setQuote] = React.useState();
 const quoteVerseObjects = books[0].chapters[reference.chapter][reference.verse].verseObjects;
 
-<>
-  <p>Quote: {quote}</p>
-  <div style={{border: '1px #ebf1f3 solid'}}>
+React.useEffect(() => {
+  setComponent(
     <ParallelScripture
       titles={titles}
       books={books}
@@ -45,6 +45,13 @@ const quoteVerseObjects = books[0].chapters[reference.chapter][reference.verse].
       quoteVerseObjects={quoteVerseObjects}
       onQuote={setQuote}
     />
+  );
+}, []);
+
+<>
+  <p>Quote: {quote}</p>
+  <div style={{border: '1px #ebf1f3 solid'}}>
+    {component}
   </div>
 </>
 ```

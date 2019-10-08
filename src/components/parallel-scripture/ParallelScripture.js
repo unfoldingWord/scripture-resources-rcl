@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {ShortText, Subject} from '@material-ui/icons';
@@ -17,23 +17,32 @@ function ParallelScripture ({
   books,
   height,
   reference,
-  selections,
-  onSelection,
   onQuote,
   quoteVerseObjects,
 }) {
   const classes = useStyles();
   const [data, setData] = useState([]);
+  const [bookData, setBookData] = useState([]);
   const [referenceData, setReferenceData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [filter, setFilter] = useState(!!reference);
+  const [components, setComponents] = useState({});
+  const [options, setOptions] = useState({});
+  const [actions, setActions] = useState([]);
 
   useEffect(() => {
     const _referenceData = dataFromReference({books, reference});
     setReferenceData(_referenceData);
-    const _data = dataFromBooks({books});
-    setData(_data);
+    const _bookData = dataFromBooks({books});
+    setBookData(_bookData);
+  }, [books, reference]);
 
+  useEffect(() => {
+    const _data = filter ? referenceData : bookData;
+    setData(_data);
+  }, [filter, referenceData, bookData]);
+
+  useEffect(() => {
     const _columns = titles.map((title, index) => ({
       title,
       field: `${index}`,
@@ -63,7 +72,47 @@ function ParallelScripture ({
       },
     }));
     setColumns(_columns);
-  }, [titles, books, reference]);
+  }, [titles, books]);
+
+  useEffect(() => {
+    const _components = {
+      Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
+      Container: props => <div {...props} />,
+      Row: props => (
+        <Row {...props} reference={reference} filter={filter} />
+      ),
+    };
+    setComponents(_components);
+  }, [classes, reference, filter, columns]);
+
+  useEffect(() => {
+    const _options = {
+      columnsButton: true,
+      search: !filter,
+      sorting: false,
+      paging: false,
+      headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
+      maxBodyHeight: height,
+    }
+    setOptions(_options);
+
+    const _actions = [
+      {
+        icon: () => filter ? <ShortText /> : <Subject/>,
+        tooltip: 'Toggle Reference View',
+        isFreeAction: true,
+        onClick: (event) => setFilter(!filter),
+      }
+    ];
+    setActions(_actions);
+  }, [filter, height]);
+
+  const onChangeColumnHidden = useCallback((column, hidden) => {
+    const _columns = [...columns];
+    const index = parseInt(column.field);
+    _columns[index].hidden = hidden;
+    setColumns(_columns);
+  }, [columns]);
 
   return (
     <Selectionable
@@ -73,34 +122,12 @@ function ParallelScripture ({
       <MaterialTable
         title={title || 'Parallel Scripture'}
         columns={columns}
-        data={filter ? referenceData : data}
+        onChangeColumnHidden={onChangeColumnHidden}
+        data={data}
         icons={tableIcons}
-        options={{
-          search: !filter,
-          sorting: false,
-          paging: false,
-          headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
-          maxBodyHeight: height,
-        }}
-        style={{}}
-        components={{
-          Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
-          Container: props => <div {...props} />,
-          Row: props => (
-            <Row {...props}
-              reference={reference}
-              filter={filter}
-            />
-          ),
-        }}
-        actions={[
-          {
-            icon: () => filter ? <ShortText /> : <Subject/>,
-            tooltip: 'Toggle Reference View',
-            isFreeAction: true,
-            onClick: (event) => setFilter(!filter),
-          }
-        ]}
+        options={options}
+        components={components}
+        actions={actions}
       />
     </Selectionable>
   );
