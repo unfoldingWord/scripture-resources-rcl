@@ -44,7 +44,7 @@ function withSelections(Component){
         const quote = quoteFromVerse();
         onQuote(quote);
       }
-    }, [selections]);
+    }, [selections, onQuote, quoteVerseObjects]);
 
     const selectionFromWord = (word) => {
       const {content, text} = word;
