@@ -10,6 +10,18 @@ let sections = [
     content: 'README.md',
   },
   {
+    name: 'USFM ',
+    content: 'src/components/usfm/_readme.md',
+    components: () => {
+      const componentNames = [
+        'withUsfm',
+      ];
+      return componentNames.map(componentName => {
+        return Path.resolve(__dirname, `src/components/usfm`, `${componentName}.js`)
+      });
+    }
+  },
+  {
     name: 'Parallel Scripture ',
     content: 'src/components/parallel-scripture/_readme.md',
     components: () => {

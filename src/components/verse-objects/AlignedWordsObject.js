@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {Popover} from '@material-ui/core';
 
-import SelectionsContext from '../parallel-scripture/Selections.context';
+import SelectionsContext from '../selections/Selections.context';
 
 import {
   WordObject,

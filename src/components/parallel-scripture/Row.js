@@ -1,65 +1,91 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
+import {makeStyles} from '@material-ui/core/styles';
 import {Skeleton} from '@material-ui/lab';
-import {MTableBodyRow} from 'material-table';
+import {
+  TableCell,
+  TableRow,
+} from '@material-ui/core';
 import {Waypoint} from 'react-waypoint';
 
-function Row ({
-  renderOffscreen,
-  reference,
-  filter,
-  ...props
-}) {
-  const onVisibility = (isVisible) => {
-    if (isVisible) setViewed(true);
-  };
-  const [viewed, setViewed] = useState(renderOffscreen);
-  const skeleton = (
-    <tr id={props.data.referenceId}>
-      <td>
-        <Waypoint onEnter={onVisibility} />
-        <Skeleton height={110} width='100%' />
-        <Waypoint onEnter={onVisibility} />
-      </td>
-    </tr>
-  );
-  const [row, setRow] = useState(skeleton);
-  const {referenceId} = props.data;
+import {Verse} from '..';
 
-  useEffect(() => {
-    if (!viewed) {
-      setRow(<MTableBodyRow {...props} />);
+function Row ({
+  columns,
+  referenceId,
+  verses,
+  renderOffscreen,
+}) {
+  const classes = useStyles();
+
+  const onVisibility = (isVisible) => {
+    if (isVisible) {
+      console.log('waypoint hit')
       setViewed(true);
     }
-  }, [props, viewed]);
+  };
+
+  const skeleton = (
+    <TableCell colSpan={columns.length} className={classes.cell}>
+      <Waypoint onEnter={onVisibility} />
+      <Skeleton height={110} width='100%' />
+      <Waypoint onEnter={onVisibility} />
+    </TableCell>
+  );
+
+  const [cells, setCells] = useState(skeleton);
+  const [viewed, setViewed] = useState(renderOffscreen);
 
   useEffect(() => {
-    if (!filter && reference && referenceId) {
-      const id = reference.chapter + ':' + reference.verse;
-      const element = document.getElementById(id);
-      if (element) element.scrollIntoView(true);
+    if (viewed) {
+      const _cells = columns.filter(col => !col.hidden).map(column => {
+        const verse = verses[column.id];
+        const verseObjects = verse ? verse.verseObjects : [];
+        return (
+          <TableCell key={column.id} className={classes.cell}>
+            <Verse
+              verseObjects={verseObjects}
+              verseKey={referenceId}
+              renderOffscreen
+              disableWordPopover
+            />
+          </TableCell>
+        );
+      });
+      setCells(_cells);
     }
-  }, [reference, referenceId, viewed, filter]);
+  }, [classes, columns, verses, referenceId, viewed]);
 
   return (
-    <>
-      <tr id={referenceId} />
-      {row}
-    </>
+    <TableRow
+      className={classes.row}
+      key={referenceId}
+      id={referenceId}
+      tabIndex={-1}
+      role="checkbox"
+      hover
+    >
+      {cells}
+    </TableRow>
+      
   );
 }
 
 Row.propTypes = {
-    /** the reference to scroll into view */
-    reference: PropTypes.shape({
-      bookId: PropTypes.string,
-      chapter: PropTypes.number,
-      verse: PropTypes.number,
-    }),
     /** bypass rendering only when visible */
     renderOffscreen: PropTypes.bool,
-    /** filter the view to the reference */
-    filter: PropTypes.bool,
 };
+
+const useStyles = makeStyles(theme => ({
+  row: {
+  },
+  cell: {
+    padding: theme.spacing(1),
+    paddingRight: 0,
+    verticalAlign: 'top',
+    minWidth: '15rem',
+    border: 'none',
+  },
+}));
 
 export default Row

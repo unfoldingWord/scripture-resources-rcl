@@ -1,13 +1,25 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
-import {ShortText, Subject} from '@material-ui/icons';
-import MaterialTable, {MTableToolbar} from 'material-table';
+import {
+  ShortText,
+  Subject,
+  ViewColumn
+} from '@material-ui/icons';
+import {
+  Table,
+  TableBody,
+} from '@material-ui/core';
 
-import {Verse, Row} from '..';
-import {dataFromBooks, dataFromReference, tableIcons} from './helpers';
-import withSelections from './withSelections';
-import {SelectionsProvider} from './Selections.context';
+import {
+  Row,
+  Headers,
+  Toolbar,
+  ColumnsMenu,
+} from '..';
+import {referenceIdsFromBooks, referenceFromReferenceId, referenceIdFromReference} from './helpers';
+import withSelections from '../selections/withSelections';
+import {SelectionsProvider} from '../selections/Selections.context';
 
 const Selectionable = withSelections(SelectionsProvider);
 
@@ -21,114 +33,87 @@ function ParallelScripture ({
   quoteVerseObjects,
 }) {
   const classes = useStyles();
-  const [data, setData] = useState([]);
-  const [bookData, setBookData] = useState([]);
-  const [referenceData, setReferenceData] = useState([]);
-  const [columns, setColumns] = useState([]);
   const [filter, setFilter] = useState(!!reference);
-  const [components, setComponents] = useState({});
-  const [options, setOptions] = useState({});
-  const [actions, setActions] = useState([]);
+  const [referenceIds, setReferenceIds] = useState([]);
+  const [columns, setColumns] = useState([]);
+  const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
   useEffect(() => {
-    const _referenceData = dataFromReference({books, reference});
-    setReferenceData(_referenceData);
-    const _bookData = dataFromBooks({books});
-    setBookData(_bookData);
-  }, [books, reference]);
-
-  useEffect(() => {
-    const _data = filter ? referenceData : bookData;
-    setData(_data);
-  }, [filter, referenceData, bookData]);
-
-  useEffect(() => {
-    const _columns = titles.map((title, index) => ({
-      title,
-      field: `${index}`,
-      cellStyle: {
-        borderBottom: 'none',
-        verticalAlign: 'top',
-        padding: '4px 8px',
-        minWidth: '15em',
-      },
-      render: (rowData) => {
-        const {referenceId} = rowData;
-        const [chapterKey, verseKey] = referenceId.split(':');
-        const verse = books[index].chapters[chapterKey][verseKey];
-        let cell = <></>;
-        if (verse) {
-          const {verseObjects} = verse;
-          cell = (
-            <Verse
-              verseObjects={verseObjects}
-              verseKey={referenceId}
-              renderOffscreen
-              disableWordPopover
-            />
-          );
-        }
-        return cell;
-      },
-    }));
+    const _columns = titles.map((title, index) => ({id: index, label: title}));
     setColumns(_columns);
-  }, [titles, books]);
+  }, [titles]);
 
   useEffect(() => {
-    const _components = {
-      Toolbar: props => <MTableToolbar {...props} classes={{root: classes.toolbar}} />,
-      Container: props => <div {...props} />,
-      Row: props => (
-        <Row {...props} reference={reference} filter={filter} />
+    const _referenceIds = referenceIdsFromBooks({books});
+    setReferenceIds(_referenceIds);
+  }, [books]);
+
+  const actions = [
+    {
+      icon: <ViewColumn fontSize='small' />,
+      tooltip: 'Select Versions',
+      onClick: (event) => setColumnsMenuAnchorEl(event.currentTarget),
+      menu: (
+        <ColumnsMenu
+          columns={columns}
+          onColumns={setColumns}
+          anchorEl={columnsMenuAnchorEl}
+          onAnchorEl={setColumnsMenuAnchorEl}
+        />
       ),
-    };
-    setComponents(_components);
-  }, [classes, reference, filter, columns]);
+    },
+    {
+      icon: filter ? <ShortText fontSize='small' /> : <Subject fontSize='small' />,
+      tooltip: 'Toggle Reference View',
+      onClick: (event) => setFilter(!filter),
+    },
+  ];
+
+  const _referenceIds = filter ? [referenceIdFromReference(reference)] : referenceIds;
+  const rows = _referenceIds.map(referenceId => {
+    const verses = books.map(book => {
+      const _reference = referenceFromReferenceId(referenceId);
+      const verse = book.chapters[_reference.chapter][_reference.verse];
+      return verse;
+    });
+    const row = (
+      <Row
+        key={referenceId}
+        verses={verses}
+        referenceId={referenceId}
+        reference={reference}
+        filter={filter}
+        columns={columns}
+      />
+    );
+    return row;
+  });
 
   useEffect(() => {
-    const _options = {
-      columnsButton: true,
-      search: !filter,
-      sorting: false,
-      paging: false,
-      headerStyle: { position: 'sticky', top: 0, padding: '4px 8px' },
-      maxBodyHeight: height,
-    }
-    setOptions(_options);
-
-    const _actions = [
-      {
-        icon: () => filter ? <ShortText /> : <Subject/>,
-        tooltip: 'Toggle Reference View',
-        isFreeAction: true,
-        onClick: (event) => setFilter(!filter),
+    const scrollReferenceId = referenceIdFromReference(reference);
+    if (!filter) {
+      const element = document.getElementById(scrollReferenceId);
+      if (element) {
+        element.scrollIntoView(true);
+        document.getElementById('wrapY').scrollTop -= 30;
       }
-    ];
-    setActions(_actions);
-  }, [filter, height]);
-
-  const onChangeColumnHidden = useCallback((column, hidden) => {
-    const _columns = [...columns];
-    const index = parseInt(column.field);
-    _columns[index].hidden = hidden;
-    setColumns(_columns);
-  }, [columns]);
+    }
+  }, [filter, reference]);
 
   return (
     <Selectionable
       onQuote={onQuote}
       quoteVerseObjects={quoteVerseObjects}
     >
-      <MaterialTable
-        title={title || 'Parallel Scripture'}
-        columns={columns}
-        onChangeColumnHidden={onChangeColumnHidden}
-        data={data}
-        icons={tableIcons}
-        options={options}
-        components={components}
-        actions={actions}
-      />
+      <Toolbar title={title} actions={actions} />
+      <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >
+        <Table className={classes.table}>
+          <Headers columns={columns} />
+          <TableBody className={classes.tableBody}>
+            {rows}
+          </TableBody>
+        </Table>
+      </div>
     </Selectionable>
   );
 }
@@ -166,9 +151,16 @@ ParallelScripture.propTypes = {
 };
 
 const useStyles = makeStyles(theme => ({
-  toolbar: {
-    minHeight: 'unset',
+  root: {
   },
+  wrapY: {
+    overflowY: 'auto',
+    overflowX: 'auto',
+  },
+  table: {
+  },
+  tableBody:{
+  }
 }));
 
 export default ParallelScripture;

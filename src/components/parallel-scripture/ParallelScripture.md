@@ -39,11 +39,11 @@ React.useEffect(() => {
     <ParallelScripture
       titles={titles}
       books={books}
-      height='250px'
       title='Titus'
       reference={reference}
       quoteVerseObjects={quoteVerseObjects}
       onQuote={setQuote}
+      height='250px'
     />
   );
 }, []);
