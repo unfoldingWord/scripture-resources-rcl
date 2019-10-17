@@ -29,9 +29,9 @@ function Component ({resources}) {
 const ResourcesComponent = withResources(Component);
 
 const resourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/v0.8/tit',
-  'unfoldingWord/en/ult/v5/tit',
-  'unfoldingWord/en/ust/v5/tit',
+  'unfoldingWord/el-x-koine/ugnt/v0.8',
+  'unfoldingWord/en/ult/v5',
+  'unfoldingWord/en/ust/v5',
 ];
 
 const config = {
@@ -41,5 +41,7 @@ const config = {
   },
 };
 
-<ResourcesComponent resourceLinks={resourceLinks} config={config} />
+const reference = {bookId: 'jhn', chapter: 1, verse: 1};
+
+<ResourcesComponent resourceLinks={resourceLinks} reference={reference} config={config} />
 ```

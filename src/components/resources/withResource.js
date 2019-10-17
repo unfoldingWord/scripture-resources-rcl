@@ -7,20 +7,21 @@ import {resourceFromResourceLink} from '../../core';
 function WithResource(Component){
   function ResourceComponent({
     resourceLink,
+    reference,
     config,
     ...props
   }) {
     const [resource, setResource] = useState();
 
     useEffect(() => {
-      resourceFromResourceLink({resourceLink, config})
+      resourceFromResourceLink({resourceLink, reference, config})
       .then(_resource => {
         setResource(deepFreeze(_resource));
       });
-    }, [resourceLink, config]);
+    }, [resourceLink, reference, config]);
 
     return (
-      <Component resource={resource} {...props} />
+      <Component resource={resource} reference={reference} {...props} />
     );
   }
 

@@ -44,8 +44,8 @@ export const getResourceProjectFile = async (
 };
 
 export const projectFromProjects = (resource) => {
-  const {reference: {bookId}, projectId, manifest: {projects}} = resource;
-  let identifier = bookId || projectId;
+  const {reference, projectId, manifest: {projects}} = resource;
+  let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
   const project = projects.filter(project => project.identifier === identifier)[0];
   project.file = async () => getResourceProjectFile(resource);
   return project;
