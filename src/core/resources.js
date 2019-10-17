@@ -2,18 +2,19 @@ import Path from 'path';
 import YAML from 'js-yaml-parser';
 import {get} from 'gitea-react-toolkit';
 
-export const resourcesFromResourceLinks = async ({resourceLinks, config}) => {
+export const resourcesFromResourceLinks = async ({resourceLinks, reference, config}) => {
   const promises = resourceLinks.map(resourceLink => {
-    return resourceFromResourceLink({resourceLink, config});
+    return resourceFromResourceLink({resourceLink, reference, config});
   });
   const resources = await Promise.all(promises);
   return resources;
 };
 
-export const resourceFromResourceLink = async ({resourceLink, config}) => {
+export const resourceFromResourceLink = async ({resourceLink, reference, config}) => {
   let resource = parseResourceLink({resourceLink, config});
   resource.manifest = await getResourceManifest(resource);
-  if (resource.projectId && resource.manifest && resource.manifest.projects) {
+  resource.reference = reference;
+  if ((resource.projectId || reference.bookId) && (resource.manifest && resource.manifest.projects)) {
     resource.project = projectFromProjects(resource);
   }
   return resource;
@@ -22,7 +23,7 @@ export const resourceFromResourceLink = async ({resourceLink, config}) => {
 export const parseResourceLink = ({resourceLink, config}) => {
   const parsed = resourceLink.split('/').filter(string => string.length > 0);
   const [username, languageId, resourceId, tag, projectId] = parsed;
-  const resource = {username, languageId, resourceId, tag, projectId, config};
+  const resource = {resourceLink, username, languageId, resourceId, tag, projectId, config};
   return resource;
 };
 
@@ -43,8 +44,9 @@ export const getResourceProjectFile = async (
 };
 
 export const projectFromProjects = (resource) => {
-  const {projectId, manifest: {projects}} = resource;
-  let project = projects.filter(project => project.identifier === projectId)[0];
+  const {reference: {bookId}, projectId, manifest: {projects}} = resource;
+  let identifier = bookId || projectId;
+  const project = projects.filter(project => project.identifier === identifier)[0];
   project.file = async () => getResourceProjectFile(resource);
   return project;
 };
