@@ -106,7 +106,7 @@ const resourceLinks = [
 
 const config = {server: 'https://git.door43.org'};
 
-const reference = {bookId: 'tit', chapter: 1, verse: 2};
+const reference = {bookId: 'tit', chapter: 2, verse: 5};
 
 <Resources resourceLinks={resourceLinks} config={config} reference={reference} />
 ```
