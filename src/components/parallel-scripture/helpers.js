@@ -16,6 +16,15 @@ export const referenceIdsFromBooks = ({books}) => {
   return [...referenceIds];
 };
 
+export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
+  const verses = books.map(book => {
+    const _reference = referenceFromReferenceId(referenceId);
+    const verse = book.chapters[_reference.chapter][_reference.verse];
+    return verse;
+  });
+  return verses;
+}
+
 export const dataFromBooks = ({books}) => {
   const referenceIds = referenceIdsFromBooks({books});
   const data = referenceIds.map(referenceId => {

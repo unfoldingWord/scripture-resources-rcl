@@ -17,7 +17,11 @@ import {
   Toolbar,
   ColumnsMenu,
 } from '..';
-import {referenceIdsFromBooks, referenceFromReferenceId, referenceIdFromReference} from './helpers';
+import {
+  referenceIdsFromBooks,
+  referenceIdFromReference,
+  versesFromReferenceIdAndBooks,
+} from './helpers';
 import withSelections from '../selections/withSelections';
 import {SelectionsProvider} from '../selections/Selections.context';
 
@@ -71,11 +75,7 @@ function ParallelScripture ({
 
   const _referenceIds = filter ? [referenceIdFromReference(reference)] : referenceIds;
   const rows = _referenceIds.map(referenceId => {
-    const verses = books.map(book => {
-      const _reference = referenceFromReferenceId(referenceId);
-      const verse = book.chapters[_reference.chapter][_reference.verse];
-      return verse;
-    });
+    const verses = versesFromReferenceIdAndBooks({referenceId, books});
     const row = (
       <Row
         key={referenceId}
