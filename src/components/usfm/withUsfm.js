@@ -20,14 +20,16 @@ function withUsfm(Component){
     );
   }
 
-  UsfmComponent.propTypes = {
-    /** The usfm string to parse */
-    usfm: PropTypes.string.isRequired,
-    /** The url of the usfm string to parse */
-    onParse: PropTypes.func,
-  };
+  UsfmComponent.propTypes = withUsfm.propTypes;
 
   return UsfmComponent;
 }
+
+withUsfm.propTypes = {
+  /** The usfm string to parse */
+  usfm: PropTypes.string.isRequired,
+  /** The url of the usfm string to parse */
+  onParse: PropTypes.func,
+};
 
 export default withUsfm;

@@ -10,6 +10,18 @@ let sections = [
     content: 'README.md',
   },
   {
+    name: 'Resources ',
+    content: 'src/components/resources/_readme.md',
+    components: () => {
+      const componentNames = [
+        'withResource',
+      ];
+      return componentNames.map(componentName => {
+        return Path.resolve(__dirname, `src/components/resources`, `${componentName}.js`)
+      });
+    }
+  },
+  {
     name: 'USFM ',
     content: 'src/components/usfm/_readme.md',
     components: () => {
