@@ -2,6 +2,14 @@ import Path from 'path';
 import YAML from 'js-yaml-parser';
 import {get} from 'gitea-react-toolkit';
 
+export const resourcesFromResourceLinks = async ({resourceLinks, config}) => {
+  const promises = resourceLinks.map(resourceLink => {
+    return resourceFromResourceLink({resourceLink, config});
+  });
+  const resources = await Promise.all(promises);
+  return resources;
+};
+
 export const resourceFromResourceLink = async ({resourceLink, config}) => {
   let resource = parseResourceLink({resourceLink, config});
   resource.manifest = await getResourceManifest(resource);
@@ -9,7 +17,7 @@ export const resourceFromResourceLink = async ({resourceLink, config}) => {
     resource.project = projectFromProjects(resource);
   }
   return resource;
-}
+};
 
 export const parseResourceLink = ({resourceLink, config}) => {
   const parsed = resourceLink.split('/').filter(string => string.length > 0);

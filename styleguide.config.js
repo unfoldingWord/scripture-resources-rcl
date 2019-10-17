@@ -15,6 +15,7 @@ let sections = [
     components: () => {
       const componentNames = [
         'withResource',
+        'withResources',
       ];
       return componentNames.map(componentName => {
         return Path.resolve(__dirname, `src/components/resources`, `${componentName}.js`)

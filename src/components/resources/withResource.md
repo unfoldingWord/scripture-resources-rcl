@@ -4,7 +4,7 @@ import ReactJson from 'react-json-view';
 import {withResource} from 'scripture-resources-rcl';
 
 function Component ({resource}) {
-  const [file, setFile] = React.useState(<></>);
+  const [file, setFile] = React.useState();
 
   React.useEffect(() => {
     if (resource && resource.project) {
