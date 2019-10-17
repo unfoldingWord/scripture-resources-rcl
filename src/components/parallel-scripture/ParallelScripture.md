@@ -1,3 +1,5 @@
+### Manually providing files
+
 ```js
 import {ParallelScripture} from "scripture-resources-rcl";
 import usfmJS from 'usfm-js';
@@ -32,7 +34,6 @@ const reference = {
 
 const [component, setComponent] = React.useState(<></>)
 const [quote, setQuote] = React.useState();
-const quoteVerseObjects = books[0].chapters[reference.chapter][reference.verse].verseObjects;
 
 React.useEffect(() => {
   setComponent(
@@ -41,7 +42,6 @@ React.useEffect(() => {
       books={books}
       title='Titus'
       reference={reference}
-      quoteVerseObjects={quoteVerseObjects}
       onQuote={setQuote}
       height='250px'
     />
@@ -54,4 +54,59 @@ React.useEffect(() => {
     {component}
   </div>
 </>
+```
+
+### withResources
+
+```js
+import {ParallelScripture, withResources} from "scripture-resources-rcl";
+import usfmJS from 'usfm-js';
+
+function Component ({resources, reference}) {
+  const [books, setBooks] = React.useState([]);
+  const [quote, setQuote] = React.useState();
+
+  React.useEffect(() => {
+    const promises = resources.map((resource, index) => resource.project.file() );
+    Promise.all(promises).then(files => {
+      const _books = files.map(file => usfmJS.toJSON(file));
+      setBooks(_books);
+    });
+  }, [resources]);
+
+  const titles = resources.map((resource) => {
+    const { manifest: { dublin_core: {title, version} } } = resource;
+    return `${title} v${version}`;
+  });
+
+  return (
+    <>
+      <p>Quote: {quote}</p>
+      <div style={{border: '1px #ebf1f3 solid'}}>
+        <ParallelScripture
+          titles={titles}
+          books={books}
+          title='Titus'
+          reference={reference}
+          onQuote={setQuote}
+          height='250px'
+        />
+      </div>
+    </>
+  );
+}
+
+const Resources = withResources(Component);
+
+const resourceLinks = [
+  'unfoldingWord/el-x-koine/ugnt/v0.8/tit',
+  'unfoldingWord/en/ult/v5/tit',
+  'unfoldingWord/en/ust/v5/tit',
+];
+
+const config = {server: 'https://git.door43.org'};
+
+const reference = {bookId: 'tit', chapter: 1, verse: 2};
+
+<Resources resourceLinks={resourceLinks} config={config} reference={reference} />
 ```

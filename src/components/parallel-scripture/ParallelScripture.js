@@ -34,13 +34,17 @@ function ParallelScripture ({
   height,
   reference,
   onQuote,
-  quoteVerseObjects,
 }) {
   const classes = useStyles();
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
   const [columns, setColumns] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
+
+  let quoteVerseObjects = [];
+  if (reference && books[0]) {
+    quoteVerseObjects = books[0].chapters[reference.chapter][reference.verse].verseObjects;
+  }
 
   useEffect(() => {
     const _columns = titles.map((title, index) => ({id: index, label: title}));
@@ -144,8 +148,6 @@ ParallelScripture.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** filter the view to the reference */
   filter: PropTypes.bool,
-  /** the verseObjects of the verse to get the quote from */
-  quoteVerseObjects: PropTypes.array,
   /** callback to return the quote when selections made */
   onQuote: PropTypes.func,
 };
