@@ -42,7 +42,7 @@ function ParallelScripture ({
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
   let quoteVerseObjects = [];
-  if (reference && books[0]) {
+  if (reference && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
     quoteVerseObjects = books[0].chapters[reference.chapter][reference.verse].verseObjects;
   }
 

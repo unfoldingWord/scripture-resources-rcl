@@ -13,7 +13,7 @@ export const resourcesFromResourceLinks = async ({resourceLinks, config}) => {
 export const resourceFromResourceLink = async ({resourceLink, config}) => {
   let resource = parseResourceLink({resourceLink, config});
   resource.manifest = await getResourceManifest(resource);
-  if (resource.projectId && resource.manifest.projects) {
+  if (resource.projectId && resource.manifest && resource.manifest.projects) {
     resource.project = projectFromProjects(resource);
   }
   return resource;
@@ -52,8 +52,10 @@ export const projectFromProjects = (resource) => {
 // https://git.door43.org/unfoldingword/en_ult/raw/branch/master/manifest.yaml
 export const getFile = async ({username, repository, path, tag, config}) => {
   let url;
-  if (tag) url = Path.join(username, repository, 'raw/tag', tag, path);
-  else url = Path.join(username, repository, 'raw/branch/master', path);
+  if (tag && tag !== 'master')
+    url = Path.join(username, repository, 'raw/tag', tag, path);
+  else
+    url = Path.join(username, repository, 'raw/branch/master', path);
   try {
     const _config = {...config}; // prevents gitea-react-toolkit from modifying object
     const data = await get({url, config: _config});

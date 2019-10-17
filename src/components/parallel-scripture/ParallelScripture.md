@@ -75,8 +75,12 @@ function Component ({resources, reference}) {
   }, [resources]);
 
   const titles = resources.map((resource) => {
-    const { manifest: { dublin_core: {title, version} } } = resource;
-    return `${title} v${version}`;
+    let _title = `${resource.languageId}_${resource.resourceId}_${resource.tag}`;
+    if (resource.manifest) {
+      const { manifest: { dublin_core: {title, version} } } = resource;
+      _title =`${title} v${version}`;
+    }
+    return _title;
   });
 
   return (
