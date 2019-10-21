@@ -33,6 +33,7 @@ function ParallelScripture ({
   books,
   height,
   reference,
+  quote,
   onQuote,
 }) {
   const classes = useStyles();
@@ -106,6 +107,7 @@ function ParallelScripture ({
 
   return (
     <Selectionable
+      quote={quote}
       onQuote={onQuote}
       quoteVerseObjects={quoteVerseObjects}
     >

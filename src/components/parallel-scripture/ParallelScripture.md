@@ -8,7 +8,7 @@ function Component ({resources, reference}) {
   const [title, setTitle] = React.useState();
   const [titles, setTitles] = React.useState([]);
   const [books, setBooks] = React.useState([]);
-  const [quote, setQuote] = React.useState();
+  const [quote, setQuote] = React.useState('ἀρχῇ … Θεόν');
 
   React.useEffect(() => {
     if (resources.length > 0) {
@@ -40,6 +40,7 @@ function Component ({resources, reference}) {
           books={books}
           title={title}
           reference={reference}
+          quote={quote}
           onQuote={setQuote}
           height='250px'
         />
