@@ -7,6 +7,7 @@ const parsify = (array) => array.map(string => JSON.parse(string));
 
 function withSelections(Component){
   return function SelectionsComponent({
+    quote,
     onQuote,
     quoteVerseObjects,
     ...props

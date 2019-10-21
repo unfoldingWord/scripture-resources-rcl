@@ -5,25 +5,30 @@ import {ParallelScripture, withResources} from "scripture-resources-rcl";
 import usfmJS from 'usfm-js';
 
 function Component ({resources, reference}) {
+  const [title, setTitle] = React.useState();
   const [titles, setTitles] = React.useState([]);
   const [books, setBooks] = React.useState([]);
   const [quote, setQuote] = React.useState();
 
   React.useEffect(() => {
-    const _titles = resources.map((resource) => {
-      let _title = `Error: ${resource.resourceLink}`;
-      if (resource.manifest) {
-        const { manifest: { dublin_core: {title, version} } } = resource;
-        _title =`${title} v${version}`;
-      }
-      return _title;
-    });
-    setTitles(_titles);
-    const promises = resources.map((resource, index) => resource.project.file() );
-    Promise.all(promises).then(files => {
-      const _books = files.map(file => usfmJS.toJSON(file));
-      setBooks(_books);
-    });
+    if (resources.length > 0) {
+      const {title: _title} = resources[0].project;
+      setTitle(_title);
+      const _titles = resources.map((resource) => {
+        let _title = `Error: ${resource.resourceLink}`;
+        if (resource.manifest) {
+          const { manifest: { dublin_core: {title, version} } } = resource;
+          _title =`${title} v${version}`;
+        }
+        return _title;
+      });
+      setTitles(_titles);
+      const promises = resources.map((resource, index) => resource.project.file() );
+      Promise.all(promises).then(files => {
+        const _books = files.map(file => usfmJS.toJSON(file));
+        setBooks(_books);
+      });
+    }
   }, [resources]);
 
   return (
@@ -33,7 +38,7 @@ function Component ({resources, reference}) {
         <ParallelScripture
           titles={titles}
           books={books}
-          title='Titus'
+          title={title}
           reference={reference}
           onQuote={setQuote}
           height='250px'
