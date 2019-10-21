@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/unfoldingWord-box3/scripture-resources-rcl"
   },
-  "version": "0.9.3",
+  "version": "0.9.4",
   "private": false,
   "license": "MIT",
   "dependencies": {
