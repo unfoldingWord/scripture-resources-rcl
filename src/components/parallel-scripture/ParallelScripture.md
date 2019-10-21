@@ -5,7 +5,7 @@ import {ParallelScripture, withResources} from "scripture-resources-rcl";
 import usfmJS from 'usfm-js';
 
 function Component ({resources, reference}) {
-  const [title, setTitle] = React.useState();
+  const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
   const [books, setBooks] = React.useState([]);
   const [quote, setQuote] = React.useState('ἀρχῇ … Θεόν');

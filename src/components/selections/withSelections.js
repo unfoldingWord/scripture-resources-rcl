@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 
-import {selectionsFromQuote, quoteFromVerse} from './helpers';
-
-// const stringify = (array) => array.map(object => JSON.stringify(object));
-const parsify = (array) => array.map(string => JSON.parse(string));
+import helpers, {parsify, selectionsFromQuote, quoteFromVerse} from './helpers';
 
 function withSelections(Component){
   return function SelectionsComponent({
@@ -24,57 +21,28 @@ function withSelections(Component){
       }
     }, [selections, onQuote, quoteVerseObjects]);
 
-    const selectionFromWord = (word) => {
-      const {content, text} = word;
-      const selection = JSON.stringify({text: content || text});
-      return selection;
-    };
+    const isSelected = (word) => helpers.isSelected({word, selections});
 
-    const isSelected = (word) => {
-      const selection = word => selectionFromWord(word);
-      const selected = selections.includes(selection);
-      return selected;
-    };
-
-    const areSelected = (words) => {
-      let selected = false;
-      const _selections = words.map(word => selectionFromWord(word));
-      _selections.forEach(selection => {
-        if (selections.includes(selection)) selected = true;
-      });
-      return selected;
-    };
+    const areSelected = (words) => helpers.areSelected({words, selections});
 
     const addSelection = (word) => {
-      let _selections = new Set(selections);
-      const selection = selectionFromWord(word);
-      _selections.add(selection);
-      setSelections([..._selections]);
+      let _selections = helpers.addSelection({word, selections});
+      setSelections(_selections);
     };
 
     const addSelections = (words) => {
-      let _selections = new Set(selections);
-      words.forEach(word => {
-        const selection = selectionFromWord(word);
-        _selections.add(selection);
-      });
-      setSelections([..._selections]);
+      let _selections = helpers.addSelections({words, selections});
+      setSelections(_selections);
     };
 
     const removeSelection = (word) => {
-      const selection = selectionFromWord(word);
-      const _selections = new Set(selections);
-      _selections.delete(selection);
-      setSelections([..._selections]);
+      const _selections = helpers.removeSelection({word, selections});
+      setSelections(_selections);
     };
 
     const removeSelections = (words) => {
-      let _selections = new Set(selections);
-      words.forEach(word => {
-        const selection = selectionFromWord(word);
-        _selections.delete(selection);
-      });
-      setSelections([..._selections]);
+      let _selections = helpers.removeSelections({words, selections});
+      setSelections(_selections);
     };
 
     const _selections = deepFreeze(parsify(selections));
