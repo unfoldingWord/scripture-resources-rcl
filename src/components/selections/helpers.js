@@ -44,7 +44,7 @@ export const selectionFromWord = (word) => {
 };
 
 export const isSelected = ({word, selections}) => {
-  const selection = word => selectionFromWord(word);
+  const selection = selectionFromWord(word);
   const selected = selections.includes(selection);
   return selected;
 };

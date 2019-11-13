@@ -1,7 +1,7 @@
 {
   "name": "scripture-resources-rcl",
   "description": "A React Component Library for Rendering Scripture Resources.",
-  "homepage": "https://unfoldingword-box3.github.io/scripture-resources-rcl/",
+  "homepage": "https://scripture-resources-rcl.netlify.com/",
   "repository": {
     "type": "git",
     "url": "https://github.com/unfoldingWord-box3/scripture-resources-rcl"
@@ -18,12 +18,11 @@
   },
   "scripts": {
     "start": "styleguidist server",
-    "styleguide:build": "styleguidist build",
+    "build": "styleguidist build",
     "predeploy": "yarn styleguide:build",
     "deploy": "gh-pages -d styleguide",
     "postpublish": "yarn deploy",
     "test": "react-scripts test",
-    "build": "react-scripts build",
     "prepublishOnly": "rm -fr ./dist & babel ./src --out-dir ./dist -s inline"
   },
   "eslintConfig": {
@@ -33,9 +32,9 @@
     ]
   },
   "peerDependencies": {
-    "@material-ui/core": "^4.4.2",
-    "@material-ui/icons": "^4.4.3",
-    "@material-ui/lab": "^4.0.0-alpha.26",
+    "@material-ui/core": "^4.6.1",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.32",
     "@material-ui/styles": "^4.4.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"

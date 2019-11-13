@@ -25,7 +25,10 @@ function Component ({resources, reference}) {
       setTitles(_titles);
       const promises = resources.map((resource, index) => resource.project.file() );
       Promise.all(promises).then(files => {
+        const start = performance.now();
         const _books = files.map(file => usfmJS.toJSON(file));
+        const end = performance.now();
+        console.log(`USFM parsing books took: ${(end - start).toFixed(3)}ms`);
         setBooks(_books);
       });
     }
