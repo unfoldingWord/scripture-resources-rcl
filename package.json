@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/unfoldingWord-box3/scripture-resources-rcl"
   },
-  "version": "0.9.6",
+  "version": "0.9.8",
   "private": false,
   "license": "MIT",
   "dependencies": {
@@ -19,8 +19,7 @@
   "scripts": {
     "start": "styleguidist server",
     "build": "styleguidist build",
-    "predeploy": "yarn styleguide:build",
-    "deploy": "gh-pages -d styleguide",
+    "deploy": "git push",
     "postpublish": "yarn deploy",
     "test": "react-scripts test",
     "prepublishOnly": "rm -fr ./dist & babel ./src --out-dir ./dist -s inline"
