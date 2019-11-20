@@ -12,7 +12,7 @@ function Component ({resources}) {
   }, [resources]);
 
   const component = resources.map((resource, index) => (
-    <>
+    <div key={index}>
       <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em',  overflow: 'scroll'}}>
         <ReactJson src={resource} />
       </Paper>
@@ -21,7 +21,7 @@ function Component ({resources}) {
           {files[index]}
         </pre>
       </Paper>
-    </>
+    </div>
   ));
 
   return component;

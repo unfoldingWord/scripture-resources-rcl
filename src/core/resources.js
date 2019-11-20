@@ -1,6 +1,7 @@
 import Path from 'path';
 import YAML from 'js-yaml-parser';
 import {get} from 'gitea-react-toolkit';
+import usfmJS from 'usfm-js';
 
 export const resourcesFromResourceLinks = async ({resourceLinks, reference, config}) => {
   const promises = resourceLinks.map(resourceLink => {
@@ -44,11 +45,32 @@ export const getResourceProjectFile = async (
 };
 
 export const projectFromProjects = (resource) => {
-  const {reference, projectId, manifest: {projects}} = resource;
+  const {resourceLink, reference, projectId, manifest: {projects}} = resource;
   let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
   const project = projects.filter(project => project.identifier === identifier)[0];
   project.file = async () => getResourceProjectFile(resource);
+  if (project.path.match(/\.usfm$/)) {
+    project.json = async () => {
+      const start = performance.now();
+      const chapter = parseChapter({project, reference});
+      const end = performance.now();
+      console.log(`fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(3)}ms`);
+      return chapter;
+    };
+  }
   return project;
+};
+
+export const parseChapter = async ({project, reference}) => {
+  const usfm = await project.file();
+  const thisChapter = parseInt(reference.chapter);
+  const nextChapter = thisChapter + 1;
+  const regexpString = '(\\\\c\\s*'+ thisChapter +'\n(.*?\n?)*?)(?:\\\\c\\s*'+ nextChapter +'\n)(?:$)?';
+  const regexp = new RegExp(regexpString, 'm');
+  const matches = usfm.match(regexp);
+  const chapter = matches[1];
+  const json = usfmJS.toJSON(chapter);
+  return json;
 };
 
 // https://git.door43.org/unfoldingword/en_ult/raw/branch/master/manifest.yaml

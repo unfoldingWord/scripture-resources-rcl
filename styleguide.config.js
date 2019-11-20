@@ -40,6 +40,7 @@ let sections = [
     components: () => {
       const componentNames = [
         'ParallelScripture',
+        'ScriptureTable',
       ];
       return componentNames.map(componentName => {
         return Path.resolve(__dirname, `src/components/parallel-scripture`, `${componentName}.js`)
