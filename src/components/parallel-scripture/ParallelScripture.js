@@ -2,7 +2,14 @@ import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {ScriptureTable} from "scripture-resources-rcl";
 
-function ParallelScripture ({resources, reference, quote, onQuote, height}) {
+function ParallelScripture ({
+  resources,
+  reference,
+  quote,
+  onQuote,
+  height,
+  buttons,
+}) {
   const [title, setTitle] = useState('');
   const [titles, setTitles] = useState([]);
   const [books, setBooks] = useState([]);
@@ -26,15 +33,16 @@ function ParallelScripture ({resources, reference, quote, onQuote, height}) {
   }, [resources]);
 
   return (
-      <ScriptureTable
-        titles={titles}
-        books={books}
-        title={title}
-        reference={reference}
-        height={height}
-        quote={quote}
-        onQuote={onQuote}
-      />
+    <ScriptureTable
+      titles={titles}
+      books={books}
+      title={title}
+      reference={reference}
+      height={height}
+      quote={quote}
+      onQuote={onQuote}
+      buttons={buttons}
+    />
   );
 };
 

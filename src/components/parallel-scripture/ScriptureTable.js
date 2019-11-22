@@ -4,7 +4,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {
   ShortText,
   Subject,
-  ViewColumn
+  ViewColumn,
 } from '@material-ui/icons';
 import {
   Table,
@@ -35,6 +35,7 @@ function ScriptureTable ({
   reference,
   quote,
   onQuote,
+  buttons,
 }) {
   const classes = useStyles();
   const [filter, setFilter] = useState(!!reference);
@@ -111,7 +112,7 @@ function ScriptureTable ({
       onQuote={onQuote}
       quoteVerseObjects={quoteVerseObjects}
     >
-      <Toolbar title={title} actions={actions} />
+      <Toolbar title={title} actions={actions} buttons={buttons} />
       <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >
         <Table className={classes.table}>
           <Headers columns={columns} />

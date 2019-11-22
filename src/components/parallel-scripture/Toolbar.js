@@ -8,6 +8,7 @@ import {Actions} from '..';
 function Toolbar ({
   title,
   actions,
+  buttons,
 }) {
   const classes = useStyles();
   return (
@@ -24,7 +25,7 @@ function Toolbar ({
         </Typography>
       </Grid>
       <Grid item>
-        <Actions actions={actions} />
+        <Actions actions={actions} buttons={buttons} />
       </Grid>
     </Grid>
   );

@@ -5,6 +5,7 @@ import {Grid, IconButton} from '@material-ui/core';
 
 function ParallelTitles ({
   actions,
+  buttons,
 }) {
   const classes = useStyles();
   const _actions = actions.map(({icon, tooltip, onClick, menu}, index) => {
@@ -35,6 +36,7 @@ function ParallelTitles ({
       className={classes.root}
     >
       {_actions}
+      {buttons}
     </Grid>
   )
 };

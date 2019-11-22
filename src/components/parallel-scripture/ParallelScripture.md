@@ -1,5 +1,6 @@
 
 ```js
+import {TextField} from '@material-ui/core';
 import {ParallelScripture, withResources} from "scripture-resources-rcl";
 
 const ParallelScriptureWithResources = withResources(ParallelScripture);
@@ -21,6 +22,17 @@ function Component({
         onQuote={setQuote}
         height='250px'
       />
+      <form noValidate autoComplete="off">
+        <TextField
+          id="quote"
+          label="Quote"
+          variant="outlined"
+          defaultValue={quote}
+          onChange={(event) => {
+            setQuote(event.target.value);
+          }}
+        />
+      </form>
     </>
   );
 }

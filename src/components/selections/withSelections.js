@@ -14,8 +14,8 @@ function withSelections(Component){
     const [selections, setSelections] = useState([]);
 
     useEffect(() => {
-      const initialSelections = selectionsFromQuote({quote});
-      setSelections(initialSelections);
+      const _selections = selectionsFromQuote({quote});
+      setSelections(_selections);
     },[quote]);
 
     useEffect(() => {
