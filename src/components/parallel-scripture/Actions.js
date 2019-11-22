@@ -55,6 +55,7 @@ const useStyles = makeStyles(theme => ({
   root: {
   },
   action: {
+    padding: '8px',
   },
 }));
 

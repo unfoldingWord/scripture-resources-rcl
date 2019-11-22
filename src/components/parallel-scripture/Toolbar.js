@@ -44,7 +44,7 @@ Toolbar.propTypes = {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: `0 ${theme.spacing(1)}px`,
+    padding: `0`,
     background: '#fff',
   },
   title: {

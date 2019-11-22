@@ -17,7 +17,13 @@ function ParallelScripture ({
   useEffect(() => {
     if (resources.length > 0) {
       const {title: _title} = resources[0].project;
-      setTitle(_title);
+      let ref = '';
+      if (reference) {
+        if (reference.chapter && reference.verse) ref = reference.chapter + ':' + reference.verse;
+        else if (reference.chapter) ref = reference.chapter;
+      }
+      const __title = _title + ' ' + ref;
+      setTitle(__title);
       const _titles = resources.map((resource) => {
         let _title = `Error: ${resource.resourceLink}`;
         if (resource.manifest) {
