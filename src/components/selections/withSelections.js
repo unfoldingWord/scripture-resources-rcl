@@ -11,8 +11,12 @@ function withSelections(Component){
     quoteVerseObjects,
     ...props
   }) {
-    const initialSelections = selectionsFromQuote({quote});
-    const [selections, setSelections] = useState(initialSelections);
+    const [selections, setSelections] = useState([]);
+
+    useEffect(() => {
+      const initialSelections = selectionsFromQuote({quote});
+      setSelections(initialSelections);
+    },[quote]);
 
     useEffect(() => {
       if (quoteVerseObjects && onQuote) {
