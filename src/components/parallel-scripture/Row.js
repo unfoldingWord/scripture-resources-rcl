@@ -27,9 +27,9 @@ function Row ({
 
   const skeleton = (
     <TableCell colSpan={columns.length} className={classes.cell}>
-      <Waypoint onEnter={onVisibility} />
-      <Skeleton height={110} width='100%' />
-      <Waypoint onEnter={onVisibility} />
+      <Waypoint onEnter={onVisibility}>
+        <Skeleton height={110} width='100%' />
+      </Waypoint>
     </TableCell>
   );
 
