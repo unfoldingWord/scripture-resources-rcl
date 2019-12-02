@@ -71,7 +71,7 @@ ParallelScripture.propTypes = {
   /** pass the quote in */
   quote: PropTypes.string.isRequired,
   /** callback to return the quote when selections made */
-  onQuote: PropTypes.func.isRequired,
+  onQuote: PropTypes.func,
   /** set the height to ensure rendering work properly   */
   height: PropTypes.string.isRequired,
 };

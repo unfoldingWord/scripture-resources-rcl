@@ -21,7 +21,7 @@ export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
   const verses = books.map((book, index) => {
     const _reference = referenceFromReferenceId(referenceId);
     let verse = book.chapters[_reference.chapter][_reference.verse];
-    if (index === 0) {
+    if (index === 0 && verse.verseObjects && verse.verseObjects.length) {
       verse.verseObjects = occurrenceInjectVerseObjects(verse.verseObjects);
     }
     return verse;

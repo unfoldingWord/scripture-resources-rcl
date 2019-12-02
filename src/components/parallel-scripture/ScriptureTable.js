@@ -156,7 +156,7 @@ ScriptureTable.propTypes = {
   /** pass the quote in from parent state */
   quote: PropTypes.string,
   /** callback to return the quote when selections made */
-  onQuote: PropTypes.func.isRequired,
+  onQuote: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({
