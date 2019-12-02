@@ -1,3 +1,4 @@
+import {occurrenceInjectVerseObjects} from '../../core/selections/verseObjects';
 
 export const referenceIdsFromBooks = ({books}) => {
   const start = performance.now();
@@ -17,9 +18,12 @@ export const referenceIdsFromBooks = ({books}) => {
 };
 
 export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
-  const verses = books.map(book => {
+  const verses = books.map((book, index) => {
     const _reference = referenceFromReferenceId(referenceId);
-    const verse = book.chapters[_reference.chapter][_reference.verse];
+    let verse = book.chapters[_reference.chapter][_reference.verse];
+    if (index === 0) {
+      verse.verseObjects = occurrenceInjectVerseObjects(verse.verseObjects);
+    }
     return verse;
   });
   return verses;

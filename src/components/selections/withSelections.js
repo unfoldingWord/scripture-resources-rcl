@@ -7,23 +7,24 @@ import helpers, {parsify, selectionsFromQuote, quoteFromVerse} from './helpers';
 function withSelections(Component){
   return function SelectionsComponent({
     quote,
+    occurrence,
     onQuote,
-    quoteVerseObjects,
+    verseObjects,
     ...props
   }) {
     const [selections, setSelections] = useState([]);
 
     useEffect(() => {
-      const _selections = selectionsFromQuote({quote});
+      const _selections = selectionsFromQuote({quote, verseObjects, occurrence});
       setSelections(_selections);
-    },[quote]);
+    },[quote, occurrence, verseObjects]);
 
     useEffect(() => {
-      if (quoteVerseObjects && onQuote) {
-        const _quote = quoteFromVerse({selections, quoteVerseObjects});
+      if (verseObjects && onQuote) {
+        const _quote = quoteFromVerse({selections, verseObjects});
         onQuote(_quote);
       }
-    }, [selections, onQuote, quoteVerseObjects]);
+    }, [selections, onQuote, verseObjects]);
 
     const isSelected = (word) => helpers.isSelected({word, selections});
 
@@ -68,6 +69,7 @@ function withSelections(Component){
 }
 
 withSelections.propTypes = {
+  quote: PropTypes.string.isRequired,
   quoteVerseObjects: PropTypes.array,
   onQuote: PropTypes.func,
 };

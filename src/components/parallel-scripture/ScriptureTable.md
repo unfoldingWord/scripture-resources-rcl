@@ -8,7 +8,8 @@ function Component ({resources, reference}) {
   const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
   const [books, setBooks] = React.useState([]);
-  const [quote, setQuote] = React.useState('ἀρχῇ … Θεόν');
+  const [quote, setQuote] = React.useState('Θεὸς…λόγος');
+  const [occurrence, setOccurrence] = React.useState(1);
 
   React.useEffect(() => {
     if (resources.length > 0) {
@@ -37,6 +38,7 @@ function Component ({resources, reference}) {
   return (
     <>
       <p>Quote: {quote}</p>
+      <p>Occurrence: {occurrence}</p>
       <div style={{border: '1px #ebf1f3 solid'}}>
         <ScriptureTable
           titles={titles}
@@ -45,6 +47,7 @@ function Component ({resources, reference}) {
           reference={reference}
           quote={quote}
           onQuote={setQuote}
+          occurrence={occurrence}
           height='250px'
         />
       </div>
@@ -102,7 +105,8 @@ const reference = {
 };
 
 const [component, setComponent] = React.useState(<></>)
-const [quote, setQuote] = React.useState();
+const [quote, setQuote] = React.useState("ἐλπίδι");
+const [occurrence, setOccurrence] = React.useState(1);
 
 React.useEffect(() => {
   setComponent(
@@ -111,7 +115,9 @@ React.useEffect(() => {
       books={books}
       title='Titus'
       reference={reference}
+      quote={quote}
       onQuote={setQuote}
+      occurrence={occurrence}
       height='250px'
     />
   );
@@ -119,6 +125,7 @@ React.useEffect(() => {
 
 <>
   <p>Quote: {quote}</p>
+  <p>Occurrence: {occurrence}</p>
   <div style={{border: '1px #ebf1f3 solid'}}>
     {component}
   </div>

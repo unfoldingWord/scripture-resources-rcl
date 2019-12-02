@@ -7,6 +7,7 @@ function ParallelScripture ({
   reference,
   quote,
   onQuote,
+  occurrence,
   height,
   buttons,
 }) {
@@ -36,7 +37,7 @@ function ParallelScripture ({
       const promises = resources.map((resource, index) => resource.project.json() );
       Promise.all(promises).then(setBooks);
     }
-  }, [resources]);
+  }, [resources, reference]);
 
   return (
     <ScriptureTable
@@ -46,7 +47,8 @@ function ParallelScripture ({
       reference={reference}
       height={height}
       quote={quote}
-      onQuote={onQuote}
+      // onQuote={onQuote} // disable until round trip is working
+      occurrence={occurrence}
       buttons={buttons}
     />
   );

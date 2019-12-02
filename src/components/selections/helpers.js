@@ -1,20 +1,21 @@
+import {selectionsFromQuoteAndVerseObjects} from '../../core/selections/selections';
+
 // const stringify = (array) => array.map(object => JSON.stringify(object));
 export const parsify = (array) => array.map(string => JSON.parse(string));
 
-export const selectionsFromQuote = ({quote, quoteVerseObjects}) => {
+export const selectionsFromQuote = ({quote, verseObjects, occurrence}) => {
   let selections = [];
-  if (quote) {
-    const words = (quote || '').replace(/[…\s]+/g, ' ').split(' ');
-    selections = words.filter(word => word.length > 0)
-    .map(text => JSON.stringify({text}));
+  if (quote && verseObjects && occurrence) {
+    selections = selectionsFromQuoteAndVerseObjects({quote, verseObjects, occurrence})
+    .map(selection => JSON.stringify(selection));
   }
   return selections;
 };
 
-export const quoteFromVerse = ({selections, quoteVerseObjects}) => {
-  let quotedWords = new Array(quoteVerseObjects.length);
+export const quoteFromVerse = ({selections, verseObjects}) => {
+  let quotedWords = new Array(verseObjects.length);
   const _selections = selections.map(selection => JSON.parse(selection).text);
-  quoteVerseObjects.forEach((verseObject, index) => {
+  verseObjects.forEach((verseObject, index) => {
     const {type, text} = verseObject;
     if (type === 'word') {
       const match = _selections.includes(text);
@@ -38,8 +39,13 @@ export const quoteFromVerse = ({selections, quoteVerseObjects}) => {
 // };
 
 export const selectionFromWord = (word) => {
-  const {content, text} = word;
-  const selection = JSON.stringify({text: content || text});
+  const {content, text, occurrence, occurrences} = word;
+  const selectionObject = {
+    text: content || text,
+    occurrence: parseInt(occurrence),
+    occurrences: parseInt(occurrences),
+  };
+  const selection = JSON.stringify(selectionObject);
   return selection;
 };
 

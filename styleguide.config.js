@@ -23,6 +23,18 @@ let sections = [
     }
   },
   {
+    name: 'Selections ',
+    content: 'src/components/selections/_readme.md',
+    components: () => {
+      const componentNames = [
+        'withSelections',
+      ];
+      return componentNames.map(componentName => {
+        return Path.resolve(__dirname, `src/components/selections`, `${componentName}.js`)
+      });
+    }
+  },
+  {
     name: 'USFM ',
     content: 'src/components/usfm/_readme.md',
     components: () => {
@@ -110,6 +122,12 @@ let sections = [
   {
     name: 'Core',
     content: 'src/core/README.md',
+    sections: [
+      {
+        name: 'Selections',
+        content: 'src/core/selections/selections.md',
+      },
+    ],
   },
 ];
 

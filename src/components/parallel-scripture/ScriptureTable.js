@@ -35,6 +35,7 @@ function ScriptureTable ({
   reference,
   quote,
   onQuote,
+  occurrence,
   buttons,
 }) {
   const classes = useStyles();
@@ -43,9 +44,9 @@ function ScriptureTable ({
   const [columns, setColumns] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
-  let quoteVerseObjects = [];
+  let verseObjects = [];
   if (reference && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
-    quoteVerseObjects = books[0].chapters[reference.chapter][reference.verse].verseObjects;
+    verseObjects = books[0].chapters[reference.chapter][reference.verse].verseObjects;
   }
 
   useEffect(() => {
@@ -109,8 +110,9 @@ function ScriptureTable ({
   return (
     <Selectionable
       quote={quote}
-      onQuote={onQuote}
-      quoteVerseObjects={quoteVerseObjects}
+      // onQuote={onQuote} // disable until round trip is working
+      occurrence={occurrence}
+      verseObjects={verseObjects}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
       <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >
@@ -152,7 +154,7 @@ ScriptureTable.propTypes = {
   /** filter the view to the reference */
   filter: PropTypes.bool,
   /** pass the quote in from parent state */
-  quote: PropTypes.string.isRequired,
+  quote: PropTypes.string,
   /** callback to return the quote when selections made */
   onQuote: PropTypes.func.isRequired,
 };
