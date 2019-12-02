@@ -17,7 +17,7 @@ export const flattenVerseObjects = (verseObjects, flat=[]) => {
     if (object) {
       if (object.type === 'milestone') { // get children of milestone
         const _flat = flattenVerseObjects(object.children, flat);
-        _flat.forEach(flat.push);
+        _flat.forEach(_object => flat.push(_object));
       } else {
         flat.push(object);
       }
