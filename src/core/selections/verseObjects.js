@@ -96,15 +96,18 @@ export const getOccurrences = (words, subString) => {
  * @return {verseObjects: Array} - clone of verseObjects and word map
  */
 export const occurrenceInjectVerseObjects = (verseObjects) => {
-  const flattenedVerseObjects = flattenVerseObjects(verseObjects);
-  const _verseObjects = flattenedVerseObjects.map((verseObject, index) => {
-    let _verseObject = {...verseObject};
-    if (verseObject.type === 'word') {
-      const occurrence = getOccurrence(flattenedVerseObjects, index, verseObject.text);
-      const occurrences = getOccurrences(flattenedVerseObjects, verseObject.text);
-      _verseObject = {...verseObject, occurrence, occurrences};
-    }
-    return _verseObject;
-  });
+  let _verseObjects = [];
+  if (verseObjects && verseObjects.length > 0) {
+    const flattenedVerseObjects = flattenVerseObjects(verseObjects);
+    _verseObjects = flattenedVerseObjects.map((verseObject, index) => {
+      let _verseObject = {...verseObject};
+      if (verseObject.type === 'word') {
+        const occurrence = getOccurrence(flattenedVerseObjects, index, verseObject.text);
+        const occurrences = getOccurrences(flattenedVerseObjects, verseObject.text);
+        _verseObject = {...verseObject, occurrence, occurrences};
+      }
+      return _verseObject;
+    });
+  }
   return _verseObjects;
 };
