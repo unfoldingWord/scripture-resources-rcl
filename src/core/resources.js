@@ -52,13 +52,21 @@ export const projectFromProjects = (resource) => {
   if (project.path.match(/\.usfm$/)) {
     project.json = async () => {
       const start = performance.now();
-      const chapter = parseChapter({project, reference});
+      let json;
+      if (reference && reference.chapter) json = parseChapter({project, reference});
+      else json = parseBook({project});
       const end = performance.now();
       console.log(`fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(3)}ms`);
-      return chapter;
+      return json;
     };
   }
   return project;
+};
+
+export const parseBook = async ({project}) => {
+  const usfm = await project.file();
+  const json = usfmJS.toJSON(usfm);
+  return json;
 };
 
 export const parseChapter = async ({project, reference}) => {
