@@ -73,11 +73,12 @@ export const parseChapter = async ({project, reference}) => {
   const usfm = await project.file();
   const thisChapter = parseInt(reference.chapter);
   const nextChapter = thisChapter + 1;
-  const regexpString = '(\\\\c\\s*'+ thisChapter +'\n(.*?\n?)*?)(?:\\\\c\\s*'+ nextChapter +'\n)(?:$)?';
-  const regexp = new RegExp(regexpString, 'm');
+  const regexpString = '(\\\\c\\s*'+ thisChapter +'\\s*(.*?\n?)*?)(?:(\\\\c\\s*'+ nextChapter +'|$))';
+  const regexp = new RegExp(regexpString, '');
   const matches = usfm.match(regexp);
   const chapter = matches[1];
   const json = usfmJS.toJSON(chapter);
+  // debugger
   return json;
 };
 
