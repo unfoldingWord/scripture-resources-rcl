@@ -12,29 +12,40 @@ export const selectionsFromQuoteAndVerseObjects = ({quote, verseObjects, occurre
 
 export const selectionsFromQuoteAndString = ({quote, string, occurrence}) => {
   let selections = [];
-  const subquotes = quote.split('…');
+  let subquotes = quote.split('…');
+  if (parseInt(occurrence) === -1) {
+    const occurrences = occurrencesInString(string, quote);
+    subquotes = (new Array(occurrences)).fill(quote);
+  }
   let prescedingText;
   let followingText = string.slice();
   let textPrescedingPreviousSubquote = '';
   subquotes.forEach((subquote, index) => {
     let splitString = followingText.split(subquote);
-    if (index === 0) prescedingText = splitString.slice(0, occurrence).join(subquote);
+    if (index === 0 && parseInt(occurrence) > -1) prescedingText = splitString.slice(0, occurrence).join(subquote);
     else prescedingText = splitString.slice(0,1).join(subquote);
-    const selectedTokens = tokenize({text: subquote, greedy: true});
-    const subSelections = selectedTokens.map(_selectedText => {
-      let subSelection = generateSelection(
-        {selectedText: _selectedText, prescedingText, entireText: string}
-      );
-      if (index > 0) {
-        const occurrencesBeforePreviousSubquote = occurrencesInString(textPrescedingPreviousSubquote, subquote);
-        subSelection.occurrence = occurrencesBeforePreviousSubquote + 1;
-      }
-      return subSelection;
-    });
-    textPrescedingPreviousSubquote = prescedingText;
+    const subSelections = subSelectionsFromSubquote(
+      {subquote, index, prescedingText, textPrescedingPreviousSubquote, string}
+    );
+    textPrescedingPreviousSubquote = [textPrescedingPreviousSubquote, prescedingText].join(subquote);
     subSelections.forEach(subSelection => selections.push(subSelection));
   });
   return selections;
+};
+
+export const subSelectionsFromSubquote = ({subquote, index, prescedingText, textPrescedingPreviousSubquote, string}) => {
+  const selectedTokens = tokenize({text: subquote, greedy: true});
+  const subSelections = selectedTokens.map(_selectedText => {
+    let subSelection = generateSelection(
+      {selectedText: _selectedText, prescedingText, entireText: string}
+    );
+    if (index > 0) {
+      const occurrencesBeforePreviousSubquote = occurrencesInString(textPrescedingPreviousSubquote, subquote);
+      subSelection.occurrence = occurrencesBeforePreviousSubquote + 1;
+    }
+    return subSelection;
+  });
+  return subSelections;
 };
 
 /**

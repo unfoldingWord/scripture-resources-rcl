@@ -4,6 +4,21 @@ import {
 
 test('selectionsFromQuoteAndString', () => {
   const input = {
+    quote: "λόγος",
+    string: "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+    occurrence: -1,
+  };
+  const output = selectionsFromQuoteAndString(input);
+  const expected = [
+    { text: "λόγος", occurrence: 1, occurrences: 3 },
+    { text: "λόγος", occurrence: 2, occurrences: 3 },
+    { text: "λόγος", occurrence: 3, occurrences: 3 },
+  ];
+  expect(output).toStrictEqual(expected);
+});
+
+test('selectionsFromQuoteAndString', () => {
+  const input = {
     quote: "Θεὸς…λόγος",
     string: "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
     occurrence: 1,
