@@ -10,9 +10,22 @@
   "private": false,
   "license": "MIT",
   "dependencies": {
-    "deep-freeze": "^0.0.1",
-    "gitea-react-toolkit": "^0.3.5",
+    "@material-ui/core": "^4.7.0",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.32",
+    "@material-ui/styles": "^4.4.1",
+    "axios": "^0.19.0",
+    "cypress": "^3.6.1",
+    "deep-freeze": "0.0.1",
+    "dog-names": "^2.0.0",
+    "gitea-react-toolkit": "^0.5.2",
     "js-yaml-parser": "^1.0.0",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-json-view": "^1.19.1",
+    "react-styleguidist": "^9.1.14",
     "react-waypoint": "^9.0.2",
     "string-punctuation-tokenizer": "^2.0.0-beta.2",
     "usfm-js": "^2.0.2"
@@ -22,22 +35,18 @@
     "build": "styleguidist build",
     "deploy": "git push",
     "postpublish": "yarn deploy",
-    "test": "jest ./src",
-    "prepublishOnly": "rm -fr ./dist & babel ./src --out-dir ./dist -s inline"
+    "prepublishOnly": "rm -fr ./dist & babel ./src --out-dir ./dist -s inline",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "nyc:report": "nyc report --reporter=json-summary --reporter=text",
+    "test": "start-test 6060 cypress:run && npm run nyc:report",
+    "create-coverage-badge": "bash scripts/create-badge-json.sh"
   },
   "eslintConfig": {
     "extends": "react-app",
     "plugins": [
       "react-hooks"
     ]
-  },
-  "peerDependencies": {
-    "@material-ui/core": "^4.6.1",
-    "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.32",
-    "@material-ui/styles": "^4.4.1",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
   },
   "browserslist": [
     ">0.2%",
@@ -46,26 +55,22 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
-    "@material-ui/core": "^4.4.2",
-    "@material-ui/icons": "^4.4.3",
-    "@material-ui/lab": "^4.0.0-alpha.26",
-    "@material-ui/styles": "^4.4.1",
-    "babel-plugin-inline-json-import": "^0.3.2",
-    "eslint-config-react-app": "^5.0.1",
-    "eslint-plugin-react-hooks": "^1.0.1",
-    "ghpages": "^0.0.10",
-    "jest": "^24.9.0",
-    "lodash": "^4.17.15",
-    "prop-types": "^15.7.2",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-json-view": "^1.19.1",
-    "react-scripts": "^3.1.1",
-    "react-styleguidist": "^9.1.16"
+    "@cypress/code-coverage": "^1.10.2",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-istanbul": "^5.2.0",
+    "cross-env": "^6.0.3",
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
+    "istanbul-lib-coverage": "^2.0.5",
+    "nyc": "^14.1.1",
+    "start-server-and-test": "^1.10.6",
+    "style-loader": "^1.0.0",
+    "url-loader": "^2.1.0",
+    "webpack": "^4.39.1"
   },
   "main": "dist/index.js",
   "files": [

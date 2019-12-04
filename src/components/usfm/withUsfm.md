@@ -1,5 +1,5 @@
 ```js
-import {ParallelScripture, withUsfm} from "scripture-resources-rcl";
+import {ParallelScripture, withUsfm} from "../../";
 
 import bhd_tit from '../mocks/bhd_tit.usfm.js';
 

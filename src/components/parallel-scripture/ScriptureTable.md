@@ -1,7 +1,7 @@
 ### withResources
 
 ```js
-import {ScriptureTable, withResources} from "scripture-resources-rcl";
+import {ScriptureTable, withResources} from "../../";
 import usfmJS from 'usfm-js';
 
 function Component ({resources, reference}) {
@@ -73,7 +73,7 @@ const reference = {bookId: 'jhn', chapter: 1, verse: 1};
 ### Manually providing files
 
 ```js
-import {ScriptureTable} from "scripture-resources-rcl";
+import {ScriptureTable} from "../../";
 import usfmJS from 'usfm-js';
 
 import ugnt_tit from '../mocks/ugnt_tit.usfm.js';

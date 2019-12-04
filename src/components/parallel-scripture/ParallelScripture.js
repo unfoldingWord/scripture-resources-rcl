@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {ScriptureTable} from "scripture-resources-rcl";
+import { ScriptureTable } from "../../";
 
-function ParallelScripture ({
+function ParallelScripture({
   resources,
   reference,
   quote,
@@ -17,7 +17,7 @@ function ParallelScripture ({
 
   useEffect(() => {
     if (resources.length > 0) {
-      const {title: _title} = resources[0].project;
+      const { title: _title } = resources[0].project;
       let ref = '';
       if (reference) {
         if (reference.chapter && reference.verse) ref = reference.chapter + ':' + reference.verse;
@@ -28,13 +28,13 @@ function ParallelScripture ({
       const _titles = resources.map((resource) => {
         let _title = `Error: ${resource.resourceLink}`;
         if (resource.manifest) {
-          const { manifest: { dublin_core: {title, version} } } = resource;
-          _title =`${title} v${version}`;
+          const { manifest: { dublin_core: { title, version } } } = resource;
+          _title = `${title} v${version}`;
         }
         return _title;
       });
       setTitles(_titles);
-      const promises = resources.map((resource, index) => resource.project.json() );
+      const promises = resources.map((resource, index) => resource.project.json());
       Promise.all(promises).then(setBooks);
     }
   }, [resources, reference]);
