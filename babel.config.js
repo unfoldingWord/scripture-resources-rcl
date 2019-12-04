@@ -10,5 +10,12 @@ module.exports = {
 		],
 		'@babel/react',
 	],
-	plugins: ['@babel/plugin-proposal-class-properties', "istanbul"]
+	plugins: ['@babel/plugin-proposal-class-properties', ["istanbul", {
+		"include": [
+			"src/components/**/**.js"
+		],
+		"exclude": [
+			"**/mocks/**"
+		]
+	}]]
 };

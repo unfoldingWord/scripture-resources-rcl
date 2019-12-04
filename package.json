@@ -75,5 +75,13 @@
   "main": "dist/index.js",
   "files": [
     "dist/*"
-  ]
+  ],
+  "nyc": {
+    "include": [
+      "src/components/**/**.js"
+    ],
+    "exclude": [
+      "**/mocks/**"
+    ]
+  }
 }
