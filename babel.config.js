@@ -3,7 +3,7 @@ module.exports = {
 		'@babel/env',
 		'@babel/react',
 	],
-	plugins: ['@babel/plugin-proposal-class-properties', ["istanbul", {
+	plugins: ['@babel/transform-runtime', ["istanbul", {
 		"include": [
 			"src/components/**/**.js"
 		],
