@@ -133,13 +133,6 @@ let sections = [
 
 module.exports = {
   title: `${upperFirst(camelCase(name))} v${version}`,
-  template: {
-    head: {
-      scripts: [
-        { src: "http://localhost:8097" }
-      ]
-    }
-  },
   ribbon: {
     url: repository.url,
     text: 'View on GitHub'
