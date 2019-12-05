@@ -3,7 +3,7 @@ module.exports = {
 		'@babel/env',
 		'@babel/react',
 	],
-	plugins: ['@babel/transform-runtime', ["istanbul", {
+	plugins: ['inline-json-import', '@babel/transform-runtime', ["istanbul", {
 		"include": [
 			"src/components/**/**.js"
 		],

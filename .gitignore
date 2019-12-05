@@ -1,7 +1,9 @@
 # production
-/build
-/styleguide
+build
+styleguide
 dist
+.DS_Store
+package-lock.json
 
 # Logs
 logs
@@ -25,6 +27,8 @@ coverage
 # nyc test coverage
 .nyc_output
 **/*.mp4
+**/*.png
+
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
