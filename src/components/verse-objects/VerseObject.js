@@ -81,8 +81,8 @@ VerseObject.propTypes = {
     strong: PropTypes.string,
     lemma: PropTypes.string,
     morph: PropTypes.string,
-    occurrence: PropTypes.string,
-    occurrences: PropTypes.string,
+    occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    occurrences: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }).isRequired,
   originalWords: PropTypes.array,
   /** render verses paragraphs, use explicit paragraphs */
