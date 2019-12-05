@@ -1,7 +1,7 @@
 ## Large Book for testing performance
 
 ```js
-import {Book} from "../../";
+import {Book} from "scripture-resources-rcl";
 import usfmJS from 'usfm-js';
 import usfm from '../mocks/en_psa.usfm.js';
 
@@ -15,7 +15,7 @@ const book = usfmJS.toJSON(usfm);
 ## Aligned Example
 
 ```js
-import {Book} from "../../";
+import {Book} from "scripture-resources-rcl";
 import usfmJS from 'usfm-js';
 import usfm from '../mocks/hi_aligned_rev.usfm.js';
 
@@ -29,7 +29,7 @@ const book = usfmJS.toJSON(usfm);
 ## Hebrew Example
 
 ```js
-import {Book} from "../../";
+import {Book} from "scripture-resources-rcl";
 import usfmJS from 'usfm-js';
 import usfm from '../mocks/uhb_rut.usfm.js';
 

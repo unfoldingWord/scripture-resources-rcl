@@ -1,5 +1,5 @@
 ```js
-import {Verses} from "../../";
+import {Verses} from "scripture-resources-rcl";
 import usfmJS from 'usfm-js';
 import usfm from '../mocks/hi_tit.usfm.js';
 

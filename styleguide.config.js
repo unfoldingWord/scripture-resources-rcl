@@ -133,6 +133,13 @@ let sections = [
 
 module.exports = {
   title: `${upperFirst(camelCase(name))} v${version}`,
+  template: {
+    head: {
+      scripts: [
+        { src: "http://localhost:8097" }
+      ]
+    }
+  },
   ribbon: {
     url: repository.url,
     text: 'View on GitHub'
@@ -151,7 +158,7 @@ module.exports = {
   sections,
   components: 'src/components/**/[A-Z]*.js',
   moduleAliases: {
-    'rsg-example': path.resolve(__dirname, 'src'),
+    "scripture-resources-rcl": Path.resolve(__dirname, "src"),
   },
   version,
   webpackConfig: {

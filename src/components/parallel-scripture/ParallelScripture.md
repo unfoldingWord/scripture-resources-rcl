@@ -1,7 +1,7 @@
 
 ```js
 import {TextField} from '@material-ui/core';
-import {ParallelScripture, withResources} from "../../";
+import {ParallelScripture, withResources} from "scripture-resources-rcl";
 
 const ParallelScriptureWithResources = withResources(ParallelScripture);
 
