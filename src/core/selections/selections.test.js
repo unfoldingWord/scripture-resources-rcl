@@ -19,6 +19,21 @@ test('selectionsFromQuoteAndString', () => {
 
 test('selectionsFromQuoteAndString', () => {
   const input = {
+    quote: "ἐν ἀρχῇ ἦν",
+    string: "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+    occurrence: 1,
+  };
+  const output = selectionsFromQuoteAndString(input);
+  const expected = [
+    { text: "ἐν", occurrence: 1, occurrences: 1 },
+    { text: "ἀρχῇ", occurrence: 1, occurrences: 1 },
+    { text: "ἦν", occurrence: 1, occurrences: 3 },
+  ];
+  expect(output).toStrictEqual(expected);
+});
+
+test('selectionsFromQuoteAndString', () => {
+  const input = {
     quote: "Θεὸς…λόγος",
     string: "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
     occurrence: 1,

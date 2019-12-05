@@ -13,7 +13,7 @@ export const selectionsFromQuoteAndVerseObjects = ({quote, verseObjects, occurre
 export const selectionsFromQuoteAndString = ({quote, string, occurrence}) => {
   let selections = [];
   let subquotes = quote.split('…');
-  if (parseInt(occurrence) === -1) {
+  if (occurrence === -1) {
     const occurrences = occurrencesInString(string, quote);
     subquotes = (new Array(occurrences)).fill(quote);
   }
@@ -22,7 +22,7 @@ export const selectionsFromQuoteAndString = ({quote, string, occurrence}) => {
   let textPrescedingPreviousSubquote = '';
   subquotes.forEach((subquote, index) => {
     let splitString = followingText.split(subquote);
-    if (index === 0 && parseInt(occurrence) > -1) prescedingText = splitString.slice(0, occurrence).join(subquote);
+    if (index === 0 && occurrence > -1) prescedingText = splitString.slice(0, occurrence).join(subquote);
     else prescedingText = splitString.slice(0,1).join(subquote);
     const subSelections = subSelectionsFromSubquote(
       {subquote, index, prescedingText, textPrescedingPreviousSubquote, string}
