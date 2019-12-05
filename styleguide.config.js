@@ -158,7 +158,7 @@ module.exports = {
   sections,
   components: 'src/components/**/[A-Z]*.js',
   moduleAliases: {
-    "scripture-resources-rcl": Path.resolve(__dirname, "src"),
+    "scripture-resources-rcl": path.resolve(__dirname, "src"),
   },
   version,
   webpackConfig: {
