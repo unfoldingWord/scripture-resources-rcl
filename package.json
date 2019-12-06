@@ -11,11 +11,9 @@
   "license": "MIT",
   "dependencies": {
     "deep-freeze": "^0.0.1",
-    "gitea-react-toolkit": "^0.3.5",
     "js-yaml-parser": "^1.0.0",
     "react-waypoint": "^9.0.2",
-    "string-punctuation-tokenizer": "^2.0.0-beta.2",
-    "usfm-js": "^2.0.2"
+    "string-punctuation-tokenizer": "^2.0.0-beta.2"
   },
   "scripts": {
     "start": "styleguidist server",
@@ -36,8 +34,10 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.32",
     "@material-ui/styles": "^4.4.1",
+    "gitea-react-toolkit": "^0.6.6",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "usfm-js": "^2.0.2"
   },
   "browserslist": [
     ">0.2%",
@@ -57,7 +57,7 @@
     "babel-plugin-inline-json-import": "^0.3.2",
     "eslint-config-react-app": "^5.0.1",
     "eslint-plugin-react-hooks": "^1.0.1",
-    "ghpages": "^0.0.10",
+    "gitea-react-toolkit": "^0.6.6",
     "jest": "^24.9.0",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
@@ -65,7 +65,8 @@
     "react-dom": "^16.9.0",
     "react-json-view": "^1.19.1",
     "react-scripts": "^3.1.1",
-    "react-styleguidist": "^9.1.16"
+    "react-styleguidist": "^9.1.16",
+    "usfm-js": "^2.0.2"
   },
   "main": "dist/index.js",
   "files": [
