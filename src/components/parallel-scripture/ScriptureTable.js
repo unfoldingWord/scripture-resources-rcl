@@ -45,7 +45,7 @@ function ScriptureTable ({
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
   let verseObjects = [];
-  if (reference && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
+  if (reference && reference.verse && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
     verseObjects = books[0].chapters[reference.chapter][reference.verse].verseObjects;
   }
 
@@ -80,7 +80,8 @@ function ScriptureTable ({
     },
   ];
 
-  const _referenceIds = filter ? [referenceIdFromReference(reference)] : referenceIds;
+  let _referenceIds = referenceIds;
+  if (filter && reference.chapter && reference.verse) _referenceIds = [referenceIdFromReference(reference)];
   const rows = _referenceIds.map(referenceId => {
     const verses = versesFromReferenceIdAndBooks({referenceId, books});
     const row = (
