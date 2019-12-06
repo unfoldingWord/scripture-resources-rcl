@@ -1,7 +1,7 @@
 ```js
 import {Paper} from '@material-ui/core';
 import ReactJson from 'react-json-view';
-import {withResources} from '../../';
+import {withResource} from 'scripture-resources-rcl';
 
 function Component ({resources}) {
   const [files, setFiles] = React.useState([]);
