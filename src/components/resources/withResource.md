@@ -141,7 +141,7 @@ const config = {
 
 const [seed, setSeed] = React.useState(['tit','rut','jon']);
 const updateSeed = (e) => {
-  const _seed = e.target.value.split(/,\s*/);
+  const _seed = e.target.value.split(/,\s*/).filter(string => string !== '');
   setSeed(_seed);
 };
 
