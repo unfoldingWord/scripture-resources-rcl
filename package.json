@@ -19,7 +19,6 @@
     "start": "styleguidist server",
     "build": "styleguidist build",
     "deploy": "git push",
-    "postpublish": "yarn deploy",
     "test": "jest ./src",
     "prepublishOnly": "rm -fr ./dist & babel ./src --out-dir ./dist -s inline"
   },

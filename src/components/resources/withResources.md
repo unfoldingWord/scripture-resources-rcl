@@ -140,8 +140,6 @@ const config = {
 const [seed, setSeed] = React.useState(['tit','rut','jon']);
 const updateSeed = (e) => {
   const _seed = e.target.value.split(/,\s*/);
-
-  debugger
   setSeed(_seed);
 };
 
