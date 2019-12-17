@@ -139,14 +139,15 @@ const config = {
   },
 };
 
-const [seed, setSeed] = React.useState(['tit','rut','jon']);
+const _seed = '3jn, tit, jon, rut'.split(/,\s*/);
+const [seed, setSeed] = React.useState(_seed);
 const updateSeed = (e) => {
   const _seed = e.target.value.split(/,\s*/).filter(string => string !== '');
   setSeed(_seed);
 };
 
 <>
-  <TextField id="seed" defaultValue={seed.join(',')} variant='outlined' label='seed' onBlur={updateSeed} />
+  <TextField id="seed" defaultValue={seed.join(', ')} variant='outlined' label='seed' onBlur={updateSeed} />
   <ResourceComponent resourceLink={resourceLink} seed={seed} config={config} />
 </>
 ```
