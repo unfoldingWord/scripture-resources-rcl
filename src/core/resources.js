@@ -15,7 +15,8 @@ export const resourceFromResourceLink = async ({ resourceLink, reference, config
   let resource = parseResourceLink({ resourceLink, config });
   resource.manifest = await getResourceManifest(resource);
   resource.reference = reference;
-  if ((resource.projectId || reference.bookId) && (resource.manifest && resource.manifest.projects)) {
+  resource.projects = resource.manifest.projects.map(project => extendProject({project, resource}));
+  if (reference && (resource.projectId || reference.bookId) && (resource.manifest && resource.manifest.projects)) {
     resource.project = projectFromProjects(resource);
   }
   return resource;
@@ -45,22 +46,30 @@ export const getResourceProjectFile = async (
 };
 
 export const projectFromProjects = (resource) => {
-  const { resourceLink, reference, projectId, manifest: { projects } } = resource;
+  const {reference, projectId, projects} = resource;
   let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
   const project = projects.filter(project => project.identifier === identifier)[0];
-  project.file = async () => getResourceProjectFile(resource);
+  return project;
+};
+
+export const extendProject = ({project, resource}) => {
+  let _project = {...project};
+  const {reference, projectId, resourceLink} = resource;
+  _project.file = async () => getResourceProjectFile({...resource, project});
   if (project.path.match(/\.usfm$/)) {
-    project.json = async () => {
+    _project.json = async () => {
       const start = performance.now();
       let json;
-      if (reference && reference.chapter) json = parseChapter({ project, reference });
-      else json = parseBook({ project });
+      if (reference && reference.chapter) json = parseChapter({project: _project, reference});
+      else 
+      json = parseBook({project: _project});
       const end = performance.now();
+      let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
       console.log(`fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(3)}ms`);
       return json;
     };
   }
-  return project;
+  return _project;
 };
 
 export const parseBook = async ({ project }) => {
