@@ -1,7 +1,34 @@
 import Path from 'path';
 import YAML from 'js-yaml-parser';
-import {get} from 'gitea-react-toolkit';
+import {get, fetchTree} from 'gitea-react-toolkit';
 import usfmJS from 'usfm-js';
+
+export const getTree = async ({username, languageId, resourceId, tag, config}) => {
+  let tree = [];
+  let moreData = true;
+  let page = 0;
+  while (moreData) {
+    const params = {
+      recursive: true,
+      per_page: 10000,
+      page,
+    };
+    const _config = {...config, params};
+    const repository = `${languageId}_${resourceId}`;
+    let data = await fetchTree({owner: username, repository, sha: tag, config: _config});
+    if (data.truncated) {
+      const _tree = data.tree.map(blob => {
+        let file = () => get({url: blob.url, config});
+        let _blob = {...blob, file};
+        return _blob;
+      });
+      tree = tree.concat(data.tree);
+      page ++;
+    } 
+    else moreData = false;
+  }
+  return tree;
+};
 
 export const resourcesFromResourceLinks = async ({resourceLinks, reference, config}) => {
   const promises = resourceLinks.map(resourceLink => {
@@ -14,9 +41,9 @@ export const resourcesFromResourceLinks = async ({resourceLinks, reference, conf
 export const resourceFromResourceLink = async ({resourceLink, reference, config}) => {
   let resource = parseResourceLink({resourceLink, config});
   resource.manifest = await getResourceManifest(resource);
-  resource.reference = reference;
+  if (reference) resource.reference = reference;
   resource.projects = resource.manifest.projects.map(project => extendProject({project, resource}));
-  if (reference && (resource.projectId || reference.bookId) && (resource.manifest && resource.manifest.projects)) {
+  if ((resource.projectId || reference.bookId) && (resource.manifest && resource.manifest.projects)) {
     resource.project = projectFromProjects(resource);
   }
   return resource;
