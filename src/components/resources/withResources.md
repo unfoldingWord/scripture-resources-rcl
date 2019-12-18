@@ -1,7 +1,7 @@
 ```js
 import {Paper} from '@material-ui/core';
 import ReactJson from 'react-json-view';
-import {withResources} from 'scripture-resources-rcl';
+import {withResources} from "scripture-resources-rcl";
 
 function Component ({resources}) {
   const [files, setFiles] = React.useState([]);
@@ -50,7 +50,7 @@ const reference = {bookId: 'jhn', chapter: 1, verse: 1};
 ```js
 import {Paper, TextField} from '@material-ui/core';
 import ReactJson from 'react-json-view';
-import {withResources} from 'scripture-resources-rcl';
+import {withResources} from "scripture-resources-rcl";
 
 function Component ({resources, seed}) {
   const [files, setFiles] = React.useState([]);

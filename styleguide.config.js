@@ -1,4 +1,4 @@
-const Path = require('path');
+const path = require('path');
 const upperFirst = require('lodash/upperFirst');
 const camelCase = require('lodash/camelCase');
 const { name, version, repository } = require('./package.json');
@@ -18,7 +18,7 @@ let sections = [
         'withResources',
       ];
       return componentNames.map(componentName => {
-        return Path.resolve(__dirname, `src/components/resources`, `${componentName}.js`)
+        return path.resolve(__dirname, `src/components/resources`, `${componentName}.js`)
       });
     }
   },
@@ -30,7 +30,7 @@ let sections = [
         'withSelections',
       ];
       return componentNames.map(componentName => {
-        return Path.resolve(__dirname, `src/components/selections`, `${componentName}.js`)
+        return path.resolve(__dirname, `src/components/selections`, `${componentName}.js`)
       });
     }
   },
@@ -42,7 +42,7 @@ let sections = [
         'withUsfm',
       ];
       return componentNames.map(componentName => {
-        return Path.resolve(__dirname, `src/components/usfm`, `${componentName}.js`)
+        return path.resolve(__dirname, `src/components/usfm`, `${componentName}.js`)
       });
     }
   },
@@ -55,7 +55,7 @@ let sections = [
         'ScriptureTable',
       ];
       return componentNames.map(componentName => {
-        return Path.resolve(__dirname, `src/components/parallel-scripture`, `${componentName}.js`)
+        return path.resolve(__dirname, `src/components/parallel-scripture`, `${componentName}.js`)
       });
     }
   },
@@ -68,7 +68,7 @@ let sections = [
         'Book',
       ];
       return componentNames.map(componentName => {
-        return Path.resolve(__dirname, `src/components/book`, `${componentName}.js`)
+        return path.resolve(__dirname, `src/components/book`, `${componentName}.js`)
       });
     }
   },
@@ -81,7 +81,7 @@ let sections = [
         'Chapters',
       ];
       return componentNames.map(componentName => {
-        return Path.resolve(__dirname, `src/components/chapters`, `${componentName}.js`)
+        return path.resolve(__dirname, `src/components/chapters`, `${componentName}.js`)
       });
     }
   },
@@ -94,7 +94,7 @@ let sections = [
         'Verses',
       ];
       return componentNames.map(componentName => {
-        return Path.resolve(__dirname, `src/components/verses`, `${componentName}.js`)
+        return path.resolve(__dirname, `src/components/verses`, `${componentName}.js`)
       });
     }
   },
@@ -115,7 +115,7 @@ let sections = [
         'UnsupportedObject'
       ];
       return componentNames.map(componentName => {
-        return Path.resolve(__dirname, `src/components/verse-objects`, `${componentName}.js`)
+        return path.resolve(__dirname, `src/components/verse-objects`, `${componentName}.js`)
       });
     }
   },
@@ -137,12 +137,10 @@ module.exports = {
     url: repository.url,
     text: 'View on GitHub'
   },
-  webpackConfig: require('react-scripts/config/webpack.config')('development'),
-  // serverPort: 3000,
   styles,
   theme,
   getComponentPathLine: (componentPath) => {
-    const dirname = Path.dirname(componentPath, '.js');
+    const dirname = path.dirname(componentPath, '.js');
     const file = dirname.split('/').slice(-1)[0];
     const componentName = upperFirst(camelCase(file));
     return `import { ${componentName} } from "${name}";`;
@@ -151,7 +149,25 @@ module.exports = {
   exampleMode: 'expand',
   pagePerSection: true,
   sections,
+  components: 'src/components/**/[A-Z]*.js',
   moduleAliases: {
-    "scripture-resources-rcl": Path.resolve(__dirname, "src"),
-  }
+    "scripture-resources-rcl": path.resolve(__dirname, "src"),
+  },
+  version,
+  webpackConfig: {
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+        },
+        {
+          test: /\.css$/,
+          loader: 'style-loader!css-loader',
+        },
+      ],
+    },
+  },
 };
+
