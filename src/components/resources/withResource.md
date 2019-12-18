@@ -1,7 +1,7 @@
 ```js
 import {Paper} from '@material-ui/core';
 import ReactJson from 'react-json-view';
-import {withResource} from 'scripture-resources-rcl';
+import {withResource} from "scripture-resources-rcl";
 
 function Component ({resource}) {
   const [file, setFile] = React.useState();
@@ -56,7 +56,7 @@ const config = {
 ```js
 import {Paper, TextField} from '@material-ui/core';
 import ReactJson from 'react-json-view';
-import {withResource} from 'scripture-resources-rcl';
+import {withResource} from "scripture-resources-rcl";
 
 function Component ({resource, seed}) {
   const [files, setFiles] = React.useState([]);

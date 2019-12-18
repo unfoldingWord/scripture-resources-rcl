@@ -15,7 +15,7 @@ export const resourceFromResourceLink = async ({ resourceLink, reference, config
   let resource = parseResourceLink({ resourceLink, config });
   resource.manifest = await getResourceManifest(resource);
   resource.reference = reference;
-  resource.projects = resource.manifest.projects.map(project => extendProject({project, resource}));
+  resource.projects = resource.manifest.projects.map(project => extendProject({ project, resource }));
   if (reference && (resource.projectId || reference.bookId) && (resource.manifest && resource.manifest.projects)) {
     resource.project = projectFromProjects(resource);
   }
@@ -46,23 +46,23 @@ export const getResourceProjectFile = async (
 };
 
 export const projectFromProjects = (resource) => {
-  const {reference, projectId, projects} = resource;
+  const { reference, projectId, projects } = resource;
   let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
   const project = projects.filter(project => project.identifier === identifier)[0];
   return project;
 };
 
-export const extendProject = ({project, resource}) => {
-  let _project = {...project};
-  const {reference, projectId, resourceLink} = resource;
-  _project.file = async () => getResourceProjectFile({...resource, project});
+export const extendProject = ({ project, resource }) => {
+  let _project = { ...project };
+  const { reference, projectId, resourceLink } = resource;
+  _project.file = async () => getResourceProjectFile({ ...resource, project });
   if (project.path.match(/\.usfm$/)) {
     _project.json = async () => {
       const start = performance.now();
       let json;
-      if (reference && reference.chapter) json = parseChapter({project: _project, reference});
-      else 
-      json = parseBook({project: _project});
+      if (reference && reference.chapter) json = parseChapter({ project: _project, reference });
+      else
+        json = parseBook({ project: _project });
       const end = performance.now();
       let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
       console.log(`fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(3)}ms`);
@@ -87,17 +87,18 @@ export const parseChapter = async ({ project, reference }) => {
   const matches = usfm.match(regexp);
   const chapter = matches[1];
   const json = usfmJS.toJSON(chapter);
-  // debugger
   return json;
 };
 
 // https://git.door43.org/unfoldingword/en_ult/raw/branch/master/manifest.yaml
-export const getFile = async ({ username, repository, urlPath, tag, config }) => {
+export const getFile = async ({ username, repository, path: urlPath = '', tag, config }) => {
   let url;
-  if (tag && tag !== 'master')
+  if (tag && tag !== 'master' && urlPath) {
     url = path.join(username, repository, 'raw/tag', tag, urlPath);
-  else
+  }
+  else {
     url = path.join(username, repository, 'raw/branch/master', urlPath);
+  }
   try {
     const _config = { ...config }; // prevents gitea-react-toolkit from modifying object
     const data = await get({ url, config: _config });
