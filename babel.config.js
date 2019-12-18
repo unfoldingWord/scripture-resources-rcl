@@ -5,7 +5,7 @@ module.exports = {
 	],
 	plugins: ['inline-json-import', '@babel/transform-runtime', ["istanbul", {
 		"include": [
-			"src/*.js"
+			"src/**/**.js"
 		],
 		"exclude": [
 			"**/mocks/**"
