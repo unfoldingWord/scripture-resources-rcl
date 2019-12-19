@@ -70,10 +70,7 @@ function Component ({resource}) {
 
   React.useEffect(() => {
     if (tree && tree.length > 0) {
-      tree[0].getBlob().then(blob => {
-        console.log(blob);
-        setBlob(blob);
-      });
+      tree[0].getBlob().then(setBlob);
     }
   }, [tree]);
 
@@ -88,8 +85,10 @@ function Component ({resource}) {
         <ReactJson src={tree} />
       </Paper>
       <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
-        <h4>First Blob in tree</h4>
-        <ReactJson src={blob} />
+        <h4>First Blob in tree's decoded content</h4>
+        <pre>
+          {blob ? blob.decoded : ''}
+        </pre>
       </Paper>
     </>
   );
