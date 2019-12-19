@@ -1,37 +1,55 @@
 ```js
+import React, {useState} from 'react';
 import {Paper} from '@material-ui/core';
 import ReactJson from 'react-json-view';
 import {withResource} from "scripture-resources-rcl";
 
 function Component ({resource}) {
-  const [file, setFile] = React.useState();
-  const [json, setJson] = React.useState();
+  const [file, setFile] = useState();
+  const [json, setJson] = useState();
+  const [tree, setTree] = useState();
+  const [blob, setBlob] = useState();
 
   React.useEffect(() => {
     if (resource && resource.project) {
-      resource.project.file().then(_file => {
-        setFile(_file);
-      });
-      resource.project.json().then(_json => {
-        setJson(_json);
-      });
+      resource.project.file().then(setFile);
+      resource.project.json().then(setJson);
+      resource.blobTree().then(setTree);
     }
   }, [resource]);
+
+  React.useEffect(() => {
+    if (tree && tree.length > 0) {
+      tree[0].getBlob().then(blob => {
+        console.log(blob);
+        setBlob(blob);
+      });
+    }
+  }, [tree]);
 
   return (
     <>
       <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em',  overflow: 'scroll'}}>
+        <h4>Resource</h4>
         <ReactJson src={resource} />
       </Paper>
       <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
+        <h4>Project File</h4>
         <pre>
           {file}
         </pre>
       </Paper>
       <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
-        <pre>
-          <ReactJson src={json} />
-        </pre>
+        <h4>Json</h4>
+        <ReactJson src={json} />
+      </Paper>
+      <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
+        <h4>Tree</h4>
+        <ReactJson src={tree} />
+      </Paper>
+      <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
+        <h4>First Blob in tree</h4>
+        <ReactJson src={blob} />
       </Paper>
     </>
   );
@@ -40,7 +58,7 @@ const ResourceComponent = withResource(Component);
 
 // const resourceLink = 'unfoldingWord/en/ust/v5/tit';
 // const resourceLink = 'unfoldingWord/en/ult/v5/tit';
-const resourceLink = 'unfoldingWord/el-x-koine/ugnt/v0.8/tit';
+const resourceLink = 'unfoldingWord/el-x-koine/ugnt/master/tit';
 
 const config = {
   server: 'https://git.door43.org',
