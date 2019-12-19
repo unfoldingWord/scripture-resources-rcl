@@ -34,7 +34,7 @@
   ],
   "dependencies": {
     "deep-freeze": "0.0.1",
-    "gitea-react-toolkit": "^0.6.8",
+    "gitea-react-toolkit": "^0.6.9",
     "js-yaml-parser": "^1.0.0",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
