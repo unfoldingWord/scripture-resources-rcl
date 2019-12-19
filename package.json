@@ -6,14 +6,13 @@
     "type": "git",
     "url": "https://github.com/unfoldingWord-box3/scripture-resources-rcl"
   },
-  "version": "0.11.0",
+  "version": "0.12.0",
   "private": false,
   "license": "MIT",
   "scripts": {
     "start": "styleguidist server",
     "build": "styleguidist build",
     "deploy": "git push",
-    "postpublish": "yarn deploy",
     "prepublishOnly": "rm -fr ./dist & babel ./src --out-dir ./dist -s inline",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
