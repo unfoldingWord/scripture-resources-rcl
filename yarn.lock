@@ -4011,10 +4011,10 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gitea-react-toolkit@^0.6.6:
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/gitea-react-toolkit/-/gitea-react-toolkit-0.6.6.tgz#7149a02de462347fc88d7bd1812c3d7309d44e2c"
-  integrity sha512-ss6fx/9CjeQhxH8E3n4shZOk4f/xnE0k7awyZJnnUuBri+ov7cKoRMYcw9JH73xAeRRR8b3g2oreJGThoW4yHQ==
+gitea-react-toolkit@^0.6.9:
+  version "0.6.9"
+  resolved "https://registry.yarnpkg.com/gitea-react-toolkit/-/gitea-react-toolkit-0.6.9.tgz#db228a8263c036aa58d2e2bf9bc3ae0e2a745b0a"
+  integrity sha512-o0tzBS7UX/6kMxcJmDbHn4gAXqtUmsQLMcQSQ0Gc2CpW5tACzB+DWnkU9rhiyZfnrQfrAOyH3HgnxqawA9AEGw==
   dependencies:
     awesome-debounce-promise "2.1.0"
     axios "0.19.0"

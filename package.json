@@ -6,14 +6,13 @@
     "type": "git",
     "url": "https://github.com/unfoldingWord-box3/scripture-resources-rcl"
   },
-  "version": "0.11.0",
+  "version": "0.12.0",
   "private": false,
   "license": "MIT",
   "scripts": {
     "start": "styleguidist server",
     "build": "styleguidist build",
     "deploy": "git push",
-    "postpublish": "yarn deploy",
     "prepublishOnly": "rm -fr ./dist & babel ./src --out-dir ./dist -s inline",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
@@ -35,7 +34,7 @@
   ],
   "dependencies": {
     "deep-freeze": "0.0.1",
-    "gitea-react-toolkit": "^0.6.6",
+    "gitea-react-toolkit": "^0.6.9",
     "js-yaml-parser": "^1.0.0",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",

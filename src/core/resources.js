@@ -1,9 +1,9 @@
 import path from 'path';
 import YAML from 'js-yaml-parser';
-import { get } from 'gitea-react-toolkit';
+import {get, getFullTree} from 'gitea-react-toolkit';
 import usfmJS from 'usfm-js';
 
-export const resourcesFromResourceLinks = async ({ resourceLinks, reference, config }) => {
+export const resourcesFromResourceLinks = async ({resourceLinks, reference, config}) => {
   const promises = resourceLinks.map(resourceLink => {
     return resourceFromResourceLink({ resourceLink, reference, config });
   });
@@ -12,20 +12,21 @@ export const resourcesFromResourceLinks = async ({ resourceLinks, reference, con
 };
 
 export const resourceFromResourceLink = async ({ resourceLink, reference, config }) => {
-  let resource = parseResourceLink({ resourceLink, config });
-  resource.manifest = await getResourceManifest(resource);
-  resource.reference = reference;
-  resource.projects = resource.manifest.projects.map(project => extendProject({ project, resource }));
-  if (reference && (resource.projectId || reference.bookId) && (resource.manifest && resource.manifest.projects)) {
-    resource.project = projectFromProjects(resource);
-  }
-  return resource;
+  const resource = parseResourceLink({ resourceLink, config });
+  const {projectId, username, repository, tag} = resource;
+  const manifest = await getResourceManifest(resource);
+  const projects = manifest.projects.map(project => extendProject({project, resource}));
+  const project = projectFromProjects({reference, projectId, projects});
+  const getTree = () => getFullTree({owner: username, repository, sha: tag, config});
+  const _resource = {...resource, reference, manifest, projects, project, getTree};
+  return _resource;
 };
 
 export const parseResourceLink = ({ resourceLink, config }) => {
   const parsed = resourceLink.split('/').filter(string => string.length > 0);
   const [username, languageId, resourceId, tag, projectId] = parsed;
-  const resource = { resourceLink, username, languageId, resourceId, tag, projectId, config };
+  const repository = `${languageId}_${resourceId}`;
+  const resource = { resourceLink, username, repository, languageId, resourceId, tag, projectId, config };
   return resource;
 };
 
@@ -45,8 +46,7 @@ export const getResourceProjectFile = async (
   return file;
 };
 
-export const projectFromProjects = (resource) => {
-  const { reference, projectId, projects } = resource;
+export const projectFromProjects = ({ reference, projectId, projects }) => {
   let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
   const project = projects.filter(project => project.identifier === identifier)[0];
   return project;
