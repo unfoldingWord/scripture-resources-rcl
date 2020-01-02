@@ -20,14 +20,15 @@ export const referenceIdsFromBooks = ({books}) => {
 export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
   const verses = books.map((book, index) => {
     const _reference = referenceFromReferenceId(referenceId);
-    let verse = book.chapters[_reference.chapter][_reference.verse];
+    const chapter = book.chapters[_reference.chapter];
+    let verse = (chapter) ? chapter[_reference.verse] : null;
     if (index === 0 && verse && verse.verseObjects && verse.verseObjects.length) {
       verse.verseObjects = occurrenceInjectVerseObjects(verse.verseObjects);
     }
     return verse;
   });
   return verses;
-}
+};
 
 export const dataFromBooks = ({books}) => {
   const referenceIds = referenceIdsFromBooks({books});

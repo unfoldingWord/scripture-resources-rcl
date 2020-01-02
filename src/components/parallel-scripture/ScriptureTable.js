@@ -46,7 +46,9 @@ function ScriptureTable ({
 
   let verseObjects = [];
   if (reference && reference.verse && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
-    verseObjects = books[0].chapters[reference.chapter][reference.verse].verseObjects;
+    const chapter = books[0].chapters[reference.chapter];
+    const verse = chapter[reference.verse];
+    verseObjects = (verse) ? verse.verseObjects : [];
   }
 
   useEffect(() => {
