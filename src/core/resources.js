@@ -15,7 +15,7 @@ export const resourceFromResourceLink = async ({ resourceLink, reference, config
   const resource = parseResourceLink({ resourceLink, config });
   const {projectId, username, repository, tag} = resource;
   const manifest = await getResourceManifest(resource);
-  const projects = manifest.projects.map(project => extendProject({project, resource}));
+  const projects = manifest.projects.map(project => extendProject({project, resource, reference}));
   const project = projectFromProjects({reference, projectId, projects});
   const getTree = () => getFullTree({owner: username, repository, sha: tag, config});
   const _resource = {...resource, reference, manifest, projects, project, getTree};
@@ -52,9 +52,9 @@ export const projectFromProjects = ({ reference, projectId, projects }) => {
   return project;
 };
 
-export const extendProject = ({ project, resource }) => {
+export const extendProject = ({ project, resource, reference }) => {
   let _project = { ...project };
-  const { reference, projectId, resourceLink } = resource;
+  const { projectId, resourceLink } = resource;
   _project.file = async () => getResourceProjectFile({ ...resource, project });
   if (project.path.match(/\.usfm$/)) {
     _project.json = async () => {
@@ -73,12 +73,14 @@ export const extendProject = ({ project, resource }) => {
 };
 
 export const parseBook = async ({ project }) => {
+  console.log('Parse Book');
   const usfm = await project.file();
   const json = usfmJS.toJSON(usfm);
   return json;
 };
 
 export const parseChapter = async ({ project, reference }) => {
+  console.log('Parse Chapter');
   const usfm = await project.file();
   const thisChapter = parseInt(reference.chapter);
   const nextChapter = thisChapter + 1;
