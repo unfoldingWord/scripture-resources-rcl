@@ -49,11 +49,17 @@ function Component({
   );
 }
 const config = {server: 'https://git.door43.org'};
-const reference = {bookId: 'jhn', chapter: 1, verse: 1};
+// const reference = {bookId: 'jhn', chapter: 1, verse: 1};
+// const resourceLinks = [
+//   'unfoldingWord/el-x-koine/ugnt/v0.8',
+//   'unfoldingWord/en/ult/v5',
+//   'unfoldingWord/en/ust/v5',
+// ];
+const reference = {bookId: 'rut', chapter: 1, verse: 1};
 const resourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/v0.8',
-  'unfoldingWord/en/ult/v5',
-  'unfoldingWord/en/ust/v5',
+  'unfoldingWord/hbo/uhb/master',
+  'unfoldingWord/en/ult/master',
+  'unfoldingWord/en/ust/master',
 ];
 
 <Component config={config} reference={reference} resourceLinks={resourceLinks} />

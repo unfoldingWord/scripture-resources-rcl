@@ -42,10 +42,11 @@ function Row ({
         const verse = verses[column.id];
         const verseObjects = verse ? verse.verseObjects : [];
         return (
-          <TableCell key={column.id} className={classes.cell}>
+          <TableCell key={column.id} className={classes.cell} dir='auto'>
             <Verse
               verseObjects={verseObjects}
               verseKey={referenceId}
+              direction='auto'
               renderOffscreen
               disableWordPopover
             />
@@ -85,6 +86,7 @@ const useStyles = makeStyles(theme => ({
     verticalAlign: 'top',
     minWidth: '15rem',
     border: 'none',
+    textAlign: 'auto',
   },
 }));
 
