@@ -10,7 +10,7 @@ function Component({
   reference,
   resourceLinks,
 }) {
-  const [quote, setQuote] = React.useState("Ἰούδας,Ἰησοῦ");
+  const [quote, setQuote] = React.useState("Ἰούδας, Ἰησοῦ Χριστοῦ δοῦλος,");
   const [occurrence, setOccurrence] = React.useState(1);
   return (
     <>
@@ -51,7 +51,7 @@ function Component({
 const config = {server: 'https://git.door43.org'};
 const reference = {bookId: 'jud', chapter: 1, verse: 1};
 const resourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/v0.8',
+  'unfoldingWord/el-x-koine/ugnt/master',
   'unfoldingWord/en/ult/v5',
   'unfoldingWord/en/ust/v5',
 ];

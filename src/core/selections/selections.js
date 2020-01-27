@@ -1,16 +1,21 @@
 
 import isEqual from 'deep-equal';
 import _ from 'lodash';
-import {tokenize} from 'string-punctuation-tokenizer';
-import {verseObjectsToString} from './verseObjects';
+import { tokenize } from 'string-punctuation-tokenizer';
+import { verseObjectsToString } from './verseObjects';
 
-export const selectionsFromQuoteAndVerseObjects = ({quote, verseObjects, occurrence}) => {
-  const string = verseObjectsToString(verseObjects);
-  const selections = selectionsFromQuoteAndString({quote, string, occurrence});
+export const selectionsFromQuoteAndVerseObjects = ({ quote, verseObjects, occurrence }) => {
+  let selections = [];
+  if (quote && verseObjects.length > 0) {
+    const string = verseObjectsToString(verseObjects);
+    selections = selectionsFromQuoteAndString({ quote, string, occurrence });
+  }
   return selections;
 };
 
-export const selectionsFromQuoteAndString = ({quote, string, occurrence}) => {
+export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawString, occurrence }) => {
+  const quote = normalizeString(rawQuote);
+  const string = normalizeString(rawString);
   let selections = [];
   let subquotes = quote.split('…');
   if (occurrence === -1) {
@@ -23,9 +28,9 @@ export const selectionsFromQuoteAndString = ({quote, string, occurrence}) => {
   subquotes.forEach((subquote, index) => {
     let splitString = followingText.split(subquote);
     if (index === 0 && occurrence > -1) prescedingText = splitString.slice(0, occurrence).join(subquote);
-    else prescedingText = splitString.slice(0,1).join(subquote);
+    else prescedingText = splitString.slice(0, 1).join(subquote);
     const subSelections = subSelectionsFromSubquote(
-      {subquote, index, prescedingText, textPrescedingPreviousSubquote, string}
+      { subquote, index, prescedingText, textPrescedingPreviousSubquote, string }
     );
     textPrescedingPreviousSubquote = [textPrescedingPreviousSubquote, prescedingText].join(subquote);
     subSelections.forEach(subSelection => selections.push(subSelection));
@@ -33,11 +38,11 @@ export const selectionsFromQuoteAndString = ({quote, string, occurrence}) => {
   return selections;
 };
 
-export const subSelectionsFromSubquote = ({subquote, index, prescedingText, textPrescedingPreviousSubquote, string}) => {
-  const selectedTokens = tokenize({text: subquote, greedy: true});
+export const subSelectionsFromSubquote = ({ subquote, index, prescedingText, textPrescedingPreviousSubquote, string }) => {
+  const selectedTokens = tokenize({ text: subquote, greedy: true });
   const subSelections = selectedTokens.map(_selectedText => {
     let subSelection = generateSelection(
-      {selectedText: _selectedText, prescedingText, entireText: string}
+      { selectedText: _selectedText, prescedingText, entireText: string }
     );
     if (index > 0) {
       const occurrencesBeforePreviousSubquote = occurrencesInString(textPrescedingPreviousSubquote, subquote);
@@ -62,7 +67,7 @@ export const subSelectionsFromSubquote = ({subquote, index, prescedingText, text
  * @param {String} entireText - the text that the selection should be in
  * @return {Object} - the selection object to be used
  */
-export const generateSelection = ({selectedText, prescedingText, entireText}) => {
+export const generateSelection = ({ selectedText, prescedingText, entireText }) => {
   let selection = {}; // response
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
@@ -90,7 +95,7 @@ export const spliceStringOnRanges = (string, ranges) => {
   let remainingString = string;
   // shift the range since the loop is destructive by working on the remainingString and not original string
   let rangeShift = 0; // start the range shift at the first character
-  ranges.forEach(function(range) {
+  ranges.forEach(function (range) {
     const firstCharacterPosition = range[0] - rangeShift; // original range start - the rangeShift
     const beforeSelection = remainingString.slice(0, firstCharacterPosition); // save all the text before the selection
     if (beforeSelection) { // only add to the array if string isn't empty
@@ -306,7 +311,7 @@ export const getQuoteOccurrencesInVerse = (string, subString) => {
     return n;
   }
   if (subString.includes('...')) subString = subString.replace('...', '.*');
-  const regex = new RegExp(`\\W+${subString}\\W+`,'g');
+  const regex = new RegExp(`\\W+${subString}\\W+`, 'g');
   let matchedSubstring;
   while ((matchedSubstring = regex.exec(string)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matchedSubstring
@@ -331,7 +336,7 @@ export const occurrences = (string, subString) => {
   let n = 0;
   let pos = 0;
   let step = subString.length;
-// eslint-disable-next-line no-constant-condition
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     pos = string.indexOf(subString, pos);
     if (pos === -1) break;
