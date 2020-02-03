@@ -106,6 +106,10 @@
     ],
     "testMatch": [
       "<rootDir>/__tests__/**/**.spec.js"
+    ],
+    "transformIgnorePatterns": [
+      "mocks",
+      "node_modules"
     ]
   }
 }
