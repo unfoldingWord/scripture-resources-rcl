@@ -17,19 +17,8 @@ function Component({
   const reference = { bookId, chapter, verse };
   return (
     <>
-      <p>Quote: {quote}</p>
-      <p>Occurrence: {occurrence}</p>
-      <ParallelScriptureWithResources
-        resourceLinks={resourceLinks}
-        config={config}
-        reference={reference}
-        quote={quote}
-        onQuote={setQuote}
-        occurrence={occurrence}
-        height='250px'
-      />
       <form noValidate autoComplete="off">
-        <div style={{paddingBottom: '1em'}}>
+        <div style={{padding: '1em 0'}}>
           <TextField
             id="bookId"
             label="BookId"
@@ -51,7 +40,7 @@ function Component({
             defaultValue={verse}
             onChange={(event) => setVerse(parseInt(event.target.value))}
           />
-        </div><div>
+        </div><div style={{padding: '1em 0'}}>
           <TextField
             id="quote"
             label="Quote"
@@ -68,6 +57,17 @@ function Component({
           />
         </div>
       </form>
+      <ParallelScriptureWithResources
+        resourceLinks={resourceLinks}
+        config={config}
+        reference={reference}
+        quote={quote}
+        onQuote={setQuote}
+        occurrence={occurrence}
+        height='250px'
+      />
+      <p>Quote: {quote}</p>
+      <p>Occurrence: {occurrence}</p>
     </>
   );
 }
