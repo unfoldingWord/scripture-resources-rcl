@@ -7,11 +7,14 @@ const ParallelScriptureWithResources = withResources(ParallelScripture);
 
 function Component({
   config,
-  reference,
   resourceLinks,
 }) {
+  const [bookId, setBookId] = React.useState("3jn");
+  const [chapter, setChapter] = React.useState(1);
+  const [verse, setVerse] = React.useState(1);
   const [quote, setQuote] = React.useState("Ἰούδας, Ἰησοῦ Χριστοῦ δοῦλος,");
   const [occurrence, setOccurrence] = React.useState(1);
+  const reference = { bookId, chapter, verse };
   return (
     <>
       <p>Quote: {quote}</p>
@@ -26,30 +29,49 @@ function Component({
         height='250px'
       />
       <form noValidate autoComplete="off">
-        <TextField
-          id="quote"
-          label="Quote"
-          variant="outlined"
-          defaultValue={quote}
-          onChange={(event) => {
-            setQuote(event.target.value);
-          }}
-        />
-        <TextField
-          id="occurrence"
-          label="Occurrence"
-          variant="outlined"
-          defaultValue={occurrence}
-          onChange={(event) => {
-            setOccurrence(parseInt(event.target.value));
-          }}
-        />
+        <div style={{paddingBottom: '1em'}}>
+          <TextField
+            id="bookId"
+            label="BookId"
+            variant="outlined"
+            defaultValue={bookId}
+            onChange={(event) => setBookId(event.target.value)}
+          />
+          <TextField
+            id="chapter"
+            label="Chapter"
+            variant="outlined"
+            defaultValue={chapter}
+            onChange={(event) => setChapter(parseInt(event.target.value))}
+          />
+          <TextField
+            id="verse"
+            label="Verse"
+            variant="outlined"
+            defaultValue={verse}
+            onChange={(event) => setVerse(parseInt(event.target.value))}
+          />
+        </div><div>
+          <TextField
+            id="quote"
+            label="Quote"
+            variant="outlined"
+            defaultValue={quote}
+            onChange={(event) => setQuote(event.target.value)}
+          />
+          <TextField
+            id="occurrence"
+            label="Occurrence"
+            variant="outlined"
+            defaultValue={occurrence}
+            onChange={(event) => setOccurrence(parseInt(event.target.value))}
+          />
+        </div>
       </form>
     </>
   );
 }
 const config = {server: 'https://git.door43.org'};
-const reference = {bookId: 'jud', chapter: 1, verse: 1};
 const resourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/master',
   'unfoldingWord/en/ult/v5',
@@ -62,5 +84,5 @@ const resourceLinks = [
 //   'unfoldingWord/en/ust/master',
 // ];
 
-<Component config={config} reference={reference} resourceLinks={resourceLinks} />
+<Component config={config} resourceLinks={resourceLinks} />
 ```
