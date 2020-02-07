@@ -11,9 +11,9 @@ function Component({
 }) {
   const [bookId, setBookId] = React.useState("3jn");
   const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState(1);
-  const [quote, setQuote] = React.useState("Ἰούδας, Ἰησοῦ Χριστοῦ δοῦλος,");
-  const [occurrence, setOccurrence] = React.useState(1);
+  const [verse, setVerse] = React.useState(10);
+  const [quote, setQuote] = React.useState("καὶ");
+  const [occurrence, setOccurrence] = React.useState(-1);
   const reference = { bookId, chapter, verse };
   return (
     <>
