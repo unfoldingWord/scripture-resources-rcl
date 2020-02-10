@@ -37,6 +37,7 @@ function ScriptureTable ({
   onQuote,
   occurrence,
   buttons,
+  renderOffscreen = {}
 }) {
   const classes = useStyles();
   const [filter, setFilter] = useState(!!reference);
@@ -88,6 +89,7 @@ function ScriptureTable ({
     const verses = versesFromReferenceIdAndBooks({referenceId, books});
     const row = (
       <Row
+        renderOffscreen={renderOffscreen[referenceId]}
         key={referenceId}
         verses={verses}
         referenceId={referenceId}
@@ -147,7 +149,7 @@ ScriptureTable.propTypes = {
     verse: PropTypes.number,
   }),
   /** bypass rendering only when visible */
-  renderOffscreen: PropTypes.bool,
+  renderOffscreen: PropTypes.object,
   /** render unsupported usfm markers */ 
   showUnsupported: PropTypes.bool,
   /** override text direction detection */

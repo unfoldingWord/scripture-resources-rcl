@@ -110,6 +110,9 @@
     "transformIgnorePatterns": [
       "mocks",
       "node_modules"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>__tests__/setupTests.js"
     ]
   }
 }

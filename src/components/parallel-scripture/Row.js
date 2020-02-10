@@ -62,6 +62,7 @@ function Row ({
       className={classes.row}
       key={referenceId}
       id={referenceId}
+      data-test={'verse-' + referenceId.replace(':', '-')}
       tabIndex={-1}
       role="checkbox"
       hover
