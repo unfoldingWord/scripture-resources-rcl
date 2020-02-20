@@ -3,19 +3,63 @@
 import {TextField} from '@material-ui/core';
 import {ParallelScripture, withResources} from "scripture-resources-rcl";
 
-const ParallelScriptureWithResources = withResources(ParallelScripture);
-
 function Component({
   config,
-  reference,
   resourceLinks,
 }) {
-  const [quote, setQuote] = React.useState("ταῦτα λάλει, καὶ παρακάλει, καὶ ἔλεγχε, μετὰ πάσης ἐπιταγῆς. μηδείς σου περιφρονείτω.");
-  const [occurrence, setOccurrence] = React.useState(1);
-  return (
-    <>
-      <p>Quote: {quote}</p>
-      <p>Occurrence: {occurrence}</p>
+  const [bookId, setBookId] = React.useState("3jn");
+  const [chapter, setChapter] = React.useState(1);
+  const [verse, setVerse] = React.useState(10);
+  const [quote, setQuote] = React.useState("καὶ");
+  const [occurrence, setOccurrence] = React.useState(-1);
+
+  const form = React.useMemo(() => (
+    <form noValidate autoComplete="off">
+      <div style={{padding: '1em 0'}}>
+        <TextField
+          id="bookId"
+          label="BookId"
+          variant="outlined"
+          defaultValue={bookId}
+          onBlur={(event) => setBookId(event.target.value)}
+        />
+        <TextField
+          id="chapter"
+          label="Chapter"
+          variant="outlined"
+          defaultValue={chapter}
+          onBlur={(event) => setChapter(parseInt(event.target.value))}
+        />
+        <TextField
+          id="verse"
+          label="Verse"
+          variant="outlined"
+          defaultValue={verse}
+          onBlur={(event) => setVerse(parseInt(event.target.value))}
+        />
+      </div><div style={{padding: '1em 0'}}>
+        <TextField
+          id="quote"
+          label="Quote"
+          variant="outlined"
+          defaultValue={quote}
+          onBlur={(event) => setQuote(event.target.value)}
+        />
+        <TextField
+          id="occurrence"
+          label="Occurrence"
+          variant="outlined"
+          defaultValue={occurrence}
+          onBlur={(event) => setOccurrence(parseInt(event.target.value))}
+        />
+      </div>
+    </form>
+  ), [bookId, chapter, verse, quote, occurrence]);
+
+  const component = React.useMemo(() => {
+    const reference = { bookId, chapter, verse };
+    const ParallelScriptureWithResources = withResources(ParallelScripture);
+    return (
       <ParallelScriptureWithResources
         resourceLinks={resourceLinks}
         config={config}
@@ -25,31 +69,19 @@ function Component({
         occurrence={occurrence}
         height='250px'
       />
-      <form noValidate autoComplete="off">
-        <TextField
-          id="quote"
-          label="Quote"
-          variant="outlined"
-          defaultValue={quote}
-          onChange={(event) => {
-            setQuote(event.target.value);
-          }}
-        />
-        <TextField
-          id="occurrence"
-          label="Occurrence"
-          variant="outlined"
-          defaultValue={occurrence}
-          onChange={(event) => {
-            setOccurrence(parseInt(event.target.value));
-          }}
-        />
-      </form>
+    );
+  }, [resourceLinks, config, bookId, chapter, verse, quote, occurrence]);
+
+  return (
+    <>
+      {form}
+      {component}
+      <p>Quote: {quote}</p>
+      <p>Occurrence: {occurrence}</p>
     </>
   );
 }
 const config = {server: 'https://git.door43.org'};
-const reference = {bookId: 'tit', chapter: 2, verse: 15};
 const resourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/master',
   'unfoldingWord/en/ult/v5',
@@ -62,5 +94,5 @@ const resourceLinks = [
 //   'unfoldingWord/en/ust/master',
 // ];
 
-<Component config={config} reference={reference} resourceLinks={resourceLinks} />
+<Component config={config} resourceLinks={resourceLinks} />
 ```
