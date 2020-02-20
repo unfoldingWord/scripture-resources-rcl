@@ -7,49 +7,51 @@ import React from 'react';
 
 describe('Checking highlights from rendered component', () => {
   it('should have all words highlighted', () => {
-    const titles = [
-      'UGNT - Greek',
-    ];
-
-    const UGNT = usfmJS.toJSON(ugnt_tit);
-    const books = [
-      UGNT
-    ];
-
     const reference = {
       bookId: 'tit',
       chapter: 1,
       verse: 1,
     };
-    const words = [];
-    const quote = `τῆς κατ’ εὐσέβειαν`
+    const quote = `τῆς κατ’ εὐσέβειαν`;
     const occurrence = 1;
-
-    const wrapper = mount(<ScriptureTable
-      renderOffscreen={{
-        '1:1': true
-      }}
-      titles={titles}
-      books={books}
-      title='Titus'
-      reference={reference}
-      quote={quote}
-      occurrence={occurrence}
-      height='250px'
-    />);
-    const {verseObjects} = UGNT.chapters[1][1];
-    const selections = selectionsFromQuote({ quote, verseObjects, occurrence });
-    const verseComponent = wrapper.find('[data-test="verse-1-1"]').first();
-    verseComponent.find('[data-test="aligned-word-object"]').forEach((wordObject) => {
-      const className = wordObject.prop('className');
-      if (className && className.match(/selected/)) {
-        words.push(wordObject.text())
-      }
-    })
-    selections.forEach((selectionStringified) => {
-      const {text} = JSON.parse(selectionStringified);
-      expect(words).toContain(text);
+    const UGNT = usfmJS.toJSON(ugnt_tit);
+    const books = [
+      UGNT
+    ];
+    const { verseObjects } = UGNT.chapters[reference.chapter][reference.verse];
+    const highlightedWordsFromVerseComponent = getHighlightedWordsFromVerseComponent(reference, occurrence, quote, books);
+    const expectedHighlightedWords = selectionsFromQuote({ verseObjects, occurrence, quote });
+    expectedHighlightedWords.forEach((selectionStringified) => {
+      const { text } = JSON.parse(selectionStringified);
+      expect(highlightedWordsFromVerseComponent).toContain(text);
     })
   })
 })
+
+function getHighlightedWordsFromVerseComponent(reference, occurrence, quote, books) {
+  const words = [];
+  const titles = [
+    'UGNT - Greek',
+  ];
+  const wrapper = mount(<ScriptureTable
+    renderOffscreen={{
+      [`${reference.chapter}:${reference.verse}`]: true
+    }}
+    titles={titles}
+    books={books}
+    title='Titus'
+    reference={reference}
+    quote={quote}
+    occurrence={occurrence}
+    height='250px'
+  />);
+  const verseComponent = wrapper.find(`[data-test="verse-${reference.chapter}-${reference.verse}"]`).first();
+  verseComponent.find('[data-test="aligned-word-object"]').forEach((wordObject) => {
+    const className = wordObject.prop('className');
+    if (className && className.match(/selected/)) {
+      words.push(wordObject.text())
+    }
+  })
+  return words;
+}
 
