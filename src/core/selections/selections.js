@@ -39,7 +39,7 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
 };
 
 export const subSelectionsFromSubquote = ({ subquote, index, prescedingText, textPrescedingPreviousSubquote, string }) => {
-  const selectedTokens = tokenize({ text: subquote, greedy: true });
+  const selectedTokens = subquote.split(' ');
   const subSelections = selectedTokens.map(_selectedText => {
     let subSelection = generateSelection(
       { selectedText: _selectedText, prescedingText, entireText: string }
@@ -71,16 +71,23 @@ export const generateSelection = ({ selectedText, prescedingText, entireText }) 
   let selection = {}; // response
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
+  const selectedTextStripped = tokenize({ text: selectedText, greedy: true })[0];
   // get the occurrences before this one
-  let prescedingOccurrences = occurrencesInString(prescedingText, selectedText);
+  const prescedingTokens = tokenize({ text: prescedingText, greedy: true });
+  let prescedingOccurrences = prescedingTokens.reduce(function (n, val) {
+    return n + (val === selectedTextStripped);
+  }, 0);
   // calculate this occurrence number by adding it to the presceding ones
   let occurrence = prescedingOccurrences + 1;
   // get the total occurrences from the verse
-  let occurrences = occurrencesInString(_entireText, selectedText);
+  const allTokens = tokenize({ text: _entireText, greedy: true });
+  let allOccurrences = allTokens.reduce(function (n, val) {
+    return n + (val === selectedTextStripped);
+  }, 0);
   selection = {
     text: selectedText,
     occurrence: occurrence,
-    occurrences: occurrences
+    occurrences: allOccurrences
   };
   return selection;
 };

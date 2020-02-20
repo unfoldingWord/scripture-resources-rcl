@@ -101,11 +101,11 @@ const books = [
 const reference = {
   bookId: 'tit',
   chapter: 1,
-  verse: 2,
+  verse: 1,
 };
 
 const [component, setComponent] = React.useState(<></>)
-const [quote, setQuote] = React.useState("ἐλπίδι");
+const [quote, setQuote] = React.useState("τῆς κατ’ εὐσέβειαν");
 const [occurrence, setOccurrence] = React.useState(1);
 
 React.useEffect(() => {
