@@ -105,7 +105,7 @@ const reference = {
 };
 
 const [component, setComponent] = React.useState(<></>)
-const [quote, setQuote] = React.useState("τοῦ Σωτῆρος ἡμῶν, Θεοῦ");
+const [quote, setQuote] = React.useState("τοῦ σωτῆρος ἡμῶν θεοῦ");
 const [occurrence, setOccurrence] = React.useState(1);
 
 React.useEffect(() => {
