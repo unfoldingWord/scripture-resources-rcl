@@ -71,21 +71,22 @@ export const generateSelection = ({ selectedText, precedingText, entireText }) =
   let selection = {}; // response
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
-  const selectedTextStripped = tokenize({ text: selectedText, greedy: true })[0];
+  const selectedTextStripped = tokenize({ text: selectedText })[0];
   // get the occurrences before this one
-  const precedingTokens = tokenize({ text: precedingText, greedy: true });
+  const precedingTokens = tokenize({ text: precedingText });
   let precedingOccurrences = precedingTokens.reduce(function (n, val) {
     return n + (val === selectedTextStripped);
   }, 0);
   // calculate this occurrence number by adding it to the preceding ones
   let occurrence = precedingOccurrences + 1;
   // get the total occurrences from the verse
-  const allTokens = tokenize({ text: _entireText, greedy: true });
+  const allTokens = tokenize({ text: _entireText });
   let allOccurrences = allTokens.reduce(function (n, val) {
     return n + (val === selectedTextStripped);
   }, 0);
   selection = {
-    text: selectedText,
+    // Need to remove on certain punctuation but not all such as the ’ in κατ’
+    text: removePunctuation(selectedText),
     occurrence: occurrence,
     occurrences: allOccurrences
   };
@@ -399,3 +400,8 @@ export const normalizeString = string => {
   string = string.replace(/\s+/g, ' ');
   return string;
 };
+
+export const removePunctuation = string => {
+  string = string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+  return string;
+}

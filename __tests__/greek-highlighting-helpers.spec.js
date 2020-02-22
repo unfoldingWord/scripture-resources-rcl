@@ -1,10 +1,10 @@
 import { generateSelection } from "../src/core/selections/selections";
 
 describe('Selections Helpers', () => {
-  it('should only contain one occurence for the given text', () => {
-    const precedingText = "Παῦλος δοῦλος θεοῦ ἀπόστολος δὲ Ἰησοῦ Χριστοῦ κατὰ πίστιν ἐκλεκτῶν θεοῦ καὶ ἐπίγνωσιν ἀληθείας ";
-    const entireText = "Παῦλος δοῦλος θεοῦ ἀπόστολος δὲ Ἰησοῦ Χριστοῦ κατὰ πίστιν ἐκλεκτῶν θεοῦ καὶ ἐπίγνωσιν ἀληθείας τῆς κατ’ εὐσέβειαν ";
-    const selectedText = `κατ’`;
+  it('should only contain one occurrence for the given text', () => {
+    const precedingText = "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν";
+    const entireText = "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν τοῦ σωτῆρος ἡμῶν θεοῦ";
+    const selectedText = `τοῦ`;
     const expectedSelection = {
       text: selectedText,
       occurrence: 1,
