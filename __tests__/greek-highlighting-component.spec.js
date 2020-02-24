@@ -69,9 +69,9 @@ function generateTest(fileName) {
   const { verseObjects } = UGNT.chapters[reference.chapter][reference.verse];
   const highlightedWordsFromVerseComponent = getHighlightedWordsFromVerseComponent(reference, occurrence, quote, books);
   const expectedHighlightedWords = selectionsFromQuote({ verseObjects, occurrence, quote });
-  expectedHighlightedWords.forEach((selectionStringified) => {
+  expectedHighlightedWords.forEach((selectionStringified, index) => {
     const { text } = JSON.parse(selectionStringified);
-    expect(highlightedWordsFromVerseComponent).toContain(text);
+    expect(highlightedWordsFromVerseComponent[index]).toBe(text);
   })
 }
 

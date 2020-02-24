@@ -40,15 +40,17 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
 
 export const subSelectionsFromSubquote = ({ subquote, index, precedingText, textPrescedingPreviousSubquote, string }) => {
   const selectedTokens = subquote.split(' ');
-  const subSelections = selectedTokens.map(_selectedText => {
+  const subSelections = [];
+   selectedTokens.forEach(_selectedText => {
     let subSelection = generateSelection(
-      { selectedText: _selectedText, precedingText, entireText: string }
+      { selectedText: _selectedText, precedingText: precedingText, entireText: string, subSelections }
     );
+    
     if (index > 0) {
       const occurrencesBeforePreviousSubquote = occurrencesInString(textPrescedingPreviousSubquote, subquote);
       subSelection.occurrence = occurrencesBeforePreviousSubquote + 1;
     }
-    return subSelection;
+    subSelections.push(subSelection);
   });
   return subSelections;
 };
@@ -67,30 +69,30 @@ export const subSelectionsFromSubquote = ({ subquote, index, precedingText, text
  * @param {String} entireText - the text that the selection should be in
  * @return {Object} - the selection object to be used
  */
-export const generateSelection = ({ selectedText, precedingText, entireText }) => {
-  let selection = {}; // response
+export const generateSelection = ({ selectedText, precedingText, entireText, subSelections = [] }) => {
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
   const selectedTextStripped = tokenize({ text: selectedText })[0];
+  
+  let precedingOccurrencesInSubquote = subSelections.filter(({ text }) => text === selectedTextStripped).length;
   // get the occurrences before this one
   const precedingTokens = tokenize({ text: precedingText });
-  let precedingOccurrences = precedingTokens.reduce(function (n, val) {
+  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (n, val) {
     return n + (val === selectedTextStripped);
-  }, 0);
+  }, precedingOccurrencesInSubquote);
   // calculate this occurrence number by adding it to the preceding ones
-  let occurrence = precedingOccurrences + 1;
+  let occurrence = precedingOccurrencesInPreviousString + 1;
   // get the total occurrences from the verse
   const allTokens = tokenize({ text: _entireText });
   let allOccurrences = allTokens.reduce(function (n, val) {
     return n + (val === selectedTextStripped);
   }, 0);
-  selection = {
-    // Need to remove on certain punctuation but not all such as the ’ in κατ’
+  return {
+    // Need to remove on certain punctuation such as commas, but not ’ in κατ’
     text: removePunctuation(selectedText),
     occurrence: occurrence,
     occurrences: allOccurrences
   };
-  return selection;
 };
 
 /**
@@ -402,6 +404,6 @@ export const normalizeString = string => {
 };
 
 export const removePunctuation = string => {
-  string = string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+  string = string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
   return string;
 }
