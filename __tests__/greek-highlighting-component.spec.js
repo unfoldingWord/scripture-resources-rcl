@@ -40,6 +40,9 @@ describe('Checking highlights from rendered component', () => {
   it('should have all words highlighted Titus 3:4', () => {
     generateTest('tit-3-4');
   })
+  it('should have all words highlighted Titus 3:4 (2)', () => {
+    generateTest('tit-3-4-2');
+  })
   it('should have all words highlighted Titus 3:6', () => {
     generateTest('tit-3-6');
   })

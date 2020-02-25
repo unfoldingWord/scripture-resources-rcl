@@ -23,11 +23,13 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
     subquotes = (new Array(occurrences)).fill(quote);
   }
   let textPrescedingPreviousSubquote = '';
-  subquotes.forEach((subquote, index) => {
+  subquotes.forEach((subquote, index) => {    
     const precedingText = getPrecedingText(string, subquote, occurrence, index);
+    
     const subSelections = subSelectionsFromSubquote(
       { subquote, index, precedingText, textPrescedingPreviousSubquote, string }
     );
+    
     textPrescedingPreviousSubquote = [textPrescedingPreviousSubquote, precedingText].join(subquote);
     subSelections.forEach(subSelection => selections.push(subSelection));
   });
@@ -43,7 +45,7 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
  */
 export const getPrecedingText = (_string, subquote, occurrence, index = 0) => {
   const string = _string.slice(0);
-  if (string.indexOf(subquote)) {
+  if (string.indexOf(subquote) === 0) {
     return '';
   }
   let splitString = string.split(subquote);
@@ -65,11 +67,6 @@ export const subSelectionsFromSubquote = ({ subquote, index, precedingText, text
     let subSelection = generateSelection(
       { selectedText: _selectedText, precedingText: precedingText, entireText: string, subSelections }
     );
-
-    if (index > 0) {
-      const occurrencesBeforePreviousSubquote = occurrencesInString(textPrescedingPreviousSubquote, subquote);
-      subSelection.occurrence = occurrencesBeforePreviousSubquote + 1;
-    }
     subSelections.push(subSelection);
   });
   return subSelections;
@@ -89,7 +86,7 @@ export const subSelectionsFromSubquote = ({ subquote, index, precedingText, text
  * @param {String} entireText - the text that the selection should be in
  * @return {Object} - the selection object to be used
  */
-export const generateSelection = ({ selectedText, precedingText, entireText, subSelections = [] }) => {
+export const generateSelection = ({ selectedText, precedingText, entireText, subSelections = [] }) => {  
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
   const selectedTextStripped = tokenize({ text: selectedText })[0];
