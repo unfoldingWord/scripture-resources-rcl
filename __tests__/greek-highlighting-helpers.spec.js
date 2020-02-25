@@ -20,11 +20,85 @@ describe('selectionHelpers.getPrecedingText', () => {
   });
 })
 
-describe('selectionHelpers.selectionsFromQuoteAndVerseObjects', () => {
-  it('should create the correct selections from a quote', () => {
-    const { quote, verseObjects, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting/tit-3-4-2'));
+describe.skip('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
+  function generateTest(fileName) {
+    const { quote, verseObjects, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
     const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
     expect(selections).toMatchObject(expected);
+  }
+  it('should have all words highlighted Titus 1:1', () => {
+    generateTest('tit/1-1');
+  })
+  it('should have all words highlighted Titus 1:2', () => {
+    generateTest('tit/1-2');
+  })
+  it('should have all words highlighted Titus 1:3', () => {
+    generateTest('tit/1-3');
+  })
+  it('should have all words highlighted Titus 1:4', () => {
+    generateTest('tit/1-4');
+  })
+  it('should have all words highlighted Titus 1:5', () => {
+    generateTest('tit/1-5');
+  })
+  it('should have all words highlighted Titus 1:9', () => {
+    generateTest('tit/1-9');
+  })
+  it('should have all words highlighted Titus 1:12', () => {
+    generateTest('tit/1-12');
+  })
+  it('should have all words highlighted Titus 2:2', () => {
+    generateTest('tit/2-2');
+  })
+  it('should have all words highlighted Titus 2:10', () => {
+    generateTest('tit/2-10');
+  })
+  it('should have all words highlighted Titus 2:13', () => {
+    generateTest('tit/2-13');
+  })
+  it('should have all words highlighted Titus 3:4', () => {
+    generateTest('tit/3-4');
+  })
+  it('should have all words highlighted Titus 3:4 (2)', () => {
+    generateTest('tit/3-4-2');
+  })
+  it('should have all words highlighted Titus 3:6', () => {
+    generateTest('tit/3-6');
+  })
+  it('should have all words highlighted Titus 3:6 (2)', () => {
+    generateTest('tit/3-6-2');
+  })
+  it('should have all words highlighted Titus 3:7', () => {
+    generateTest('tit/3-7');
+  })
+  it('should have all words highlighted Titus 3:13', () => {
+    generateTest('tit/3-13');
+  })
+})
+
+describe('selectionHelpers.selectionsFromQuoteAndVerseObjects 3JN', () => {
+  function generateTest(fileName) {
+    const { quote, verseObjects, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
+    const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
+    expect(selections).toMatchObject(expected);
+  }
+  it('should have all words highlighted 3JN 1:10', () => {
+    generateTest('3jn/1-10');
+  })
+  it('should have all words highlighted 3JN 1:11', () => {
+    generateTest('3jn/1-11');
+  })
+  it('should have all words highlighted 3JN 1:11 (2)', () => {
+    generateTest('3jn/1-11-2');
+  })
+  it('should have all words highlighted 3JN 1:12', () => {
+    generateTest('3jn/1-12');
+  })
+  it('should have all words highlighted 3JN 1:14', () => {
+    generateTest('3jn/1-14');
+  })
+  it('should have all words highlighted 3JN 1:15', () => {
+    generateTest('3jn/1-15');
   })
 })
 

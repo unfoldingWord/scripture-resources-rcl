@@ -1,75 +1,101 @@
 import { ScriptureTable } from "../src";
 import usfmJS from 'usfm-js';
 import { selectionsFromQuote } from '../src/components/selections/helpers';
-import ugnt_tit from './__mocks__/ugnt_tit.js';
+import ugnt_tit from './fixtures/books/ugnt_tit.js';
+import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
 import { mount } from 'enzyme';
 import React from 'react';
 import path from 'path';
+const UGNT_BOOKS = {
+  'tit': ugnt_tit,
+  '3jn': ugnt_3jn
+}
 
-describe('Checking highlights from rendered component', () => {
+describe('Checking highlights from rendered component in Titus', () => {
   it('should have all words highlighted Titus 1:1', () => {
-    generateTest('tit-1-1');
+    generateTest('tit/1-1');
   })
   it('should have all words highlighted Titus 1:2', () => {
-    generateTest('tit-1-2');
+    generateTest('tit/1-2');
   })
   it('should have all words highlighted Titus 1:3', () => {
-    generateTest('tit-1-3');
+    generateTest('tit/1-3');
   })
   it('should have all words highlighted Titus 1:4', () => {
-    generateTest('tit-1-4');
+    generateTest('tit/1-4');
   })
   it('should have all words highlighted Titus 1:5', () => {
-    generateTest('tit-1-5');
+    generateTest('tit/1-5');
   })
   it('should have all words highlighted Titus 1:9', () => {
-    generateTest('tit-1-9');
+    generateTest('tit/1-9');
   })
   it('should have all words highlighted Titus 1:12', () => {
-    generateTest('tit-1-12');
+    generateTest('tit/1-12');
   })
   it('should have all words highlighted Titus 2:2', () => {
-    generateTest('tit-2-2');
+    generateTest('tit/2-2');
   })
   it('should have all words highlighted Titus 2:10', () => {
-    generateTest('tit-2-10');
+    generateTest('tit/2-10');
   })
   it('should have all words highlighted Titus 2:13', () => {
-    generateTest('tit-2-13');
+    generateTest('tit/2-13');
   })
   it('should have all words highlighted Titus 3:4', () => {
-    generateTest('tit-3-4');
+    generateTest('tit/3-4');
   })
   it('should have all words highlighted Titus 3:4 (2)', () => {
-    generateTest('tit-3-4-2');
+    generateTest('tit/3-4-2');
   })
   it('should have all words highlighted Titus 3:6', () => {
-    generateTest('tit-3-6');
+    generateTest('tit/3-6');
   })
   it('should have all words highlighted Titus 3:6 (2)', () => {
-    generateTest('tit-3-6-2');
+    generateTest('tit/3-6-2');
   })
   it('should have all words highlighted Titus 3:7', () => {
-    generateTest('tit-3-7');
+    generateTest('tit/3-7');
   })
   it('should have all words highlighted Titus 3:13', () => {
-    generateTest('tit-3-13');
+    generateTest('tit/3-13');
+  })
+})
+
+describe.only('Checking highlights from rendered component in 3 John', () => {
+  it('should have all words highlighted 3JN 1:10', () => {
+    generateTest('3jn/1-10');
+  })
+  it('should have all words highlighted 3JN 1:11', () => {
+    generateTest('3jn/1-11');
+  })
+  it('should have all words highlighted 3JN 1:11 (2)', () => {
+    generateTest('3jn/1-11-2');
+  })
+  it('should have all words highlighted 3JN 1:12', () => {
+    generateTest('3jn/1-12');
+  })
+  it('should have all words highlighted 3JN 1:14', () => {
+    generateTest('3jn/1-14');
+  })
+  it('should have all words highlighted 3JN 1:15', () => {
+    generateTest('3jn/1-15');
   })
 })
 
 function generateTest(fileName) {
-  const { book, chapter, verse, quote } = require(path.join(__dirname, './fixtures/highlighting', `${fileName}.js`));
+  const { book, chapter, verse, quote, occurrence } = require(path.join(__dirname, './fixtures/highlighting', `${fileName}.js`));
   const reference = {
     bookId: book,
     chapter,
     verse,
   };
-  const occurrence = 1;
-  const UGNT = usfmJS.toJSON(ugnt_tit);
+  const UGNT = usfmJS.toJSON(UGNT_BOOKS[book]);
   const books = [
     UGNT
   ];
   const { verseObjects } = UGNT.chapters[reference.chapter][reference.verse];
+  
   const highlightedWordsFromVerseComponent = getHighlightedWordsFromVerseComponent(reference, occurrence, quote, books);
   const expectedHighlightedWords = selectionsFromQuote({ verseObjects, occurrence, quote });
   expectedHighlightedWords.forEach((selectionStringified, index) => {
@@ -89,7 +115,7 @@ function getHighlightedWordsFromVerseComponent(reference, occurrence, quote, boo
     }}
     titles={titles}
     books={books}
-    title='Titus'
+    title='Book'
     reference={reference}
     quote={quote}
     occurrence={occurrence}
