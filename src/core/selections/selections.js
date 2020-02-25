@@ -9,7 +9,7 @@ export const selectionsFromQuoteAndVerseObjects = ({ quote, verseObjects, occurr
   if (quote && verseObjects.length > 0) {
     const string = verseObjectsToString(verseObjects);
     selections = selectionsFromQuoteAndString({ quote, string, occurrence });
-  }
+  }  
   return selections;
 };
 
@@ -22,13 +22,9 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
     const occurrences = occurrencesInString(string, quote);
     subquotes = (new Array(occurrences)).fill(quote);
   }
-  let precedingText;
-  let followingText = string.slice(0);
   let textPrescedingPreviousSubquote = '';
   subquotes.forEach((subquote, index) => {
-    let splitString = followingText.split(subquote);
-    if (index === 0 && occurrence > -1) precedingText = splitString.slice(0, occurrence).join(subquote);
-    else precedingText = splitString.slice(0, 1).join(subquote);
+    const precedingText = getPrecedingText(string, subquote, occurrence, index);
     const subSelections = subSelectionsFromSubquote(
       { subquote, index, precedingText, textPrescedingPreviousSubquote, string }
     );
@@ -38,14 +34,29 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
   return selections;
 };
 
+export const getPrecedingText = (_string, subquote, occurrence, index) => {
+  const string = _string.slice(0);
+  if (string.indexOf(subquote)) {
+    return '';
+  }
+  let splitString = string.split(subquote);
+  
+  if (index === 0 && occurrence > -1) {
+    return splitString.slice(0, occurrence).join(subquote);
+  }
+  else {
+    return splitString.slice(0, 1).join(subquote);
+  }
+}
+
 export const subSelectionsFromSubquote = ({ subquote, index, precedingText, textPrescedingPreviousSubquote, string }) => {
   const selectedTokens = subquote.split(' ');
   const subSelections = [];
-   selectedTokens.forEach(_selectedText => {
+  selectedTokens.forEach(_selectedText => {
     let subSelection = generateSelection(
       { selectedText: _selectedText, precedingText: precedingText, entireText: string, subSelections }
     );
-    
+
     if (index > 0) {
       const occurrencesBeforePreviousSubquote = occurrencesInString(textPrescedingPreviousSubquote, subquote);
       subSelection.occurrence = occurrencesBeforePreviousSubquote + 1;
@@ -73,7 +84,7 @@ export const generateSelection = ({ selectedText, precedingText, entireText, sub
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
   const selectedTextStripped = tokenize({ text: selectedText })[0];
-  
+
   let precedingOccurrencesInSubquote = subSelections.filter(({ text }) => text === selectedTextStripped).length;
   // get the occurrences before this one
   const precedingTokens = tokenize({ text: precedingText });
@@ -87,6 +98,7 @@ export const generateSelection = ({ selectedText, precedingText, entireText, sub
   let allOccurrences = allTokens.reduce(function (n, val) {
     return n + (val === selectedTextStripped);
   }, 0);
+  
   return {
     // Need to remove on certain punctuation such as commas, but not ’ in κατ’
     text: removePunctuation(selectedText),

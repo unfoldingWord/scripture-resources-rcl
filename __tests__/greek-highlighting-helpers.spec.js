@@ -1,9 +1,17 @@
-import { generateSelection, selectionsFromQuoteAndVerseObjects } from "../src/core/selections/selections";
+import { generateSelection, selectionsFromQuoteAndVerseObjects, getPrecedingText } from "../src/core/selections/selections";
 import path from 'path';
 
 describe('Selections Helpers', () => {
+  it('should text getPrecedingText', () => {
+    const string = `ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,`;
+    const subquote = `ὅτε ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ`;
+    const index = 0;
+    const occurrence = 1;
+    const precedingText = getPrecedingText(string, subquote, occurrence, index);
+    expect(precedingText).toBe('');
+  })
   it('should create the correct selections from a quote', () => {
-    const { quote, verseObjects, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting/tit-1-9'));
+    const { quote, verseObjects, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting/tit-3-13'));
     const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
     expect(selections).toMatchObject(expected);
   })

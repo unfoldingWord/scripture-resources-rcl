@@ -37,7 +37,7 @@ describe('Checking highlights from rendered component', () => {
   it('should have all words highlighted Titus 2:13', () => {
     generateTest('tit-2-13');
   })
-  it.skip('should have all words highlighted Titus 3:4', () => {
+  it('should have all words highlighted Titus 3:4', () => {
     generateTest('tit-3-4');
   })
   it('should have all words highlighted Titus 3:6', () => {
@@ -49,7 +49,7 @@ describe('Checking highlights from rendered component', () => {
   it('should have all words highlighted Titus 3:7', () => {
     generateTest('tit-3-7');
   })
-  it.skip('should have all words highlighted Titus 3:13', () => {
+  it('should have all words highlighted Titus 3:13', () => {
     generateTest('tit-3-13');
   })
 })
@@ -70,7 +70,7 @@ function generateTest(fileName) {
   const highlightedWordsFromVerseComponent = getHighlightedWordsFromVerseComponent(reference, occurrence, quote, books);
   const expectedHighlightedWords = selectionsFromQuote({ verseObjects, occurrence, quote });
   expectedHighlightedWords.forEach((selectionStringified, index) => {
-    const { text } = JSON.parse(selectionStringified);
+    const { text } = JSON.parse(selectionStringified);    
     expect(highlightedWordsFromVerseComponent[index]).toBe(text);
   })
 }
