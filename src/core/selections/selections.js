@@ -34,7 +34,14 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
   return selections;
 };
 
-export const getPrecedingText = (_string, subquote, occurrence, index) => {
+/**
+ * 
+ * @param {string} _string - The entire string to use to find the preceding text
+ * @param {string} subquote - The subquote to find the preceding text of
+ * @param {number} occurrence - The occurrence of the string in the entire string
+ * @param {number} index - The index of the subquote
+ */
+export const getPrecedingText = (_string, subquote, occurrence, index = 0) => {
   const string = _string.slice(0);
   if (string.indexOf(subquote)) {
     return '';
@@ -50,6 +57,8 @@ export const getPrecedingText = (_string, subquote, occurrence, index) => {
 }
 
 export const subSelectionsFromSubquote = ({ subquote, index, precedingText, textPrescedingPreviousSubquote, string }) => {
+  //Splitting by tokenization here causes issues because we are still
+  //comparing those characters at this level
   const selectedTokens = subquote.split(' ');
   const subSelections = [];
   selectedTokens.forEach(_selectedText => {
@@ -84,7 +93,7 @@ export const generateSelection = ({ selectedText, precedingText, entireText, sub
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
   const selectedTextStripped = tokenize({ text: selectedText })[0];
-
+  // Getting the occurrences before the current token that are in the subquote
   let precedingOccurrencesInSubquote = subSelections.filter(({ text }) => text === selectedTextStripped).length;
   // get the occurrences before this one
   const precedingTokens = tokenize({ text: precedingText });
