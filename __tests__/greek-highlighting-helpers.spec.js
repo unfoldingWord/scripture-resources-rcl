@@ -20,12 +20,7 @@ describe('selectionHelpers.getPrecedingText', () => {
   });
 })
 
-describe.skip('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
-  function generateTest(fileName) {
-    const { quote, verseObjects, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
-    const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
-    expect(selections).toMatchObject(expected);
-  }
+describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
   it('should have all words highlighted Titus 1:1', () => {
     generateTest('tit/1-1');
   })
@@ -77,11 +72,6 @@ describe.skip('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () =>
 })
 
 describe('selectionHelpers.selectionsFromQuoteAndVerseObjects 3JN', () => {
-  function generateTest(fileName) {
-    const { quote, verseObjects, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
-    const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
-    expect(selections).toMatchObject(expected);
-  }
   it('should have all words highlighted 3JN 1:10', () => {
     generateTest('3jn/1-10');
   })
@@ -132,3 +122,10 @@ describe('selectionHelpers.generateSelection', () => {
     expect(selection).toMatchObject(expectedSelection);
   })
 })
+
+
+function generateTest(fileName) {
+  const { quote, verseObjects, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
+  const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
+  expect(selections).toMatchObject(expected);
+}

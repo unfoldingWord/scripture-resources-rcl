@@ -6,6 +6,8 @@ import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
 import { mount } from 'enzyme';
 import React from 'react';
 import path from 'path';
+import fs from 'fs';
+
 const UGNT_BOOKS = {
   'tit': ugnt_tit,
   '3jn': ugnt_3jn
@@ -62,7 +64,7 @@ describe('Checking highlights from rendered component in Titus', () => {
   })
 })
 
-describe.only('Checking highlights from rendered component in 3 John', () => {
+describe('Checking highlights from rendered component in 3 John', () => {
   it('should have all words highlighted 3JN 1:10', () => {
     generateTest('3jn/1-10');
   })
@@ -84,7 +86,8 @@ describe.only('Checking highlights from rendered component in 3 John', () => {
 })
 
 function generateTest(fileName) {
-  const { book, chapter, verse, quote, occurrence } = require(path.join(__dirname, './fixtures/highlighting', `${fileName}.js`));
+  const fixturePath = path.join(__dirname, './fixtures/highlighting', `${fileName}.js`);
+  const { book, chapter, verse, quote, occurrence } = require(fixturePath);
   const reference = {
     bookId: book,
     chapter,
@@ -94,14 +97,24 @@ function generateTest(fileName) {
   const books = [
     UGNT
   ];
+  let expected = [];
   const { verseObjects } = UGNT.chapters[reference.chapter][reference.verse];
-  
   const highlightedWordsFromVerseComponent = getHighlightedWordsFromVerseComponent(reference, occurrence, quote, books);
   const expectedHighlightedWords = selectionsFromQuote({ verseObjects, occurrence, quote });
   expectedHighlightedWords.forEach((selectionStringified, index) => {
     const { text } = JSON.parse(selectionStringified);    
+    expected.push(JSON.parse(selectionStringified));
     expect(highlightedWordsFromVerseComponent[index]).toBe(text);
   })
+  // fs.writeFileSync(fixturePath, `module.exports = {
+  //   book:"${book}",
+  //   chapter:${chapter},
+  //   verse:${verse},
+  //   quote:"${quote}",
+  //   occurrence:${occurrence || 1},
+  //   verseObjects: ${JSON.stringify(verseObjects)},
+  //   expected: ${JSON.stringify(expected)}
+  // }`)
 }
 
 function getHighlightedWordsFromVerseComponent(reference, occurrence, quote, books) {

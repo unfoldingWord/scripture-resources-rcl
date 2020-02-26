@@ -1,6 +1,9 @@
 module.exports = {
-  book: 'tit',
-  chapter: 3,
-  verse: 6,
-  quote: `διὰ Ἰησοῦ Χριστοῦ, τοῦ Σωτῆρος ἡμῶν`
-}
+    book:"tit",
+    chapter:3,
+    verse:6,
+    quote:"διὰ Ἰησοῦ Χριστοῦ, τοῦ Σωτῆρος ἡμῶν",
+    occurrence:1,
+    verseObjects: [{"type":"text","text":" "},{"text":"οὗ","tag":"w","type":"word","lemma":"ὅς","strong":"G37390","morph":"Gr,RR,,,,GNS,"},{"type":"text","text":" "},{"text":"ἐξέχεεν","tag":"w","type":"word","lemma":"ἐκχέω","strong":"G16320","morph":"Gr,V,IAA3,,S,"},{"type":"text","text":" "},{"text":"ἐφ’","tag":"w","type":"word","lemma":"ἐπί","strong":"G19090","morph":"Gr,P,,,,,A,,,"},{"type":"text","text":" "},{"text":"ἡμᾶς","tag":"w","type":"word","lemma":"ἐγώ","strong":"G14730","morph":"Gr,RP,,,1A,P,"},{"type":"text","text":" "},{"text":"πλουσίως","tag":"w","type":"word","lemma":"πλουσίως","strong":"G41460","morph":"Gr,D,,,,,,,,,"},{"type":"text","text":", "},{"text":"διὰ","tag":"w","type":"word","lemma":"διά","strong":"G12230","morph":"Gr,P,,,,,G,,,"},{"type":"text","text":" "},{"tag":"k","type":"milestone","tw":"rc://*/tw/dict/bible/kt/jesus","children":[{"text":"Ἰησοῦ","tag":"w","type":"word","lemma":"Ἰησοῦς","strong":"G24240","morph":"Gr,N,,,,,GMS,"},{"type":"text","text":" "},{"text":"Χριστοῦ","tag":"w","type":"word","lemma":"χριστός","strong":"G55470","morph":"Gr,N,,,,,GMS,","tw":"rc://*/tw/dict/bible/kt/christ"},{"type":"text","text":", "}],"endTag":"k-e\\*"},{"type":"text","text":" "},{"text":"τοῦ","tag":"w","type":"word","lemma":"ὁ","strong":"G35880","morph":"Gr,EA,,,,GMS,"},{"type":"text","text":" "},{"text":"Σωτῆρος","tag":"w","type":"word","lemma":"σωτήρ","strong":"G49900","morph":"Gr,N,,,,,GMS,","tw":"rc://*/tw/dict/bible/kt/savior"},{"type":"text","text":" "},{"text":"ἡμῶν","tag":"w","type":"word","lemma":"ἐγώ","strong":"G14730","morph":"Gr,RP,,,1G,P,"},{"type":"text","text":",\n\n"}],
+    expected: [{"text":"διὰ","occurrence":1,"occurrences":1},{"text":"Ἰησοῦ","occurrence":1,"occurrences":1},{"text":"Χριστοῦ","occurrence":1,"occurrences":1},{"text":"τοῦ","occurrence":1,"occurrences":1},{"text":"Σωτῆρος","occurrence":1,"occurrences":1},{"text":"ἡμῶν","occurrence":1,"occurrences":1}]
+  }

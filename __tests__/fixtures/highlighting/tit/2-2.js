@@ -1,6 +1,9 @@
 module.exports = {
-  book: 'tit',
-  chapter: 2,
-  verse: 2,
-  quote: `ὑγιαίνοντας τῇ πίστει, τῇ ἀγάπῃ, τῇ ὑπομονῇ`
-}
+    book:"tit",
+    chapter:2,
+    verse:2,
+    quote:"ὑγιαίνοντας τῇ πίστει, τῇ ἀγάπῃ, τῇ ὑπομονῇ",
+    occurrence:1,
+    verseObjects: [{"type":"text","text":" "},{"text":"πρεσβύτας","tag":"w","type":"word","lemma":"πρεσβύτης","strong":"G42460","morph":"Gr,N,,,,,AMP,","tw":"rc://*/tw/dict/bible/other/elder"},{"type":"text","text":" "},{"text":"νηφαλίους","tag":"w","type":"word","lemma":"νηφάλιος","strong":"G35240","morph":"Gr,NS,,,,AMP,"},{"type":"text","text":" "},{"text":"εἶναι","tag":"w","type":"word","lemma":"εἰμί","strong":"G15100","morph":"Gr,V,NPA,,,,,"},{"type":"text","text":", "},{"text":"σεμνούς","tag":"w","type":"word","lemma":"σεμνός","strong":"G45860","morph":"Gr,NP,,,,AMP,"},{"type":"text","text":", "},{"text":"σώφρονας","tag":"w","type":"word","lemma":"σώφρων","strong":"G49980","morph":"Gr,NS,,,,AMP,","tw":"rc://*/tw/dict/bible/other/selfcontrol"},{"type":"text","text":", "},{"text":"ὑγιαίνοντας","tag":"w","type":"word","lemma":"ὑγιαίνω","strong":"G51980","morph":"Gr,V,PPA,AMP,"},{"type":"text","text":" "},{"text":"τῇ","tag":"w","type":"word","lemma":"ὁ","strong":"G35880","morph":"Gr,EA,,,,DFS,"},{"type":"text","text":" "},{"text":"πίστει","tag":"w","type":"word","lemma":"πίστις","strong":"G41020","morph":"Gr,N,,,,,DFS,","tw":"rc://*/tw/dict/bible/kt/faith"},{"type":"text","text":", "},{"text":"τῇ","tag":"w","type":"word","lemma":"ὁ","strong":"G35880","morph":"Gr,EA,,,,DFS,"},{"type":"text","text":" "},{"text":"ἀγάπῃ","tag":"w","type":"word","lemma":"ἀγάπη","strong":"G00260","morph":"Gr,N,,,,,DFS,","tw":"rc://*/tw/dict/bible/kt/love"},{"type":"text","text":", "},{"text":"τῇ","tag":"w","type":"word","lemma":"ὁ","strong":"G35880","morph":"Gr,EA,,,,DFS,"},{"type":"text","text":" "},{"text":"ὑπομονῇ","tag":"w","type":"word","lemma":"ὑπομονή","strong":"G52810","morph":"Gr,N,,,,,DFS,","tw":"rc://*/tw/dict/bible/other/perseverance"},{"type":"text","text":".\n\n"},{"tag":"p","nextChar":"\n","type":"paragraph"}],
+    expected: [{"text":"ὑγιαίνοντας","occurrence":1,"occurrences":1},{"text":"τῇ","occurrence":1,"occurrences":3},{"text":"πίστει","occurrence":1,"occurrences":1},{"text":"τῇ","occurrence":2,"occurrences":3},{"text":"ἀγάπῃ","occurrence":1,"occurrences":1},{"text":"τῇ","occurrence":3,"occurrences":3},{"text":"ὑπομονῇ","occurrence":1,"occurrences":1}]
+  }

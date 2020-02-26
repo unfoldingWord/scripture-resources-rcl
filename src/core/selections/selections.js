@@ -58,7 +58,7 @@ export const getPrecedingText = (_string, subquote, occurrence, index = 0) => {
   }
 }
 
-export const subSelectionsFromSubquote = ({ subquote, index, precedingText, textPrescedingPreviousSubquote, string }) => {
+export const subSelectionsFromSubquote = ({ subquote, precedingText, string }) => {
   //Splitting by tokenization here causes issues because we are still
   //comparing those characters at this level
   const selectedTokens = subquote.split(' ');
@@ -107,7 +107,7 @@ export const generateSelection = ({ selectedText, precedingText, entireText, sub
   
   return {
     // Need to remove on certain punctuation such as commas, but not ’ in κατ’
-    text: removePunctuation(selectedText),
+    text: selectedText,
     occurrence: occurrence,
     occurrences: allOccurrences
   };
@@ -416,12 +416,15 @@ export const occurrencesInString = (string, subString) => {
  * @param {String} string - the string to normalize
  * @return {String} - The returned normalized string
  */
-export const normalizeString = string => {
+export const normalizeString = _string => {
+  let string = _string.slice(0);
   string = string.replace(/\s+/g, ' ');
+  string = removePunctuation(string);
   return string;
 };
 
-export const removePunctuation = string => {
+export const removePunctuation = _string => {
+  let string = _string.slice(0);
   string = string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
   return string;
 }

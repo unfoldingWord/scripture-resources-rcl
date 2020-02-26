@@ -1,6 +1,9 @@
 module.exports = {
-  book: 'tit',
-  chapter: 1,
-  verse: 2,
-  quote: `ἐπ’ ἐλπίδι ζωῆς αἰωνίου`
-}
+    book:"tit",
+    chapter:1,
+    verse:2,
+    quote:"ἐπ’ ἐλπίδι ζωῆς αἰωνίου",
+    occurrence:1,
+    verseObjects: [{"type":"text","text":" "},{"text":"ἐπ’","tag":"w","type":"word","lemma":"ἐπί","strong":"G19090","morph":"Gr,P,,,,,D,,,"},{"type":"text","text":" "},{"text":"ἐλπίδι","tag":"w","type":"word","lemma":"ἐλπίς","strong":"G16800","morph":"Gr,N,,,,,DFS,","tw":"rc://*/tw/dict/bible/kt/hope"},{"type":"text","text":" "},{"text":"ζωῆς","tag":"w","type":"word","lemma":"ζωή","strong":"G22220","morph":"Gr,N,,,,,GFS,","tw":"rc://*/tw/dict/bible/kt/life"},{"type":"text","text":" "},{"text":"αἰωνίου","tag":"w","type":"word","lemma":"αἰώνιος","strong":"G01660","morph":"Gr,AA,,,,GFS,","tw":"rc://*/tw/dict/bible/kt/eternity"},{"type":"text","text":", "},{"text":"ἣν","tag":"w","type":"word","lemma":"ὅς","strong":"G37390","morph":"Gr,RR,,,,AFS,"},{"type":"text","text":" "},{"text":"ἐπηγγείλατο","tag":"w","type":"word","lemma":"ἐπαγγέλλω","strong":"G18610","morph":"Gr,V,IAM3,,S,","tw":"rc://*/tw/dict/bible/kt/promise"},{"type":"text","text":" "},{"text":"ὁ","tag":"w","type":"word","lemma":"ὁ","strong":"G35880","morph":"Gr,EA,,,,NMS,"},{"type":"text","text":" "},{"text":"ἀψευδὴς","tag":"w","type":"word","lemma":"ἀψευδής","strong":"G08930","morph":"Gr,AA,,,,NMS,"},{"type":"text","text":" "},{"text":"Θεὸς","tag":"w","type":"word","lemma":"θεός","strong":"G23160","morph":"Gr,N,,,,,NMS,","tw":"rc://*/tw/dict/bible/kt/god"},{"type":"text","text":" "},{"text":"πρὸ","tag":"w","type":"word","lemma":"πρό","strong":"G42530","morph":"Gr,P,,,,,G,,,"},{"type":"text","text":" "},{"text":"χρόνων","tag":"w","type":"word","lemma":"χρόνος","strong":"G55500","morph":"Gr,N,,,,,GMP,","tw":"rc://*/tw/dict/bible/other/time"},{"type":"text","text":" "},{"text":"αἰωνίων","tag":"w","type":"word","lemma":"αἰώνιος","strong":"G01660","morph":"Gr,AA,,,,GMP,","tw":"rc://*/tw/dict/bible/kt/eternity"},{"type":"text","text":",\n\n"}],
+    expected: [{"text":"ἐπ’","occurrence":1,"occurrences":1},{"text":"ἐλπίδι","occurrence":1,"occurrences":1},{"text":"ζωῆς","occurrence":1,"occurrences":1},{"text":"αἰωνίου","occurrence":1,"occurrences":1}]
+  }
