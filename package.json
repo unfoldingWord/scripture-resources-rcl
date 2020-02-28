@@ -17,7 +17,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "nyc:report": "nyc report --reporter=json-summary --reporter=text",
-    "test": "start-test 6060 cypress:run && npm run nyc:report",
+    "test": "start-test 6060 cypress:run && yarn nyc:report",
     "test:unit": "jest __tests__",
     "create-coverage-badge": "bash scripts/create-badge-json.sh"
   },
