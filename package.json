@@ -17,7 +17,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "nyc:report": "nyc report --reporter=json-summary --reporter=text",
-    "test": "start-test 6060 cypress:run && npm run nyc:report",
+    "test": "nyc start-test 6060 cypress:run && npm run nyc:report",
     "test:unit": "jest __tests__",
     "create-coverage-badge": "bash scripts/create-badge-json.sh"
   },
@@ -38,6 +38,7 @@
     "gitea-react-toolkit": "^0.6.9",
     "js-yaml-parser": "^1.0.0",
     "lodash": "^4.17.15",
+    "nyc": "^15.0.0-beta.3",
     "prop-types": "^15.7.2",
     "react-waypoint": "^9.0.2",
     "string-punctuation-tokenizer": "^2.0.0-beta.2",
@@ -50,7 +51,7 @@
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
-    "@cypress/code-coverage": "^1.10.2",
+    "@cypress/code-coverage": "1.12.2",
     "@material-ui/core": "^4.7.0",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.32",
@@ -62,12 +63,11 @@
     "babel-plugin-istanbul": "^5.2.0",
     "coveralls": "^3.0.9",
     "css-loader": "^3.2.0",
-    "cypress": "^3.6.1",
+    "cypress": "4.1.0",
     "eslint-plugin-cypress": "2.7.0",
     "file-loader": "^4.2.0",
     "istanbul-lib-coverage": "^2.0.5",
     "jest": "^25.1.0",
-    "nyc": "^14.1.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-json-view": "^1.19.1",
@@ -94,7 +94,8 @@
     ],
     "exclude": [
       "**/mocks/**"
-    ]
+    ],
+    "all": true
   },
   "jest": {
     "collectCoverage": false,
