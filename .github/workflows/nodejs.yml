@@ -40,8 +40,6 @@ jobs:
       - name: Install Packages
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn;
-      - name: Prepend Path
-        run: npm config set scripts-prepend-node-path true;
       - name: Run Tests
         run: yarn test;
       - name: Create Badge For Coverage Results
