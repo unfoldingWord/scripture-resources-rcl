@@ -10,14 +10,14 @@ describe('selectionHelpers.getPrecedingText', () => {
     const precedingText = getPrecedingText(string, subquote, occurrence, index);
     expect(precedingText).toBe('');
   })
-  it('should be be expected preceding text', () => {
+  it('should be nothing', () => {
     const string = `ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,`;
-    const subquote = `ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ`;
-    const index = 1;
+    const subquote = `ὅτε`;
+    const index = 0;
     const occurrence = 1;
     const precedingText = getPrecedingText(string, subquote, occurrence, index);
-    expect(precedingText).toBe('ὅτε δὲ ');
-  });
+    expect(precedingText).toBe('');
+  })
 })
 
 describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
@@ -108,7 +108,7 @@ describe('selectionHelpers.generateSelection', () => {
 
   it('should return second occurrence for the given text', () => {
     const selectedText = "ἡ";
-    const precedingText = "ὅτε δὲ";
+    const precedingText = "ὅτε δὲ ἡ χρηστότης καὶ ";
     const subSelections = [{ text: 'ἡ', occurrence: 1, occurrences: 2 },
     { text: 'χρηστότης', occurrence: 1, occurrences: 1 },
     { text: 'καὶ', occurrence: 1, occurrences: 1 }];

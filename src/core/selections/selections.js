@@ -9,32 +9,50 @@ export const selectionsFromQuoteAndVerseObjects = ({ quote, verseObjects, occurr
   if (quote && verseObjects.length > 0) {
     const string = verseObjectsToString(verseObjects);
     selections = selectionsFromQuoteAndString({ quote, string, occurrence });
-  }  
+  }
   return selections;
 };
 
+export const getPrecedingOccurrences = (_string, subquote) => {
+  const precedingTokens = tokenize({ text: _string });
+  const selectedTextStripped = tokenize({ text: subquote })[0];
+  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (n, val) {
+    return n + (val === selectedTextStripped);
+  }, 0);
+  return precedingOccurrencesInPreviousString;
+}
+
 export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawString, occurrence }) => {
   const quote = normalizeString(rawQuote);
-  const string = normalizeString(rawString);
+  let string = normalizeString(rawString);
   let selections = [];
   let subquotes = quote.split('…');
   if (occurrence === -1) {
     const occurrences = occurrencesInString(string, quote);
     subquotes = (new Array(occurrences)).fill(quote);
   }
-  let textPrescedingPreviousSubquote = '';
-  subquotes.forEach((subquote, index) => {    
-    const precedingText = getPrecedingText(string, subquote, occurrence, index);
-    
+  let precedingOccurrences = 0;
+  let precedingText = '';
+  subquotes.forEach((subquote, index) => {
+    precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
+    const occurrenceForPrecedingText = occurrence === -1 ? occurrence : index > 0 ? precedingOccurrences + 1 : occurrence;
+    precedingText = getPrecedingText(string, subquote, occurrenceForPrecedingText, index);
     const subSelections = subSelectionsFromSubquote(
-      { subquote, index, precedingText, textPrescedingPreviousSubquote, string }
+      { subquote, index, precedingText, string }
     );
-    
-    textPrescedingPreviousSubquote = [textPrescedingPreviousSubquote, precedingText].join(subquote);
+
     subSelections.forEach(subSelection => selections.push(subSelection));
   });
   return selections;
 };
+
+export const getStringFromEllipsis = (_string, quote, occurrence) => {
+  const [lower, upper] = quote.split('…');
+  const reg = new RegExp('(?:.*?' + lower + '.*' + upper + `){${occurrence - 1}}.*?(` + lower + '.*' + upper + ').*');
+  const string = _string.slice(0);
+  const matches = string.match(reg) || [];
+  return matches[1];
+}
 
 /**
  * 
@@ -43,30 +61,31 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
  * @param {number} occurrence - The occurrence of the string in the entire string
  * @param {number} index - The index of the subquote
  */
-export const getPrecedingText = (_string, subquote, occurrence, index = 0) => {
+export const getPrecedingText = (_string, subquote, occurrence, index = 0, ellipsis = false) => {
   const string = _string.slice(0);
   if (string.indexOf(subquote) === 0) {
     return '';
   }
   let splitString = string.split(subquote);
-  
-  if (index === 0 && occurrence > -1) {
+
+  if (occurrence === -1) {
+    return splitString.slice(0, index + 1).join(subquote);
+  } else {
     return splitString.slice(0, occurrence).join(subquote);
-  }
-  else {
-    return splitString.slice(0, 1).join(subquote);
   }
 }
 
-export const subSelectionsFromSubquote = ({ subquote, precedingText, string }) => {
+export const subSelectionsFromSubquote = ({ subquote, precedingText: _precedingText, string }) => {
   //Splitting by tokenization here causes issues because we are still
   //comparing those characters at this level
   const selectedTokens = subquote.split(' ');
   const subSelections = [];
   selectedTokens.forEach(_selectedText => {
+    const precedingTextInSubselections = subSelections.map(({ text }) => text).join(' ');
     let subSelection = generateSelection(
-      { selectedText: _selectedText, precedingText: precedingText, entireText: string, subSelections }
+      { selectedText: _selectedText, precedingText: _precedingText + precedingTextInSubselections, entireText: string, subSelections }
     );
+
     subSelections.push(subSelection);
   });
   return subSelections;
@@ -86,17 +105,16 @@ export const subSelectionsFromSubquote = ({ subquote, precedingText, string }) =
  * @param {String} entireText - the text that the selection should be in
  * @return {Object} - the selection object to be used
  */
-export const generateSelection = ({ selectedText, precedingText, entireText, subSelections = [] }) => {  
+export const generateSelection = ({ selectedText, precedingText, entireText, subSelections = [] }) => {
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
   const selectedTextStripped = tokenize({ text: selectedText })[0];
   // Getting the occurrences before the current token that are in the subquote
-  let precedingOccurrencesInSubquote = subSelections.filter(({ text }) => text === selectedTextStripped).length;
   // get the occurrences before this one
   const precedingTokens = tokenize({ text: precedingText });
   let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (n, val) {
     return n + (val === selectedTextStripped);
-  }, precedingOccurrencesInSubquote);
+  }, 0);
   // calculate this occurrence number by adding it to the preceding ones
   let occurrence = precedingOccurrencesInPreviousString + 1;
   // get the total occurrences from the verse
@@ -104,7 +122,7 @@ export const generateSelection = ({ selectedText, precedingText, entireText, sub
   let allOccurrences = allTokens.reduce(function (n, val) {
     return n + (val === selectedTextStripped);
   }, 0);
-  
+
   return {
     // Need to remove on certain punctuation such as commas, but not ’ in κατ’
     text: selectedText,

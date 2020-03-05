@@ -18,7 +18,7 @@
     "cypress:run": "cypress run",
     "nyc:report": "nyc report --reporter=json-summary --reporter=text",
     "test": "nyc start-test 6060 cypress:run && npm run nyc:report",
-    "test:unit": "jest __tests__",
+    "test:unit": "jest",
     "create-coverage-badge": "bash scripts/create-badge-json.sh"
   },
   "eslintConfig": {
@@ -64,6 +64,8 @@
     "coveralls": "^3.0.9",
     "css-loader": "^3.2.0",
     "cypress": "4.1.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint-plugin-cypress": "2.7.0",
     "file-loader": "^4.2.0",
     "istanbul-lib-coverage": "^2.0.5",
@@ -105,7 +107,11 @@
       "!**/vendor/**"
     ],
     "testMatch": [
-      "<rootDir>/__tests__/**/**.spec.js"
+      "<rootDir>**/**.spec.js"
+    ],
+    "testPathIgnorePatterns": [
+      "node_modules",
+      "cypress"
     ],
     "transformIgnorePatterns": [
       "mocks",
