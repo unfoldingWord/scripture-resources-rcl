@@ -1,7 +1,7 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
-import {Popover} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Popover } from '@material-ui/core';
 
 import SelectionsContext from '../selections/Selections.context';
 
@@ -10,20 +10,20 @@ import {
   OriginalWordObject,
 } from '.';
 
-function AlignedWordsObject ({
+function AlignedWordsObject({
   children,
   originalWords,
   disableWordPopover,
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-  
+
   const handleOpen = event => { setAnchorEl(event.currentTarget); };
   const handleClose = () => { setAnchorEl(null); };
 
-  let onClick = () => {};
+  let onClick = () => { };
   let selected;
-  const {areSelected, addSelections, removeSelections} = useContext(SelectionsContext);
+  const { areSelected, addSelections, removeSelections } = useContext(SelectionsContext);
   if (areSelected && addSelections && removeSelections) {
     selected = areSelected(originalWords);
     onClick = () => {
@@ -33,7 +33,7 @@ function AlignedWordsObject ({
   }
 
   const words = children.map((verseObject, index) =>
-    <span onClick={onClick} key={index} className={selected ? classes.selected : undefined}>
+    <span data-test="aligned-word-object" onClick={onClick} key={index} className={selected ? classes.selected : undefined}>
       <WordObject verseObject={verseObject} disableWordPopover={disableWordPopover} />
     </span>
   );

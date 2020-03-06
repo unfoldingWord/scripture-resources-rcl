@@ -1,4 +1,4 @@
-export default `\\id TIT Titus
+module.exports = `\\id TIT Titus
 \\ide UTF-8
 \\h Titus
 \\toc1
