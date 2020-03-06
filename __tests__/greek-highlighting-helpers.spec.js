@@ -1,5 +1,8 @@
 import { generateSelection, selectionsFromQuoteAndVerseObjects, getPrecedingText } from "../src/core/selections/selections";
 import path from 'path';
+import usfmJS from 'usfm-js';
+import ugnt_tit from './fixtures/books/ugnt_tit.js';
+import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
 
 describe('selectionHelpers.getPrecedingText', () => {
   it('should be nothing', () => {
@@ -120,9 +123,18 @@ describe('selectionHelpers.generateSelection', () => {
   })
 })
 
+const UGNT_TIT = usfmJS.toJSON(ugnt_tit);
+const UGNT_3JN = usfmJS.toJSON(ugnt_3jn);
+const books = {
+  'tit': UGNT_TIT,
+  '3jn': UGNT_3JN
+};
 
 function generateTest(fileName) {
-  const { quote, verseObjects, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
+  const [bookName, reference] = fileName.split('/');
+  const [chapter, verse] = reference.split('-');
+  const { quote, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
+  const { verseObjects } = books[bookName].chapters[chapter][verse];
   const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
   expect(selections).toMatchObject(expected);
 }
