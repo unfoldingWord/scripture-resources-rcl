@@ -13,5 +13,9 @@
 				"exclude": ["**/mocks/**"]
 			}
 		]
-	]
+	],
+	"ignore": [
+		"**/*.spec.js",
+		"**/*.usfm.js"
+  ]
 }
