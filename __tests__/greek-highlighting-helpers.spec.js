@@ -109,16 +109,13 @@ describe('selectionHelpers.generateSelection', () => {
   it('should return second occurrence for the given text', () => {
     const selectedText = "ἡ";
     const precedingText = "ὅτε δὲ ἡ χρηστότης καὶ ";
-    const subSelections = [{ text: 'ἡ', occurrence: 1, occurrences: 2 },
-    { text: 'χρηστότης', occurrence: 1, occurrences: 1 },
-    { text: 'καὶ', occurrence: 1, occurrences: 1 }];
     const entireText = "ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,";
     const expectedSelection = {
       text: selectedText,
       occurrence: 2,
       occurrences: 2
     }
-    const selection = generateSelection({ selectedText, precedingText, entireText, subSelections });
+    const selection = generateSelection({ selectedText, precedingText, entireText });
     expect(selection).toMatchObject(expectedSelection);
   })
 })
