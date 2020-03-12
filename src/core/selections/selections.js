@@ -35,25 +35,28 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
   let precedingText = '';
   subquotes.forEach((subquote, index) => {
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
-    const occurrenceForPrecedingText = getOccurrencesOfPrecedingText(occurrence, index, precedingOccurrences)
-    precedingText = getPrecedingText(string, subquote, occurrenceForPrecedingText, index);
+    const currentOccurrence = getCurrentOccurrenceFromPrecedingText(occurrence, index, precedingOccurrences)
+    precedingText = getPrecedingText(string, subquote, currentOccurrence, index);
+    
     const subSelections = subSelectionsFromSubquote(
       { subquote, index, precedingText, string }
     );
 
     subSelections.forEach(subSelection => selections.push(subSelection));
+    /** Adding the previous subquote to account for repeated ellipsis words i.e. Θεοῦ…Θεοῦ */
+    precedingText += subquote;
   });
   return selections;
 };
 
 /**
- * This function gets the correct amount of occurrences to provide the function getOccurrencesOfPrecedingText
+ * This function gets the correct amount of occurrences to provide the function getPrecedingText
  * 
  * @param {number} occurrence - The occurrence of the subquote in the string
  * @param {number} index - The current index of the subquotes
  * @param {number} precedingOccurrences - The number of occurrences before the current subquote in the string
  */
-export const getOccurrencesOfPrecedingText = (occurrence, index, precedingOccurrences) => {
+export const getCurrentOccurrenceFromPrecedingText = (occurrence, index, precedingOccurrences) => {
   if (occurrence === -1 || index === 0) {
     return occurrence
   } else {

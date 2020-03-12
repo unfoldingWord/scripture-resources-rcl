@@ -4,25 +4,6 @@ import usfmJS from 'usfm-js';
 import ugnt_tit from './fixtures/books/ugnt_tit.js';
 import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
 
-describe('selectionHelpers.getPrecedingText', () => {
-  it('should be nothing', () => {
-    const string = `ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,`;
-    const subquote = `ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ`;
-    const index = 0;
-    const occurrence = 1;
-    const precedingText = getPrecedingText(string, subquote, occurrence, index);
-    expect(precedingText).toBe('');
-  })
-  it('should be nothing', () => {
-    const string = `ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,`;
-    const subquote = `ὅτε`;
-    const index = 0;
-    const occurrence = 1;
-    const precedingText = getPrecedingText(string, subquote, occurrence, index);
-    expect(precedingText).toBe('');
-  })
-})
-
 describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
   it('should have all words highlighted Titus 1:1', () => {
     generateTest('tit/1-1');
@@ -92,34 +73,6 @@ describe('selectionHelpers.selectionsFromQuoteAndVerseObjects 3JN', () => {
   })
   it('should have all words highlighted 3JN 1:15', () => {
     generateTest('3jn/1-15');
-  })
-})
-
-describe('selectionHelpers.generateSelection', () => {
-  it('should only contain one occurrence for the given text', () => {
-    const precedingText = "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν";
-    const entireText = "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν τοῦ σωτῆρος ἡμῶν θεοῦ";
-    const selectedText = `τοῦ`;
-    const expectedSelection = {
-      text: selectedText,
-      occurrence: 1,
-      occurrences: 1
-    }
-    const selection = generateSelection({ selectedText, precedingText, entireText });
-    expect(selection).toMatchObject(expectedSelection);
-  })
-
-  it('should return second occurrence for the given text', () => {
-    const selectedText = "ἡ";
-    const precedingText = "ὅτε δὲ ἡ χρηστότης καὶ ";
-    const entireText = "ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,";
-    const expectedSelection = {
-      text: selectedText,
-      occurrence: 2,
-      occurrences: 2
-    }
-    const selection = generateSelection({ selectedText, precedingText, entireText });
-    expect(selection).toMatchObject(expectedSelection);
   })
 })
 
