@@ -1,23 +1,8 @@
 import {
-  selectionsFromQuoteAndString,
+  selectionsFromQuoteAndString, generateSelection, getPrecedingText
 } from './selections';
 
 describe('selectionsFromQuoteAndString', () => {
-  it('all occurrences', () => {
-    const input = {
-      quote: "λόγος",
-      string: "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
-      occurrence: -1,
-    };
-    const output = selectionsFromQuoteAndString(input);
-    const expected = [
-      { text: "λόγος", occurrence: 1, occurrences: 3 },
-      { text: "λόγος", occurrence: 2, occurrences: 3 },
-      { text: "λόγος", occurrence: 3, occurrences: 3 },
-    ];
-    expect(output).toStrictEqual(expected);
-  });
-
   it('phrase at beginning', () => {
     const input = {
       quote: "ἐν ἀρχῇ ἦν",
@@ -29,6 +14,20 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "ἐν", occurrence: 1, occurrences: 1 },
       { text: "ἀρχῇ", occurrence: 1, occurrences: 1 },
       { text: "ἦν", occurrence: 1, occurrences: 3 },
+    ];
+    expect(output).toStrictEqual(expected);
+  });
+
+  it('ellipsis: repeated word', () => {
+    const input = {
+      quote: "Θεοῦ…Θεοῦ",
+      string: "Παῦλος, δοῦλος Θεοῦ, ἀπόστολος δὲ Ἰησοῦ Χριστοῦ, κατὰ πίστιν ἐκλεκτῶν Θεοῦ, καὶ ἐπίγνωσιν ἀληθείας, τῆς κατ’ εὐσέβειαν",
+      occurrence: 1,
+    };
+    const output = selectionsFromQuoteAndString(input);
+    const expected = [
+      { text: "Θεοῦ", occurrence: 1, occurrences: 2 },
+      { text: "Θεοῦ", occurrence: 2, occurrences: 2 },
     ];
     expect(output).toStrictEqual(expected);
   });
@@ -148,3 +147,51 @@ describe('selectionsFromQuoteAndString', () => {
     expect(output).toStrictEqual(expected);
   });
 });
+
+describe('generateSelection', () => {
+  it('should only contain one occurrence for the given text', () => {
+    const precedingText = "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν";
+    const entireText = "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν τοῦ σωτῆρος ἡμῶν θεοῦ";
+    const selectedText = `τοῦ`;
+    const expectedSelection = {
+      text: selectedText,
+      occurrence: 1,
+      occurrences: 1
+    }
+    const selection = generateSelection({ selectedText, precedingText, entireText });
+    expect(selection).toMatchObject(expectedSelection);
+  })
+
+  it('should return second occurrence for the given text', () => {
+    const selectedText = "ἡ";
+    const precedingText = "ὅτε δὲ ἡ χρηστότης καὶ ";
+    const entireText = "ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,";
+    const expectedSelection = {
+      text: selectedText,
+      occurrence: 2,
+      occurrences: 2
+    }
+    const selection = generateSelection({ selectedText, precedingText, entireText });
+    expect(selection).toMatchObject(expectedSelection);
+  })
+})
+
+
+describe('getPrecedingText', () => {
+  it('should be nothing', () => {
+    const string = `ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,`;
+    const subquote = `ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ`;
+    const index = 0;
+    const occurrence = 1;
+    const precedingText = getPrecedingText(string, subquote, occurrence, index);
+    expect(precedingText).toBe('');
+  })
+  it('should be nothing', () => {
+    const string = `ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,`;
+    const subquote = `ὅτε`;
+    const index = 0;
+    const occurrence = 1;
+    const precedingText = getPrecedingText(string, subquote, occurrence, index);
+    expect(precedingText).toBe('');
+  })
+})
