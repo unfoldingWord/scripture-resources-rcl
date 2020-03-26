@@ -27,17 +27,20 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
   let string = normalizeString(rawString);
   let selections = [];
   let subquotes = quote.split('…');
-  if (occurrence === -1) {
+  const hasEllipsis = subquotes.length > 1;
+
+  if (occurrence === -1 && subquotes.length === 1) {
     const occurrences = occurrencesInString(string, quote);
     subquotes = (new Array(occurrences)).fill(quote);
   }
+
   let precedingOccurrences = 0;
   let precedingText = '';
-  subquotes.forEach((subquote, index) => {
+  subquotes.forEach((subquote, index) => {    
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
     const currentOccurrence = getCurrentOccurrenceFromPrecedingText(occurrence, index, precedingOccurrences)
-    precedingText = getPrecedingText(string, subquote, currentOccurrence, index);
-    
+    precedingText = getPrecedingText(string, subquote, currentOccurrence, index, hasEllipsis);
+
     const subSelections = subSelectionsFromSubquote(
       { subquote, index, precedingText, string }
     );
@@ -87,9 +90,12 @@ export const getStringFromEllipsis = (_string, quote, occurrence) => {
  * @param {number} occurrence - The occurrence of the string in the entire string
  * @param {number} index - The index of the subquote
  */
-export const getPrecedingText = (_string, subquote, occurrence, index = 0) => {
+export const getPrecedingText = (_string, subquote, occurrence, index = 0, hasEllipsis = false) => {
   const string = _string.slice(0);
   let splitString = string.split(subquote);
+  if (hasEllipsis) {
+    index = 0;
+  }
 
   if (occurrence === -1) {
     //Need every occurrence of the subquote
@@ -384,6 +390,22 @@ export const getQuoteOccurrencesInVerse = (string, subString) => {
     return n;
   }
   if (subString.includes('...')) subString = subString.replace('...', '.*');
+  const regex = new RegExp(`\\W+${subString}\\W+`, 'g');
+  let matchedSubstring;
+  while ((matchedSubstring = regex.exec(string)) !== null) {
+    // This is necessary to avoid infinite loops with zero-width matchedSubstring
+    if (matchedSubstring.index === regex.lastIndex) {
+      regex.lastIndex++;
+    }
+    n++;
+  }
+  return n;
+};
+
+export const getQuoteOccurrencesInStringFromEllipsis = (string, subString) => {
+  let n = 0;
+  if (subString.length <= 0) return 0;
+  if (subString.includes('…')) subString = subString.replace('…', '.*');
   const regex = new RegExp(`\\W+${subString}\\W+`, 'g');
   let matchedSubstring;
   while ((matchedSubstring = regex.exec(string)) !== null) {

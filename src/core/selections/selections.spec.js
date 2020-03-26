@@ -194,4 +194,14 @@ describe('getPrecedingText', () => {
     const precedingText = getPrecedingText(string, subquote, occurrence, index);
     expect(precedingText).toBe('');
   })
+
+  it('should work with -1 occurrence and ellipsis', () => {
+    const string = `διὰ τοῦτο ἐὰν ἔλθω ὑπομνήσω αὐτοῦ τὰ ἔργα ἃ ποιεῖ λόγοις πονηροῖς φλυαρῶν ἡμᾶς καὶ μὴ ἀρκούμενος ἐπὶ τούτοις οὔτε αὐτὸς ἐπιδέχεται τοὺς ἀδελφοὺς καὶ τοὺς βουλομένους κωλύει καὶ ἐκ τῆς ἐκκλησίας ἐκβάλλει`;
+    const subquote = `μὴ`;
+    const index = 1;
+    const occurrence = -1;
+    const hasEllipsis = true;
+    const precedingText = getPrecedingText(string, subquote, occurrence, index, hasEllipsis);
+    expect(precedingText).toBe('διὰ τοῦτο ἐὰν ἔλθω ὑπομνήσω αὐτοῦ τὰ ἔργα ἃ ποιεῖ λόγοις πονηροῖς φλυαρῶν ἡμᾶς καὶ ');
+  })
 })
