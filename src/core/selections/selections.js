@@ -402,22 +402,6 @@ export const getQuoteOccurrencesInVerse = (string, subString) => {
   return n;
 };
 
-export const getQuoteOccurrencesInStringFromEllipsis = (string, subString) => {
-  let n = 0;
-  if (subString.length <= 0) return 0;
-  if (subString.includes('…')) subString = subString.replace('…', '.*');
-  const regex = new RegExp(`\\W+${subString}\\W+`, 'g');
-  let matchedSubstring;
-  while ((matchedSubstring = regex.exec(string)) !== null) {
-    // This is necessary to avoid infinite loops with zero-width matchedSubstring
-    if (matchedSubstring.index === regex.lastIndex) {
-      regex.lastIndex++;
-    }
-    n++;
-  }
-  return n;
-};
-
 /**
  * @description Function that count occurrences of a substring in a string
  * @param {String} string - The string to search in
