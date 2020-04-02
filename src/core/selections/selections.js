@@ -28,6 +28,9 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
   let selections = [];
   let subquotes = quote.split('…');
   const hasEllipsis = subquotes.length > 1;
+  if (hasEllipsis && occurrence === -1 ) {
+    return [];
+  }
 
   if (occurrence === -1 && subquotes.length === 1) {
     const occurrences = occurrencesInString(string, quote);
@@ -39,7 +42,7 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
   subquotes.forEach((subquote, index) => {    
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
     const currentOccurrence = getCurrentOccurrenceFromPrecedingText(occurrence, index, precedingOccurrences)
-    precedingText = getPrecedingText(string, subquote, currentOccurrence, index, hasEllipsis);
+    precedingText = getPrecedingText(string, subquote, currentOccurrence, index);
 
     const subSelections = subSelectionsFromSubquote(
       { subquote, index, precedingText, string }
@@ -90,12 +93,9 @@ export const getStringFromEllipsis = (_string, quote, occurrence) => {
  * @param {number} occurrence - The occurrence of the string in the entire string
  * @param {number} index - The index of the subquote
  */
-export const getPrecedingText = (_string, subquote, occurrence, index = 0, hasEllipsis = false) => {
+export const getPrecedingText = (_string, subquote, occurrence, index = 0) => {
   const string = _string.slice(0);
   let splitString = string.split(subquote);
-  if (hasEllipsis) {
-    index = 0;
-  }
 
   if (occurrence === -1) {
     //Need every occurrence of the subquote

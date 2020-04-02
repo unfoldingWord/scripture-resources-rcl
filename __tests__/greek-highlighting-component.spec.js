@@ -19,9 +19,6 @@ describe('Checking highlights from rendered component in Titus', () => {
   it('should have all words highlighted Titus 1:1 (2)', () => {
     generateTest('tit/1-1-2');
   })
-  it('should have all words highlighted Titus 1:1 (3)', () => {
-    generateTest('tit/1-1-3');
-  })
   it('should have all words highlighted Titus 1:2', () => {
     generateTest('tit/1-2');
   })
@@ -106,8 +103,6 @@ function generateTest(fileName) {
   const { verseObjects } = UGNT.chapters[reference.chapter][reference.verse];
   const highlightedWordsFromVerseComponent = getHighlightedWordsFromVerseComponent(reference, occurrence, quote, books);
   const expectedHighlightedWords = selectionsFromQuote({ verseObjects, occurrence, quote });
-  console.log("expectedHighlightedWords", expectedHighlightedWords)
-  console.log("highlightedWordsFromVerseComponent", highlightedWordsFromVerseComponent)
   expectedHighlightedWords.forEach((selectionStringified, index) => {
     const { text } = JSON.parse(selectionStringified);    
     expected.push(JSON.parse(selectionStringified));
