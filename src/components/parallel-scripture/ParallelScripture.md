@@ -7,11 +7,11 @@ function Component({
   config,
   resourceLinks,
 }) {
-  const [bookId, setBookId] = React.useState("3jn");
+  const [bookId, setBookId] = React.useState("rut");
   const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState(10);
-  const [quote, setQuote] = React.useState("καὶ");
-  const [occurrence, setOccurrence] = React.useState(-1);
+  const [verse, setVerse] = React.useState(3);
+  const [quote, setQuote] = React.useState("הִ֖יא וּ⁠שְׁנֵ֥י בָנֶֽי⁠הָ׃");
+  const [occurrence, setOccurrence] = React.useState(1);
 
   const form = React.useMemo(() => (
     <form noValidate autoComplete="off">
@@ -82,17 +82,18 @@ function Component({
   );
 }
 const config = {server: 'https://git.door43.org'};
-const resourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/master',
-  'unfoldingWord/en/ult/v5',
-  'unfoldingWord/en/ust/v5',
-];
-// const reference = {bookId: 'rut', chapter: 1, verse: 1};
 // const resourceLinks = [
+//   // 'unfoldingWord/el-x-koine/ugnt/master',
 //   'unfoldingWord/hbo/uhb/master',
-//   'unfoldingWord/en/ult/master',
-//   'unfoldingWord/en/ust/master',
+//   'unfoldingWord/en/ult/v5',
+//   'unfoldingWord/en/ust/v5',
 // ];
+// const reference = {bookId: 'rut', chapter: 1, verse: 1};
+const resourceLinks = [
+  'unfoldingWord/hbo/uhb/master',
+  'unfoldingWord/en/ult/master',
+  'unfoldingWord/en/ust/master',
+];
 
 <Component config={config} resourceLinks={resourceLinks} />
 ```

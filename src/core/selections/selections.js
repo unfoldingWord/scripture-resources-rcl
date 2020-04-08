@@ -37,7 +37,7 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
     const currentOccurrence = getCurrentOccurrenceFromPrecedingText(occurrence, index, precedingOccurrences)
     precedingText = getPrecedingText(string, subquote, currentOccurrence, index);
-    
+
     const subSelections = subSelectionsFromSubquote(
       { subquote, index, precedingText, string }
     );
@@ -470,6 +470,6 @@ export const normalizeString = _string => {
 
 export const removePunctuation = _string => {
   let string = _string.slice(0);
-  string = string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+  string = string.replace(/[׃.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
   return string;
 }
