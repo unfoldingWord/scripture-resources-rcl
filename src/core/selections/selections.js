@@ -463,7 +463,7 @@ export const occurrencesInString = (string, subString) => {
  */
 export const normalizeString = _string => {
   let string = _string.slice(0);
-  string = string.replace(/\s+/g, ' ');
+  string = string.replace(/\s+/g, ' ').replace(/\u200B/g,'');;
   string = removePunctuation(string);
   return string;
 };
