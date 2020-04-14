@@ -27,13 +27,19 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
   let string = normalizeString(rawString);
   let selections = [];
   let subquotes = quote.split('…');
-  if (occurrence === -1) {
+  const hasEllipsis = subquotes.length > 1;
+  if (hasEllipsis && occurrence === -1 ) {
+    return [];
+  }
+
+  if (occurrence === -1 && subquotes.length === 1) {
     const occurrences = occurrencesInString(string, quote);
     subquotes = (new Array(occurrences)).fill(quote);
   }
+
   let precedingOccurrences = 0;
   let precedingText = '';
-  subquotes.forEach((subquote, index) => {
+  subquotes.forEach((subquote, index) => {    
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
     const currentOccurrence = getCurrentOccurrenceFromPrecedingText(occurrence, index, precedingOccurrences)
     precedingText = getPrecedingText(string, subquote, currentOccurrence, index);

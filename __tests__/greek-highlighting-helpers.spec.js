@@ -8,6 +8,12 @@ describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
   it('should have all words highlighted Titus 1:1', () => {
     generateTest('tit/1-1');
   })
+  it('should have all words highlighted Titus 1:1 (2)', () => {
+    generateTest('tit/1-1-2');
+  })
+  it('should have all words highlighted Titus 1:1 (3)', () => {
+    generateTest('tit/1-1-3');
+  })
   it('should have all words highlighted Titus 1:2', () => {
     generateTest('tit/1-2');
   })

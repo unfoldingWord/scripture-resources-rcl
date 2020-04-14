@@ -9,9 +9,9 @@ function Component({
 }) {
   const [bookId, setBookId] = React.useState("rut");
   const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState(3);
-  const [quote, setQuote] = React.useState("הִ֖יא וּ⁠שְׁנֵ֥י בָנֶֽי⁠הָ׃");
-  const [occurrence, setOccurrence] = React.useState(1);
+  const [verse, setVerse] = React.useState(10);
+  const [quote, setQuote] = React.useState("καὶ…μὴ");
+  const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(() => (
     <form noValidate autoComplete="off">
