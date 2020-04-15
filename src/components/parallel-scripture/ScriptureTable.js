@@ -10,7 +10,6 @@ import {
   Table,
   TableBody,
 } from '@material-ui/core';
-import { Tooltip } from '@material-ui/core';
 import { localString } from '../../core/localStrings';
 
 import {
@@ -66,8 +65,8 @@ function ScriptureTable ({
 
   const actions = [
     {
-      icon: <div><Tooltip title={localString('ViewVersions')} arrow> <ViewColumn fontSize='small' /> </Tooltip> </div>,
-      tooltip: 'Select Versions',
+      icon: <ViewColumn fontSize='small' />,
+      tooltip: localString('ViewVersions'),
       onClick: (event) => setColumnsMenuAnchorEl(event.currentTarget),
       menu: (
         <ColumnsMenu
@@ -79,9 +78,8 @@ function ScriptureTable ({
       ),
     },
     {
-      icon: filter ? <div><Tooltip title={localString('CollapseChapter')} arrow> <ShortText fontSize='small' /> </Tooltip></div>
-        : <div><Tooltip title={localString('ExpandChapter')} arrow> <Subject fontSize='small' /> </Tooltip></div>,
-      tooltip: 'Toggle Reference View',
+      icon: ( filter ? <ShortText fontSize='small' /> : <Subject fontSize='small' /> ),
+      tooltip: filter ? localString('ExpandChapter') : localString('CollapseChapter'),
       onClick: (event) => setFilter(!filter),
     },
   ];
