@@ -15,7 +15,7 @@ const UGNT_BOOKS = {
 }
 
 
-describe.only('Checking highlights from rendered component in Ruth', () => {
+describe('Checking highlights from rendered component in Ruth', () => {
   it('should have all words highlighted Ruth 1:3', () => {
     generateTest('rut/1-3');
   })
