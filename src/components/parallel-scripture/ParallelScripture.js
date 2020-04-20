@@ -20,6 +20,7 @@ function ParallelScripture({
 
   useEffect(() => {
     if (resources.length > 0) {
+      console.log("Resources:",resources);
       const { title: _title } = resources[0].project;
       let ref = '';
       if (reference) {
@@ -31,9 +32,14 @@ function ParallelScripture({
       const _titles = resources.map((resource) => {
         let _title = `Error: ${resource.resourceLink}`;
   
-        if (resource.manifest) {
+        if (resource.manifest) { 
           const { manifest: { dublin_core: { title, version, rights } } } = resource;
-          const onClickLicense = () => openLink(resource.resourceLink);
+          const onClickLicense = () => {
+            const resourceUrl = resource.config.server + '/' +
+              resource.username + '/' +
+              resource.repository;
+            openLink(resourceUrl);
+          }
           let rightsIcon = <Tooltip title={rights} arrow><Info onClick={onClickLicense} fontSize='small' color='action' /></Tooltip>
           //_title = `${title} v${version} ${rights} ${ {rightsIcon} }`;
           _title = (
