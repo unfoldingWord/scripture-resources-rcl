@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Tooltip, Chip, Typography } from '@material-ui/core';
+import { Info } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { ScriptureTable } from "../../";
 
@@ -14,6 +16,7 @@ function ParallelScripture({
   const [title, setTitle] = useState('');
   const [titles, setTitles] = useState([]);
   const [books, setBooks] = useState([]);
+  const openLink = useCallback((link) => window.open(link, '_blank'), []);
 
   useEffect(() => {
     if (resources.length > 0) {
@@ -27,9 +30,17 @@ function ParallelScripture({
       setTitle(__title);
       const _titles = resources.map((resource) => {
         let _title = `Error: ${resource.resourceLink}`;
+  
         if (resource.manifest) {
-          const { manifest: { dublin_core: { title, version } } } = resource;
-          _title = `${title} v${version}`;
+          const { manifest: { dublin_core: { title, version, rights } } } = resource;
+          const onClickLicense = () => openLink(resource.resourceLink);
+          let rightsIcon = <Tooltip title={rights} arrow><Info onClick={onClickLicense} fontSize='small' color='action' /></Tooltip>
+          //_title = `${title} v${version} ${rights} ${ {rightsIcon} }`;
+          _title = (
+            <Typography variant='caption'>
+              {title} v{version} {rightsIcon}
+            </Typography>
+          )
         }
         return _title;
       });
