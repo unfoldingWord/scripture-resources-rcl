@@ -31,13 +31,15 @@ function ParallelScripture({
       setTitle(__title);
       const _titles = resources.map((resource) => {
         let _title = `Error: ${resource.resourceLink}`;
-  
+  //https://git.door43.org/unfoldingWord/el-x-koine_ugnt/src/branch/master/LICENSE.md
         if (resource.manifest) { 
           const { manifest: { dublin_core: { title, version, rights } } } = resource;
           const onClickLicense = () => {
             const resourceUrl = resource.config.server + '/' +
               resource.username + '/' +
-              resource.repository;
+              resource.repository + '/' +
+              'src/branch/' + resource.tag + '/' +
+              'LICENSE.md';
             openLink(resourceUrl);
           }
           let rightsIcon = <Tooltip title={rights} arrow><Info onClick={onClickLicense} fontSize='small' color='action' /></Tooltip>
