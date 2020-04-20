@@ -10,6 +10,7 @@ import {
   Table,
   TableBody,
 } from '@material-ui/core';
+import { localString } from '../../core/localStrings';
 
 import {
   Row,
@@ -65,7 +66,7 @@ function ScriptureTable ({
   const actions = [
     {
       icon: <ViewColumn fontSize='small' />,
-      tooltip: 'Select Versions',
+      tooltip: localString('ViewVersions'),
       onClick: (event) => setColumnsMenuAnchorEl(event.currentTarget),
       menu: (
         <ColumnsMenu
@@ -77,8 +78,8 @@ function ScriptureTable ({
       ),
     },
     {
-      icon: filter ? <ShortText fontSize='small' /> : <Subject fontSize='small' />,
-      tooltip: 'Toggle Reference View',
+      icon: ( filter ? <ShortText fontSize='small' /> : <Subject fontSize='small' /> ),
+      tooltip: filter ? localString('ExpandChapter') : localString('CollapseChapter'),
       onClick: (event) => setFilter(!filter),
     },
   ];

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
-import {Grid, IconButton} from '@material-ui/core';
+import {Grid, IconButton, Tooltip} from '@material-ui/core';
 
 function ParallelTitles ({
   actions,
@@ -10,14 +10,16 @@ function ParallelTitles ({
   const classes = useStyles();
   const _actions = actions.map(({icon, tooltip, onClick, menu}, index) => {
     const button = (
-      <IconButton
-        aria-label={tooltip}
-        onClick={onClick}
-        className={classes.action}
-        size='small'
-      >
-        {icon}
-      </IconButton>
+      <Tooltip title={tooltip} arrow >
+        <IconButton
+          aria-label={tooltip}
+          onClick={onClick}
+          className={classes.action}
+          size='small'
+        >
+          {icon}
+        </IconButton>
+      </Tooltip>
     );
     return (
       <span key={index}>
