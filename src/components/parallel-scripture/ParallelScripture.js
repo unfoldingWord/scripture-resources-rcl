@@ -34,11 +34,13 @@ function ParallelScripture({
   //https://git.door43.org/unfoldingWord/el-x-koine_ugnt/src/branch/master/LICENSE.md
         if (resource.manifest) { 
           const { manifest: { dublin_core: { title, version, rights } } } = resource;
+          let branchOrTag = 'tag';
+          if ( resource.tag === 'master' ) { branchOrTag = 'branch'}
           const onClickLicense = () => {
             const resourceUrl = resource.config.server + '/' +
               resource.username + '/' +
               resource.repository + '/' +
-              'src/branch/' + resource.tag + '/' +
+              'src/' + branchOrTag + '/' + resource.tag + '/' +
               'LICENSE.md';
             openLink(resourceUrl);
           }
