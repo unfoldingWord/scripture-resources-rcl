@@ -20,7 +20,6 @@ function ParallelScripture({
 
   useEffect(() => {
     if (resources.length > 0) {
-      console.log("Resources:",resources);
       const { title: _title } = resources[0].project;
       let ref = '';
       if (reference) {
@@ -31,7 +30,6 @@ function ParallelScripture({
       setTitle(__title);
       const _titles = resources.map((resource) => {
         let _title = `Error: ${resource.resourceLink}`;
-  //https://git.door43.org/unfoldingWord/el-x-koine_ugnt/src/branch/master/LICENSE.md
         if (resource.manifest) { 
           const { manifest: { dublin_core: { title, version, rights } } } = resource;
           let branchOrTag = 'tag';
