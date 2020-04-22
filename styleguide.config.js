@@ -120,6 +120,18 @@ let sections = [
     }
   },
   {
+    name: 'License',
+    content: 'src/components/license/README.md',
+    components: () => {
+      const componentNames = [
+        'License',
+      ];
+      return componentNames.map(componentName => {
+        return path.resolve(__dirname, `src/components/license`, `${componentName}.js`)
+      });
+    }
+  },
+  {
     name: 'Core',
     content: 'src/core/README.md',
     sections: [
