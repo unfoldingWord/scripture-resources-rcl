@@ -43,7 +43,7 @@ function ParallelScripture({
             openLink(resourceUrl);
           }
           let rightsIcon = <Tooltip title={rights} arrow><Info onClick={onClickLicense} fontSize='small' color='action' /></Tooltip>
-          //_title = `${title} v${version} ${rights} ${ {rightsIcon} }`;
+
           _title = (
             <Typography variant='caption'>
               {title} v{version} {rightsIcon}
