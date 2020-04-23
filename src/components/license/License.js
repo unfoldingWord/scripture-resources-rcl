@@ -24,8 +24,8 @@ export const License = ({
   const openLink = useCallback((link) => window.open(link, '_blank'), []);
   const onClickLicense = () => { openLink(licenseLink); }
 
-  const w = width ? width : 20;
-  const h = height ? height : 20;
+  const w = width ? width : 80;
+  const h = height ? height : 15;
 
   let iconProps = {
     width: w,

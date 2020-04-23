@@ -3,6 +3,7 @@ import { Tooltip, Chip, Typography } from '@material-ui/core';
 import { Info } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { ScriptureTable } from "../../";
+import { License } from '../license'
 
 function ParallelScripture({
   resources,
@@ -34,15 +35,14 @@ function ParallelScripture({
           const { manifest: { dublin_core: { title, version, rights } } } = resource;
           let branchOrTag = 'tag';
           if ( resource.tag === 'master' ) { branchOrTag = 'branch'}
-          const onClickLicense = () => {
-            const resourceUrl = resource.config.server + '/' +
-              resource.username + '/' +
-              resource.repository + '/' +
-              'src/' + branchOrTag + '/' + resource.tag + '/' +
-              'LICENSE.md';
-            openLink(resourceUrl);
-          }
-          let rightsIcon = <Tooltip title={rights} arrow><Info onClick={onClickLicense} fontSize='small' color='action' /></Tooltip>
+          const licenseLink = resource.config.server + '/' +
+            resource.username + '/' +
+            resource.repository + '/' +
+            'src/' + branchOrTag + '/' + resource.tag + '/' +
+            'LICENSE.md'
+          ;
+          
+          let rightsIcon = <License rights={rights} licenseLink={licenseLink} />
 
           _title = (
             <Typography variant='caption'>
