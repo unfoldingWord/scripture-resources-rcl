@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Tooltip } from '@material-ui/core';
+import { Info } from '@material-ui/icons';
 
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
@@ -33,9 +33,9 @@ export const License = ({
     onClick: onClickLicense,
   };
 
-  let rightsIcon = <BySaIcon {...iconProps} />
+  let rightsIcon = <Info {...iconProps} />; 
   if ( rights.toUpperCase().match(/BY-SA/) ) {
-    // the default
+    rightsIcon = <BySaIcon {...iconProps} />
   } else if ( rights.toUpperCase().match(/BY-NC-ND/) ) {
     rightsIcon = <ByNcNdIcon {...iconProps} />
   } else if ( rights.toUpperCase().match(/BY-NC-SA/) ) {
@@ -50,7 +50,8 @@ export const License = ({
     rightsIcon = <CcZeroIcon {...iconProps} />
   } else if ( rights.toUpperCase().match(/PUBLIC DOMAIN/) ) {
     rightsIcon = <PublicdomainIcon {...iconProps} />
-  }
+  } 
+
   return (
     <div className={classes.root}>
       {rightsIcon}
