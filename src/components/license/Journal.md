@@ -1,5 +1,15 @@
 # Journal
 
+## 2020-04-23
+
+After preview, the use of just the CC icon has problems. So I'll switch to the "button" SVG files instead.
+
+1. NOTE: the "buttons" are actually just SVG files like the icons... so treat them as icons
+2. Downloaded all the "buttons" SVG and deleted all current files in assets and `src/Icons`.
+3. Moved the button SGV to the assets folder
+3. Ran the svgr conversion to create the Icon directory files
+4. Updated `License.js` and its README to test all the variants.
+
 ## 2020-04-22
 
 1. Created this folder to contain the new license component.

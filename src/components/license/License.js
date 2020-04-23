@@ -4,7 +4,14 @@ import { Tooltip } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 
-import CcIcon from '../../Icons/Cc';
+import ByNcNdIcon from '../../Icons/ByNcNd';
+import ByNcSaIcon from '../../Icons/ByNcSa';
+import ByNcIcon from '../../Icons/ByNc';
+import ByNdIcon from '../../Icons/ByNd';
+import BySaIcon from '../../Icons/BySa';
+import ByIcon from '../../Icons/By';
+import CcZeroIcon from '../../Icons/CcZero';
+import PublicdomainIcon from '../../Icons/Publicdomain';
 
 export const License = ({
   rights,
@@ -19,16 +26,31 @@ export const License = ({
 
   const w = width ? width : 20;
   const h = height ? height : 20;
-  //const CcIcon = React.forwardRef((props, ref) => <div><CcIcon onClick={onClickLicense} width={w} height={h} {...props} ref={ref}/></div>);
+
   let iconProps = {
     width: w,
     height: h,
-    title: rights,
     onClick: onClickLicense,
   };
 
-  let rightsIcon = <CcIcon {...iconProps} />
-
+  let rightsIcon = <BySaIcon {...iconProps} />
+  if ( rights.toUpperCase().match(/BY-SA/) ) {
+    // the default
+  } else if ( rights.toUpperCase().match(/BY-NC-ND/) ) {
+    rightsIcon = <ByNcNdIcon {...iconProps} />
+  } else if ( rights.toUpperCase().match(/BY-NC-SA/) ) {
+    rightsIcon = <ByNcSaIcon {...iconProps} />
+  } else if ( rights.toUpperCase().match(/BY-NC/) ) {
+    rightsIcon = <ByNcIcon {...iconProps} />
+  } else if ( rights.toUpperCase().match(/BY-ND/) ) {
+    rightsIcon = <ByNdIcon {...iconProps} />
+  } else if ( rights.toUpperCase().match(/BY/) ) {
+    rightsIcon = <ByIcon {...iconProps} />
+  } else if ( rights.toUpperCase().match(/CC0/) ) {
+    rightsIcon = <CcZeroIcon {...iconProps} />
+  } else if ( rights.toUpperCase().match(/PUBLIC DOMAIN/) ) {
+    rightsIcon = <PublicdomainIcon {...iconProps} />
+  }
   return (
     <div className={classes.root}>
       {rightsIcon}
