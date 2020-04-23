@@ -10,6 +10,9 @@ After preview, the use of just the CC icon has problems. So I'll switch to the "
 3. Ran the svgr conversion to create the Icon directory files
 4. Updated `License.js` and its README to test all the variants.
 
+After preview of above, let's try the Font Awesome icons for Creative Commons.
+That had issues too... so going back to Info icon for all with a tooltip.
+
 ## 2020-04-22
 
 1. Created this folder to contain the new license component.
