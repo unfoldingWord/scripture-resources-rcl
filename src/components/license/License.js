@@ -23,9 +23,7 @@ export const License = ({
   let rightsIcon = <Tooltip title={rights} arrow><InfoOutlinedIcon {...iconProps} /></Tooltip> ; 
 
   return (
-    <div className={classes.root}>
-      {rightsIcon}
-    </div>
+    <>{rightsIcon}</>
   );
 };
 
