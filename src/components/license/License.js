@@ -8,19 +8,22 @@ import {makeStyles} from '@material-ui/core/styles';
 export const License = ({
   rights,
   licenseLink,
+  style,
+  iconProps,
 }) => {
 
   const classes = useStyles();
   const openLink = useCallback((link) => window.open(link, '_blank'), []);
   const onClickLicense = () => { openLink(licenseLink); }
 
-  let iconProps = {
+  let _iconProps = {
     color: "primary",
     fontSize: "small",
     onClick: onClickLicense,
+    ...iconProps,
   };
 
-  let rightsIcon = <Tooltip title={rights} arrow><InfoOutlinedIcon {...iconProps} /></Tooltip> ; 
+  let rightsIcon = <Tooltip title={rights} arrow><InfoOutlinedIcon {..._iconProps} /></Tooltip> ; 
 
   return (
     <>{rightsIcon}</>
