@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Info } from '@material-ui/icons';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { Tooltip } from '@material-ui/core';
 
 import PropTypes from 'prop-types';
@@ -16,10 +16,11 @@ export const License = ({
 
   let iconProps = {
     color: "primary",
+    fontSize: "small",
     onClick: onClickLicense,
   };
 
-  let rightsIcon = <Tooltip title={rights} arrow><Info {...iconProps} /></Tooltip> ; 
+  let rightsIcon = <Tooltip title={rights} arrow><InfoOutlinedIcon {...iconProps} /></Tooltip> ; 
 
   return (
     <div className={classes.root}>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Tooltip, Chip, Typography } from '@material-ui/core';
-import { Info } from '@material-ui/icons';
+import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { ScriptureTable } from "../../";
 import { License } from '../license'
@@ -46,7 +45,7 @@ function ParallelScripture({
 
           _title = (
             <Typography variant='caption'>
-              {title} v{version} {rightsIcon}
+              {title} v{version}{rightsIcon}
             </Typography>
           )
         }
