@@ -21,11 +21,10 @@ export const getPrecedingOccurrences = (_string, subquote) => {
   return precedingOccurrencesInPreviousString;
 }
 
-export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawString, occurrence }) => {
-  const quote = normalizeString(rawQuote);
+export const selectionsFromQuoteAndString = ({ quote, string: rawString, occurrence }) => {
   let string = normalizeString(rawString);
+  let subquotes = quote.split('…').map(normalizeString);
   let selections = [];
-  let subquotes = quote.split('…');
   const hasEllipsis = subquotes.length > 1;
   if (hasEllipsis && occurrence === -1) {
     return [];
@@ -461,28 +460,14 @@ export const occurrencesInString = (string, subString) => {
 };
 
 const tokenizer = (text) => {
-  return tokenize({ text, greedy: true, normalize: true });
-}
-
-// /**
-//  * @description - Function that normalizes a string including whitespace
-//  * @param {String} string - the string to normalize
-//  * @return {String} - The returned normalized string
-//  */
-// export const normalizeString = _string => {
-//   let string = _string.slice(0);
-//   return tokenizer(string).join(' ');
-// };
-
-export const normalizeString = _string => {
-  let string = _string.slice(0);
-  string = string.replace(/\s+/g, ' ');
-  string = removePunctuation(string);
-  return string;
+  return tokenize({
+    text,
+    greedy: true,
+    normalize: true,
+  });
 };
 
-export const removePunctuation = _string => {
-  let string = _string.slice(0);
-  string = string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-  return string;
-}
+export const normalizeString = string => {
+  const normalized = tokenizer(string).join(' ');
+  return normalized;
+};
