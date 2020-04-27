@@ -3,23 +3,14 @@ import usfmJS from 'usfm-js';
 import { selectionsFromQuote } from '../src/components/selections/helpers';
 import ugnt_tit from './fixtures/books/ugnt_tit.js';
 import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
-import hbo_rut from './fixtures/books/hbo_rut.js';
 import { mount } from 'enzyme';
 import React from 'react';
 import path from 'path';
 
 const UGNT_BOOKS = {
   'tit': ugnt_tit,
-  '3jn': ugnt_3jn,
-  'rut': hbo_rut
+  '3jn': ugnt_3jn
 }
-
-
-describe('Checking highlights from rendered component in Ruth', () => {
-  it('should have all words highlighted Ruth 1:3', () => {
-    generateTest('rut/1-3');
-  })
-});
 
 describe('Checking highlights from rendered component in Titus', () => {
   it('should have all words highlighted Titus 1:1', () => {

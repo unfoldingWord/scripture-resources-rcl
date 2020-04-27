@@ -14,10 +14,9 @@ export const selectionsFromQuoteAndVerseObjects = ({ quote, verseObjects, occurr
 };
 
 export const getPrecedingOccurrences = (_string, subquote) => {
-  const precedingTokens = tokenize({ text: _string });
-  const selectedTextStripped = tokenize({ text: subquote })[0];
+  const precedingTokens = tokenizer(_string);
   let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (n, val) {
-    return n + (val === selectedTextStripped);
+    return n + (val === subquote);
   }, 0);
   return precedingOccurrencesInPreviousString;
 }
@@ -28,7 +27,7 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
   let selections = [];
   let subquotes = quote.split('…');
   const hasEllipsis = subquotes.length > 1;
-  if (hasEllipsis && occurrence === -1 ) {
+  if (hasEllipsis && occurrence === -1) {
     return [];
   }
 
@@ -39,7 +38,7 @@ export const selectionsFromQuoteAndString = ({ quote: rawQuote, string: rawStrin
 
   let precedingOccurrences = 0;
   let precedingText = '';
-  subquotes.forEach((subquote, index) => {    
+  subquotes.forEach((subquote, index) => {
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
     const currentOccurrence = getCurrentOccurrenceFromPrecedingText(occurrence, index, precedingOccurrences)
     precedingText = getPrecedingText(string, subquote, currentOccurrence, index);
@@ -143,18 +142,17 @@ export const subSelectionsFromSubquote = ({ subquote, precedingText: _precedingT
 export const generateSelection = ({ selectedText, precedingText, entireText }) => {
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
-  const selectedTextStripped = tokenize({ text: selectedText })[0];
   // Getting the occurrences before the current token
-  const precedingTokens = tokenize({ text: precedingText });
+  const precedingTokens = tokenizer(precedingText);
   let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (n, val) {
-    return n + (val === selectedTextStripped);
+    return n + (val === selectedText);
   }, 0);
   // calculate this occurrence number by adding it to the preceding ones
   let occurrence = precedingOccurrencesInPreviousString + 1;
   // get the total occurrences from the verse
-  const allTokens = tokenize({ text: _entireText });
+  const allTokens = tokenizer(_entireText);
   let allOccurrences = allTokens.reduce(function (n, val) {
-    return n + (val === selectedTextStripped);
+    return n + (val === selectedText);
   }, 0);
 
   return {
@@ -462,13 +460,29 @@ export const occurrencesInString = (string, subString) => {
   return occurrences;
 };
 
-/**
- * @description - Function that normalizes a string including whitespace
- * @param {String} string - the string to normalize
- * @return {String} - The returned normalized string
- */
+const tokenizer = (text) => {
+  return tokenize({ text, greedy: true, normalize: true });
+}
+
+// /**
+//  * @description - Function that normalizes a string including whitespace
+//  * @param {String} string - the string to normalize
+//  * @return {String} - The returned normalized string
+//  */
+// export const normalizeString = _string => {
+//   let string = _string.slice(0);
+//   return tokenizer(string).join(' ');
+// };
+
 export const normalizeString = _string => {
   let string = _string.slice(0);
-  string = tokenize({text: string, greedy: true, normalize: true}).join(' ');
+  string = string.replace(/\s+/g, ' ');
+  string = removePunctuation(string);
   return string;
 };
+
+export const removePunctuation = _string => {
+  let string = _string.slice(0);
+  string = string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+  return string;
+}

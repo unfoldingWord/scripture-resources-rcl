@@ -10299,10 +10299,10 @@ string-length@^3.1.0:
     astral-regex "^1.0.0"
     strip-ansi "^5.2.0"
 
-string-punctuation-tokenizer@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/string-punctuation-tokenizer/-/string-punctuation-tokenizer-2.0.1.tgz#6099f41e6eee71ad324f46d07d510211f922c89f"
-  integrity sha512-w3+k6NdWmZvWLNQPAKBiArSoX6okFaJWcz95ub3n2TDaZjT5plrsBsgTY1yMbQEKiRYNoTTdcCFAitNdN8c4ew==
+string-punctuation-tokenizer@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/string-punctuation-tokenizer/-/string-punctuation-tokenizer-2.0.2.tgz#4b10b2b7e676e81e035cfbc0df4774443e757c05"
+  integrity sha512-CFAUA4E25X98ZsvlMEv93CgXTcEo/KGi/13SV9YokapjrPs35XZpVESSsF4EVU8wsakVrOLLiieAgHdOWQ5Few==
   dependencies:
     xregexp "^4.1.1"
 
