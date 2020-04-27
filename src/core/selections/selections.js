@@ -469,13 +469,6 @@ export const occurrencesInString = (string, subString) => {
  */
 export const normalizeString = _string => {
   let string = _string.slice(0);
-  string = string.replace(/\s+/g, ' ');
-  string = removePunctuation(string);
+  string = tokenize({text: string, greedy: true, normalize: true}).join(' ');
   return string;
 };
-
-export const removePunctuation = _string => {
-  let string = _string.slice(0);
-  string = string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-  return string;
-}
