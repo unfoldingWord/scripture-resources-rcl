@@ -19,8 +19,7 @@
     "nyc:report": "nyc report --reporter=json-summary --reporter=text",
     "test": "nyc start-test 6060 cypress:run && npm run nyc:report",
     "test:unit": "jest",
-    "create-coverage-badge": "bash scripts/create-badge-json.sh",
-    "svgr": "svgr -d src/Icons/ assets/"
+    "create-coverage-badge": "bash scripts/create-badge-json.sh"
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -57,7 +56,6 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.32",
     "@material-ui/styles": "^4.4.1",
-    "@svgr/cli": "^5.3.1",
     "@types/jest": "24.0.22",
     "@unfoldingword/eslint-config": "^1.0.11",
     "babel-loader": "^8.0.6",
