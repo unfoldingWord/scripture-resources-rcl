@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { ScriptureTable } from "../../";
+import { License } from '../license'
 
 function ParallelScripture({
   resources,
@@ -14,6 +16,7 @@ function ParallelScripture({
   const [title, setTitle] = useState('');
   const [titles, setTitles] = useState([]);
   const [books, setBooks] = useState([]);
+  const openLink = useCallback((link) => window.open(link, '_blank'), []);
 
   useEffect(() => {
     if (resources.length > 0) {
@@ -27,9 +30,24 @@ function ParallelScripture({
       setTitle(__title);
       const _titles = resources.map((resource) => {
         let _title = `Error: ${resource.resourceLink}`;
-        if (resource.manifest) {
-          const { manifest: { dublin_core: { title, version } } } = resource;
-          _title = `${title} v${version}`;
+        if (resource.manifest) { 
+          const { manifest: { dublin_core: { title, version, rights } } } = resource;
+          let branchOrTag = 'tag';
+          if ( resource.tag === 'master' ) { branchOrTag = 'branch'}
+          const licenseLink = resource.config.server + '/' +
+            resource.username + '/' +
+            resource.repository + '/' +
+            'src/' + branchOrTag + '/' + resource.tag + '/' +
+            'LICENSE.md'
+          ;
+          
+          let rightsIcon = <License rights={rights} licenseLink={licenseLink} />
+
+          _title = (
+            <Typography variant='caption'>
+              {title} v{version}{rightsIcon}
+            </Typography>
+          )
         }
         return _title;
       });
