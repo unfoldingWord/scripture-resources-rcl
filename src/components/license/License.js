@@ -20,6 +20,9 @@ export const License = ({
     color: "primary",
     fontSize: "small",
     onClick: onClickLicense,
+    style: {
+      fontSize: '1em'
+    },
     ...iconProps,
   };
 
