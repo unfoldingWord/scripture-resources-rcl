@@ -2,14 +2,26 @@ withSelections example:
 
 ```js
 import ReactJson from 'react-json-view';
+import { useSelections } from 'scripture-resources-rcl';
+
 function Component ({
-  value,
+  quote,
+  occurrence,
+  verseObjects,
 }) {
+  const [selections, setSelections] = React.useState();
+  const { state, actions } = useSelections({
+    selections,
+    onSelections: setSelections,
+    quote,
+    occurrence,
+    verseObjects,
+  });
+
   return (
-    <ReactJson src={value.selections} />
-  )
-}
-const ComponentWithSelections = WithSelections(Component);
+    <ReactJson src={state} />
+  );
+};
 
 const quote = "ὁ λόγος,";
 const occurrence = 1;
@@ -151,5 +163,12 @@ const verseObjects = [
     "text": ".\n\n"
   }
 ];
-<ComponentWithSelections quote={quote} occurrence={occurrence} verseObjects={verseObjects} />
+
+const props = {
+  quote,
+  occurrence,
+  verseObjects,
+};
+
+<Component {...props} />;
 ```

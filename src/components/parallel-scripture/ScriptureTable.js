@@ -23,10 +23,8 @@ import {
   referenceIdFromReference,
   versesFromReferenceIdAndBooks,
 } from './helpers';
-import withSelections from '../selections/withSelections';
+import useSelections from '../selections/useSelections';
 import {SelectionsProvider} from '../selections/Selections.context';
-
-const Selectionable = withSelections(SelectionsProvider);
 
 function ScriptureTable ({
   title,
@@ -114,7 +112,7 @@ function ScriptureTable ({
   }, [filter, reference]);
 
   return (
-    <Selectionable
+    <SelectionsProvider
       quote={quote}
       // onQuote={onQuote} // disable until round trip is working
       occurrence={occurrence}
@@ -129,7 +127,7 @@ function ScriptureTable ({
           </TableBody>
         </Table>
       </div>
-    </Selectionable>
+    </SelectionsProvider>
   );
 }
 
