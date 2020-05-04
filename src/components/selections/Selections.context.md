@@ -1,29 +1,20 @@
-useSelections example:
-
 ```js
 import ReactJson from 'react-json-view';
-import { useSelections } from 'scripture-resources-rcl';
+import { SelectionsContext, SelectionsContextProvider } from "scripture-resources-rcl";
 
-function Component ({
-  quote,
-  occurrence,
-  verseObjects,
-}) {
-  const [selections, setSelections] = React.useState();
-  const { state, actions } = useSelections({
-    selections,
-    onSelections: setSelections,
-    quote,
-    occurrence,
-    verseObjects,
-  });
+function Component () {
+  const selectionsContext = React.useContext(SelectionsContext);
 
   return (
-    <ReactJson src={state} />
+    <div>
+      <ReactJson src={selectionsContext} />
+    </div>
   );
 };
 
+
 const quote = "ὁ λόγος,";
+//const onSelections = () => console.log("hello");
 const occurrence = 1;
 const verseObjects = [
   {
@@ -170,5 +161,10 @@ const props = {
   verseObjects,
 };
 
-<Component {...props} />;
+
+<div style={{height: '250px', overflow: 'auto'}}>
+  <SelectionsContextProvider value={{...props}}>
+    <Component />
+  </SelectionsContextProvider>
+</div>
 ```

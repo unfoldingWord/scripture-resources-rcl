@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import usfmJS from 'usfm-js';
 
-function useUsfm({
+export function useUsfm({
   usfm,
 }) {
   const [json, setJson] = useState();

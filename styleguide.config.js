@@ -27,7 +27,7 @@ let sections = [
     content: 'src/components/selections/_readme.md',
     components: () => {
       const componentNames = [
-        'useSelections',
+        'Selections.context',
       ];
       return componentNames.map(componentName => {
         return path.resolve(__dirname, `src/components/selections`, `${componentName}.js`)
@@ -39,7 +39,7 @@ let sections = [
     content: 'src/components/usfm/_readme.md',
     components: () => {
       const componentNames = [
-        'useUsfm',
+        //'useUsfm',
         'Usfm.context',
       ];
       return componentNames.map(componentName => {

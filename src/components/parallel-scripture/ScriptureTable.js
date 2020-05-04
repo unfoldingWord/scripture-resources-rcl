@@ -24,7 +24,7 @@ import {
   versesFromReferenceIdAndBooks,
 } from './helpers';
 import useSelections from '../selections/useSelections';
-import {SelectionsProvider} from '../selections/Selections.context';
+import {SelectionsContextProvider} from '../selections/Selections.context';
 
 function ScriptureTable ({
   title,
