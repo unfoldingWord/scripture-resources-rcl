@@ -155,7 +155,10 @@ const verseObjects = [
   }
 ];
 
+const [ selections, onSelections ] = React.useState([]);
 const props = {
+  selections,
+  onSelections,
   quote,
   occurrence,
   verseObjects,
