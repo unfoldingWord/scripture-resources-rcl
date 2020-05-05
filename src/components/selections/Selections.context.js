@@ -13,14 +13,15 @@ export function SelectionsContextProvider({
     onQuote,
     verseObjects,
     children,
-  }) {
-    const val = useSelections({     
-        selections,
-        onSelections,
-        occurrence,
-        quote,
-        onQuote,
-        verseObjects,
+}) {
+
+    const val = useSelections({
+        selections: selections,
+        onSelections: onSelections,
+        occurrence: occurrence,
+        quote: quote,
+        onQuote: onQuote,
+        verseObjects: verseObjects,
     });
   
     return (

@@ -3,13 +3,20 @@ import ReactJson from 'react-json-view';
 import { SelectionsContext, SelectionsContextProvider } from "scripture-resources-rcl";
 
 function Component () {
+  // - Note how this component is able to access data that is not
+  // directly provided to it. The data is stored elsewhere in an
+  // enclosing component -- the "context". This component might
+  // have multiple contexts. 
+  // - Note further that the data is NOT copied to this component; it 
+  // is only stored once and when it changes all enclosed components
+  // are able to respond, re-render, etc.
   const selectionsContext = React.useContext(SelectionsContext);
 
   return (
-    <div>
-      <ReactJson src={selectionsContext} />
-    </div>
-  );
+      <div>
+        <ReactJson src={selectionsContext} />
+      </div>
+    );
 };
 
 
@@ -156,17 +163,18 @@ const verseObjects = [
 ];
 
 const [ selections, onSelections ] = React.useState([]);
-const props = {
-  selections,
-  onSelections,
-  quote,
-  occurrence,
-  verseObjects,
-};
 
-
+// Note that below, the provider can be given arbitrary variables.
+// It is NOT limited to the "value" variable so often seen in documentation.
 <div style={{height: '250px', overflow: 'auto'}}>
-  <SelectionsContextProvider value={{...props}}>
+  <SelectionsContextProvider
+    selections={selections} 
+    onSelections={onSelections}
+    quote={quote}
+    onQuote={console.log("onQuote")}
+    occurrence={occurrence}
+    verseObjects={verseObjects}
+  >
     <Component />
   </SelectionsContextProvider>
 </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useMemo, useEffect } from "react";
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 
@@ -13,10 +13,24 @@ function useSelections({
   verseObjects,
 }) {
 
+  // - this level of indirection is needed because objects and arrays
+  // cannot be reliable compared for equality. In this case,
+  // making the verse object array a string will solve the problem
+  // - doing this means it has to be undone inside useEffect(). Here, 
+  // parse the string back out into an array and map it to the argument.
+  //const verseObjectsMemo = JSON.stringify(verseObjects);
+  const verseObjectsMemo = useMemo(() => {verseObjects}, [verseObjects]);
   useEffect(() => {
-    const _selections = selectionsFromQuote({quote, verseObjects, occurrence});
+    //const _verseObjects = JSON.parse(verseObjectsMemo);
+    
+    const _selections = selectionsFromQuote({
+      quote,
+      verseObjects: verseObjectsMemo,
+      occurrence,
+    });
+
     update(_selections);
-  }, [quote, occurrence, verseObjects]);
+  }, [quote, occurrence, verseObjectsMemo]);
 
   useEffect(() => {
     if (verseObjects && onQuote) {
