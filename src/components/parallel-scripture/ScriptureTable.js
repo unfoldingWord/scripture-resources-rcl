@@ -112,7 +112,7 @@ function ScriptureTable ({
   }, [filter, reference]);
 
   return (
-    <SelectionsProvider
+    <SelectionsContextProvider
       quote={quote}
       // onQuote={onQuote} // disable until round trip is working
       occurrence={occurrence}
@@ -127,7 +127,7 @@ function ScriptureTable ({
           </TableBody>
         </Table>
       </div>
-    </SelectionsProvider>
+    </SelectionsContextProvider>
   );
 }
 
