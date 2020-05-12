@@ -15,7 +15,7 @@ let sections = [
     components: () => {
       const componentNames = [
         'Resource.context',
-        'withResources',
+        'Resources.context',
       ];
       return componentNames.map(componentName => {
         return path.resolve(__dirname, `src/components/resources`, `${componentName}.js`)
@@ -167,7 +167,7 @@ module.exports = {
     "scripture-resources-rcl": path.resolve(__dirname, "src"),
   },
   version,
-  serverPort: 6061,
+  serverPort: 6060,
   webpackConfig: {
     devtool: 'source-map',
     module: {

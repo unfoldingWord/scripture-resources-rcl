@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo, useEffect } from "react";
+import React, { useCallback } from "react";
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
+import useEffect  from 'use-deep-compare-effect';
 
 import helpers, {parsify, selectionsFromQuote, quoteFromVerse} from './helpers';
 
@@ -19,18 +20,16 @@ function useSelections({
   // - doing this means it has to be undone inside useEffect(). Here, 
   // parse the string back out into an array and map it to the argument.
   //const verseObjectsMemo = JSON.stringify(verseObjects);
-  const verseObjectsMemo = useMemo(() => {verseObjects}, [verseObjects]);
   useEffect(() => {
-    //const _verseObjects = JSON.parse(verseObjectsMemo);
     
     const _selections = selectionsFromQuote({
       quote,
-      verseObjects: verseObjectsMemo,
+      verseObjects,
       occurrence,
     });
 
     update(_selections);
-  }, [quote, occurrence, verseObjectsMemo]);
+  }, [quote, occurrence, verseObjects]);
 
   useEffect(() => {
     if (verseObjects && onQuote) {
