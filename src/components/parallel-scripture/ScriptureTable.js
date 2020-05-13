@@ -38,10 +38,12 @@ function ScriptureTable ({
   buttons,
   renderOffscreen = {}
 }) {
+  console.log("ScriptureTable(), reference:",reference);
   const classes = useStyles();
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
   let verseObjects = [];
@@ -117,6 +119,8 @@ function ScriptureTable ({
       // onQuote={onQuote} // disable until round trip is working
       occurrence={occurrence}
       verseObjects={verseObjects}
+      selections={selections}
+      onSelections={setSelections}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
       <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >

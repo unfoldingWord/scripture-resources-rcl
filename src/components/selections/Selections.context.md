@@ -21,7 +21,6 @@ function Component () {
 
 
 const quote = "ὁ λόγος,";
-//const onSelections = () => console.log("hello");
 const occurrence = 1;
 const verseObjects = [
   {

@@ -23,7 +23,7 @@ function AlignedWordsObject({
 
   let onClick = () => { };
   let selected;
-  const { areSelected, addSelections, removeSelections } = useContext(SelectionsContext);
+  const { actions: { areSelected, addSelections, removeSelections } } = useContext(SelectionsContext);
   if (areSelected && addSelections && removeSelections) {
     selected = areSelected(originalWords);
     onClick = () => {

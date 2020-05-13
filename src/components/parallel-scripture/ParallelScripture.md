@@ -1,12 +1,17 @@
-
+### Using Contexts
 ```js
 import {TextField} from '@material-ui/core';
-import {ParallelScripture, withResources} from "scripture-resources-rcl";
+import {ParallelScripture,ResourcesContext, ResourcesContextProvider} 
+  from "scripture-resources-rcl";
+import useEffect from 'use-deep-compare-effect';
 
-function Component({
-  config,
-  resourceLinks,
-}) {
+function Component() {
+
+  const resourcesContext = React.useContext(ResourcesContext);
+  const resources        = resourcesContext.state;
+  const resourceLinks    = resources.resourceLinks;
+  const config           = resources.config;
+
   const [bookId, setBookId] = React.useState("3jn");
   const [chapter, setChapter] = React.useState(1);
   const [verse, setVerse] = React.useState(10);
@@ -58,9 +63,8 @@ function Component({
 
   const component = React.useMemo(() => {
     const reference = { bookId, chapter, verse };
-    const ParallelScriptureWithResources = withResources(ParallelScripture);
     return (
-      <ParallelScriptureWithResources
+      <ResourcesContextProvider
         resourceLinks={resourceLinks}
         config={config}
         reference={reference}
@@ -69,6 +73,8 @@ function Component({
         occurrence={occurrence}
         height='250px'
       />
+      <ParallelScripture />
+      </ResourcesContextProvider>
     );
   }, [resourceLinks, config, bookId, chapter, verse, quote, occurrence]);
 

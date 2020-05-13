@@ -39,8 +39,12 @@ function useSelections({
   }, [selections, onQuote, verseObjects]);
 
   const update = useCallback((_selections) => {
-    const __selections = _selections && deepFreeze(parsify(_selections));
-    onSelections(__selections);
+    if ( typeof onSelections === "function" ) {
+      const __selections = _selections && deepFreeze(parsify(_selections));
+      onSelections(__selections);
+    } else {
+      console.log("onSelections not a function:",typeof onSelections)
+    }
   }, [onSelections]);
 
   const isSelected = (word) => helpers.isSelected({word, selections});
