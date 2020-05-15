@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {Skeleton} from '@material-ui/lab';
@@ -10,12 +10,23 @@ import {Waypoint} from 'react-waypoint';
 
 import {Verse} from '..';
 
+//** DEBUG REMOVE LATER */
+import SelectionsContext from '../selections/Selections.context';
+
+
+
 function Row ({
   columns,
   referenceId,
   verses,
   renderOffscreen,
 }) {
+
+
+  //** DEBUG REMOVE LATER */
+const _sc = useContext(SelectionsContext);
+console.log("Row() _sc=",_sc)
+
   const classes = useStyles();
 
   const onVisibility = (isVisible) => {

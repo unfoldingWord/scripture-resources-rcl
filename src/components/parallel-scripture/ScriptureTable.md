@@ -12,7 +12,6 @@ import usfmJS from 'usfm-js';
 function Component ({reference}) {
 
   const resourcesContext = React.useContext(ResourcesContext);
-  console.log("Component(), resourcesContext:", resourcesContext);
   const resources = resourcesContext.state;
   // note: reference is same for all resources
   //const reference = resources && resources[0] && resources[0].reference;

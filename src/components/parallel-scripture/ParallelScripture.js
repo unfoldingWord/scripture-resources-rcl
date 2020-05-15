@@ -19,7 +19,7 @@ function ParallelScripture({
   const openLink = useCallback((link) => window.open(link, '_blank'), []);
 
   useEffect(() => {
-    if (resources.length > 0) {
+    if (resources && resources.length > 0) {
       const { title: _title } = resources[0].project;
       let ref = '';
       if (reference) {

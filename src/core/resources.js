@@ -18,7 +18,6 @@ export const resourceFromResourceLink = async ({ resourceLink, reference, config
   const projects = manifest.projects.map(project => extendProject({project, resource, reference}));
   const project = projectFromProjects({reference, projectId, projects});
   const _resource = {...resource, reference, manifest, projects, project};
-  console.log("resourceFromResourceLink()", resourceLink, _resource)
   return _resource;
 };
 

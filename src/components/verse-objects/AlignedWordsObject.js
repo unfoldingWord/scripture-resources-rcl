@@ -23,13 +23,19 @@ function AlignedWordsObject({
 
   let onClick = () => { };
   let selected;
-  const { actions: { areSelected, addSelections, removeSelections } } = useContext(SelectionsContext);
-  if (areSelected && addSelections && removeSelections) {
-    selected = areSelected(originalWords);
-    onClick = () => {
-      if (selected) removeSelections(originalWords);
-      else addSelections(originalWords);
-    };
+
+  //** DEBUG REMOVE LATER */
+  const _selectionsContext = useContext(SelectionsContext);
+  console.log("AlignedWordsObject() _selectionsContext=",_selectionsContext)
+  if ( _selectionsContext ) {
+    const { actions: { areSelected, addSelections, removeSelections } } = _selectionsContext;
+    if (areSelected && addSelections && removeSelections) {
+      selected = areSelected(originalWords);
+      onClick = () => {
+        if (selected) removeSelections(originalWords);
+        else addSelections(originalWords);
+      };
+    }
   }
 
   const words = children.map((verseObject, index) =>

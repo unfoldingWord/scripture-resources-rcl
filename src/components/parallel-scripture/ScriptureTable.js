@@ -23,8 +23,7 @@ import {
   referenceIdFromReference,
   versesFromReferenceIdAndBooks,
 } from './helpers';
-import useSelections from '../selections/useSelections';
-import {SelectionsContextProvider} from '../selections/Selections.context';
+import { SelectionsContextProvider } from '../selections/Selections.context';
 
 function ScriptureTable ({
   title,
@@ -38,7 +37,6 @@ function ScriptureTable ({
   buttons,
   renderOffscreen = {}
 }) {
-  console.log("ScriptureTable(), reference:",reference);
   const classes = useStyles();
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);

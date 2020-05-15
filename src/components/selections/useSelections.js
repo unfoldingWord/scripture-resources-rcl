@@ -14,12 +14,6 @@ function useSelections({
   verseObjects,
 }) {
 
-  // - this level of indirection is needed because objects and arrays
-  // cannot be reliable compared for equality. In this case,
-  // making the verse object array a string will solve the problem
-  // - doing this means it has to be undone inside useEffect(). Here, 
-  // parse the string back out into an array and map it to the argument.
-  //const verseObjectsMemo = JSON.stringify(verseObjects);
   useEffect(() => {
     
     const _selections = selectionsFromQuote({
