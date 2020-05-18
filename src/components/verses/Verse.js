@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {Skeleton} from '@material-ui/lab';
@@ -21,8 +21,8 @@ export const Verse = ({
 }) => {
 
 //** DEBUG REMOVE LATER */
-const _sc = useContext(SelectionsContext);
-console.log("Verse() _sc=",_sc)
+const selectionsContext = React.useContext(SelectionsContext);
+console.log("Verse() selectionsContext=", selectionsContext)
 
   const classes = useStyles();
 

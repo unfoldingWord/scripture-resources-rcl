@@ -13,10 +13,10 @@ function Component () {
   const selectionsContext = React.useContext(SelectionsContext);
 
   return (
-      <div>
-        <ReactJson src={selectionsContext} />
-      </div>
-    );
+    <div>
+      <ReactJson src={selectionsContext} />
+    </div>
+  );
 };
 
 
@@ -161,16 +161,14 @@ const verseObjects = [
   }
 ];
 
-const [ selections, onSelections ] = React.useState([]);
+const [ selections, setSelections ] = React.useState([]);
 
-// Note that below, the provider can be given arbitrary variables.
-// It is NOT limited to the "value" variable so often seen in documentation.
 <div style={{height: '250px', overflow: 'auto'}}>
   <SelectionsContextProvider
     selections={selections} 
-    onSelections={onSelections}
+    onSelections={setSelections}
     quote={quote}
-    onQuote={console.log("onQuote")}
+    //onQuote=
     occurrence={occurrence}
     verseObjects={verseObjects}
   >

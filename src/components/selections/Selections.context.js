@@ -15,7 +15,7 @@ export function SelectionsContextProvider({
     children,
 }) {
 
-  const {state, actions} = useSelections({
+  let {state, actions} = useSelections({
       selections: selections,
       onSelections: onSelections,
       occurrence: occurrence,
@@ -25,10 +25,7 @@ export function SelectionsContextProvider({
   });
 
   return (
-    <SelectionsContext.Provider 
-      state={state} 
-      actions={actions}
-    >
+    <SelectionsContext.Provider value={{state, actions}}>
       {children}
     </SelectionsContext.Provider>
   );

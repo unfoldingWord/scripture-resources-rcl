@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {Skeleton} from '@material-ui/lab';
@@ -13,8 +13,6 @@ import {Verse} from '..';
 //** DEBUG REMOVE LATER */
 import SelectionsContext from '../selections/Selections.context';
 
-
-
 function Row ({
   columns,
   referenceId,
@@ -24,8 +22,8 @@ function Row ({
 
 
   //** DEBUG REMOVE LATER */
-const _sc = useContext(SelectionsContext);
-console.log("Row() _sc=",_sc)
+  const selectionsContext = React.useContext(SelectionsContext);
+  console.log("Row() selectionsContext=",selectionsContext)
 
   const classes = useStyles();
 

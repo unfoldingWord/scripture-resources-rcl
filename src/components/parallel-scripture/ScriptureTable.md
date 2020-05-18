@@ -13,8 +13,6 @@ function Component ({reference}) {
 
   const resourcesContext = React.useContext(ResourcesContext);
   const resources = resourcesContext.state;
-  // note: reference is same for all resources
-  //const reference = resources && resources[0] && resources[0].reference;
 
   const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
@@ -46,21 +44,39 @@ function Component ({reference}) {
     }
   }, [resources]);
 
+  let verseObjects = [];
+  if (reference && reference.verse && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
+    const chapter = books[0].chapters[reference.chapter];
+    const verse = chapter[reference.verse];
+    verseObjects = (verse) ? verse.verseObjects : [];
+  }
+
+  const [selections, setSelections] = React.useState([]);
+
+
   return (
     <>
       <p>Quote: {quote}</p>
       <p>Occurrence: {occurrence}</p>
       <div style={{border: '1px #ebf1f3 solid'}}>
-        <ScriptureTable
-          titles={titles}
-          books={books}
-          title={title}
-          reference={reference}
+        <SelectionsContextProvider
           quote={quote}
-          onQuote={setQuote}
+          // onQuote={onQuote} // disable until round trip is working
           occurrence={occurrence}
-          height='250px'
-        />
+          verseObjects={verseObjects}
+          selections={selections}
+          onSelections={setSelections}
+        >
+
+          <ScriptureTable
+            titles={titles}
+            books={books}
+            title={title}
+            reference={reference}
+            height='250px'
+          />
+
+        </SelectionsContextProvider>
       </div>
     </>
   );
