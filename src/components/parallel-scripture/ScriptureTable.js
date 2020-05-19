@@ -40,9 +40,9 @@ function ScriptureTable ({
 
   //** DEBUG REMOVE LATER */
   const selectionsContext = React.useContext(SelectionsContext);
-  console.log("ScriptureTable() selectionsContext=",selectionsContext)
+  console.log("ScriptureTable() selectionsContext=",selectionsContext);
   const resourcesContext = React.useContext(ResourcesContext);
-  console.log("ScriptureTable() resourcesContext=",resourcesContext)
+  console.log("ScriptureTable() resourcesContext=",resourcesContext);
 
 
   const classes = useStyles();

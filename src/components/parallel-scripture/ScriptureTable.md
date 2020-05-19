@@ -1,9 +1,10 @@
 ### Using a Context
 
 ```js
-import {ScriptureTable, 
+import { 
   ResourcesContext, ResourcesContextProvider,
   SelectionsContext, SelectionsContextProvider,
+  ScriptureTable,
 } from "scripture-resources-rcl";
 import useEffect from 'use-deep-compare-effect';
 
@@ -44,14 +45,6 @@ function Component ({reference}) {
     }
   }, [resources]);
 
-  let verseObjects = [];
-  if (reference && reference.verse && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
-    const chapter = books[0].chapters[reference.chapter];
-    const verse = chapter[reference.verse];
-    verseObjects = (verse) ? verse.verseObjects : [];
-  }
-
-  const [selections, setSelections] = React.useState([]);
 
 
   return (
@@ -59,14 +52,6 @@ function Component ({reference}) {
       <p>Quote: {quote}</p>
       <p>Occurrence: {occurrence}</p>
       <div style={{border: '1px #ebf1f3 solid'}}>
-        <SelectionsContextProvider
-          quote={quote}
-          // onQuote={onQuote} // disable until round trip is working
-          occurrence={occurrence}
-          verseObjects={verseObjects}
-          selections={selections}
-          onSelections={setSelections}
-        >
 
           <ScriptureTable
             titles={titles}
@@ -76,7 +61,6 @@ function Component ({reference}) {
             height='250px'
           />
 
-        </SelectionsContextProvider>
       </div>
     </>
   );
@@ -96,6 +80,19 @@ const reference = {bookId: 'jhn', chapter: 1, verse: 1};
 const [ resources, setResources ] = React.useState( [] );
 const quote='Θεὸς…λόγος';
 const occurrence=1;
+
+// data for selections context
+let verseObjects = [];
+/*
+if (reference && reference.verse && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
+  const chapter = books[0].chapters[reference.chapter];
+  const verse = chapter[reference.verse];
+  verseObjects = (verse) ? verse.verseObjects : [];
+}
+*/
+
+const [selections, setSelections] = React.useState([]);
+
 <>
   <ResourcesContextProvider
     reference={reference}
@@ -104,7 +101,18 @@ const occurrence=1;
     onResources={setResources}
     config={config}
   >
+    <SelectionsContextProvider
+      quote={quote}
+      // onQuote={onQuote} // disable until round trip is working
+      occurrence={occurrence}
+      verseObjects={verseObjects}
+      selections={selections}
+      onSelections={setSelections}
+    >
+
       <Component reference={reference}/>
+    </SelectionsContextProvider>
+
   </ResourcesContextProvider>
 </>
 
