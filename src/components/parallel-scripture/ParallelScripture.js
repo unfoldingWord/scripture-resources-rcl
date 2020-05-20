@@ -47,7 +47,7 @@ function ParallelScripture({
             'src/' + branchOrTag + '/' + resource.tag + '/' +
             'LICENSE.md'
           ;
-          let viewLicense = localString("ViewLicense") + rights;
+          let viewLicense = localString("ViewLicense") + " " + rights;
           let rightsIcon = <License rights={viewLicense} licenseLink={licenseLink} />
 
           _title = (
