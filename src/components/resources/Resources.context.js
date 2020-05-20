@@ -13,7 +13,6 @@ export function ResourcesContextProvider({
     onResources,
     children,
 }) {
-
     const val = useResources({
         resources: resources,
         resourceLinks: resourceLinks,

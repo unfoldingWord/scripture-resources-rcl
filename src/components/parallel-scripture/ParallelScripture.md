@@ -56,22 +56,10 @@ function Component( {config, resourceLinks} ) {
     </form>
   ), [bookId, chapter, verse, quote, occurrence]);
 
-  const [ resources, setResources ] = React.useState([]);
 
   const component = React.useMemo(() => {
     const reference = { bookId, chapter, verse };
     return (
-      <ResourcesContextProvider
-        resourceLinks={resourceLinks}
-        resources={resources}
-        onResources={setResources}
-        config={config}
-        reference={reference}
-        quote={quote}
-        onQuote={setQuote}
-        occurrence={occurrence}
-        height='250px'
-      >
         <ParallelScripture 
           resources={resources} 
           reference={reference} 
@@ -80,7 +68,6 @@ function Component( {config, resourceLinks} ) {
           occurrence={occurrence}
           height='250px'
         />
-      </ResourcesContextProvider>
     );
   }, [resourceLinks, config, bookId, chapter, verse, quote, occurrence]);
 
@@ -105,6 +92,14 @@ const resourceLinks = [
 //   'unfoldingWord/en/ult/master',
 //   'unfoldingWord/en/ust/master',
 // ];
+  const [ resources, setResources ] = React.useState([]);
 
-<Component config={config} resourceLinks={resourceLinks} />
+<ResourcesContextProvider
+  resourceLinks={resourceLinks}
+  resources={resources}
+  onResources={setResources}
+  config={config}
+>
+  <Component config={config} resourceLinks={resourceLinks} />
+</ResourcesContextProvider>
 ```

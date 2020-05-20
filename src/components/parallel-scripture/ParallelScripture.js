@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { ResourcesContext } from '../resources/Resources.context';
+
 import { ScriptureTable } from "../../";
 import { License } from '../license'
 import { localString } from '../../core/localStrings';
+import useEffect from 'use-deep-compare-effect';
 
 function ParallelScripture({
-  resources,
   reference,
   quote,
   onQuote,
@@ -14,13 +16,17 @@ function ParallelScripture({
   height,
   buttons,
 }) {
+
   const [title, setTitle] = useState('');
   const [titles, setTitles] = useState([]);
   const [books, setBooks] = useState([]);
   const openLink = useCallback((link) => window.open(link, '_blank'), []);
 
+  const {state: resources} = React.useContext(ResourcesContext);
+
   useEffect(() => {
-    if (resources && resources.length > 0) {
+    if (resources && resources[0] && resources[0].project) {
+      console.log("useEffect(): has resources:", resources)
       const { title: _title } = resources[0].project;
       let ref = '';
       if (reference) {
@@ -78,7 +84,7 @@ ParallelScripture.propTypes = {
     PropTypes.shape({
       resourceLink: PropTypes.string.isRequired,
       manifest: PropTypes.object.isRequired,
-      project: PropTypes.object.isRequired,
+      project: PropTypes.object,
     })
   ).isRequired,
   /** the reference to scroll into view */

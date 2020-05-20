@@ -12,7 +12,6 @@ function useResources({
   config,
   onResources,
 }) {
-
   useEffect(() => {
     resourcesFromResourceLinks({resourceLinks, reference, config})
     .then(_resources => {
@@ -24,7 +23,7 @@ function useResources({
     const __resources = _resources && deepFreeze(_resources);
     onResources(__resources);
   }, [onResources]);
-  
+
   return {
     state: resources,
     actions: {

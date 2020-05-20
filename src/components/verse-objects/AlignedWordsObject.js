@@ -26,18 +26,17 @@ function AlignedWordsObject({
 
   const _selectionsContext = useContext(SelectionsContext);
   if ( _selectionsContext ) {
-    const { actions: { areSelected, addSelections, removeSelections } } = _selectionsContext;
-    if (areSelected && addSelections && removeSelections) {
+    const { state: selections, actions: { areSelected, addSelections, removeSelections } } = _selectionsContext;
       selected = areSelected(originalWords);
+      //console.log("AlignedWordsObject() selected", selected, originalWords, selections)
       onClick = () => {
         if (selected) removeSelections(originalWords);
         else addSelections(originalWords);
       };
-    }
   }
 
   const words = children.map((verseObject, index) =>
-    <span data-test="aligned-word-object" onClick={onClick} key={index} className={selected ? classes.selected : undefined}>
+    <span data-test="aligned-word-object" onClick={onClick} key={index} className={selected ? classes.selected : undefined }>
       <WordObject verseObject={verseObject} disableWordPopover={disableWordPopover} />
     </span>
   );

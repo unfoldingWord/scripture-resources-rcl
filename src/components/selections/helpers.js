@@ -59,7 +59,19 @@ export const areSelected = ({ words, selections }) => {
   let selected = false;
   const _selections = words.map(word => selectionFromWord(word));
   _selections.forEach(selection => {
-    if (selections.includes(selection)) selected = true;
+    //if (selections.includes(_s)) selected = true;
+    let _s = JSON.parse(selection);
+    for (let i=0; i < selections.length; i++) {
+      const text = selections[i].text;
+      const occ  = selections[i].occurrence;
+      const occs = selections[i].occurrences;
+      //console.log("a-t,o,s=",text, occ, occs);
+      //console.log("b-t,o,s=",_s.text,_s.occurrence,_s.occurrences);
+      if ( text === _s.text &&  occ === _s.occurrence && occs === _s.occurrences) {
+        selected = true;
+        break;
+      }
+    }
   });
   return selected;
 };
