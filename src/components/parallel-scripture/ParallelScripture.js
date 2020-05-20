@@ -3,6 +3,7 @@ import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { ScriptureTable } from "../../";
 import { License } from '../license'
+import { localString } from '../../core/localStrings';
 
 function ParallelScripture({
   resources,
@@ -40,8 +41,8 @@ function ParallelScripture({
             'src/' + branchOrTag + '/' + resource.tag + '/' +
             'LICENSE.md'
           ;
-          
-          let rightsIcon = <License rights={rights} licenseLink={licenseLink} />
+          let viewLicense = localString("ViewLicense") + rights;
+          let rightsIcon = <License rights={viewLicense} licenseLink={licenseLink} />
 
           _title = (
             <Typography variant='caption'>

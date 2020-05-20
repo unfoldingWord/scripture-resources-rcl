@@ -6,10 +6,6 @@ import {Waypoint} from 'react-waypoint';
 
 import {VerseObjects} from '../verse-objects';
 
-//** DEBUG REMOVE LATER */
-import SelectionsContext from '../selections/Selections.context';
-
-
 export const Verse = ({
   verseKey,
   verseObjects,
@@ -20,9 +16,6 @@ export const Verse = ({
   renderOffscreen,
 }) => {
 
-//** DEBUG REMOVE LATER */
-const selectionsContext = React.useContext(SelectionsContext);
-console.log("Verse() selectionsContext=", selectionsContext)
 
   const classes = useStyles();
 

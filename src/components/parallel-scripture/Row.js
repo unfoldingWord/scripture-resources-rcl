@@ -10,20 +10,12 @@ import {Waypoint} from 'react-waypoint';
 
 import {Verse} from '..';
 
-//** DEBUG REMOVE LATER */
-import SelectionsContext from '../selections/Selections.context';
-
 function Row ({
   columns,
   referenceId,
   verses,
   renderOffscreen,
 }) {
-
-
-  //** DEBUG REMOVE LATER */
-  const selectionsContext = React.useContext(SelectionsContext);
-  console.log("Row() selectionsContext=",selectionsContext)
 
   const classes = useStyles();
 

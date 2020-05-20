@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {
@@ -23,10 +23,7 @@ import {
   referenceIdFromReference,
   versesFromReferenceIdAndBooks,
 } from './helpers';
-
-//** DEBUG REMOVE LATER */
-import SelectionsContext from '../selections/Selections.context';
-import ResourcesContext from '../resources/Resources.context';
+import { SelectionsContextProvider } from '../selections/Selections.context';
 
 function ScriptureTable ({
   title,
@@ -34,23 +31,25 @@ function ScriptureTable ({
   books,
   height,
   reference,
+  quote,
+  onQuote,
+  occurrence,
   buttons,
   renderOffscreen = {}
 }) {
-
-  //** DEBUG REMOVE LATER */
-  const selectionsContext = React.useContext(SelectionsContext);
-  console.log("ScriptureTable() selectionsContext=",selectionsContext);
-  const resourcesContext = React.useContext(ResourcesContext);
-  console.log("ScriptureTable() resourcesContext=",resourcesContext);
-
-
   const classes = useStyles();
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
+  let verseObjects = [];
+  if (reference && reference.verse && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
+    const chapter = books[0].chapters[reference.chapter];
+    const verse = chapter[reference.verse];
+    verseObjects = (verse) ? verse.verseObjects : [];
+  }
 
   useEffect(() => {
     const _columns = titles.map((title, index) => ({id: index, label: title}));
@@ -86,6 +85,24 @@ function ScriptureTable ({
   let _referenceIds = referenceIds;
   if (filter && reference.chapter && reference.verse) _referenceIds = [referenceIdFromReference(reference)];
 
+  const rows = () => (
+    _referenceIds.map(referenceId => {
+      const verses = versesFromReferenceIdAndBooks({referenceId, books});
+      const row = (
+        <Row
+          renderOffscreen={renderOffscreen[referenceId]}
+          key={referenceId}
+          verses={verses}
+          referenceId={referenceId}
+          reference={reference}
+          filter={filter}
+          columns={columns}
+        />
+      );
+      return row;
+    })
+  );
+
   useEffect(() => {
     const scrollReferenceId = referenceIdFromReference(reference);
     if (!filter) {
@@ -98,33 +115,24 @@ function ScriptureTable ({
   }, [filter, reference]);
 
   return (
-    <div>
+    <SelectionsContextProvider
+      quote={quote}
+      // onQuote={onQuote} // disable until round trip is working
+      occurrence={occurrence}
+      verseObjects={verseObjects}
+      selections={selections}
+      onSelections={setSelections}
+    >
       <Toolbar title={title} actions={actions} buttons={buttons} />
       <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >
         <Table className={classes.table}>
           <Headers columns={columns} />
           <TableBody className={classes.tableBody}>
-            { 
-              _referenceIds.map(referenceId => {
-                const verses = versesFromReferenceIdAndBooks({referenceId, books});
-                const row = (
-                  <Row
-                    renderOffscreen={renderOffscreen[referenceId]}
-                    key={referenceId}
-                    verses={verses}
-                    referenceId={referenceId}
-                    reference={reference}
-                    filter={filter}
-                    columns={columns}
-                  />
-                );
-                return row;
-              })
-            }
+            {rows()}
           </TableBody>
         </Table>
       </div>
-    </div>
+    </SelectionsContextProvider>
   );
 }
 

@@ -1,10 +1,9 @@
 ### Using a Context
 
 ```js
-import { 
+import {ScriptureTable, 
   ResourcesContext, ResourcesContextProvider,
   SelectionsContext, SelectionsContextProvider,
-  ScriptureTable,
 } from "scripture-resources-rcl";
 import useEffect from 'use-deep-compare-effect';
 
@@ -45,22 +44,21 @@ function Component ({reference}) {
     }
   }, [resources]);
 
-
-
   return (
     <>
       <p>Quote: {quote}</p>
       <p>Occurrence: {occurrence}</p>
       <div style={{border: '1px #ebf1f3 solid'}}>
-
-          <ScriptureTable
-            titles={titles}
-            books={books}
-            title={title}
-            reference={reference}
-            height='250px'
-          />
-
+        <ScriptureTable
+          titles={titles}
+          books={books}
+          title={title}
+          reference={reference}
+          quote={quote}
+          onQuote={setQuote}
+          occurrence={occurrence}
+          height='250px'
+        />
       </div>
     </>
   );
@@ -80,19 +78,6 @@ const reference = {bookId: 'jhn', chapter: 1, verse: 1};
 const [ resources, setResources ] = React.useState( [] );
 const quote='Θεὸς…λόγος';
 const occurrence=1;
-
-// data for selections context
-let verseObjects = [];
-/*
-if (reference && reference.verse && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
-  const chapter = books[0].chapters[reference.chapter];
-  const verse = chapter[reference.verse];
-  verseObjects = (verse) ? verse.verseObjects : [];
-}
-*/
-
-const [selections, setSelections] = React.useState([]);
-
 <>
   <ResourcesContextProvider
     reference={reference}
@@ -101,18 +86,7 @@ const [selections, setSelections] = React.useState([]);
     onResources={setResources}
     config={config}
   >
-    <SelectionsContextProvider
-      quote={quote}
-      // onQuote={onQuote} // disable until round trip is working
-      occurrence={occurrence}
-      verseObjects={verseObjects}
-      selections={selections}
-      onSelections={setSelections}
-    >
-
       <Component reference={reference}/>
-    </SelectionsContextProvider>
-
   </ResourcesContextProvider>
 </>
 

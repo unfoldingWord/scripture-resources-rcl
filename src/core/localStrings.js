@@ -21,6 +21,7 @@ const strings = {
         ViewVersions: "View Versions",
         ExpandChapter: "Expand Chapter",
         CollapseChapter: "Collapse Chapter",
+        ViewLicense: "View License",
         /* do not remove these two */
         StringMissing:"String Id missing",
         LangNotSupported: "Language not supported"
