@@ -28,7 +28,6 @@ function AlignedWordsObject({
   if ( _selectionsContext ) {
     const { state: selections, actions: { areSelected, addSelections, removeSelections } } = _selectionsContext;
       selected = areSelected(originalWords);
-      //console.log("AlignedWordsObject() selected", selected, originalWords, selections)
       onClick = () => {
         if (selected) removeSelections(originalWords);
         else addSelections(originalWords);

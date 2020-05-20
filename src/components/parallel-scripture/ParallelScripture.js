@@ -26,7 +26,6 @@ function ParallelScripture({
 
   useEffect(() => {
     if (resources && resources[0] && resources[0].project) {
-      console.log("useEffect(): has resources:", resources)
       const { title: _title } = resources[0].project;
       let ref = '';
       if (reference) {
