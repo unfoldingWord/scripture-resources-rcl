@@ -1,4 +1,11 @@
 ### Using Contexts
+
+To see highlighting appear, change the `-1` occurrence to 1; 
+then click or tab out of field. Or try this:
+
+1. paste this into quote: `καὶ…τῆς`
+2. Then alter occurrence from 1 to 2 to 3 to see how the highlighting changes.
+
 ```js
 import {TextField} from '@material-ui/core';
 import {ParallelScripture,ResourcesContext, ResourcesContextProvider} 
@@ -82,9 +89,9 @@ function Component( {config, resourceLinks} ) {
 }
 const config = {server: 'https://git.door43.org'};
 const resourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/master',
-  'unfoldingWord/en/ult/v5',
-  'unfoldingWord/en/ust/v5',
+  'unfoldingWord/el-x-koine/ugnt/master/3jn',
+  'unfoldingWord/en/ult/v5/3jn',
+  'unfoldingWord/en/ust/v5/3jn',
 ];
 // const reference = {bookId: 'rut', chapter: 1, verse: 1};
 // const resourceLinks = [
