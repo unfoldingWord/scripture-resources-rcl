@@ -79,13 +79,6 @@ function ParallelScripture({
 };
 
 ParallelScripture.propTypes = {
-  resources: PropTypes.arrayOf(
-    PropTypes.shape({
-      resourceLink: PropTypes.string.isRequired,
-      manifest: PropTypes.object.isRequired,
-      project: PropTypes.object,
-    })
-  ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({
     bookId: PropTypes.string,

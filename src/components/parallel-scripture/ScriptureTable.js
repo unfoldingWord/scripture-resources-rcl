@@ -138,7 +138,7 @@ function ScriptureTable ({
 
 ScriptureTable.propTypes = {
   titles: PropTypes.arrayOf(
-    PropTypes.string.isRequired,
+    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
   ).isRequired,
   books: PropTypes.arrayOf(
     PropTypes.shape({
