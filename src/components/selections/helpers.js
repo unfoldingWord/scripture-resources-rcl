@@ -60,7 +60,12 @@ export const areSelected = ({ words, selections }) => {
   const _selections = words.map(word => selectionFromWord(word));
   _selections.forEach(selection => {
     //if (selections.includes(_s)) selected = true;
-    let _s = JSON.parse(selection);
+    let _s;
+    try {
+      _s = JSON.parse(selection);
+    } catch {
+      return false;
+    }
     for (let i=0; i < selections.length; i++) {
       const text = selections[i].text;
       const occ  = selections[i].occurrence;

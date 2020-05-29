@@ -12,7 +12,7 @@ import {ParallelScripture,ResourcesContext, ResourcesContextProvider}
   from "scripture-resources-rcl";
 import useEffect from 'use-deep-compare-effect';
 
-function Component( {config, resourceLinks} ) {
+function Component() {
 
   const [bookId, setBookId] = React.useState("3jn");
   const [chapter, setChapter] = React.useState(1);
@@ -63,12 +63,10 @@ function Component( {config, resourceLinks} ) {
     </form>
   ), [bookId, chapter, verse, quote, occurrence]);
 
-
   const component = React.useMemo(() => {
     const reference = { bookId, chapter, verse };
     return (
         <ParallelScripture 
-          resources={resources} 
           reference={reference} 
           quote={quote}
           onQuote={setQuote}
@@ -76,7 +74,7 @@ function Component( {config, resourceLinks} ) {
           height='250px'
         />
     );
-  }, [resourceLinks, config, bookId, chapter, verse, quote, occurrence]);
+  }, [bookId, chapter, verse, quote, occurrence]);
 
   return (
     <>
@@ -107,6 +105,6 @@ const resourceLinks = [
   onResources={setResources}
   config={config}
 >
-  <Component config={config} resourceLinks={resourceLinks} />
+  <Component />
 </ResourcesContextProvider>
 ```
