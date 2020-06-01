@@ -61,12 +61,7 @@ export const areSelected = ({ words, selections }) => {
   _selections.forEach(selection => {
     //if (selections.includes(_s)) selected = true;
     let _s;
-    try {
-      _s = JSON.parse(selection);
-    } catch {
-      console.log("JSON.parse() Error: areSelected() selection:",selection)
-      return false;
-    }
+    _s = JSON.parse(selection);
     for (let i=0; i < selections.length; i++) {
       const text = selections[i].text;
       const occ  = selections[i].occurrence;

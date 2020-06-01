@@ -47,7 +47,6 @@ function useSelections({
         let x = JSON.parse(_selections[i]);
         _selectionsParsified.push(x);
       } catch (error) {
-        console.log("Error: useSelections() update() i,_selections[i]:",i, _selections[i]);
         _selectionsParsified.push(_selections[i]);
       }
 
@@ -68,7 +67,6 @@ function useSelections({
 
   const addSelections = (words) => {
     let _selections = helpers.addSelections({words, selections});
-    console.log("addSelection()", _selections)
     update(_selections);
   };
 
