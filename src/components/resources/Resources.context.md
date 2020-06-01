@@ -1,3 +1,82 @@
+### useResources
+
+*What is a custom hook?*  Here are some common characteristics based
+on how this package uses them.
+
+1. A custom hook will be named beginning with `use`, following normal hook naming conventions.
+1. A custom hook will take a number of properties, which are used to initialize one or more
+built-in React `useEffect()` hooks.
+1. Additional processing may also be performed.
+1. Finally the funtion will return an object with two properties:
+- state
+- actions
+1. `actions` will be one or more ways to delete, modify, or add to the state value(s).
+1. Once an actions updates the state, then the `useEffect()` hooks inside the custom hook
+will cause an update to data. These updates are made by `useState()` functions. Thus, 
+managing the life cycle of the application data.
+
+A custom hook is used inside a React Context. This will make the data updates 
+available to all components below the context in the component tree. These lower
+level components may subscribe to the context data in order update UI data (using stil
+more `useState()` and `useEffect()` hooks).
+
+This technique ensures that data is only stored and maintained in one place, but yet 
+made available to any rendering component that requires it. *Note that rendering component
+may udpate the data using the actions available via the context which is managing the data.*
+
+
+```js
+import { useContext } from 'react';
+import { Paper } from '@material-ui/core';
+import ReactJson from 'react-json-view';
+
+import { useResources, ResourcesContextProvider, ResourcesContext } from 'scripture-resources-rcl';
+
+function Component( { stateActions }) {
+  return (
+    <>
+      <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
+        <pre>
+          <ReactJson src={stateActions} />
+        </pre>
+      </Paper>
+    </>
+  );
+};
+
+
+
+const config = {
+  server: 'https://git.door43.org',
+  cache: {
+    maxAge: 1 * 1 * 1 * 60 * 1000, // override cache to 1 minute
+  },
+};
+
+const reference = {bookId: 'jhn', chapter: 1, verse: 1};
+const resourceLinks = [
+  'unfoldingWord/el-x-koine/ugnt/v0.8',
+  'unfoldingWord/en/ult/v5',
+  'unfoldingWord/en/ust/v5',
+];
+const [ resources, setResources ] = React.useState([]);
+
+const resourceStateActions = useResources({
+    resources: resources,
+    resourceLinks: resourceLinks,
+    reference: reference,
+    config: config,
+    onResources: setResources,
+});
+
+<div style={{height: '250px', overflow: 'auto'}}>
+    <Component stateActions={resourceStateActions} />
+</div>
+
+```
+
+### Resources Context Provider - A Simple Example
+
 ```js
 import {Paper} from '@material-ui/core';
 import ReactJson from 'react-json-view';

@@ -1,7 +1,7 @@
 import { selectionsFromQuoteAndVerseObjects } from '../../core/selections/selections';
 
 // const stringify = (array) => array.map(object => JSON.stringify(object));
-export const parsify = (array) => array.map(string => JSON.parse(string));
+//export const parsify = (array) => array.map(string => JSON.parse(string));
 
 export const selectionsFromQuote = ({ quote, verseObjects, occurrence }) => {
   let selections = [];
@@ -64,6 +64,7 @@ export const areSelected = ({ words, selections }) => {
     try {
       _s = JSON.parse(selection);
     } catch {
+      console.log("JSON.parse() Error: areSelected() selection:",selection)
       return false;
     }
     for (let i=0; i < selections.length; i++) {

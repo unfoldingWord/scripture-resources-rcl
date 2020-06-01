@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect  from 'use-deep-compare-effect';
 
-import helpers, {parsify, selectionsFromQuote, quoteFromVerse} from './helpers';
+//import helpers, {parsify, selectionsFromQuote, quoteFromVerse} from './helpers';
+import helpers, { selectionsFromQuote, quoteFromVerse } from './helpers';
 
 function useSelections({
   selections,
@@ -33,14 +34,26 @@ function useSelections({
   }, [selections, onQuote, verseObjects]);
 
   const update = useCallback((_selections) => {
-    let _selectionsParsified;
-    try {
-      _selectionsParsified = parsify(_selections);
-    } catch (error) {
-      console.log("Error: useSelections() update() _selections:",_selections);
-      return;
+    // the "parsify" function is expecting an array of stringified objects
+    // it will return an array of the parsed objects
+    // const parsify = (array) => array.map(string => JSON.parse(string));
+    // However, at present, some of the array elements are objecs, 
+    // not strings. This causes the parse to fail. At present, it is
+    // unknown where the mixed bag of an array is created.
+    // So let's deal with it here.
+    let _selectionsParsified = [];
+    for (let i=0; i < _selections.length; i++) {
+      try {
+        let x = JSON.parse(_selections[i]);
+        _selectionsParsified.push(x);
+      } catch (error) {
+        console.log("Error: useSelections() update() i,_selections[i]:",i, _selections[i]);
+        _selectionsParsified.push(_selections[i]);
+      }
+
     }
-    const __selections = _selections && deepFreeze(parsify(_selections));
+    //const __selections = _selections && deepFreeze(parsify(_selections));
+    const __selections = _selections && deepFreeze(_selectionsParsified);
     onSelections(__selections);
   }, [onSelections]);
 
@@ -55,6 +68,7 @@ function useSelections({
 
   const addSelections = (words) => {
     let _selections = helpers.addSelections({words, selections});
+    console.log("addSelection()", _selections)
     update(_selections);
   };
 
