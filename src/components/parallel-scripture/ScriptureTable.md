@@ -1,17 +1,26 @@
-### withResources
+### Using a Context
 
 ```js
-import {ScriptureTable, withResources} from "scripture-resources-rcl";
+import {ScriptureTable, 
+  ResourcesContext, ResourcesContextProvider,
+  SelectionsContext, SelectionsContextProvider,
+} from "scripture-resources-rcl";
+import useEffect from 'use-deep-compare-effect';
+
 import usfmJS from 'usfm-js';
 
-function Component ({resources, reference}) {
+function Component ({reference}) {
+
+  const resourcesContext = React.useContext(ResourcesContext);
+  const resources = resourcesContext.state;
+
   const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
   const [books, setBooks] = React.useState([]);
   const [quote, setQuote] = React.useState('Θεὸς…λόγος');
   const [occurrence, setOccurrence] = React.useState(1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (resources.length > 0) {
       const {title: _title} = resources[0].project;
       setTitle(_title);
@@ -55,8 +64,6 @@ function Component ({resources, reference}) {
   );
 }
 
-const Resources = withResources(Component);
-
 const resourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/v0.8',
   'unfoldingWord/en/ult/v5',
@@ -67,8 +74,24 @@ const config = {server: 'https://git.door43.org'};
 
 const reference = {bookId: 'jhn', chapter: 1, verse: 1};
 
-<Resources resourceLinks={resourceLinks} config={config} reference={reference} />
+//<Resources resourceLinks={resourceLinks} config={config} reference={reference} />
+const [ resources, setResources ] = React.useState( [] );
+const quote='Θεὸς…λόγος';
+const occurrence=1;
+<>
+  <ResourcesContextProvider
+    reference={reference}
+    resources={resources}
+    resourceLinks={resourceLinks} 
+    onResources={setResources}
+    config={config}
+  >
+      <Component reference={reference}/>
+  </ResourcesContextProvider>
+</>
+
 ```
+
 
 ### Manually providing files
 

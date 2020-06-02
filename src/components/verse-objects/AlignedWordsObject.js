@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Popover } from '@material-ui/core';
 
-import SelectionsContext from '../selections/Selections.context';
+import { SelectionsContext } from '../selections/Selections.context';
 
 import {
   WordObject,
@@ -23,17 +23,19 @@ function AlignedWordsObject({
 
   let onClick = () => { };
   let selected;
-  const { areSelected, addSelections, removeSelections } = useContext(SelectionsContext);
-  if (areSelected && addSelections && removeSelections) {
-    selected = areSelected(originalWords);
-    onClick = () => {
-      if (selected) removeSelections(originalWords);
-      else addSelections(originalWords);
-    };
+
+  const _selectionsContext = useContext(SelectionsContext);
+  if ( _selectionsContext ) {
+    const { state: selections, actions: { areSelected, addSelections, removeSelections } } = _selectionsContext;
+      selected = areSelected(originalWords);
+      onClick = () => {
+        if (selected) removeSelections(originalWords);
+        else addSelections(originalWords);
+      };
   }
 
   const words = children.map((verseObject, index) =>
-    <span data-test="aligned-word-object" onClick={onClick} key={index} className={selected ? classes.selected : undefined}>
+    <span data-test="aligned-word-object" onClick={onClick} key={index} className={selected ? classes.selected : undefined }>
       <WordObject verseObject={verseObject} disableWordPopover={disableWordPopover} />
     </span>
   );

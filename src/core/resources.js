@@ -17,8 +17,7 @@ export const resourceFromResourceLink = async ({ resourceLink, reference, config
   const manifest = await getResourceManifest(resource);
   const projects = manifest.projects.map(project => extendProject({project, resource, reference}));
   const project = projectFromProjects({reference, projectId, projects});
-  const getTree = () => getFullTree({owner: username, repository, sha: tag, config});
-  const _resource = {...resource, reference, manifest, projects, project, getTree};
+  const _resource = {...resource, reference, manifest, projects, project};
   return _resource;
 };
 

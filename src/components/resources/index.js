@@ -1,2 +1,6 @@
-export {default as withResource} from './withResource';
-export {default as withResources} from './withResources';
+export {default as useResource} from './useResource';
+export * from './Resource.context';
+
+
+export {default as useResources} from './useResources';
+export * from './Resources.context';

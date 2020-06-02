@@ -2,41 +2,25 @@
 
 ```js
 import React, {useState} from 'react';
-import {Paper} from '@material-ui/core';
 import ReactJson from 'react-json-view';
-import {withResource} from "scripture-resources-rcl";
+import { ResourceContext, ResourceContextProvider } from "scripture-resources-rcl";
 
-function Component ({resource}) {
-  const [file, setFile] = useState();
-  const [json, setJson] = useState();
-
-  React.useEffect(() => {
-    if (resource && resource.project) {
-      resource.project.file().then(setFile);
-      resource.project.json().then(setJson);
-    }
-  }, [resource]);
+function Component () {
+  // - Note how this component is able to access data that is not
+  // directly provided to it. The data is stored elsewhere in an
+  // enclosing component -- the "context". This component might
+  // have multiple contexts. 
+  // - Note further that the data is NOT copied to this component; it 
+  // is only stored once and when it changes all enclosed components
+  // are able to respond, re-render, etc.
+  const resourceContext = React.useContext(ResourceContext);
 
   return (
-    <>
-      <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em',  overflow: 'scroll'}}>
-        <h4>Resource</h4>
-        <ReactJson src={resource} />
-      </Paper>
-      <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
-        <h4>Project File</h4>
-        <pre>
-          {file}
-        </pre>
-      </Paper>
-      <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
-        <h4>Json</h4>
-        <ReactJson src={json} />
-      </Paper>
-    </>
+    <div>
+      <ReactJson src={resourceContext} />
+    </div>
   );
 };
-const ResourceComponent = withResource(Component);
 
 // const resourceLink = 'unfoldingWord/en/ust/v5/tit';
 // const resourceLink = 'unfoldingWord/en/ult/v5/tit';
@@ -48,74 +32,35 @@ const config = {
     maxAge: 1 * 1 * 60 * 60 * 1000, // override cache to 1 minute
   },
 };
+const [ resource, setResource ] = React.useState();
 
-<ResourceComponent resourceLink={resourceLink} config={config} />
+<div style={{height: '250px', overflow: 'auto'}}>
+  <ResourceContextProvider
+    resource={resource}
+    resourceLink={resourceLink} 
+    onResource={setResource}
+    config={config}
+  >
+    <Component />
+  </ResourceContextProvider>
+</div>
+ 
 ```
 
-### Get Tree and first blob
 
-```js
-import React, {useState} from 'react';
-import {Paper} from '@material-ui/core';
-import ReactJson from 'react-json-view';
-import {withResource} from "scripture-resources-rcl";
+### Complex example
 
-function Component ({resource}) {
-  const [tree, setTree] = useState();
-  const [blob, setBlob] = useState();
-
-  React.useEffect(() => {
-    if (resource) resource.getTree().then(setTree);
-  }, [resource]);
-
-  React.useEffect(() => {
-    if (tree && tree.length > 0) {
-      tree[0].getBlob().then(setBlob);
-    }
-  }, [tree]);
-
-  return (
-    <>
-      <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em',  overflow: 'scroll'}}>
-        <h4>Resource</h4>
-        <ReactJson src={resource} />
-      </Paper>
-      <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
-        <h4>Tree</h4>
-        <ReactJson src={tree} />
-      </Paper>
-      <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
-        <h4>First Blob in tree's decoded content</h4>
-        <pre>
-          {blob ? blob.decoded : ''}
-        </pre>
-      </Paper>
-    </>
-  );
-};
-const ResourceComponent = withResource(Component);
-
-// const resourceLink = 'unfoldingWord/en/ust/v5/tit';
-// const resourceLink = 'unfoldingWord/en/ult/v5/tit';
-const resourceLink = 'unfoldingWord/el-x-koine/ugnt/master/tit';
-
-const config = {
-  server: 'https://git.door43.org',
-  cache: {
-    maxAge: 1 * 1 * 60 * 60 * 1000, // override cache to 1 minute
-  },
-};
-
-<ResourceComponent resourceLink={resourceLink} config={config} />
-```
-
-# Find Book Order based on fewest new UTA articles
 ```js
 import {Paper, TextField} from '@material-ui/core';
 import ReactJson from 'react-json-view';
-import {withResource} from "scripture-resources-rcl";
+import useEffect from 'use-deep-compare-effect';
 
-function Component ({resource, seed}) {
+import { ResourceContext, ResourceContextProvider } from "scripture-resources-rcl";
+
+function Component ({seed}) {
+
+  const resourceContext = React.useContext(ResourceContext);
+
   const [files, setFiles] = React.useState([]);
   const [bookOrder, setBookOrder] = React.useState([]);
 
@@ -142,11 +87,13 @@ function Component ({resource, seed}) {
     return [bookId, articles];
   },[]);
 
-  React.useEffect(() => {
+  let resource = resourceContext.state;
+  
+  useEffect(() => {
     if (resource && resource.projects) {
       const promises = resource.projects
       // .filter(p => p.categories.includes('bible-nt'))
-      .map(articlesByProject);
+      .map(articlesByProject);      
       Promise.all(promises).then(projects => {
         const bookIndex = {};
         projects.forEach(project => bookIndex[project.identifier] = Array.from(project.articles));
@@ -169,7 +116,7 @@ function Component ({resource, seed}) {
           Object.keys(_bookIndex).forEach(bookId => { // remove completed articles from index
             _bookIndex[bookId] = _bookIndex[bookId].filter(article => !articles.includes(article));
           });
-        });
+        });        
         setBookOrder(_bookOrder);
       });
     }
@@ -178,21 +125,21 @@ function Component ({resource, seed}) {
   return (
     <>
       <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
-        <ReactJson src={bookOrder} />
+        <pre>
+          <ReactJson src={bookOrder} />
+        </pre>
       </Paper>
     </>
   );
 };
-const ResourceComponent = withResource(Component);
 
 // const resourceLink = 'unfoldingWord/en/ust/v5/tit';
 // const resourceLink = 'unfoldingWord/en/ult/v5/tit';
 const resourceLink = 'unfoldingWord/en/tn/master';
-
 const config = {
   server: 'https://git.door43.org',
   cache: {
-    maxAge: 1 * 1 * 60 * 60 * 1000, // override cache to 1 hour
+    maxAge: 1 * 1 * 60 * 60 * 1000, // override cache to 1 minute
   },
 };
 
@@ -202,9 +149,18 @@ const updateSeed = (e) => {
   const _seed = e.target.value.split(/,\s*/).filter(string => string !== '');
   setSeed(_seed);
 };
+const [ resource, setResource ] = React.useState( {} );
 
 <>
   <TextField id="seed" defaultValue={seed.join(', ')} variant='outlined' label='seed' onBlur={updateSeed} />
-  <ResourceComponent resourceLink={resourceLink} seed={seed} config={config} />
+  <ResourceContextProvider
+    resource={resource}
+    resourceLink={resourceLink} 
+    onResource={setResource}
+    config={config}
+  >
+  <Component seed={seed} />
+  </ResourceContextProvider>
 </>
+
 ```

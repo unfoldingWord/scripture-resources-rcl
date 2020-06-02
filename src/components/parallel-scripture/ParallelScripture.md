@@ -1,12 +1,19 @@
+### Using Contexts
+
+To see highlighting appear, change the `-1` occurrence to 1; 
+then click or tab out of field. Or try this:
+
+1. paste this into quote: `καὶ…τῆς`
+2. Then alter occurrence from 1 to 2 to 3 to see how the highlighting changes.
 
 ```js
 import {TextField} from '@material-ui/core';
-import {ParallelScripture, withResources} from "scripture-resources-rcl";
+import {ParallelScripture,ResourcesContext, ResourcesContextProvider} 
+  from "scripture-resources-rcl";
+import useEffect from 'use-deep-compare-effect';
 
-function Component({
-  config,
-  resourceLinks,
-}) {
+function Component() {
+
   const [bookId, setBookId] = React.useState("3jn");
   const [chapter, setChapter] = React.useState(1);
   const [verse, setVerse] = React.useState(10);
@@ -58,19 +65,16 @@ function Component({
 
   const component = React.useMemo(() => {
     const reference = { bookId, chapter, verse };
-    const ParallelScriptureWithResources = withResources(ParallelScripture);
     return (
-      <ParallelScriptureWithResources
-        resourceLinks={resourceLinks}
-        config={config}
-        reference={reference}
-        quote={quote}
-        onQuote={setQuote}
-        occurrence={occurrence}
-        height='250px'
-      />
+        <ParallelScripture 
+          reference={reference} 
+          quote={quote}
+          onQuote={setQuote}
+          occurrence={occurrence}
+          height='250px'
+        />
     );
-  }, [resourceLinks, config, bookId, chapter, verse, quote, occurrence]);
+  }, [bookId, chapter, verse, quote, occurrence]);
 
   return (
     <>
@@ -83,9 +87,9 @@ function Component({
 }
 const config = {server: 'https://git.door43.org'};
 const resourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/master',
-  'unfoldingWord/en/ult/v5',
-  'unfoldingWord/en/ust/v5',
+  'unfoldingWord/el-x-koine/ugnt/master/3jn',
+  'unfoldingWord/en/ult/v5/3jn',
+  'unfoldingWord/en/ust/v5/3jn',
 ];
 // const reference = {bookId: 'rut', chapter: 1, verse: 1};
 // const resourceLinks = [
@@ -93,6 +97,14 @@ const resourceLinks = [
 //   'unfoldingWord/en/ult/master',
 //   'unfoldingWord/en/ust/master',
 // ];
+  const [ resources, setResources ] = React.useState([]);
 
-<Component config={config} resourceLinks={resourceLinks} />
+<ResourcesContextProvider
+  resourceLinks={resourceLinks}
+  resources={resources}
+  onResources={setResources}
+  config={config}
+>
+  <Component />
+</ResourcesContextProvider>
 ```

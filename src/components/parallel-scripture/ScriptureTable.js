@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {
@@ -23,10 +23,7 @@ import {
   referenceIdFromReference,
   versesFromReferenceIdAndBooks,
 } from './helpers';
-import withSelections from '../selections/withSelections';
-import {SelectionsProvider} from '../selections/Selections.context';
-
-const Selectionable = withSelections(SelectionsProvider);
+import { SelectionsContextProvider } from '../selections/Selections.context';
 
 function ScriptureTable ({
   title,
@@ -44,6 +41,7 @@ function ScriptureTable ({
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
   let verseObjects = [];
@@ -86,21 +84,24 @@ function ScriptureTable ({
 
   let _referenceIds = referenceIds;
   if (filter && reference.chapter && reference.verse) _referenceIds = [referenceIdFromReference(reference)];
-  const rows = _referenceIds.map(referenceId => {
-    const verses = versesFromReferenceIdAndBooks({referenceId, books});
-    const row = (
-      <Row
-        renderOffscreen={renderOffscreen[referenceId]}
-        key={referenceId}
-        verses={verses}
-        referenceId={referenceId}
-        reference={reference}
-        filter={filter}
-        columns={columns}
-      />
-    );
-    return row;
-  });
+
+  const rows = () => (
+    _referenceIds.map(referenceId => {
+      const verses = versesFromReferenceIdAndBooks({referenceId, books});
+      const row = (
+        <Row
+          renderOffscreen={renderOffscreen[referenceId]}
+          key={referenceId}
+          verses={verses}
+          referenceId={referenceId}
+          reference={reference}
+          filter={filter}
+          columns={columns}
+        />
+      );
+      return row;
+    })
+  );
 
   useEffect(() => {
     const scrollReferenceId = referenceIdFromReference(reference);
@@ -114,28 +115,30 @@ function ScriptureTable ({
   }, [filter, reference]);
 
   return (
-    <Selectionable
+    <SelectionsContextProvider
       quote={quote}
       // onQuote={onQuote} // disable until round trip is working
       occurrence={occurrence}
       verseObjects={verseObjects}
+      selections={selections}
+      onSelections={setSelections}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
       <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >
         <Table className={classes.table}>
           <Headers columns={columns} />
           <TableBody className={classes.tableBody}>
-            {rows}
+            {rows()}
           </TableBody>
         </Table>
       </div>
-    </Selectionable>
+    </SelectionsContextProvider>
   );
 }
 
 ScriptureTable.propTypes = {
   titles: PropTypes.arrayOf(
-    PropTypes.string.isRequired,
+    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
   ).isRequired,
   books: PropTypes.arrayOf(
     PropTypes.shape({

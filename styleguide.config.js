@@ -14,8 +14,8 @@ let sections = [
     content: 'src/components/resources/_readme.md',
     components: () => {
       const componentNames = [
-        'withResource',
-        'withResources',
+        'Resource.context',
+        'Resources.context',
       ];
       return componentNames.map(componentName => {
         return path.resolve(__dirname, `src/components/resources`, `${componentName}.js`)
@@ -27,7 +27,7 @@ let sections = [
     content: 'src/components/selections/_readme.md',
     components: () => {
       const componentNames = [
-        'withSelections',
+        'Selections.context',
       ];
       return componentNames.map(componentName => {
         return path.resolve(__dirname, `src/components/selections`, `${componentName}.js`)
@@ -39,7 +39,8 @@ let sections = [
     content: 'src/components/usfm/_readme.md',
     components: () => {
       const componentNames = [
-        'withUsfm',
+        //'useUsfm',
+        'Usfm.context',
       ];
       return componentNames.map(componentName => {
         return path.resolve(__dirname, `src/components/usfm`, `${componentName}.js`)
@@ -166,6 +167,7 @@ module.exports = {
     "scripture-resources-rcl": path.resolve(__dirname, "src"),
   },
   version,
+  serverPort: 6060,
   webpackConfig: {
     devtool: 'source-map',
     module: {

@@ -1,7 +1,7 @@
 import { selectionsFromQuoteAndVerseObjects } from '../../core/selections/selections';
 
 // const stringify = (array) => array.map(object => JSON.stringify(object));
-export const parsify = (array) => array.map(string => JSON.parse(string));
+//export const parsify = (array) => array.map(string => JSON.parse(string));
 
 export const selectionsFromQuote = ({ quote, verseObjects, occurrence }) => {
   let selections = [];
@@ -59,7 +59,20 @@ export const areSelected = ({ words, selections }) => {
   let selected = false;
   const _selections = words.map(word => selectionFromWord(word));
   _selections.forEach(selection => {
-    if (selections.includes(selection)) selected = true;
+    //if (selections.includes(_s)) selected = true;
+    const _selection = JSON.parse(selection);
+    let _text = _selection.text;
+    let _occ  = _selection.occurrence;
+    let _occs = _selection.occurrences;
+    for (let i=0; i < selections.length; i++) {
+      const text = selections[i].text;
+      const occ  = selections[i].occurrence;
+      const occs = selections[i].occurrences;
+      if ( text === _text &&  occ === _occ && occs === _occs) {
+        selected = true;
+        break;
+      }
+    }
   });
   return selected;
 };

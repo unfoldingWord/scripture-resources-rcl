@@ -1,15 +1,24 @@
-withSelections example:
-
 ```js
 import ReactJson from 'react-json-view';
-function Component ({
-  value,
-}) {
+import { SelectionsContext, SelectionsContextProvider } from "scripture-resources-rcl";
+
+function Component () {
+  // - Note how this component is able to access data that is not
+  // directly provided to it. The data is stored elsewhere in an
+  // enclosing component -- the "context". This component might
+  // have multiple contexts. 
+  // - Note further that the data is NOT copied to this component; it 
+  // is only stored once and when it changes all enclosed components
+  // are able to respond, re-render, etc.
+  const selectionsContext = React.useContext(SelectionsContext);
+
   return (
-    <ReactJson src={value.selections} />
-  )
-}
-const ComponentWithSelections = WithSelections(Component);
+    <div>
+      <ReactJson src={selectionsContext} />
+    </div>
+  );
+};
+
 
 const quote = "ὁ λόγος,";
 const occurrence = 1;
@@ -151,5 +160,19 @@ const verseObjects = [
     "text": ".\n\n"
   }
 ];
-<ComponentWithSelections quote={quote} occurrence={occurrence} verseObjects={verseObjects} />
+
+const [ selections, setSelections ] = React.useState([]);
+
+<div style={{height: '250px', overflow: 'auto'}}>
+  <SelectionsContextProvider
+    selections={selections} 
+    onSelections={setSelections}
+    quote={quote}
+    //onQuote=
+    occurrence={occurrence}
+    verseObjects={verseObjects}
+  >
+    <Component />
+  </SelectionsContextProvider>
+</div>
 ```

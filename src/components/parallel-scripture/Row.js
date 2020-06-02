@@ -16,6 +16,7 @@ function Row ({
   verses,
   renderOffscreen,
 }) {
+
   const classes = useStyles();
 
   const onVisibility = (isVisible) => {

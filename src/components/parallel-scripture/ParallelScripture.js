@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { ResourcesContext } from '../resources/Resources.context';
+
 import { ScriptureTable } from "../../";
 import { License } from '../license'
+import { localString } from '../../core/localStrings';
+import useEffect from 'use-deep-compare-effect';
 
 function ParallelScripture({
-  resources,
   reference,
   quote,
   onQuote,
@@ -13,13 +16,16 @@ function ParallelScripture({
   height,
   buttons,
 }) {
+
   const [title, setTitle] = useState('');
   const [titles, setTitles] = useState([]);
   const [books, setBooks] = useState([]);
   const openLink = useCallback((link) => window.open(link, '_blank'), []);
 
+  const {state: resources} = React.useContext(ResourcesContext);
+
   useEffect(() => {
-    if (resources.length > 0) {
+    if (resources && resources[0] && resources[0].project) {
       const { title: _title } = resources[0].project;
       let ref = '';
       if (reference) {
@@ -40,8 +46,8 @@ function ParallelScripture({
             'src/' + branchOrTag + '/' + resource.tag + '/' +
             'LICENSE.md'
           ;
-          
-          let rightsIcon = <License rights={rights} licenseLink={licenseLink} style={{fontSize: "1em", marginLeft: "0.1em"}} />
+          let viewLicense = localString("ViewLicense") + " " + rights;
+          let rightsIcon = <License rights={viewLicense} licenseLink={licenseLink} />
 
           _title = (
             <Typography variant='caption'>
@@ -73,13 +79,6 @@ function ParallelScripture({
 };
 
 ParallelScripture.propTypes = {
-  resources: PropTypes.arrayOf(
-    PropTypes.shape({
-      resourceLink: PropTypes.string.isRequired,
-      manifest: PropTypes.object.isRequired,
-      project: PropTypes.object.isRequired,
-    })
-  ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({
     bookId: PropTypes.string,

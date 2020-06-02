@@ -1,1 +1,2 @@
-export {default as withUsfm} from './withUsfm';
+export {default as useUsfm} from './useUsfm';
+export * from './Usfm.context';

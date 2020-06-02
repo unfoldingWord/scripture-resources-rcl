@@ -15,6 +15,8 @@ export const Verse = ({
   direction,
   renderOffscreen,
 }) => {
+
+
   const classes = useStyles();
 
   const onVisibility = (isVisible) => {
