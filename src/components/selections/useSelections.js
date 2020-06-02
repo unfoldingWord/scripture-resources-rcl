@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect  from 'use-deep-compare-effect';
 
-//import helpers, {parsify, selectionsFromQuote, quoteFromVerse} from './helpers';
-import helpers, { selectionsFromQuote, quoteFromVerse } from './helpers';
+import * as helpers from './helpers';
 
 function useSelections({
   selections,
@@ -17,7 +16,7 @@ function useSelections({
 
   useEffect(() => {
     
-    const _selections = selectionsFromQuote({
+    const _selections = helpers.selectionsFromQuote({
       quote,
       verseObjects,
       occurrence,
@@ -28,7 +27,7 @@ function useSelections({
 
   useEffect(() => {
     if (verseObjects && onQuote) {
-      const _quote = quoteFromVerse({selections, verseObjects});
+      const _quote = helpers.quoteFromVerse({selections, verseObjects});
       onQuote(_quote);
     }
   }, [selections, onQuote, verseObjects]);
