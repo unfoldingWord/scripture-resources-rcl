@@ -94,7 +94,7 @@ function ScriptureTable ({
           renderOffscreen={renderOffscreen[referenceId]}
           key={referenceId}
           verses={verses}
-          referenceId={referenceId}
+          referenceId={referenceId} 
           reference={reference}
           filter={filter}
           columns={columns}

@@ -4,9 +4,10 @@ export const referenceIdsFromBooks = ({books}) => {
   const start = performance.now();
   const referenceIds = new Set([]);
   books.forEach((book) => {
-    Object.keys(book.chapters).forEach(chapterKey => {
+    let vkArray = [];
+    Object.keys(book.chapters).forEach((chapterKey) => {
       const chapter = book.chapters[chapterKey];
-      Object.keys(chapter).forEach(verseKey => {
+      Object.keys(chapter).forEach((verseKey) => {
         const referenceId = chapterKey + ':' + verseKey;
         // if (verseKey.split('-').length > 1) debugger;
         referenceIds.add(referenceId);
@@ -39,18 +40,20 @@ export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
   const versesData = books.map((book, index) => {
     const reference = referenceFromReferenceId(referenceId);
     const chapterData = book.chapters[reference.chapter];
-    let verseData = chapterData && chapterData[reference.verse];
+    let _verseData = chapterData && chapterData[reference.verse];
+    let range;
     // if (index === 2) debugger
-    if (!verseData) {
+    if (!_verseData) {
       const verseKeys = Object.keys(chapterData);
-      const range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
-      verseData = chapterData[range];
+      range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
+      _verseData = chapterData[range];
       // debugger
     }
-    if (index === 0 && verseData && verseData.verseObjects && verseData.verseObjects.length) {
-      verseData.verseObjects = occurrenceInjectVerseObjects(verseData.verseObjects);
+    if (index === 0 && _verseData && _verseData.verseObjects && _verseData.verseObjects.length) {
+      _verseData.verseObjects = occurrenceInjectVerseObjects(_verseData.verseObjects);
     }
-    return verseData;
+    const _verseTitle = range ? reference.chapter+':'+range : reference.verse;
+    return {verseData: _verseData, verseTitle: _verseTitle};
   });
   return versesData;
 };
