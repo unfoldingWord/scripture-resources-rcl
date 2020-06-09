@@ -185,7 +185,6 @@ const useStyles = makeStyles(theme => ({
     overflowX: 'auto',
   },
   table: {
-    height: '100%'
   },
   tableBody:{
   }
