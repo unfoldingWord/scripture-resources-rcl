@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {
@@ -93,8 +93,8 @@ function ScriptureTable ({
   let _referenceIds = referenceIds;
   if (filter && reference.chapter && reference.verse) _referenceIds = [referenceIdFromReference(reference)];
 
-  const rows = () => (
-    _referenceIds.map(referenceId => {
+  const rows = useMemo(() => {
+    return () => _referenceIds.map(referenceId => {
       const verses = versesFromReferenceIdAndBooks({referenceId, books});
       const row = (
         <Row
@@ -109,7 +109,7 @@ function ScriptureTable ({
       );
       return row;
     })
-  );
+  }, [_referenceIds, reference, filter, columns]);
 
   useEffect(() => {
     const scrollReferenceId = referenceIdFromReference(reference);
@@ -132,14 +132,15 @@ function ScriptureTable ({
       onSelections={setSelections}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
-      {open && <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >
+      <div id='wrapY' className={classes.wrapY}>
+      {open && 
         <Table className={classes.table}>
           <Headers columns={columns} />
           <TableBody className={classes.tableBody}>
             {rows()}
           </TableBody>
-        </Table>
-      </div>}
+        </Table>}
+        </div>
     </SelectionsContextProvider>
   );
 }
@@ -184,6 +185,7 @@ const useStyles = makeStyles(theme => ({
     overflowX: 'auto',
   },
   table: {
+    height: '100%'
   },
   tableBody:{
   }
