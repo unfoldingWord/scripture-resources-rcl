@@ -52,7 +52,10 @@ export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
     if (index === 0 && _verseData && _verseData.verseObjects && _verseData.verseObjects.length) {
       _verseData.verseObjects = occurrenceInjectVerseObjects(_verseData.verseObjects);
     }
-    const _verseTitle = range ? reference.chapter+':'+range : reference.verse;
+    let _verseTitle = reference.verse;
+    if ( !(_verseTitle === 'front' || _verseTitle === 'back') ) {
+      _verseTitle = range ? reference.chapter+':'+range : reference.chapter+':'+reference.verse;
+    }
     return {verseData: _verseData, verseTitle: _verseTitle};
   });
   return versesData;
