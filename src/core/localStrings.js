@@ -22,6 +22,8 @@ const strings = {
         ExpandChapter: "Expand Chapter",
         CollapseChapter: "Collapse Chapter",
         ViewLicense: "View License",
+        ExpandScripturePane: "Expand Scripture Pane",
+        CloseScripturePane: "Close Scripture Pane",
         /* do not remove these two */
         StringMissing:"String Id missing",
         LangNotSupported: "Language not supported"
