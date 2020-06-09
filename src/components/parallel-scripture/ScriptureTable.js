@@ -5,6 +5,8 @@ import {
   ShortText,
   Subject,
   ViewColumn,
+  UnfoldMore,
+  UnfoldLess,
 } from '@material-ui/icons';
 import {
   Table,
@@ -38,6 +40,7 @@ function ScriptureTable ({
   renderOffscreen = {}
 }) {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -63,6 +66,11 @@ function ScriptureTable ({
 
   const actions = [
     {
+      icon: open ?  <UnfoldLess fontSize="small" /> : <UnfoldMore fontSize="small" />,
+      tooltip: open ? localString('CloseScripturePane') : localString('ExpandScripturePane'),
+      onClick: () => setOpen(!open)
+    },
+    {
       icon: <ViewColumn fontSize='small' />,
       tooltip: localString('ViewVersions'),
       onClick: (event) => setColumnsMenuAnchorEl(event.currentTarget),
@@ -78,7 +86,7 @@ function ScriptureTable ({
     {
       icon: ( filter ? <ShortText fontSize='small' /> : <Subject fontSize='small' /> ),
       tooltip: filter ? localString('ExpandChapter') : localString('CollapseChapter'),
-      onClick: (event) => setFilter(!filter),
+      onClick: () => setFilter(!filter),
     },
   ];
 
@@ -90,7 +98,7 @@ function ScriptureTable ({
       const verses = versesFromReferenceIdAndBooks({referenceId, books});
       const row = (
         <Row
-          renderOffscreen={renderOffscreen[referenceId]}
+          renderOffscreen={open && renderOffscreen[referenceId]}
           key={referenceId}
           verses={verses}
           referenceId={referenceId}
@@ -124,14 +132,14 @@ function ScriptureTable ({
       onSelections={setSelections}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
-      <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >
+      {open && <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >
         <Table className={classes.table}>
           <Headers columns={columns} />
           <TableBody className={classes.tableBody}>
             {rows()}
           </TableBody>
         </Table>
-      </div>
+      </div>}
     </SelectionsContextProvider>
   );
 }
