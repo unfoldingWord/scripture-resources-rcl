@@ -1,10 +1,7 @@
 ### Using Contexts
 
 To see highlighting appear, change the `-1` occurrence to 1; 
-then click or tab out of field. Or try this:
-
-1. paste this into quote: `καὶ…τῆς`
-2. Then alter occurrence from 1 to 2 to 3 to see how the highlighting changes.
+then click or tab out of field.
 
 ```js
 import {TextField} from '@material-ui/core';
@@ -17,7 +14,7 @@ function Component() {
   const [bookId, setBookId] = React.useState("act");
   const [chapter, setChapter] = React.useState(1);
   const [verse, setVerse] = React.useState(24);
-  const [quote, setQuote] = React.useState("καὶ…μὴ");
+  const [quote, setQuote] = React.useState("καὶ…Κύριε");
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(() => (
