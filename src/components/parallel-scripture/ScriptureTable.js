@@ -1,23 +1,11 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
-import {
-  ShortText,
-  Subject,
-  ViewColumn,
-} from '@material-ui/icons';
-import {
-  Table,
-  TableBody,
-} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { ShortText, Subject, ViewColumn } from '@material-ui/icons';
+import { Table, TableBody } from '@material-ui/core';
 import { localString } from '../../core/localStrings';
 
-import {
-  Row,
-  Headers,
-  Toolbar,
-  ColumnsMenu,
-} from '..';
+import { Row, Headers, Toolbar, ColumnsMenu } from '..';
 import {
   referenceIdsFromBooks,
   referenceIdFromReference,
@@ -25,7 +13,7 @@ import {
 } from './helpers';
 import { SelectionsContextProvider } from '../selections/Selections.context';
 
-function ScriptureTable ({
+function ScriptureTable({
   title,
   titles,
   books,
@@ -35,7 +23,7 @@ function ScriptureTable ({
   onQuote,
   occurrence,
   buttons,
-  renderOffscreen = {}
+  renderOffscreen = {},
 }) {
   const classes = useStyles();
   const [filter, setFilter] = useState(!!reference);
@@ -45,19 +33,28 @@ function ScriptureTable ({
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
   let verseObjects = [];
-  if (reference && reference.verse && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
+  if (
+    reference &&
+    reference.verse &&
+    books[0] &&
+    books[0].chapters &&
+    books[0].chapters[reference.chapter]
+  ) {
     const chapter = books[0].chapters[reference.chapter];
     const verse = chapter[reference.verse];
-    verseObjects = (verse) ? verse.verseObjects : [];
+    verseObjects = verse ? verse.verseObjects : [];
   }
 
   useEffect(() => {
-    const _columns = titles.map((title, index) => ({id: index, label: title}));
+    const _columns = titles.map((title, index) => ({
+      id: index,
+      label: title,
+    }));
     setColumns(_columns);
   }, [titles]);
 
   useEffect(() => {
-    const _referenceIds = referenceIdsFromBooks({books});
+    const _referenceIds = referenceIdsFromBooks({ books });
     setReferenceIds(_referenceIds);
   }, [books]);
 
@@ -76,18 +73,25 @@ function ScriptureTable ({
       ),
     },
     {
-      icon: ( filter ? <ShortText fontSize='small' /> : <Subject fontSize='small' /> ),
-      tooltip: filter ? localString('ExpandChapter') : localString('CollapseChapter'),
+      icon: filter ? (
+        <ShortText fontSize='small' />
+      ) : (
+        <Subject fontSize='small' />
+      ),
+      tooltip: filter
+        ? localString('ExpandChapter')
+        : localString('CollapseChapter'),
       onClick: (event) => setFilter(!filter),
     },
   ];
 
   let _referenceIds = referenceIds;
-  if (filter && reference.chapter && reference.verse) _referenceIds = [referenceIdFromReference(reference)];
+  if (filter && reference.chapter && reference.verse)
+    _referenceIds = [referenceIdFromReference(reference)];
 
-  const rows = () => (
-    _referenceIds.map(referenceId => {
-      const verses = versesFromReferenceIdAndBooks({referenceId, books});
+  const rows = () =>
+    _referenceIds.map((referenceId) => {
+      const verses = versesFromReferenceIdAndBooks({ referenceId, books });
       const row = (
         <Row
           renderOffscreen={renderOffscreen[referenceId]}
@@ -100,8 +104,7 @@ function ScriptureTable ({
         />
       );
       return row;
-    })
-  );
+    });
 
   useEffect(() => {
     const scrollReferenceId = referenceIdFromReference(reference);
@@ -124,12 +127,10 @@ function ScriptureTable ({
       onSelections={setSelections}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
-      <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}} >
+      <div id='wrapY' className={classes.wrapY} style={{ maxHeight: height }}>
         <Table className={classes.table}>
           <Headers columns={columns} />
-          <TableBody className={classes.tableBody}>
-            {rows()}
-          </TableBody>
+          <TableBody className={classes.tableBody}>{rows()}</TableBody>
         </Table>
       </div>
     </SelectionsContextProvider>
@@ -144,7 +145,7 @@ ScriptureTable.propTypes = {
     PropTypes.shape({
       headers: PropTypes.array.isRequired,
       chapters: PropTypes.object.isRequired,
-    })  
+    })
   ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({
@@ -154,7 +155,8 @@ ScriptureTable.propTypes = {
   }),
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.object,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
+
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
@@ -168,17 +170,14 @@ ScriptureTable.propTypes = {
   onQuote: PropTypes.func,
 };
 
-const useStyles = makeStyles(theme => ({
-  root: {
-  },
+const useStyles = makeStyles((theme) => ({
+  root: {},
   wrapY: {
     overflowY: 'auto',
     overflowX: 'auto',
   },
-  table: {
-  },
-  tableBody:{
-  }
+  table: {},
+  tableBody: {},
 }));
 
 export default ScriptureTable;

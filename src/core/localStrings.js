@@ -1,5 +1,5 @@
-// 
-// Translate strings into different languages 
+//
+// Translate strings into different languages
 // Then use localString(id) to return the language specific string to use
 //
 // To use:
@@ -17,35 +17,35 @@
 //    localString(stringid)
 //
 const strings = {
-    en:{
-        ViewVersions: "View Versions",
-        ExpandChapter: "Expand Chapter",
-        CollapseChapter: "Collapse Chapter",
-        ViewLicense: "View License",
-        /* do not remove these two */
-        StringMissing:"String Id missing",
-        LangNotSupported: "Language not supported"
-    },
-    el: {
-        StringMissing:"λείπει το εργαλείο"
-    }
+  en: {
+    ViewVersions: 'View Versions',
+    ExpandChapter: 'Expand Chapter',
+    CollapseChapter: 'Collapse Chapter',
+    ViewLicense: 'View License',
+    /* do not remove these two */
+    StringMissing: 'String Id missing',
+    LangNotSupported: 'Language not supported',
+  },
+  el: {
+    StringMissing: 'λείπει το εργαλείο',
+  },
 };
 
 export const localString = (id) => {
-    let lang = navigator.language.split(/-|_/)[0];
-    // if language is unknown (not sure this can actually happen)
-    if ( lang === undefined ) {
-        lang = 'en';
-    }
-    // if there are no strings for the language
-    if ( strings[lang] === undefined ) {
-        lang = 'en';
-        return strings[lang]['LangNotSupported'];
-    }
-    let lstring = strings[lang][id];
-    // if a string for the message id is missing
-    if ( lstring === undefined ) {
-        return strings[lang]['StringMissing']
-    }
-    return lstring;
+  let lang = navigator.language.split(/-|_/)[0];
+  // if language is unknown (not sure this can actually happen)
+  if (lang === undefined) {
+    lang = 'en';
+  }
+  // if there are no strings for the language
+  if (strings[lang] === undefined) {
+    lang = 'en';
+    return strings[lang]['LangNotSupported'];
+  }
+  let lstring = strings[lang][id];
+  // if a string for the message id is missing
+  if (lstring === undefined) {
+    return strings[lang]['StringMissing'];
+  }
+  return lstring;
 };
