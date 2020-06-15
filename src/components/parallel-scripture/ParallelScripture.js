@@ -61,7 +61,11 @@ function ParallelScripture({
             'LICENSE.md';
           let viewLicense = localString('ViewLicense') + ' ' + rights;
           let rightsIcon = (
-            <License rights={viewLicense} licenseLink={licenseLink} />
+            <License
+              rights={viewLicense}
+              licenseLink={licenseLink}
+              style={{ fontSize: '1em', marginLeft: '0.1em' }}
+            />
           );
 
           _title = (

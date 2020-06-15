@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { ShortText, Subject, ViewColumn } from '@material-ui/icons';
+import {
+  ShortText,
+  Subject,
+  ViewColumn,
+  UnfoldMore,
+  UnfoldLess,
+} from '@material-ui/icons';
 import { Table, TableBody } from '@material-ui/core';
 import { localString } from '../../core/localStrings';
 
@@ -26,6 +32,7 @@ function ScriptureTable({
   renderOffscreen = {},
 }) {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -60,6 +67,17 @@ function ScriptureTable({
 
   const actions = [
     {
+      icon: open ? (
+        <UnfoldLess fontSize='small' />
+      ) : (
+        <UnfoldMore fontSize='small' />
+      ),
+      tooltip: open
+        ? localString('CloseScripturePane')
+        : localString('ExpandScripturePane'),
+      onClick: () => setOpen(!open),
+    },
+    {
       icon: <ViewColumn fontSize='small' />,
       tooltip: localString('ViewVersions'),
       onClick: (event) => setColumnsMenuAnchorEl(event.currentTarget),
@@ -81,7 +99,7 @@ function ScriptureTable({
       tooltip: filter
         ? localString('ExpandChapter')
         : localString('CollapseChapter'),
-      onClick: (event) => setFilter(!filter),
+      onClick: () => setFilter(!filter),
     },
   ];
 
@@ -89,22 +107,24 @@ function ScriptureTable({
   if (filter && reference.chapter && reference.verse)
     _referenceIds = [referenceIdFromReference(reference)];
 
-  const rows = () =>
-    _referenceIds.map((referenceId) => {
-      const verses = versesFromReferenceIdAndBooks({ referenceId, books });
-      const row = (
-        <Row
-          renderOffscreen={renderOffscreen[referenceId]}
-          key={referenceId}
-          verses={verses}
-          referenceId={referenceId}
-          reference={reference}
-          filter={filter}
-          columns={columns}
-        />
-      );
-      return row;
-    });
+  const rows = useMemo(() => {
+    return () =>
+      _referenceIds.map((referenceId) => {
+        const verses = versesFromReferenceIdAndBooks({ referenceId, books });
+        const row = (
+          <Row
+            renderOffscreen={open && renderOffscreen[referenceId]}
+            key={referenceId}
+            verses={verses}
+            referenceId={referenceId}
+            reference={reference}
+            filter={filter}
+            columns={columns}
+          />
+        );
+        return row;
+      });
+  }, [_referenceIds, reference, filter, columns]);
 
   useEffect(() => {
     const scrollReferenceId = referenceIdFromReference(reference);
@@ -128,10 +148,12 @@ function ScriptureTable({
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
       <div id='wrapY' className={classes.wrapY} style={{ maxHeight: height }}>
-        <Table className={classes.table}>
-          <Headers columns={columns} />
-          <TableBody className={classes.tableBody}>{rows()}</TableBody>
-        </Table>
+        {open && (
+          <Table className={classes.table}>
+            <Headers columns={columns} />
+            <TableBody className={classes.tableBody}>{rows()}</TableBody>
+          </Table>
+        )}
       </div>
     </SelectionsContextProvider>
   );
