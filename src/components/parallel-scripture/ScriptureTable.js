@@ -132,7 +132,7 @@ function ScriptureTable ({
       onSelections={setSelections}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
-      <div id='wrapY' className={classes.wrapY}>
+      <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}}>
       {open && 
         <Table className={classes.table}>
           <Headers columns={columns} />
