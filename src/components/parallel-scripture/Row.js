@@ -1,4 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
+import useEffect from 'use-deep-compare-effect';
+
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {Skeleton} from '@material-ui/lab';
@@ -40,13 +42,15 @@ function Row ({
   useEffect(() => {
     if (viewed) {
       const _cells = columns.filter(col => !col.hidden).map(column => {
-        const verse = verses[column.id];
+        const _verse = verses[column.id];
+        const verse  = _verse ? _verse.verseData: undefined;
+        const verseTitle = _verse ? _verse.verseTitle: "";
         const verseObjects = verse ? verse.verseObjects : [];
         return (
           <TableCell key={column.id} className={classes.cell} dir='auto'>
             <Verse
               verseObjects={verseObjects}
-              verseKey={referenceId}
+              verseKey={verseTitle}
               direction='auto'
               renderOffscreen
               disableWordPopover

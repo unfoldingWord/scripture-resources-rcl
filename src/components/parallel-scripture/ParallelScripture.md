@@ -1,10 +1,7 @@
 ### Using Contexts
 
 To see highlighting appear, change the `-1` occurrence to 1; 
-then click or tab out of field. Or try this:
-
-1. paste this into quote: `καὶ…τῆς`
-2. Then alter occurrence from 1 to 2 to 3 to see how the highlighting changes.
+then click or tab out of field.
 
 ```js
 import {TextField} from '@material-ui/core';
@@ -14,10 +11,10 @@ import useEffect from 'use-deep-compare-effect';
 
 function Component() {
 
-  const [bookId, setBookId] = React.useState("3jn");
+  const [bookId, setBookId] = React.useState("act");
   const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState(10);
-  const [quote, setQuote] = React.useState("καὶ…μὴ");
+  const [verse, setVerse] = React.useState(24);
+  const [quote, setQuote] = React.useState("καὶ…Κύριε");
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(() => (
@@ -87,9 +84,9 @@ function Component() {
 }
 const config = {server: 'https://git.door43.org'};
 const resourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/master/3jn',
-  'unfoldingWord/en/ult/v5/3jn',
-  'unfoldingWord/en/ust/v5/3jn',
+  'unfoldingWord/el-x-koine/ugnt/master/act',
+  'unfoldingWord/en/ult/v5/act',
+  'unfoldingWord/en/ust/v5/act',
 ];
 // const reference = {bookId: 'rut', chapter: 1, verse: 1};
 // const resourceLinks = [
