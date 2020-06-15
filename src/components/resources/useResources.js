@@ -8,10 +8,10 @@ import { resourcesFromResourceLinks } from '../../core';
 function useResources({
   resources,
   resourceLinks,
-  onResourceLinks,
   reference,
   config,
   onResources,
+  onResourceLinks = () => {},
 }) {
   useEffect(() => {
     resourcesFromResourceLinks({ resourceLinks, reference, config }).then(
@@ -29,9 +29,18 @@ function useResources({
     [onResources]
   );
 
+  const addResourceLink = useCallback(
+    (newResourceLink) => {
+      const _resourceLinks = [...resourceLinks, newResourceLink];
+      onResourceLinks(_resourceLinks);
+    },
+    [resourcesFromResourceLinks, resourceLinks]
+  );
+
   return {
     state: resources,
     actions: {
+      addResourceLink,
       update,
       updateResourceLinks: onResourceLinks,
     },

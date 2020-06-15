@@ -13,6 +13,8 @@ import { ResourcesContext } from '../resources/Resources.context';
 import { TextField } from '@material-ui/core';
 
 function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
+  const { state: resources, actions } = React.useContext(ResourcesContext);
+
   const toggleColumn = (index) => {
     const _columns = [...columns];
     _columns[index].hidden = !columns[index].hidden;
@@ -20,9 +22,7 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
   };
 
   const onResourceAddClick = () => {
-    console.log('ColumnsMenu.js / onResourceAddCLick');
-    console.log(resources);
-    console.log(resourceUrl.value);
+    actions.addResourceLink(resourceUrl.value);
   };
 
   const menuItems = columns.map((col, index) => (
@@ -33,10 +33,6 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
       />
     </MenuItem>
   ));
-
-  const { state: resources } = React.useContext(ResourcesContext);
-  console.log('ColumnsMenu');
-  console.log(resources);
 
   const useStyles = makeStyles((theme) => ({
     menuIconButton: {
