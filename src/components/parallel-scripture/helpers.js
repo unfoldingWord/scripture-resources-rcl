@@ -42,12 +42,10 @@ export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
     const chapterData = book.chapters[reference.chapter];
     let _verseData = chapterData && chapterData[reference.verse];
     let range;
-    // if (index === 2) debugger
     if (!_verseData) {
       const verseKeys = Object.keys(chapterData);
       range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
       _verseData = chapterData[range];
-      // debugger
     }
     if (index === 0 && _verseData && _verseData.verseObjects && _verseData.verseObjects.length) {
       _verseData.verseObjects = occurrenceInjectVerseObjects(_verseData.verseObjects);
