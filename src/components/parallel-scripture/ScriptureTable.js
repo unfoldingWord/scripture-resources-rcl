@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
+import useEffect from 'use-deep-compare-effect';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {
@@ -101,7 +102,7 @@ function ScriptureTable ({
           renderOffscreen={open && renderOffscreen[referenceId]}
           key={referenceId}
           verses={verses}
-          referenceId={referenceId}
+          referenceId={referenceId} 
           reference={reference}
           filter={filter}
           columns={columns}

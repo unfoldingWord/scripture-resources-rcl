@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import useEffect from 'use-deep-compare-effect';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { ResourcesContext } from '../resources/Resources.context';
@@ -6,7 +7,6 @@ import { ResourcesContext } from '../resources/Resources.context';
 import { ScriptureTable } from "../../";
 import { License } from '../license'
 import { localString } from '../../core/localStrings';
-import useEffect from 'use-deep-compare-effect';
 
 function ParallelScripture({
   reference,

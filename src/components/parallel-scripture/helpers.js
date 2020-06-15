@@ -4,10 +4,12 @@ export const referenceIdsFromBooks = ({books}) => {
   const start = performance.now();
   const referenceIds = new Set([]);
   books.forEach((book) => {
-    Object.keys(book.chapters).forEach(chapterKey => {
+    let vkArray = [];
+    Object.keys(book.chapters).forEach((chapterKey) => {
       const chapter = book.chapters[chapterKey];
-      Object.keys(chapter).forEach(verseKey => {
+      Object.keys(chapter).forEach((verseKey) => {
         const referenceId = chapterKey + ':' + verseKey;
+        // if (verseKey.split('-').length > 1) debugger;
         referenceIds.add(referenceId);
       });
     });
@@ -17,17 +19,44 @@ export const referenceIdsFromBooks = ({books}) => {
   return [...referenceIds];
 };
 
-export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
-  const verses = books.map((book, index) => {
-    const _reference = referenceFromReferenceId(referenceId);
-    const chapter = book.chapters[_reference.chapter];
-    let verse = (chapter) ? chapter[_reference.verse] : null;
-    if (index === 0 && verse && verse.verseObjects && verse.verseObjects.length) {
-      verse.verseObjects = occurrenceInjectVerseObjects(verse.verseObjects);
-    }
-    return verse;
+export const isVerseKeyInRange = (({ range, verseKey }) => {
+  const [first, last] = range.split('-');
+  const inRange = first <= verseKey && verseKey <= last;
+  return inRange;
+});
+
+export const rangeFromVerseAndVerseKeys = (({ verseKeys, verseKey }) => {
+  let range;
+  verseKeys.forEach(_verseKey => {
+    if (_verseKey.includes('-')) { // if the verseKey includes - it is a range
+      const inRange = isVerseKeyInRange({ range: _verseKey, verseKey });
+      if (inRange) range = _verseKey;
+    };
   });
-  return verses;
+  return range;
+});
+
+export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
+  const versesData = books.map((book, index) => {
+    const reference = referenceFromReferenceId(referenceId);
+    const chapterData = book.chapters[reference.chapter];
+    let _verseData = chapterData && chapterData[reference.verse];
+    let range;
+    if (!_verseData) {
+      const verseKeys = Object.keys(chapterData);
+      range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
+      _verseData = chapterData[range];
+    }
+    if (index === 0 && _verseData && _verseData.verseObjects && _verseData.verseObjects.length) {
+      _verseData.verseObjects = occurrenceInjectVerseObjects(_verseData.verseObjects);
+    }
+    let _verseTitle = reference.verse;
+    if ( !(_verseTitle === 'front' || _verseTitle === 'back') ) {
+      _verseTitle = range ? reference.chapter+':'+range : reference.chapter+':'+reference.verse;
+    }
+    return {verseData: _verseData, verseTitle: _verseTitle};
+  });
+  return versesData;
 };
 
 export const dataFromBooks = ({books}) => {
@@ -36,8 +65,15 @@ export const dataFromBooks = ({books}) => {
     let row = {referenceId};
     books.forEach((_, index) => {
       const [chapterKey, verseKey] = referenceId.split(':');
-      const verse = books[index].chapters[chapterKey][verseKey];
-      if (verse) row[index] = JSON.stringify({referenceId, ...verse});
+      const chapterData = books[index].chapters[chapterKey];
+      let verseData = chapterData[verseKey];
+      if (!verseData) {
+        const verseKeys = Object.keys(chapterData);
+        const range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey });
+        verseData = chapterData[range];
+        debugger
+      }
+      if (verseData) row[index] = JSON.stringify({referenceId, ...verseData});
     });
     return row;
   });
@@ -48,7 +84,14 @@ export const dataFromReference = ({books, reference}) => {
   const referenceId = referenceIdFromReference(reference);
   let row = {referenceId};
   books.forEach((_, index) => {
-    const verse = books[index].chapters[reference.chapter][reference.verse];
+    const chapterData = books[index].chapters[reference.chapter];
+    const verseData = chapterData[reference.verse];
+    if (!verseData) {
+      const verseKeys = Object.keys(chapterData);
+      const range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
+      verse = chapterData[range];
+      debugger
+    }
     if (verse) row[index] = JSON.stringify({referenceId, ...verse});
   });
   const data = [row];
