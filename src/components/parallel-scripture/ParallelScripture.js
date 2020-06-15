@@ -58,10 +58,6 @@ function ParallelScripture({
         return _title;
       });
       setTitles(_titles);
-      /*
-      const promises = resources.map((resource, index) => resource.project.json());
-      Promise.all(promises).then(setBooks);
-      */
       const _books = resources.map( (resource) => {
         return resource.project.json;
       } );
