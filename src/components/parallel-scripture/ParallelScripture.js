@@ -7,6 +7,7 @@ import { ResourcesContext } from '../resources/Resources.context';
 import { ScriptureTable } from '../../';
 import { License } from '../license';
 import { localString } from '../../core/localStrings';
+import deepFreeze from 'deep-freeze';
 
 function ParallelScripture({
   reference,
@@ -15,10 +16,14 @@ function ParallelScripture({
   occurrence,
   height,
   buttons,
+  open: _open = true,
 }) {
   const [title, setTitle] = useState();
   const [titles, setTitles] = useState();
-  const [books, setBooks] = useState();
+  const [_books, setBooks] = useState();
+  const books = _books && deepFreeze(_books);
+  const [open, setOpen] = useState(_open);
+
   const openLink = useCallback((link) => window.open(link, '_blank'), []);
 
   const { state: resources, actions } = React.useContext(ResourcesContext);
@@ -94,6 +99,8 @@ function ParallelScripture({
         // onQuote={onQuote} // disable until round trip is working
         occurrence={occurrence}
         buttons={buttons}
+        open={open}
+        onOpen={setOpen}
       />
     )) || <></>
   );
@@ -112,6 +119,8 @@ ParallelScripture.propTypes = {
   onQuote: PropTypes.func,
   /** set the height to ensure rendering work properly   */
   height: PropTypes.string.isRequired,
+  /** set the default open state */
+  open: PropTypes.string,
 };
 
 export default ParallelScripture;

@@ -42,9 +42,10 @@ function ScriptureTable({
   occurrence,
   buttons,
   renderOffscreen = {},
+  open = true,
+  onOpen,
 }) {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
   const [_columns, setColumns] = useState([]);
@@ -98,7 +99,7 @@ function ScriptureTable({
       tooltip: open
         ? localString('CloseScripturePane')
         : localString('ExpandScripturePane'),
-      onClick: () => setOpen(!open),
+      onClick: () => onOpen && onOpen(!open),
     },
     {
       icon: <PlaylistAdd />,
@@ -224,6 +225,10 @@ ScriptureTable.propTypes = {
   quote: PropTypes.string,
   /** callback to return the quote when selections made */
   onQuote: PropTypes.func,
+  /** set the default open state */
+  open: PropTypes.string,
+  /** callback to update open state */
+  onOpen: PropTypes.func,
 };
 
 const useStyles = makeStyles((theme) => ({
