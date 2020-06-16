@@ -36,6 +36,12 @@ function useResources({
   }, [resources, projectIdentifier]);
 
   useEffect(() => {
+    console.log('useEffect setProjectIdentifier');
+    setProjectIdentifier();
+  }, [resources]);
+
+  useEffect(() => {
+    console.log('resourcesFromResourceLinks [' + resourceLinks.length + ']...');
     resourcesFromResourceLinks({ resourceLinks, reference, config }).then(
       (_resources) => {
         update(_resources);
@@ -54,7 +60,7 @@ function useResources({
   const addResourceLink = useCallback(
     (newResourceLink) => {
       const _resourceLinks = [...resourceLinks, newResourceLink];
-      setProjectIdentifier();
+      console.log('addResourceLink: [' + _resourceLinks.length + '] resources');
       onResourceLinks(_resourceLinks);
     },
     [resourcesFromResourceLinks, resourceLinks]
