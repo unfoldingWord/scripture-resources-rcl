@@ -48,7 +48,7 @@ export const getResourceProjectFile = async (
 export const projectFromProjects = async ({ reference, projectId, projects }) => {
   let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
   const project = projects.filter(project => project.identifier === identifier)[0];
-  const json = project && await project.parseJson();
+  const json = project && project.parseJson && await project.parseJson();
   return project && { ...project, json};
 };
 
