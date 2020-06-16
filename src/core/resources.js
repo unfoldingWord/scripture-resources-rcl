@@ -48,8 +48,7 @@ export const getResourceProjectFile = async (
 export const projectFromProjects = async ({ reference, projectId, projects }) => {
   let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
   const project = projects.filter(project => project.identifier === identifier)[0];
-  const json = project && project.parseJson && await project.parseJson();
-  return project && { ...project, json};
+  return project;
 };
 
 export const extendProject = ({ project, resource, reference }) => {
@@ -57,7 +56,7 @@ export const extendProject = ({ project, resource, reference }) => {
   const { projectId, resourceLink } = resource;
   _project.file = async () => getResourceProjectFile({ ...resource, project });
   if (project.path.match(/\.usfm$/)) {
-    _project.parseJson = async () => {
+    _project.parseUsfm = async () => {
       const start = performance.now();
       let json;
       if (reference && reference.chapter) json = parseChapter({ project: _project, reference });

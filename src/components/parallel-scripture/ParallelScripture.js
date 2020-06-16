@@ -17,12 +17,12 @@ function ParallelScripture({
   buttons,
 }) {
 
-  const [title, setTitle] = useState('');
-  const [titles, setTitles] = useState([]);
-  const [books, setBooks] = useState([]);
+  const [title, setTitle] = useState();
+  const [titles, setTitles] = useState();
+  const [books, setBooks] = useState();
   const openLink = useCallback((link) => window.open(link, '_blank'), []);
 
-  const {state: resources} = React.useContext(ResourcesContext);
+  const {state: resources, actions } = React.useContext(ResourcesContext);
 
   useEffect(() => {
     if (resources && resources[0] && resources[0].project) {
@@ -58,14 +58,11 @@ function ParallelScripture({
         return _title;
       });
       setTitles(_titles);
-      const _books = resources.map( (resource) => {
-        return resource.project.json;
-      } );
-      setBooks(_books)
-    }
+      actions.parseUsfm().then(setBooks);
+    };
   }, [resources, reference]);
 
-  return (
+  return title && titles && books && (
     <ScriptureTable
       titles={titles}
       books={books}
@@ -77,7 +74,7 @@ function ParallelScripture({
       occurrence={occurrence}
       buttons={buttons}
     />
-  );
+  ) || <></>;
 };
 
 ParallelScripture.propTypes = {
