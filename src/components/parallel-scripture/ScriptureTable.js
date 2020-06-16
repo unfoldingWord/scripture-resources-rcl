@@ -45,7 +45,8 @@ function ScriptureTable ({
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [_columns, setColumns] = useState([]);
+  const columns = deepFreeze(_columns);
   const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
@@ -55,8 +56,6 @@ function ScriptureTable ({
     const verse = chapter[reference.verse];
     verseObjects = (verse) ? verse.verseObjects : [];
   };
-
-  const onColumns = (_columns) => setColumns(deepFreeze(_columns));
 
   useEffect(() => {
     const _columns = titles.map((title, index) => ({id: index, label: title}));
@@ -81,7 +80,7 @@ function ScriptureTable ({
       menu: (
         <ColumnsMenu
           columns={columns}
-          onColumns={onColumns}
+          onColumns={setColumns}
           anchorEl={columnsMenuAnchorEl}
           onAnchorEl={setColumnsMenuAnchorEl}
         />
