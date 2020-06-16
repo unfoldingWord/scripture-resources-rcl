@@ -2,22 +2,32 @@ import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
+  PlaylistAdd,
   ShortText,
   Subject,
   ViewColumn,
   UnfoldMore,
   UnfoldLess,
 } from '@material-ui/icons';
-import { Table, TableBody } from '@material-ui/core';
+import {
+  IconButton,
+  Menu,
+  MenuItem,
+  Table,
+  TableBody,
+  TextField,
+  Tooltip,
+} from '@material-ui/core';
 import { localString } from '../../core/localStrings';
 
-import { Row, Headers, Toolbar, ColumnsMenu } from '..';
+import { Row, Headers, Toolbar, ColumnsMenu, AddResourceMenu } from '..';
 import {
   referenceIdsFromBooks,
   referenceIdFromReference,
   versesFromReferenceIdAndBooks,
 } from './helpers';
 import { SelectionsContextProvider } from '../selections/Selections.context';
+import { ResourcesContext } from '../resources/Resources.context';
 
 function ScriptureTable({
   title,
@@ -38,6 +48,7 @@ function ScriptureTable({
   const [columns, setColumns] = useState([]);
   const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
+  const [addResourceMenuAnchorEl, setAddResourceMenuAnchorEl] = useState();
 
   let verseObjects = [];
   if (
@@ -65,6 +76,15 @@ function ScriptureTable({
     setReferenceIds(_referenceIds);
   }, [books]);
 
+  const {
+    state: resources,
+    actions: resourceContextActions,
+  } = React.useContext(ResourcesContext);
+
+  const onResourceAddClick = () => {
+    resourceContextActions.addResourceLink(resourceUrl.value);
+  };
+
   const actions = [
     {
       icon: open ? (
@@ -76,6 +96,17 @@ function ScriptureTable({
         ? localString('CloseScripturePane')
         : localString('ExpandScripturePane'),
       onClick: () => setOpen(!open),
+    },
+    {
+      icon: <PlaylistAdd />,
+      tooltip: 'Add Resource',
+      onClick: (event) => setAddResourceMenuAnchorEl(event.currentTarget),
+      menu: (
+        <AddResourceMenu
+          anchorEl={addResourceMenuAnchorEl}
+          onAnchorEl={setAddResourceMenuAnchorEl}
+        />
+      ),
     },
     {
       icon: <ViewColumn fontSize='small' />,
