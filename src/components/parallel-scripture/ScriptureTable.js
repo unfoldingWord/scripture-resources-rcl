@@ -29,6 +29,7 @@ import {
 } from './helpers';
 import { SelectionsContextProvider } from '../selections/Selections.context';
 import deepFreeze from 'deep-freeze';
+import { ResourcesContext } from '../resources/Resources.context';
 
 function ScriptureTable({
   title,
