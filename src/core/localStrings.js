@@ -24,7 +24,6 @@ const strings = {
     ViewLicense: 'View License',
     ExpandScripturePane: 'Expand Scripture Pane',
     CloseScripturePane: 'Close Scripture Pane',
-    Add
     /* do not remove these two */
     StringMissing: 'String Id missing',
     LangNotSupported: 'Language not supported',

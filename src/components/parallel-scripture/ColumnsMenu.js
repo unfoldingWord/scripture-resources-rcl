@@ -1,28 +1,11 @@
 import React from 'react';
-import {
-  Menu,
-  MenuItem,
-  FormControlLabel,
-  Checkbox,
-  colors,
-} from '@material-ui/core';
-import { Grid, IconButton, Tooltip } from '@material-ui/core';
-import { PlaylistAdd } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
-import { ResourcesContext } from '../resources/Resources.context';
-import { TextField } from '@material-ui/core';
+import { Menu, MenuItem, FormControlLabel, Checkbox } from '@material-ui/core';
 
 function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
-  const { state: resources, actions } = React.useContext(ResourcesContext);
-
   const toggleColumn = (index) => {
     const _columns = [...columns];
     _columns[index].hidden = !columns[index].hidden;
     onColumns(_columns);
-  };
-
-  const onResourceAddClick = () => {
-    actions.addResourceLink(resourceUrl.value);
   };
 
   const menuItems = columns.map((col, index) => (
@@ -34,17 +17,6 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
     </MenuItem>
   ));
 
-  const useStyles = makeStyles((theme) => ({
-    menuIconButton: {
-      margin: '12pt',
-      borderWidth: '2px',
-      borderColor: 'black',
-      color: 'black',
-    },
-  }));
-
-  const classes = useStyles();
-
   return (
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => onAnchorEl()}>
       <MenuItem
@@ -55,35 +27,8 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
         View Versions
       </MenuItem>
       {menuItems}
-
-      <MenuItem>
-        <TextField
-          id='resourceUrl'
-          label='Resource Path'
-          variant='outlined'
-          defaultValue=''
-          style={{ valign: 'middle' }}
-        />
-        <Tooltip title='Add Resource' arrow>
-          <IconButton
-            aria-label='Add Resource'
-            onClick={onResourceAddClick}
-            className={(classes.action, classes.menuIconButton)}
-            size='small'
-          >
-            <PlaylistAdd fontSize='small' />
-          </IconButton>
-        </Tooltip>
-      </MenuItem>
     </Menu>
   );
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  action: {
-    padding: '8px',
-  },
-}));
 
 export default ColumnsMenu;
