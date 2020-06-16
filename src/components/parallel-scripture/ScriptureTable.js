@@ -27,6 +27,7 @@ import {
   versesFromReferenceIdAndBooks,
 } from './helpers';
 import { SelectionsContextProvider } from '../selections/Selections.context';
+import deepFreeze from 'deep-freeze';
 
 function ScriptureTable ({
   title,
@@ -44,7 +45,8 @@ function ScriptureTable ({
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [_columns, setColumns] = useState([]);
+  const columns = deepFreeze(_columns);
   const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
@@ -53,7 +55,7 @@ function ScriptureTable ({
     const chapter = books[0].chapters[reference.chapter];
     const verse = chapter[reference.verse];
     verseObjects = (verse) ? verse.verseObjects : [];
-  }
+  };
 
   useEffect(() => {
     const _columns = titles.map((title, index) => ({id: index, label: title}));

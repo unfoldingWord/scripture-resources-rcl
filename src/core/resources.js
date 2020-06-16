@@ -16,7 +16,7 @@ export const resourceFromResourceLink = async ({ resourceLink, reference, config
   const {projectId, username, repository, tag} = resource;
   const manifest = await getResourceManifest(resource);
   const projects = manifest.projects.map(project => extendProject({project, resource, reference}));
-  const project = projectFromProjects({reference, projectId, projects});
+  const project = await projectFromProjects({reference, projectId, projects});
   const _resource = {...resource, reference, manifest, projects, project};
   return _resource;
 };
@@ -45,7 +45,7 @@ export const getResourceProjectFile = async (
   return file;
 };
 
-export const projectFromProjects = ({ reference, projectId, projects }) => {
+export const projectFromProjects = async ({ reference, projectId, projects }) => {
   let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
   const project = projects.filter(project => project.identifier === identifier)[0];
   return project;
@@ -56,12 +56,11 @@ export const extendProject = ({ project, resource, reference }) => {
   const { projectId, resourceLink } = resource;
   _project.file = async () => getResourceProjectFile({ ...resource, project });
   if (project.path.match(/\.usfm$/)) {
-    _project.json = async () => {
+    _project.parseUsfm = async () => {
       const start = performance.now();
       let json;
-      if (reference && reference.chapter) json = parseChapter({ project: _project, reference });
-      else
-        json = parseBook({ project: _project });
+      if (reference && reference.chapter) json = await parseChapter({ project: _project, reference });
+      else json = await parseBook({ project: _project });
       const end = performance.now();
       let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
       console.log(`fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(3)}ms`);

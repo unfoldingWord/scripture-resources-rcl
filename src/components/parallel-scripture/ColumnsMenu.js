@@ -14,8 +14,10 @@ function ColumnsMenu ({
 }) {
 
   const toggleColumn = (index) => {
+    const column = {...columns[index]};
+    column.hidden = !column.hidden;
     const _columns = [...columns];
-    _columns[index].hidden = !columns[index].hidden;
+    _columns[index] = column;
     onColumns(_columns);
   };
 
