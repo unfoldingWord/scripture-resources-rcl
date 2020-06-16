@@ -89,7 +89,7 @@ function Component() {
   );
 }
 const config = { server: 'https://git.door43.org' };
-const resourceLinks = [
+const _resourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/master/act',
   'unfoldingWord/en/ult/v5/act',
   'unfoldingWord/en/ust/v5/act',

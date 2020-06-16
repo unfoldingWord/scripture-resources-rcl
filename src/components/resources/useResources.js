@@ -52,6 +52,7 @@ function useResources({
   const addResourceLink = useCallback(
     (newResourceLink) => {
       const _resourceLinks = [...resourceLinks, newResourceLink];
+      setProjectIdentifier();
       onResourceLinks(_resourceLinks);
     },
     [resourcesFromResourceLinks, resourceLinks]
