@@ -1,8 +1,9 @@
-import React, {useState, useMemo, useCallback} from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import useEffect from 'use-deep-compare-effect';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {
+  PlaylistAdd,
   ShortText,
   Subject,
   ViewColumn,
@@ -10,17 +11,17 @@ import {
   UnfoldLess,
 } from '@material-ui/icons';
 import {
+  IconButton,
+  Menu,
+  MenuItem,
   Table,
   TableBody,
+  TextField,
+  Tooltip,
 } from '@material-ui/core';
 import { localString } from '../../core/localStrings';
 
-import {
-  Row,
-  Headers,
-  Toolbar,
-  ColumnsMenu,
-} from '..';
+import { Row, Headers, Toolbar, ColumnsMenu, AddResourceMenu } from '..';
 import {
   referenceIdsFromBooks,
   referenceIdFromReference,
@@ -28,8 +29,9 @@ import {
 } from './helpers';
 import { SelectionsContextProvider } from '../selections/Selections.context';
 import deepFreeze from 'deep-freeze';
+import { ResourcesContext } from '../resources/Resources.context';
 
-function ScriptureTable ({
+function ScriptureTable({
   title,
   titles,
   books,
@@ -39,39 +41,76 @@ function ScriptureTable ({
   onQuote,
   occurrence,
   buttons,
-  renderOffscreen = {}
+  renderOffscreen = {},
+  open = true,
+  onOpen,
 }) {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
   const [_columns, setColumns] = useState([]);
   const columns = deepFreeze(_columns);
   const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
+  const [addResourceMenuAnchorEl, setAddResourceMenuAnchorEl] = useState();
 
   let verseObjects = [];
-  if (reference && reference.verse && books[0] && books[0].chapters && books[0].chapters[reference.chapter]) {
+  if (
+    reference &&
+    reference.verse &&
+    books[0] &&
+    books[0].chapters &&
+    books[0].chapters[reference.chapter]
+  ) {
     const chapter = books[0].chapters[reference.chapter];
     const verse = chapter[reference.verse];
-    verseObjects = (verse) ? verse.verseObjects : [];
-  };
+    verseObjects = verse ? verse.verseObjects : [];
+  }
 
   useEffect(() => {
-    const _columns = titles.map((title, index) => ({id: index, label: title}));
+    const _columns = titles.map((title, index) => ({
+      id: index,
+      label: title,
+    }));
     setColumns(_columns);
   }, [titles]);
 
   useEffect(() => {
-    const _referenceIds = referenceIdsFromBooks({books});
+    const _referenceIds = referenceIdsFromBooks({ books });
     setReferenceIds(_referenceIds);
   }, [books]);
 
+  const {
+    state: resources,
+    actions: resourceContextActions,
+  } = React.useContext(ResourcesContext);
+
+  const onResourceAddClick = () => {
+    resourceContextActions.addResourceLink(resourceUrl.value);
+  };
+
   const actions = [
     {
-      icon: open ?  <UnfoldLess fontSize="small" /> : <UnfoldMore fontSize="small" />,
-      tooltip: open ? localString('CloseScripturePane') : localString('ExpandScripturePane'),
-      onClick: () => setOpen(!open)
+      icon: open ? (
+        <UnfoldLess fontSize='small' />
+      ) : (
+        <UnfoldMore fontSize='small' />
+      ),
+      tooltip: open
+        ? localString('CloseScripturePane')
+        : localString('ExpandScripturePane'),
+      onClick: () => onOpen && onOpen(!open),
+    },
+    {
+      icon: <PlaylistAdd />,
+      tooltip: 'Add Resource',
+      onClick: (event) => setAddResourceMenuAnchorEl(event.currentTarget),
+      menu: (
+        <AddResourceMenu
+          anchorEl={addResourceMenuAnchorEl}
+          onAnchorEl={setAddResourceMenuAnchorEl}
+        />
+      ),
     },
     {
       icon: <ViewColumn fontSize='small' />,
@@ -87,31 +126,39 @@ function ScriptureTable ({
       ),
     },
     {
-      icon: ( filter ? <ShortText fontSize='small' /> : <Subject fontSize='small' /> ),
-      tooltip: filter ? localString('ExpandChapter') : localString('CollapseChapter'),
+      icon: filter ? (
+        <ShortText fontSize='small' />
+      ) : (
+        <Subject fontSize='small' />
+      ),
+      tooltip: filter
+        ? localString('ExpandChapter')
+        : localString('CollapseChapter'),
       onClick: () => setFilter(!filter),
     },
   ];
 
   let _referenceIds = referenceIds;
-  if (filter && reference.chapter && reference.verse) _referenceIds = [referenceIdFromReference(reference)];
+  if (filter && reference.chapter && reference.verse)
+    _referenceIds = [referenceIdFromReference(reference)];
 
   const rows = useMemo(() => {
-    return () => _referenceIds.map(referenceId => {
-      const verses = versesFromReferenceIdAndBooks({referenceId, books});
-      const row = (
-        <Row
-          renderOffscreen={open && renderOffscreen[referenceId]}
-          key={referenceId}
-          verses={verses}
-          referenceId={referenceId} 
-          reference={reference}
-          filter={filter}
-          columns={columns}
-        />
-      );
-      return row;
-    })
+    return () =>
+      _referenceIds.map((referenceId) => {
+        const verses = versesFromReferenceIdAndBooks({ referenceId, books });
+        const row = (
+          <Row
+            renderOffscreen={open && renderOffscreen[referenceId]}
+            key={referenceId}
+            verses={verses}
+            referenceId={referenceId}
+            reference={reference}
+            filter={filter}
+            columns={columns}
+          />
+        );
+        return row;
+      });
   }, [_referenceIds, reference, filter, columns]);
 
   useEffect(() => {
@@ -135,15 +182,14 @@ function ScriptureTable ({
       onSelections={setSelections}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
-      <div id='wrapY' className={classes.wrapY} style={{maxHeight: height}}>
-      {open && 
-        <Table className={classes.table}>
-          <Headers columns={columns} />
-          <TableBody className={classes.tableBody}>
-            {rows()}
-          </TableBody>
-        </Table>}
-        </div>
+      <div id='wrapY' className={classes.wrapY} style={{ maxHeight: height }}>
+        {open && (
+          <Table className={classes.table}>
+            <Headers columns={columns} />
+            <TableBody className={classes.tableBody}>{rows()}</TableBody>
+          </Table>
+        )}
+      </div>
     </SelectionsContextProvider>
   );
 }
@@ -156,7 +202,7 @@ ScriptureTable.propTypes = {
     PropTypes.shape({
       headers: PropTypes.array.isRequired,
       chapters: PropTypes.object.isRequired,
-    })  
+    })
   ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({
@@ -166,7 +212,8 @@ ScriptureTable.propTypes = {
   }),
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.object,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
+
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
@@ -178,19 +225,20 @@ ScriptureTable.propTypes = {
   quote: PropTypes.string,
   /** callback to return the quote when selections made */
   onQuote: PropTypes.func,
+  /** set the default open state */
+  open: PropTypes.string,
+  /** callback to update open state */
+  onOpen: PropTypes.func,
 };
 
-const useStyles = makeStyles(theme => ({
-  root: {
-  },
+const useStyles = makeStyles((theme) => ({
+  root: {},
   wrapY: {
     overflowY: 'auto',
     overflowX: 'auto',
   },
-  table: {
-  },
-  tableBody:{
-  }
+  table: {},
+  tableBody: {},
 }));
 
 export default ScriptureTable;

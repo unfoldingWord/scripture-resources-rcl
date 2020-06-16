@@ -1,13 +1,14 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
 
-import {resourceFromResourceLink} from '../../core';
+import { resourceFromResourceLink } from '../../core';
 
 function useResource({
   resource,
   resourceLink,
+  onResourceLink,
   reference,
   config,
   onResource,
@@ -18,27 +19,31 @@ function useResource({
   const parseUsfm = useCallback(async () => {
     let response = usfmJson;
     if (resource && resource.project) {
-      const {project} = resource;
+      const { project } = resource;
       if (project.identifier !== projectIdentifier || !usfmJson) {
         const json = await project.parseUsfm();
         setUsfmJson(json);
         setProjectIdentifier(project.identifier);
         response = json;
-      };
-    };
+      }
+    }
   }, [projectIdentifier]);
 
   useEffect(() => {
-    resourceFromResourceLink({resourceLink, reference, config})
-    .then(_resource => {
-      update(_resource);
-    });
+    resourceFromResourceLink({ resourceLink, reference, config }).then(
+      (_resource) => {
+        update(_resource);
+      }
+    );
   }, [resourceLink, reference, config]);
 
-  const update = useCallback((_resource) => {
-    const __resource = _resource && deepFreeze(_resource);
-    onResource(__resource);
-  }, [onResource]);
+  const update = useCallback(
+    (_resource) => {
+      const __resource = _resource && deepFreeze(_resource);
+      onResource(__resource);
+    },
+    [onResource]
+  );
 
   return {
     state: resource,
@@ -62,8 +67,8 @@ useResource.propTypes = {
     /** the overriding cache settings */
     cache: PropTypes.shape({
       /** cache age in ms */
-      maxAge: PropTypes.number
-    })
+      maxAge: PropTypes.number,
+    }),
   }),
   /** action taken after a resource is acquired */
   onResource: PropTypes.func.isRequired,
