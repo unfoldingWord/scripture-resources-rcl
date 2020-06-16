@@ -21,6 +21,8 @@ function useResources({
     if (resources && resources[0] && resources[0].project) {
       const { project } = resources[0];
       if (project.identifier !== projectIdentifier || !usfmJsonArray) {
+        console.log('useResource');
+        console.log('Parsing [' + resources.length + ']...');
         const promises = resources.map((resource) =>
           resource.project.parseUsfm()
         );

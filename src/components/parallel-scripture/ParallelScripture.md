@@ -13,10 +13,10 @@ import {
 import useEffect from 'use-deep-compare-effect';
 
 function Component() {
-  const [bookId, setBookId] = React.useState('act');
+  const [bookId, setBookId] = React.useState('3jn');
   const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState(24);
-  const [quote, setQuote] = React.useState('καὶ…Κύριε');
+  const [verse, setVerse] = React.useState(10);
+  const [quote, setQuote] = React.useState('καὶ μὴ');
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
@@ -90,9 +90,9 @@ function Component() {
 }
 const config = { server: 'https://git.door43.org' };
 const _resourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/master/act',
-  'unfoldingWord/en/ult/v5/act',
-  'unfoldingWord/en/ust/v5/act',
+  'unfoldingWord/el-x-koine/ugnt/master/3jn',
+  'unfoldingWord/en/ult/v5/3jn',
+  'unfoldingWord/en/ust/v5/3jn',
 ];
 const [resourceLinks, setResourceLinks] = React.useState(_resourceLinks);
 // const reference = {bookId: 'rut', chapter: 1, verse: 1};
