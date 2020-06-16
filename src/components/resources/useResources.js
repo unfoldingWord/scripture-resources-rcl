@@ -16,6 +16,11 @@ function useResources({
   const [projectIdentifier, setProjectIdentifier] = useState();
   const [usfmJsonArray, setUsfmJsonArray] = useState();
 
+  useEffect(() => { // this has to come before the parseUsfm callback so that it is invalidated first.
+    setProjectIdentifier();
+    setUsfmJsonArray();
+  }, [resources, resourceLinks]); // if resources/links change, we need to reset the cached value.
+
   const parseUsfm = useCallback(async () => {
     let response = usfmJsonArray;
     if (resources && resources[0] && resources[0].project) {
@@ -30,15 +35,10 @@ function useResources({
         setUsfmJsonArray(jsonArray);
         setProjectIdentifier(project.identifier);
         response = jsonArray;
-      }
-    }
+      };
+    };
     return response;
   }, [resources, projectIdentifier]);
-
-  useEffect(() => {
-    console.log('useEffect setProjectIdentifier');
-    setProjectIdentifier();
-  }, [resources]);
 
   useEffect(() => {
     console.log('resourcesFromResourceLinks [' + resourceLinks.length + ']...');
