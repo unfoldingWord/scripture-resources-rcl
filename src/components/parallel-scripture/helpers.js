@@ -40,21 +40,23 @@ export const versesFromReferenceIdAndBooks = ({referenceId, books}) => {
   const versesData = books.map((book, index) => {
     const reference = referenceFromReferenceId(referenceId);
     const chapterData = book.chapters[reference.chapter];
-    let _verseData = chapterData && chapterData[reference.verse];
+    let verseData = chapterData && chapterData[reference.verse];
     let range;
-    if (!_verseData) {
+    if (!verseData) {
       const verseKeys = Object.keys(chapterData);
       range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
-      _verseData = chapterData[range];
+      verseData = chapterData[range];
     }
-    if (index === 0 && _verseData && _verseData.verseObjects && _verseData.verseObjects.length) {
+    if (index === 0 && verseData && verseData.verseObjects && verseData.verseObjects.length) {
+      const _verseData = {...verseData};
       _verseData.verseObjects = occurrenceInjectVerseObjects(_verseData.verseObjects);
+      verseData = _verseData;
     }
-    let _verseTitle = reference.verse;
-    if ( !(_verseTitle === 'front' || _verseTitle === 'back') ) {
-      _verseTitle = range ? reference.chapter+':'+range : reference.chapter+':'+reference.verse;
+    let verseTitle = reference.verse;
+    if ( !(verseTitle === 'front' || verseTitle === 'back') ) {
+      verseTitle = range ? reference.chapter+':'+range : reference.chapter+':'+reference.verse;
     }
-    return {verseData: _verseData, verseTitle: _verseTitle};
+    return {verseData, verseTitle};
   });
   return versesData;
 };

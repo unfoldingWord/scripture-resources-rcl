@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
@@ -13,6 +13,22 @@ function useResource({
   config,
   onResource,
 }) {
+  const [projectIdentifier, setProjectIdentifier] = useState();
+  const [usfmJson, setUsfmJson] = useState();
+
+  const parseUsfm = useCallback(async () => {
+    let response = usfmJson;
+    if (resource && resource.project) {
+      const { project } = resource;
+      if (project.identifier !== projectIdentifier || !usfmJson) {
+        const json = await project.parseUsfm();
+        setUsfmJson(json);
+        setProjectIdentifier(project.identifier);
+        response = json;
+      }
+    }
+  }, [projectIdentifier]);
+
   useEffect(() => {
     resourceFromResourceLink({ resourceLink, reference, config }).then(
       (_resource) => {
@@ -33,7 +49,7 @@ function useResource({
     state: resource,
     actions: {
       update,
-      updateResourceLink: onResourceLink,
+      parseUsfm,
     },
   };
 }
