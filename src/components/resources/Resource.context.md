@@ -17,7 +17,7 @@ function Component () {
 
   return (
     <div>
-      <ReactJson src={resourceContext.state? resourceContext.state.project: {} } />
+      <ReactJson src={resourceContext.state ? resourceContext.state.project : {} } />
     </div>
   );
 };

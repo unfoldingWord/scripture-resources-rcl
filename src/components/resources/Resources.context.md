@@ -106,7 +106,7 @@ function Component () {
   const component = resources.map((resource, index) => (
     <div key={index}>
       <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em',  overflow: 'scroll'}}>
-        <ReactJson src={resource} />
+        <ReactJson src={resource.project} />
       </Paper>
       <Paper style={{maxHeight: '250px', margin: '1em', padding: '1em', overflow: 'scroll'}}>
         <pre>
