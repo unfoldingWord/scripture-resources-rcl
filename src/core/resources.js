@@ -59,9 +59,8 @@ export const extendProject = ({ project, resource, reference }) => {
     _project.parseUsfm = async () => {
       const start = performance.now();
       let json;
-      if (reference && reference.chapter) json = parseChapter({ project: _project, reference });
-      else
-        json = parseBook({ project: _project });
+      if (reference && reference.chapter) json = await parseChapter({ project: _project, reference });
+      else json = await parseBook({ project: _project });
       const end = performance.now();
       let identifier = (reference && reference.bookId) ? reference.bookId : projectId;
       console.log(`fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(3)}ms`);
