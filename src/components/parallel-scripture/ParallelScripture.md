@@ -16,8 +16,8 @@ function Component() {
   const [bookId, setBookId] = React.useState('3jn');
   const [chapter, setChapter] = React.useState(1);
   const [verse, setVerse] = React.useState(10);
-  const [quote, setQuote] = React.useState('καὶ μὴ');
-  const [occurrence, setOccurrence] = React.useState(-1);
+  const [quote, setQuote] = React.useState('καὶ…μὴ');
+  const [occurrence, setOccurrence] = React.useState(1);
 
   const form = React.useMemo(
     () => (
@@ -89,23 +89,34 @@ function Component() {
   );
 }
 const config = { server: 'https://git.door43.org' };
+
 const _resourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/master/3jn',
   'unfoldingWord/en/ult/v5/3jn',
   'unfoldingWord/en/ust/v5/3jn',
 ];
-const [resourceLinks, setResourceLinks] = React.useState(_resourceLinks);
+
 // const reference = {bookId: 'rut', chapter: 1, verse: 1};
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',
 //   'unfoldingWord/en/ust/master',
 // ];
+
+const [resourceLinks, setResourceLinks] = React.useState(_resourceLinks);
 const [resources, setResources] = React.useState([]);
+
+// Allows consumer to munge/manipulate newResourceLink.
+const addResourceLink = (newResourceLink) => {
+  const _resourceLinks = [...resourceLinks, newResourceLink];
+  setResourceLinks(_resourceLinks);
+  return newResourceLink;
+};
 
 <ResourcesContextProvider
   resourceLinks={resourceLinks}
   onResourceLinks={setResourceLinks}
+  onAddResourceLink={addResourceLink}
   resources={resources}
   onResources={setResources}
   config={config}
