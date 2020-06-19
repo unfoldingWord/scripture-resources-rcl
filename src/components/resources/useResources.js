@@ -12,11 +12,13 @@ function useResources({
   config,
   onResources,
   onResourceLinks = () => {},
+  onAddResourceLink = () => {},
 }) {
   const [projectIdentifier, setProjectIdentifier] = useState();
   const [usfmJsonArray, setUsfmJsonArray] = useState();
 
-  useEffect(() => { // this has to come before the parseUsfm callback so that it is invalidated first.
+  useEffect(() => {
+    // this has to come before the parseUsfm callback so that it is invalidated first.
     setProjectIdentifier();
     setUsfmJsonArray();
   }, [resources, resourceLinks]); // if resources/links change, we need to reset the cached value.
@@ -26,8 +28,6 @@ function useResources({
     if (resources && resources[0] && resources[0].project) {
       const { project } = resources[0];
       if (project.identifier !== projectIdentifier || !usfmJsonArray) {
-        console.log('useResource');
-        console.log('Parsing [' + resources.length + ']...');
         const promises = resources.map((resource) =>
           resource.project.parseUsfm()
         );
@@ -35,13 +35,12 @@ function useResources({
         setUsfmJsonArray(jsonArray);
         setProjectIdentifier(project.identifier);
         response = jsonArray;
-      };
-    };
+      }
+    }
     return response;
   }, [resources, projectIdentifier]);
 
   useEffect(() => {
-    console.log('resourcesFromResourceLinks [' + resourceLinks.length + ']...');
     resourcesFromResourceLinks({ resourceLinks, reference, config }).then(
       (_resources) => {
         update(_resources);
@@ -58,9 +57,11 @@ function useResources({
   );
 
   const addResourceLink = useCallback(
-    (newResourceLink) => {
+    (_newResourceLink) => {
+      // Pass the root path through to the consumer;
+      // but allow the consumer to munge resourceLink.
+      const newResourceLink = onAddResourceLink(_newResourceLink);
       const _resourceLinks = [...resourceLinks, newResourceLink];
-      console.log('addResourceLink: [' + _resourceLinks.length + '] resources');
       onResourceLinks(_resourceLinks);
     },
     [resourcesFromResourceLinks, resourceLinks]
