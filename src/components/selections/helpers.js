@@ -95,13 +95,13 @@ export const addSelections = ({ words, selections }) => {
 
 export const removeSelection = ({ word, selections }) => {
   const selection = selectionFromWord(word);
-  const _selections = new Set(selections);
+  const _selections = new Set(selections.map(_selection => selectionFromWord(_selection)));
   _selections.delete(selection);
   return [..._selections];
 };
 
 export const removeSelections = ({ words, selections }) => {
-  let _selections = new Set(selections);
+  const _selections = new Set(selections.map(selection => selectionFromWord(selection)));
   words.forEach(word => {
     const selection = selectionFromWord(word);
     _selections.delete(selection);
