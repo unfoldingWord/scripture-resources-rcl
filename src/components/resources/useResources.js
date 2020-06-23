@@ -12,7 +12,6 @@ function useResources({
   config,
   onResources,
   onResourceLinks = () => {},
-  onAddResourceLink = () => {},
 }) {
   const [projectIdentifier, setProjectIdentifier] = useState();
   const [usfmJsonArray, setUsfmJsonArray] = useState();
@@ -57,10 +56,9 @@ function useResources({
   );
 
   const addResourceLink = useCallback(
-    (_newResourceLink) => {
+    (newResourceLink) => {
       // Pass the root path through to the consumer;
       // but allow the consumer to munge resourceLink.
-      const newResourceLink = onAddResourceLink(_newResourceLink);
       const _resourceLinks = [...resourceLinks, newResourceLink];
       onResourceLinks(_resourceLinks);
     },
