@@ -95,13 +95,15 @@ export const addSelections = ({ words, selections }) => {
 
 export const removeSelection = ({ word, selections }) => {
   const selection = selectionFromWord(word);
-  const _selections = new Set(selections);
+  const selectionStringified = selections.map(_selection => selectionFromWord(_selection));
+  const _selections = new Set(selectionStringified);
   _selections.delete(selection);
   return [..._selections];
 };
 
 export const removeSelections = ({ words, selections }) => {
-  let _selections = new Set(selections);
+  const selectionStringified = selections.map(selection => selectionFromWord(selection));
+  const _selections = new Set(selectionStringified);
   words.forEach(word => {
     const selection = selectionFromWord(word);
     _selections.delete(selection);
