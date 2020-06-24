@@ -42,6 +42,7 @@ function useResources({
 
   const remove = useCallback(
     (index) => {
+      debugger;
       removeResource(resources, index, onResources);
     },
     [resources, onResources]

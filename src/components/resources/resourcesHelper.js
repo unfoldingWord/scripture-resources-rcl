@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 
 export const removeResource = (resources, index, onResources) => {
+  debugger;
+
   let _resources = [];
   if (index > 0) {
     let head = resources.slice(0, index);

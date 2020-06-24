@@ -66,9 +66,7 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
               <Tooltip title={localString('Remove')} arrow>
                 <IconButton
                   aria-label={localString('Remove')}
-                  onClick={() =>
-                    removeResource(resources, index, actions.onResources)
-                  }
+                  onClick={() => removeResource(index)}
                   className={classes.action}
                   size='small'
                 >
