@@ -18,10 +18,6 @@ import { ResourcesContext } from '../resources/Resources.context';
 function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
   const { state: resources, actions } = React.useContext(ResourcesContext);
 
-  const onResourceAddClick = () => {
-    actions.addResourceLink(resourceUrl.value);
-  };
-
   const removeResource = (index) => {
     actions.remove(index);
   };
