@@ -22,7 +22,7 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
     actions.addResourceLink(resourceUrl.value);
   };
 
-  const removeResource = (index) => {
+  const removeResourceLink = (index) => {
     actions.remove(index);
   };
 
@@ -66,7 +66,7 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
               <Tooltip title={localString('Remove')} arrow>
                 <IconButton
                   aria-label={localString('Remove')}
-                  onClick={() => removeResource(index)}
+                  onClick={() => removeResourceLink(index)}
                   className={classes.action}
                   size='small'
                 >
