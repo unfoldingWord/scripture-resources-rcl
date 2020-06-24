@@ -8,6 +8,7 @@ export const ResourcesContext = React.createContext({});
 export function ResourcesContextProvider({
   resources,
   resourceLinks,
+  defaultResourceLinks,
   onResourceLinks,
   onAddResourceLink,
   reference,
@@ -18,6 +19,7 @@ export function ResourcesContextProvider({
   const val = useResources({
     resources,
     resourceLinks,
+    defaultResourceLinks,
     onResourceLinks,
     onAddResourceLink,
     reference,

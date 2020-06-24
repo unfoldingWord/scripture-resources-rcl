@@ -4,10 +4,12 @@ import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
 
 import { resourcesFromResourceLinks } from '../../core';
+import { parseUsfm, removeResource } from './resourcesHelper';
 
 function useResources({
   resources,
   resourceLinks,
+  defaultResourceLinks,
   reference,
   config,
   onResources,
@@ -21,6 +23,47 @@ function useResources({
     setProjectIdentifier();
     setUsfmJsonArray();
   }, [resources, resourceLinks]); // if resources/links change, we need to reset the cached value.
+
+  useEffect(() => {
+    resourcesFromResourceLinks({ resourceLinks, reference, config }).then(
+      (_resources) => {
+        update(_resources);
+      }
+    );
+  }, [resourceLinks, reference, config]);
+
+  const update = useCallback(
+    (_resources) => {
+      const __resources = _resources && deepFreeze(_resources);
+      onResources(__resources);
+    },
+    [onResources]
+  );
+
+  const remove = useCallback(
+    (index) => {
+      removeResource(resources, index, onResources);
+    },
+    [resources, onResources]
+  );
+
+  const addResourceLink = useCallback(
+    (newResourceLink) => {
+      // Pass the root path through to the consumer;
+      // but allow the consumer to munge resourceLink.
+      const _resourceLinks = [...resourceLinks, newResourceLink];
+      onResourceLinks(_resourceLinks);
+    },
+    [resourcesFromResourceLinks, resourceLinks]
+  );
+
+  const isDefaultResourceLink = (_resourceLink) => {
+    //console.log('useResources:: isDefaultResourceLink');
+    return (
+      defaultResourceLinks != null &&
+      defaultResourceLinks.includes(_resourceLink)
+    );
+  };
 
   const parseUsfm = useCallback(async () => {
     let response = usfmJsonArray;
@@ -39,38 +82,14 @@ function useResources({
     return response;
   }, [resources, projectIdentifier]);
 
-  useEffect(() => {
-    resourcesFromResourceLinks({ resourceLinks, reference, config }).then(
-      (_resources) => {
-        update(_resources);
-      }
-    );
-  }, [resourceLinks, reference, config]);
-
-  const update = useCallback(
-    (_resources) => {
-      const __resources = _resources && deepFreeze(_resources);
-      onResources(__resources);
-    },
-    [onResources]
-  );
-
-  const addResourceLink = useCallback(
-    (newResourceLink) => {
-      // Pass the root path through to the consumer;
-      // but allow the consumer to munge resourceLink.
-      const _resourceLinks = [...resourceLinks, newResourceLink];
-      onResourceLinks(_resourceLinks);
-    },
-    [resourcesFromResourceLinks, resourceLinks]
-  );
-
   return {
     state: resources,
     actions: {
       addResourceLink,
-      update,
+      isDefaultResourceLink,
       parseUsfm,
+      update,
+      remove,
     },
   };
 }

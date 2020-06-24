@@ -1,27 +1,18 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import useEffect from 'use-deep-compare-effect';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  PlaylistAdd,
   ShortText,
   Subject,
   ViewColumn,
   UnfoldMore,
   UnfoldLess,
 } from '@material-ui/icons';
-import {
-  IconButton,
-  Menu,
-  MenuItem,
-  Table,
-  TableBody,
-  TextField,
-  Tooltip,
-} from '@material-ui/core';
+import { Table, TableBody } from '@material-ui/core';
 import { localString } from '../../core/localStrings';
 
-import { Row, Headers, Toolbar, ColumnsMenu, AddResourceMenu } from '..';
+import { Row, Headers, Toolbar, ColumnsMenu } from '..';
 import {
   referenceIdsFromBooks,
   referenceIdFromReference,
@@ -52,7 +43,6 @@ function ScriptureTable({
   const columns = deepFreeze(_columns);
   const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
-  const [addResourceMenuAnchorEl, setAddResourceMenuAnchorEl] = useState();
 
   let verseObjects = [];
   if (
@@ -85,10 +75,6 @@ function ScriptureTable({
     actions: resourceContextActions,
   } = React.useContext(ResourcesContext);
 
-  const onResourceAddClick = () => {
-    resourceContextActions.addResourceLink(resourceUrl.value);
-  };
-
   const actions = [
     {
       icon: open ? (
@@ -102,19 +88,8 @@ function ScriptureTable({
       onClick: () => onOpen && onOpen(!open),
     },
     {
-      icon: <PlaylistAdd />,
-      tooltip: 'Add Resource',
-      onClick: (event) => setAddResourceMenuAnchorEl(event.currentTarget),
-      menu: (
-        <AddResourceMenu
-          anchorEl={addResourceMenuAnchorEl}
-          onAnchorEl={setAddResourceMenuAnchorEl}
-        />
-      ),
-    },
-    {
       icon: <ViewColumn fontSize='small' />,
-      tooltip: localString('ViewVersions'),
+      tooltip: localString('ManageVersions'),
       onClick: (event) => setColumnsMenuAnchorEl(event.currentTarget),
       menu: (
         <ColumnsMenu

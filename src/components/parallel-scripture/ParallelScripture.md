@@ -90,11 +90,13 @@ function Component() {
 }
 const config = { server: 'https://git.door43.org' };
 
-const _resourceLinks = [
+const defaultResourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/master/3jn',
   'unfoldingWord/en/ult/v5/3jn',
   'unfoldingWord/en/ust/v5/3jn',
 ];
+
+const _resourceLinks = [...defaultResourceLinks];
 
 // const reference = {bookId: 'rut', chapter: 1, verse: 1};
 // const resourceLinks = [
@@ -115,6 +117,7 @@ const addResourceLink = (newResourceLink) => {
 
 <ResourcesContextProvider
   resourceLinks={resourceLinks}
+  defaultResourceLinks={defaultResourceLinks}
   onResourceLinks={setResourceLinks}
   onAddResourceLink={addResourceLink}
   resources={resources}
