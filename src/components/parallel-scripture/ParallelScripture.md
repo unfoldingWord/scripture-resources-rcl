@@ -108,18 +108,10 @@ const _resourceLinks = [...defaultResourceLinks];
 const [resourceLinks, setResourceLinks] = React.useState(_resourceLinks);
 const [resources, setResources] = React.useState([]);
 
-// Allows consumer to munge/manipulate newResourceLink.
-const addResourceLink = (newResourceLink) => {
-  const _resourceLinks = [...resourceLinks, newResourceLink];
-  setResourceLinks(_resourceLinks);
-  return newResourceLink;
-};
-
 <ResourcesContextProvider
   resourceLinks={resourceLinks}
   defaultResourceLinks={defaultResourceLinks}
   onResourceLinks={setResourceLinks}
-  onAddResourceLink={addResourceLink}
   resources={resources}
   onResources={setResources}
   config={config}
