@@ -1,18 +1,19 @@
 import { useCallback } from 'react';
 
-export const removeResource = (resources, index, onResources) => {
-  let _resources = [];
+export const removeResourceLink = (resourceLinks, index) => {
+  let _resourceLinks = [];
+
   if (index > 0) {
-    let head = resources.slice(0, index);
+    let head = resourceLinks.slice(0, index);
     let tail = [];
-    if (index + 1 >= resources.length - 1) {
-      tail = resources.slice(index + 1);
+    if (index + 1 >= resourceLinks.length - 1) {
+      tail = resourceLinks.slice(index + 1);
     }
 
-    _resources = [...head, ...tail];
+    _resourceLinks = [...head, ...tail];
   } else {
-    _resources = resources.slice(1);
+    _resourceLinks = resourceLinks.slice(1);
   }
 
-  onResources(_resources);
+  return _resourceLinks;
 };

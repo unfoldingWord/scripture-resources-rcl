@@ -4,7 +4,7 @@ import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
 
 import { resourcesFromResourceLinks } from '../../core';
-import { parseUsfm, removeResource } from './resourcesHelper';
+import { removeResourceLink } from './resourcesHelper';
 
 function useResources({
   resources,
@@ -42,9 +42,10 @@ function useResources({
 
   const remove = useCallback(
     (index) => {
-      removeResource(resources, index, onResources);
+      let _resourceLinks = removeResourceLink(resourceLinks, index);
+      onResourceLinks(_resourceLinks);
     },
-    [resources, onResources]
+    [resourceLinks, onResources]
   );
 
   const addResourceLink = useCallback(
