@@ -13,8 +13,8 @@ export const License = ({
 
   const classes = useStyles();
   const openLink = useCallback((link) => window.open(link, '_blank'), []);
-  const onClickLicense = () => { openLink(licenseLink); }
-
+  const onClickLicense = (e) => { e.stopPropagation(); openLink(licenseLink); }
+  
   let _iconProps = {
     onClick: onClickLicense,
     ...iconProps
