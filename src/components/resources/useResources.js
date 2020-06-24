@@ -4,10 +4,12 @@ import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
 
 import { resourcesFromResourceLinks } from '../../core';
+import { removeResourceLink } from './resourcesHelper';
 
 function useResources({
   resources,
   resourceLinks,
+  defaultResourceLinks,
   reference,
   config,
   onResources,
@@ -16,32 +18,13 @@ function useResources({
   const [projectIdentifier, setProjectIdentifier] = useState();
   const [usfmJsonArray, setUsfmJsonArray] = useState();
 
-  useEffect(() => { // this has to come before the parseUsfm callback so that it is invalidated first.
+  useEffect(() => {
+    // this has to come before the parseUsfm callback so that it is invalidated first.
     setProjectIdentifier();
     setUsfmJsonArray();
   }, [resources, resourceLinks]); // if resources/links change, we need to reset the cached value.
 
-  const parseUsfm = useCallback(async () => {
-    let response = usfmJsonArray;
-    if (resources && resources[0] && resources[0].project) {
-      const { project } = resources[0];
-      if (project.identifier !== projectIdentifier || !usfmJsonArray) {
-        console.log('useResource');
-        console.log('Parsing [' + resources.length + ']...');
-        const promises = resources.map((resource) =>
-          resource.project.parseUsfm()
-        );
-        const jsonArray = await Promise.all(promises);
-        setUsfmJsonArray(jsonArray);
-        setProjectIdentifier(project.identifier);
-        response = jsonArray;
-      };
-    };
-    return response;
-  }, [resources, projectIdentifier]);
-
   useEffect(() => {
-    console.log('resourcesFromResourceLinks [' + resourceLinks.length + ']...');
     resourcesFromResourceLinks({ resourceLinks, reference, config }).then(
       (_resources) => {
         update(_resources);
@@ -57,21 +40,57 @@ function useResources({
     [onResources]
   );
 
+  const remove = useCallback(
+    (index) => {
+      let _resourceLinks = removeResourceLink(resourceLinks, index);
+      onResourceLinks(_resourceLinks);
+    },
+    [resourceLinks, onResources]
+  );
+
   const addResourceLink = useCallback(
     (newResourceLink) => {
+      // Pass the root path through to the consumer;
+      // but allow the consumer to munge resourceLink.
       const _resourceLinks = [...resourceLinks, newResourceLink];
-      console.log('addResourceLink: [' + _resourceLinks.length + '] resources');
       onResourceLinks(_resourceLinks);
     },
     [resourcesFromResourceLinks, resourceLinks]
   );
 
+  const isDefaultResourceLink = (_resourceLink) => {
+    //console.log('useResources:: isDefaultResourceLink');
+    return (
+      defaultResourceLinks != null &&
+      defaultResourceLinks.includes(_resourceLink)
+    );
+  };
+
+  const parseUsfm = useCallback(async () => {
+    let response = usfmJsonArray;
+    if (resources && resources[0] && resources[0].project) {
+      const { project } = resources[0];
+      if (project.identifier !== projectIdentifier || !usfmJsonArray) {
+        const promises = resources.map((resource) =>
+          resource.project.parseUsfm()
+        );
+        const jsonArray = await Promise.all(promises);
+        setUsfmJsonArray(jsonArray);
+        setProjectIdentifier(project.identifier);
+        response = jsonArray;
+      }
+    }
+    return response;
+  }, [resources, projectIdentifier]);
+
   return {
     state: resources,
     actions: {
       addResourceLink,
-      update,
+      isDefaultResourceLink,
       parseUsfm,
+      update,
+      remove,
     },
   };
 }

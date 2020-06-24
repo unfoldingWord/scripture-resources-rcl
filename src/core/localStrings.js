@@ -18,12 +18,16 @@
 //
 const strings = {
   en: {
-    ViewVersions: 'View Versions',
+    //ViewVersions: 'View Versions',
+    ManageVersions: 'Manage Versions',
+    AddResource: 'Add Resource',
+    ResourcePath: 'Resource Path',
     ExpandChapter: 'Expand Chapter',
     CollapseChapter: 'Collapse Chapter',
     ViewLicense: 'View License',
     ExpandScripturePane: 'Expand Scripture Pane',
     CloseScripturePane: 'Close Scripture Pane',
+    Remove: 'Remove',
     /* do not remove these two */
     StringMissing: 'String Id missing',
     LangNotSupported: 'Language not supported',
