@@ -36,7 +36,6 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
 
   const isDefaultResourceLink = React.useCallback(
     (index) => {
-      //console.log('ColumnsMenu:: isDefaultResourceLink');
       return (
         resources &&
         resources[index] &&
