@@ -1,5 +1,8 @@
 import { useCallback } from 'react';
 
+import { resourceFromResourceLink } from '../../core';
+
+// array.slice + re-join for resourceLinks array.
 export const removeResourceLink = (resourceLinks, index) => {
   let _resourceLinks = [];
 
@@ -16,4 +19,22 @@ export const removeResourceLink = (resourceLinks, index) => {
   }
 
   return _resourceLinks;
+};
+
+export const tryAddResourceLink = (
+  resourceLinks,
+  newResourceLink,
+  reference,
+  config,
+  onResourceLinks
+) => {
+  resourceFromResourceLink({
+    resourceLink: newResourceLink,
+    reference,
+    config,
+  }).then((_parsedResource) => {
+    if (_parsedResource != null) {
+      onResourceLinks([...resourceLinks, newResourceLink]);
+    }
+  });
 };
