@@ -201,7 +201,7 @@ let quoteVariations = [
   // Orthographically equivalent; but requires unicode normalization.
   'וּ⁠גְדֵ֯רֹ֖ת',
   // Omitting the [non-semantic] masora & accents requires lossy normalization.
-  'וְלַנַּעֲרָ',
+  'וּ⁠גְדֵרֹת',
 ];
 
 <ParallelScriptureMock
