@@ -73,11 +73,7 @@ export const areSelected = ({ words, selections }) => {
       const text = selections[i].text;
       const occ = selections[i].occurrence;
       const occs = selections[i].occurrences;
-      if (
-        text.normalize() === _text.normalize() &&
-        occ === _occ &&
-        occs === _occs
-      ) {
+      if (text === _text && occ === _occ && occs === _occs) {
         selected = true;
         break;
       }
