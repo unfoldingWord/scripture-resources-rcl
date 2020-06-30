@@ -4,7 +4,7 @@ import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
 
 import { resourcesFromResourceLinks } from '../../core';
-import { removeResourceLink } from './resourcesHelper';
+import { removeResourceLink, tryAddResourceLink } from './resourcesHelper';
 
 function useResources({
   resources,
@@ -50,12 +50,15 @@ function useResources({
 
   const addResourceLink = useCallback(
     (newResourceLink) => {
-      // Pass the root path through to the consumer;
-      // but allow the consumer to munge resourceLink.
-      const _resourceLinks = [...resourceLinks, newResourceLink];
-      onResourceLinks(_resourceLinks);
+      const _resourceLinks = tryAddResourceLink(
+        resourceLinks,
+        newResourceLink,
+        reference,
+        config,
+        onResourceLinks
+      );
     },
-    [resourcesFromResourceLinks, resourceLinks]
+    [resourceLinks]
   );
 
   const isDefaultResourceLink = (_resourceLink) => {
