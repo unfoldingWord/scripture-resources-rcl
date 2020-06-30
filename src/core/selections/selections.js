@@ -533,9 +533,10 @@ export const occurrencesInString = (string, subString) => {
 
 const tokenizer = (text) => {
   return tokenize({
-    text: text.normalize(),
+    text: text,
     greedy: true,
     normalize: true,
+    normalizeLossy: true,
   });
 };
 

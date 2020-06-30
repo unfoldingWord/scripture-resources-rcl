@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 
 import { normalizeString } from '../../../../core/selections/selections';
+import { makeStyles } from '@material-ui/core/styles';
 
 import ResourcesContextProvider from '../../../resources/Resources.context';
 import ParallelScripture from '../../../parallel-scripture/ParallelScripture';
@@ -54,31 +55,37 @@ export function ParallelScriptureMock({
 
   const config = { server: 'https://git.door43.org' };
 
+  const classes = useStyles();
+
   return (
     <>
-      <table>
+      <table style={{ borderSpacing: '0px', borderCollapse: 'separate' }}>
         <tr>
           <th>String</th>
-          <th>===</th>
-          <th colspan='2'>string.normalize('NFKC')</th>
-          <th colspan='2'>string-punctuation-tokenizer (lossy)</th>
+          <th style={{ borderRight: '1px solid black' }}>===</th>
+          <th colspan='2' style={{ borderRight: '1px solid black' }}>
+            string.normalize('NFKC')
+          </th>
+          <th colspan='2' style={{ borderRight: '1px solid black' }}>
+            string-punctuation-tokenizer (lossy)
+          </th>
         </tr>
         {selections.map((currentSelection) => {
           return (
             <tr>
               <td>{currentSelection}</td>
-              <td>
+              <td style={{ borderRight: '1px solid black' }}>
                 {selections[0] === currentSelection ? 'Match' : 'No match'}
               </td>
               <td>{currentSelection.normalize('NFKC')}</td>
-              <td>
+              <td style={{ borderRight: '1px solid black' }}>
                 {selections[0].normalize('NFKC') ===
                 currentSelection.normalize('NFKC')
                   ? 'Match'
                   : 'No match'}
               </td>
               <td>{normalizeString(currentSelection)}</td>
-              <td>
+              <td style={{ borderRight: '1px solid black' }}>
                 {normalizeString(selections[0]) ===
                 normalizeString(currentSelection)
                   ? 'Match'
@@ -114,3 +121,7 @@ export function ParallelScriptureMock({
     </>
   );
 }
+
+const useStyles = makeStyles((theme) => ({
+  root: {},
+}));
