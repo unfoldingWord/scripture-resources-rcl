@@ -3,6 +3,13 @@
 To see highlighting appear, change the `-1` occurrence to 1;
 then click or tab out of field.
 
+To add resources to the RCL, please see the following sample paths:  
+`Door43-Catalog/hi/ulb/master/3jn`  
+`STR/hi/irv/master/3jn`  
+To add resources to the app, please omit bookId from the end:  
+`Door43-Catalog/hi/ulb/master`  
+`STR/hi/irv/master`
+
 ```js
 import { TextField } from '@material-ui/core';
 import {
@@ -17,7 +24,7 @@ function Component() {
   const [chapter, setChapter] = React.useState(1);
   const [verse, setVerse] = React.useState(10);
   const [quote, setQuote] = React.useState('καὶ…μὴ');
-  const [occurrence, setOccurrence] = React.useState(1);
+  const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
     () => (
