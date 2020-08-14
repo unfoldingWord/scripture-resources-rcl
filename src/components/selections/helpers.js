@@ -1,4 +1,4 @@
-import { selectionsFromQuoteAndVerseObjects } from '../../core/selections/selections';
+import { selectionsFromQuoteAndVerseObjects, normalizeString } from '../../core/selections/selections';
 
 // const stringify = (array) => array.map(object => JSON.stringify(object));
 //export const parsify = (array) => array.map(string => JSON.parse(string));
@@ -66,11 +66,11 @@ export const areSelected = ({ words, selections }) => {
   _selections.forEach((selection) => {
     //if (selections.includes(_s)) selected = true;
     const _selection = JSON.parse(selection);
-    let _text = _selection.text;
+    let _text = normalizeString(_selection.text);
     let _occ = _selection.occurrence;
     let _occs = _selection.occurrences;
     for (let i = 0; i < selections.length; i++) {
-      const text = selections[i].text;
+      const text = selections[i].text;//already normalized.
       const occ = selections[i].occurrence;
       const occs = selections[i].occurrences;
       if (text === _text && occ === _occ && occs === _occs) {

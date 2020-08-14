@@ -67,7 +67,7 @@ export function ParallelScriptureMock({
             string.normalize('NFKC')
           </th>
           <th colspan='2' style={{ borderRight: '1px solid black' }}>
-            string-punctuation-tokenizer (lossy)
+            string-punctuation-tokenizer (destructive)
           </th>
         </tr>
         {selections.map((currentSelection) => {
@@ -80,14 +80,14 @@ export function ParallelScriptureMock({
               <td>{currentSelection.normalize('NFKC')}</td>
               <td style={{ borderRight: '1px solid black' }}>
                 {selections[0].normalize('NFKC') ===
-                currentSelection.normalize('NFKC')
+                  currentSelection.normalize('NFKC')
                   ? 'Match'
                   : 'No match'}
               </td>
               <td>{normalizeString(currentSelection)}</td>
               <td style={{ borderRight: '1px solid black' }}>
                 {normalizeString(selections[0]) ===
-                normalizeString(currentSelection)
+                  normalizeString(currentSelection)
                   ? 'Match'
                   : 'No match! ☹️'}
               </td>
@@ -107,11 +107,13 @@ export function ParallelScriptureMock({
         config={config}
       >
         {selections.map((currentSelection) => {
+          const [quote, setQuote] = React.useState('');
+
           return (
             <ParallelScripture
               reference={reference}
               quote={currentSelection}
-              onQuote={() => {}}
+              onQuote={setQuote}
               occurrence={1}
               height='250px'
             />
