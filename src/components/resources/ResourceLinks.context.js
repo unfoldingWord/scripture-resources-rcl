@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import PropTypes, { func } from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import { useResources } from '..';
 
@@ -22,9 +22,9 @@ export function ResourceLinksContextProvider({
   });
 
   return (
-    <ResourceLinksContext.Provider value={val}>
+    <ResourcesContext.Provider value={val}>
       {children}
-    </ResourceLinksContext.Provider>
+    </ResourcesContext.Provider>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
@@ -17,27 +17,25 @@ function useResources({
 }) {
   const [projectIdentifier, setProjectIdentifier] = useState();
   const [usfmJsonArray, setUsfmJsonArray] = useState();
+  const [books, setBooks] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // this has to come before the parseUsfm callback so that it is invalidated first.
-    setProjectIdentifier();
-    setUsfmJsonArray();
-  }, [resources, resourceLinks]); // if resources/links change, we need to reset the cached value.
-
-  useEffect(() => {
-    resourcesFromResourceLinks({ resourceLinks, reference, config }).then(
+    resourcesFromResourceLinks({
+      resourceLinks, reference, config,
+    }).then(
       (_resources) => {
         update(_resources);
-      }
+      },
     );
-  }, [resourceLinks, reference, config]);
+  }, [resourceLinks, reference, config, update]);
 
   const update = useCallback(
     (_resources) => {
       const __resources = _resources && deepFreeze(_resources);
       onResources(__resources);
     },
-    [onResources]
+    [onResources],
   );
 
   const remove = useCallback(
@@ -45,35 +43,35 @@ function useResources({
       let _resourceLinks = removeResourceLink(resourceLinks, index);
       onResourceLinks(_resourceLinks);
     },
-    [resourceLinks, onResources]
+    [resourceLinks, onResourceLinks],
   );
 
   const addResourceLink = useCallback(
     (newResourceLink) => {
-      const _resourceLinks = tryAddResourceLink(
+      tryAddResourceLink(
         resourceLinks,
         newResourceLink,
         reference,
         config,
-        onResourceLinks
+        onResourceLinks,
       );
     },
-    [resourceLinks]
+    [config, onResourceLinks, reference, resourceLinks],
   );
 
-  const isDefaultResourceLink = (_resourceLink) => {
-    //console.log('useResources:: isDefaultResourceLink');
-    return (
-      defaultResourceLinks != null &&
+  const isDefaultResourceLink = (_resourceLink) =>(
+    defaultResourceLinks != null &&
       defaultResourceLinks.includes(_resourceLink)
-    );
-  };
+  );
 
   const parseUsfm = useCallback(async () => {
     let response = usfmJsonArray;
+
     if (resources && resources[0] && resources[0].project) {
       const { project } = resources[0];
-      if (project.identifier !== projectIdentifier || !usfmJsonArray) {
+
+      if (!loading && (project.identifier !== projectIdentifier || !usfmJsonArray)) {
+        setLoading(true);
         const promises = resources
           .map((resource) => {
             try {
@@ -89,10 +87,17 @@ function useResources({
         response = jsonArray;
       }
     }
+    setLoading(false);
     return response;
-  }, [resources, projectIdentifier]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectIdentifier, resources, usfmJsonArray]);
+
+  useEffect(() => {
+    parseUsfm().then(setBooks);
+  }, [parseUsfm, projectIdentifier]);
 
   return {
+    books,
     state: resources,
     actions: {
       addResourceLink,
