@@ -18,13 +18,13 @@ export const selectionsFromQuoteAndVerseObjects = ({
 
 export const getPrecedingOccurrences = (_string, subquote) => {
   const precedingTokens = tokenizer(_string);
-  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function(
+  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (
     n,
     val
   ) {
     return n + (val === subquote);
   },
-  0);
+    0);
   return precedingOccurrencesInPreviousString;
 };
 
@@ -107,14 +107,14 @@ export const getStringFromEllipsis = (_string, quote, occurrence) => {
   const [lower, upper] = quote.split('…');
   const reg = new RegExp(
     '(?:.*?' +
-      lower +
-      '.*' +
-      upper +
-      `){${occurrence - 1}}.*?(` +
-      lower +
-      '.*' +
-      upper +
-      ').*'
+    lower +
+    '.*' +
+    upper +
+    `){${occurrence - 1}}.*?(` +
+    lower +
+    '.*' +
+    upper +
+    ').*'
   );
   const string = _string.slice(0);
   const matches = string.match(reg) || [];
@@ -193,18 +193,18 @@ export const generateSelection = ({
   const _entireText = normalizeString(entireText);
   // Getting the occurrences before the current token
   const precedingTokens = tokenizer(precedingText);
-  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function(
+  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (
     n,
     val
   ) {
     return n + (val === selectedText);
   },
-  0);
+    0);
   // calculate this occurrence number by adding it to the preceding ones
   let occurrence = precedingOccurrencesInPreviousString + 1;
   // get the total occurrences from the verse
   const allTokens = tokenizer(_entireText);
-  let allOccurrences = allTokens.reduce(function(n, val) {
+  let allOccurrences = allTokens.reduce(function (n, val) {
     return n + (val === selectedText);
   }, 0);
 
@@ -225,7 +225,7 @@ export const spliceStringOnRanges = (string, ranges) => {
   let remainingString = string;
   // shift the range since the loop is destructive by working on the remainingString and not original string
   let rangeShift = 0; // start the range shift at the first character
-  ranges.forEach(function(range) {
+  ranges.forEach(function (range) {
     const firstCharacterPosition = range[0] - rangeShift; // original range start - the rangeShift
     const beforeSelection = remainingString.slice(0, firstCharacterPosition); // save all the text before the selection
     if (beforeSelection) {
@@ -536,7 +536,6 @@ const tokenizer = (text) => {
     text: text,
     greedy: true,
     normalize: true,
-    normalizeLossy: true,
   });
 };
 
