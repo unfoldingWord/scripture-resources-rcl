@@ -1,4 +1,4 @@
-import { selectionsFromQuoteAndVerseObjects } from '../../core/selections/selections';
+import { selectionsFromQuoteAndVerseObjects, normalizeString } from '../../core/selections/selections';
 
 // const stringify = (array) => array.map(object => JSON.stringify(object));
 //export const parsify = (array) => array.map(string => JSON.parse(string));
@@ -6,15 +6,18 @@ import { selectionsFromQuoteAndVerseObjects } from '../../core/selections/select
 export const selectionsFromQuote = ({ quote, verseObjects, occurrence }) => {
   let selections = [];
   if (quote && verseObjects && occurrence) {
-    selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence })
-      .map(selection => JSON.stringify(selection));
+    selections = selectionsFromQuoteAndVerseObjects({
+      quote,
+      verseObjects,
+      occurrence,
+    }).map((selection) => JSON.stringify(selection));
   }
   return selections;
 };
 
 export const quoteFromVerse = ({ selections, verseObjects }) => {
   let quotedWords = new Array(verseObjects.length);
-  const _selections = selections.map(selection => JSON.parse(selection).text);
+  const _selections = selections.map((selection) => JSON.parse(selection).text);
   verseObjects.forEach((verseObject, index) => {
     const { type, text } = verseObject;
     if (type === 'word') {
@@ -23,8 +26,10 @@ export const quoteFromVerse = ({ selections, verseObjects }) => {
       quotedWords.push(quotedWord);
     }
   });
-  const quote = quotedWords.join(' ')
-    .replace(/( ?… ?)+/g, ' … ').replace(/(^[… ]+|[… ]+$)/g, '');
+  const quote = quotedWords
+    .join(' ')
+    .replace(/( ?… ?)+/g, ' … ')
+    .replace(/(^[… ]+|[… ]+$)/g, '');
   return quote;
 };
 
@@ -57,18 +62,18 @@ export const isSelected = ({ word, selections }) => {
 
 export const areSelected = ({ words, selections }) => {
   let selected = false;
-  const _selections = words.map(word => selectionFromWord(word));
-  _selections.forEach(selection => {
+  const _selections = words.map((word) => selectionFromWord(word));
+  _selections.forEach((selection) => {
     //if (selections.includes(_s)) selected = true;
     const _selection = JSON.parse(selection);
-    let _text = _selection.text;
-    let _occ  = _selection.occurrence;
+    let _text = normalizeString(_selection.text);
+    let _occ = _selection.occurrence;
     let _occs = _selection.occurrences;
-    for (let i=0; i < selections.length; i++) {
-      const text = selections[i].text;
-      const occ  = selections[i].occurrence;
+    for (let i = 0; i < selections.length; i++) {
+      const text = selections[i].text;//already normalized.
+      const occ = selections[i].occurrence;
       const occs = selections[i].occurrences;
-      if ( text === _text &&  occ === _occ && occs === _occs) {
+      if (text === _text && occ === _occ && occs === _occs) {
         selected = true;
         break;
       }
@@ -86,7 +91,7 @@ export const addSelection = ({ word, selections }) => {
 
 export const addSelections = ({ words, selections }) => {
   let _selections = new Set(selections);
-  words.forEach(word => {
+  words.forEach((word) => {
     const selection = selectionFromWord(word);
     _selections.add(selection);
   });
@@ -95,16 +100,20 @@ export const addSelections = ({ words, selections }) => {
 
 export const removeSelection = ({ word, selections }) => {
   const selection = selectionFromWord(word);
-  const selectionStringified = selections.map(_selection => selectionFromWord(_selection));
+  const selectionStringified = selections.map((_selection) =>
+    selectionFromWord(_selection)
+  );
   const _selections = new Set(selectionStringified);
   _selections.delete(selection);
   return [..._selections];
 };
 
 export const removeSelections = ({ words, selections }) => {
-  const selectionStringified = selections.map(selection => selectionFromWord(selection));
+  const selectionStringified = selections.map((selection) =>
+    selectionFromWord(selection)
+  );
   const _selections = new Set(selectionStringified);
-  words.forEach(word => {
+  words.forEach((word) => {
     const selection = selectionFromWord(word);
     _selections.delete(selection);
   });
