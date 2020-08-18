@@ -7273,10 +7273,10 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gitea-react-toolkit@^0.6.9:
-  version "0.6.14"
-  resolved "https://registry.yarnpkg.com/gitea-react-toolkit/-/gitea-react-toolkit-0.6.14.tgz#77750cfbdbc806aa9d6d186667d108371d770629"
-  integrity sha512-kS9yo5pH4tC39mIEvNCwF7V0nJMtjqNPWV7sGKAv3LLSy6SPyiRMcky/IfBgFKBXjg/RXNzyjw/yvmMuAoYCjA==
+gitea-react-toolkit@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/gitea-react-toolkit/-/gitea-react-toolkit-1.1.1.tgz#80023f8ee0936cfe0fa01a1b75287569fad5a163"
+  integrity sha512-j8KWyzGfTer+vMEpoaCigxGDsKawgvvRW0QrkNBk6ucfrXq/BrpcYyXZtEj/9AWUtVDreKgn7vRrvn6M7+Sj/A==
   dependencies:
     awesome-debounce-promise "2.1.0"
     axios "0.19.0"
@@ -7285,6 +7285,8 @@ gitea-react-toolkit@^0.6.9:
     jszip "3.2.1"
     localforage "1.7.3"
     prop-types "15.7.2"
+    react-json-view "^1.19.1"
+    use-deep-compare-effect "^1.3.1"
     utf8 "3.0.0"
 
 github-slugger@^1.2.1:
@@ -15531,7 +15533,7 @@ url@0.11.0, url@^0.11.0, url@~0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-use-deep-compare-effect@1.3.1:
+use-deep-compare-effect@1.3.1, use-deep-compare-effect@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/use-deep-compare-effect/-/use-deep-compare-effect-1.3.1.tgz#90bdbed97e1acb8423f7bb0bf24de58590d021af"
   integrity sha512-ejL+Al+aeDyC9Sywx56ti4PtSwkf6BH27tEptMWF2cfO41/auG0nRRsArh6Vv5bUyBe3z7IyxmgQCK5nas70hg==
