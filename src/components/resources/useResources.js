@@ -97,8 +97,7 @@ function useResources({
   }, [parseUsfm, projectIdentifier]);
 
   return {
-    books,
-    state: resources,
+    state: { resources, books },
     actions: {
       addResourceLink,
       isDefaultResourceLink,

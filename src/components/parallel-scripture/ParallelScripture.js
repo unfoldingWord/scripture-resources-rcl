@@ -22,7 +22,8 @@ function ParallelScripture({
   const [titles, setTitles] = useState();
   const [open, setOpen] = useState(_open);
 
-  const { state: resources, books } = React.useContext(ResourcesContext);
+  const { state } = React.useContext(ResourcesContext);
+  const { resources, books } = state;
 
   useEffect(() => {
     const _titles = resources.map((resource) => {

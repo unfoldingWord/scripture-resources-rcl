@@ -10,17 +10,18 @@ import {
   UnfoldLess,
 } from '@material-ui/icons';
 import { Table, TableBody } from '@material-ui/core';
+import deepFreeze from 'deep-freeze';
 import { localString } from '../../core/localStrings';
 
-import { Row, Headers, Toolbar, ColumnsMenu } from '..';
+import {
+  Row, Headers, Toolbar, ColumnsMenu,
+} from '..';
+import { SelectionsContextProvider } from '../selections/Selections.context';
 import {
   referenceIdsFromBooks,
   referenceIdFromReference,
   versesFromReferenceIdAndBooks,
 } from './helpers';
-import { SelectionsContextProvider } from '../selections/Selections.context';
-import deepFreeze from 'deep-freeze';
-import { ResourcesContext } from '../resources/Resources.context';
 
 function ScriptureTable({
   title,
@@ -29,7 +30,6 @@ function ScriptureTable({
   height,
   reference,
   quote,
-  onQuote,
   occurrence,
   buttons,
   renderOffscreen = {},
@@ -45,6 +45,7 @@ function ScriptureTable({
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
   let verseObjects = [];
+
   if (
     reference &&
     reference.verse &&
@@ -69,11 +70,6 @@ function ScriptureTable({
     const _referenceIds = referenceIdsFromBooks({ books });
     setReferenceIds(_referenceIds);
   }, [books]);
-
-  const {
-    state: resources,
-    actions: resourceContextActions,
-  } = React.useContext(ResourcesContext);
 
   const actions = [
     {
@@ -114,32 +110,34 @@ function ScriptureTable({
   ];
 
   let _referenceIds = referenceIds;
-  if (filter && reference.chapter && reference.verse)
-    _referenceIds = [referenceIdFromReference(reference)];
 
-  const rows = useMemo(() => {
-    return () =>
-      _referenceIds.map((referenceId) => {
-        const verses = versesFromReferenceIdAndBooks({ referenceId, books });
-        const row = (
-          <Row
-            renderOffscreen={open && renderOffscreen[referenceId]}
-            key={referenceId}
-            verses={verses}
-            referenceId={referenceId}
-            reference={reference}
-            filter={filter}
-            columns={columns}
-          />
-        );
-        return row;
-      });
-  }, [_referenceIds, reference, filter, columns]);
+  if (filter && reference.chapter && reference.verse) {
+    _referenceIds = [referenceIdFromReference(reference)];
+  }
+
+  const rows = useMemo(() => () =>
+    _referenceIds.map((referenceId) => {
+      const verses = versesFromReferenceIdAndBooks({ referenceId, books });
+      const row = (
+        <Row
+          renderOffscreen={open && renderOffscreen[referenceId]}
+          key={referenceId}
+          verses={verses}
+          referenceId={referenceId}
+          reference={reference}
+          filter={filter}
+          columns={columns}
+        />
+      );
+      return row;
+    }), [_referenceIds, books, open, renderOffscreen, reference, filter, columns]);
 
   useEffect(() => {
     const scrollReferenceId = referenceIdFromReference(reference);
+
     if (!filter) {
       const element = document.getElementById(scrollReferenceId);
+
       if (element) {
         element.scrollIntoView(true);
         document.getElementById('wrapY').scrollTop -= 30;
@@ -171,13 +169,13 @@ function ScriptureTable({
 
 ScriptureTable.propTypes = {
   titles: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
+    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   ).isRequired,
   books: PropTypes.arrayOf(
     PropTypes.shape({
       headers: PropTypes.array.isRequired,
       chapters: PropTypes.object.isRequired,
-    })
+    }),
   ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({
