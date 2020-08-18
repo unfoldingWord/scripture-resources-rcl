@@ -13,26 +13,29 @@ let sections = [
     name: 'Resources ',
     content: 'src/components/resources/_readme.md',
     components: () => {
-      const componentNames = [
-        'Resource.context',
-        'Resources.context',
-      ];
-      return componentNames.map(componentName => {
-        return path.resolve(__dirname, `src/components/resources`, `${componentName}.js`)
+      const componentNames = ['Resource.context', 'Resources.context'];
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/resources`,
+          `${componentName}.js`
+        );
       });
-    }
+    },
   },
   {
     name: 'Selections ',
     content: 'src/components/selections/_readme.md',
     components: () => {
-      const componentNames = [
-        'Selections.context',
-      ];
-      return componentNames.map(componentName => {
-        return path.resolve(__dirname, `src/components/selections`, `${componentName}.js`)
+      const componentNames = ['Selections.context'];
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/selections`,
+          `${componentName}.js`
+        );
       });
-    }
+    },
   },
   {
     name: 'USFM ',
@@ -42,62 +45,70 @@ let sections = [
         //'useUsfm',
         'Usfm.context',
       ];
-      return componentNames.map(componentName => {
-        return path.resolve(__dirname, `src/components/usfm`, `${componentName}.js`)
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/usfm`,
+          `${componentName}.js`
+        );
       });
-    }
+    },
   },
   {
     name: 'Parallel Scripture ',
     content: 'src/components/parallel-scripture/_readme.md',
     components: () => {
-      const componentNames = [
-        'ParallelScripture',
-        'ScriptureTable',
-      ];
-      return componentNames.map(componentName => {
-        return path.resolve(__dirname, `src/components/parallel-scripture`, `${componentName}.js`)
+      const componentNames = ['ParallelScripture', 'ScriptureTable'];
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/parallel-scripture`,
+          `${componentName}.js`
+        );
       });
-    }
+    },
   },
   {
     name: 'Book ',
     content: 'src/components/book/_readme.md',
     components: () => {
-      const componentNames = [
-        'BookHeaders',
-        'Book',
-      ];
-      return componentNames.map(componentName => {
-        return path.resolve(__dirname, `src/components/book`, `${componentName}.js`)
+      const componentNames = ['BookHeaders', 'Book'];
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/book`,
+          `${componentName}.js`
+        );
       });
-    }
+    },
   },
   {
     name: 'Chapters ',
     content: 'src/components/chapters/_readme.md',
     components: () => {
-      const componentNames = [
-        'Chapter',
-        'Chapters',
-      ];
-      return componentNames.map(componentName => {
-        return path.resolve(__dirname, `src/components/chapters`, `${componentName}.js`)
+      const componentNames = ['Chapter', 'Chapters'];
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/chapters`,
+          `${componentName}.js`
+        );
       });
-    }
+    },
   },
   {
     name: 'Verses ',
     content: 'src/components/verses/_readme.md',
     components: () => {
-      const componentNames = [
-        'Verse',
-        'Verses',
-      ];
-      return componentNames.map(componentName => {
-        return path.resolve(__dirname, `src/components/verses`, `${componentName}.js`)
+      const componentNames = ['Verse', 'Verses'];
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/verses`,
+          `${componentName}.js`
+        );
       });
-    }
+    },
   },
   {
     name: 'Verse Objects',
@@ -113,24 +124,30 @@ let sections = [
         'OriginalWordObject',
         'SectionObject',
         'FootnoteObject',
-        'UnsupportedObject'
+        'UnsupportedObject',
       ];
-      return componentNames.map(componentName => {
-        return path.resolve(__dirname, `src/components/verse-objects`, `${componentName}.js`)
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/verse-objects`,
+          `${componentName}.js`
+        );
       });
-    }
+    },
   },
   {
     name: 'License',
     content: 'src/components/license/README.md',
     components: () => {
-      const componentNames = [
-        'License',
-      ];
-      return componentNames.map(componentName => {
-        return path.resolve(__dirname, `src/components/license`, `${componentName}.js`)
+      const componentNames = ['License'];
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/license`,
+          `${componentName}.js`
+        );
       });
-    }
+    },
   },
   {
     name: 'Core',
@@ -142,13 +159,29 @@ let sections = [
       },
     ],
   },
+  {
+    name: 'Unicode Encoding & Normalization',
+    content: 'src/components/parallel-scripture/examples/unicode/_readme.md',
+    sections: [
+      {
+        name: 'Hebrew Cases',
+        content:
+          'src/components/parallel-scripture/examples/unicode/hebrew/_readme.md',
+      },
+      {
+        name: 'Greek Cases',
+        content:
+          'src/components/parallel-scripture/examples/unicode/greek/_readme.md',
+      },
+    ],
+  },
 ];
 
 module.exports = {
   title: `${upperFirst(camelCase(name))} v${version}`,
   ribbon: {
     url: repository.url,
-    text: 'View on GitHub'
+    text: 'View on GitHub',
   },
   styles,
   theme,
@@ -164,7 +197,7 @@ module.exports = {
   sections,
   components: 'src/components/**/[A-Z]*.js',
   moduleAliases: {
-    "scripture-resources-rcl": path.resolve(__dirname, "src"),
+    'scripture-resources-rcl': path.resolve(__dirname, 'src'),
   },
   version,
   serverPort: 6060,
@@ -185,4 +218,3 @@ module.exports = {
     },
   },
 };
-

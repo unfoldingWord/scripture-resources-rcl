@@ -1,10 +1,13 @@
-
 import isEqual from 'deep-equal';
 import _ from 'lodash';
 import { tokenize } from 'string-punctuation-tokenizer';
 import { verseObjectsToString } from './verseObjects';
 
-export const selectionsFromQuoteAndVerseObjects = ({ quote, verseObjects, occurrence }) => {
+export const selectionsFromQuoteAndVerseObjects = ({
+  quote,
+  verseObjects,
+  occurrence,
+}) => {
   let selections = [];
   if (quote && verseObjects.length > 0) {
     const string = verseObjectsToString(verseObjects);
@@ -15,13 +18,21 @@ export const selectionsFromQuoteAndVerseObjects = ({ quote, verseObjects, occurr
 
 export const getPrecedingOccurrences = (_string, subquote) => {
   const precedingTokens = tokenizer(_string);
-  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (n, val) {
+  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (
+    n,
+    val
+  ) {
     return n + (val === subquote);
-  }, 0);
+  },
+    0);
   return precedingOccurrencesInPreviousString;
-}
+};
 
-export const selectionsFromQuoteAndString = ({ quote, string: rawString, occurrence }) => {
+export const selectionsFromQuoteAndString = ({
+  quote,
+  string: rawString,
+  occurrence,
+}) => {
   let string = normalizeString(rawString);
   let subquotes = quote.split('…').map(normalizeString);
   let selections = [];
@@ -32,21 +43,33 @@ export const selectionsFromQuoteAndString = ({ quote, string: rawString, occurre
 
   if (occurrence === -1 && subquotes.length === 1) {
     const occurrences = occurrencesInString(string, quote);
-    subquotes = (new Array(occurrences)).fill(quote);
+    subquotes = new Array(occurrences).fill(quote);
   }
 
   let precedingOccurrences = 0;
   let precedingText = '';
   subquotes.forEach((subquote, index) => {
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
-    const currentOccurrence = getCurrentOccurrenceFromPrecedingText(occurrence, index, precedingOccurrences)
-    precedingText = getPrecedingText(string, subquote, currentOccurrence, index);
-
-    const subSelections = subSelectionsFromSubquote(
-      { subquote, index, precedingText, string }
+    const currentOccurrence = getCurrentOccurrenceFromPrecedingText(
+      occurrence,
+      index,
+      precedingOccurrences
+    );
+    precedingText = getPrecedingText(
+      string,
+      subquote,
+      currentOccurrence,
+      index
     );
 
-    subSelections.forEach(subSelection => selections.push(subSelection));
+    const subSelections = subSelectionsFromSubquote({
+      subquote,
+      index,
+      precedingText,
+      string,
+    });
+
+    subSelections.forEach((subSelection) => selections.push(subSelection));
     /** Adding the previous subquote to account for repeated ellipsis words i.e. Θεοῦ…Θεοῦ */
     precedingText += subquote;
   });
@@ -55,37 +78,51 @@ export const selectionsFromQuoteAndString = ({ quote, string: rawString, occurre
 
 /**
  * This function gets the correct amount of occurrences to provide the function getPrecedingText
- * 
+ *
  * @param {number} occurrence - The occurrence of the subquote in the string
  * @param {number} index - The current index of the subquotes
  * @param {number} precedingOccurrences - The number of occurrences before the current subquote in the string
  */
-export const getCurrentOccurrenceFromPrecedingText = (occurrence, index, precedingOccurrences) => {
+export const getCurrentOccurrenceFromPrecedingText = (
+  occurrence,
+  index,
+  precedingOccurrences
+) => {
   if (occurrence === -1 || index === 0) {
-    return occurrence
+    return occurrence;
   } else {
-    return precedingOccurrences + 1
+    return precedingOccurrences + 1;
   }
-}
+};
 
 /**
- * This function will return the text in between 
+ * This function will return the text in between
  * to ellipsis (inclusive of the container words) given the occurrence
- * 
+ *
  * @param {string} _string - The string to search
  * @param {*} quote - The substring which contains an ellipsis to search for
  * @param {*} occurrence - The occurrence of the quote to search for
  */
 export const getStringFromEllipsis = (_string, quote, occurrence) => {
   const [lower, upper] = quote.split('…');
-  const reg = new RegExp('(?:.*?' + lower + '.*' + upper + `){${occurrence - 1}}.*?(` + lower + '.*' + upper + ').*');
+  const reg = new RegExp(
+    '(?:.*?' +
+    lower +
+    '.*' +
+    upper +
+    `){${occurrence - 1}}.*?(` +
+    lower +
+    '.*' +
+    upper +
+    ').*'
+  );
   const string = _string.slice(0);
   const matches = string.match(reg) || [];
   return matches[1];
-}
+};
 
 /**
- * 
+ *
  * @param {string} _string - The entire string to use to find the preceding text
  * @param {string} subquote - The subquote to find the preceding text of
  * @param {number} occurrence - The occurrence of the string in the entire string
@@ -104,20 +141,29 @@ export const getPrecedingText = (_string, subquote, occurrence, index = 0) => {
     //of the entire string
     return splitString.slice(0, occurrence).join(subquote);
   }
-}
+};
 
-export const subSelectionsFromSubquote = ({ subquote, precedingText: _precedingText, string }) => {
+export const subSelectionsFromSubquote = ({
+  subquote,
+  precedingText: _precedingText,
+  string,
+}) => {
   //Splitting by tokenization here causes issues because we are still
   //comparing those characters at this level
   const selectedTokens = subquote.split(' ');
   const subSelections = [];
-  selectedTokens.forEach(_selectedText => {
-    //Adding the preceding text from the subSelections to ensure that 
+  selectedTokens.forEach((_selectedText) => {
+    //Adding the preceding text from the subSelections to ensure that
     //Repeated words are accounted for
-    const precedingTextInSubselections = subSelections.map(({ text }) => text).join(' ');
-    let subSelection = generateSelection(
-      { selectedText: _selectedText, precedingText: _precedingText + precedingTextInSubselections, entireText: string, subSelections }
-    );
+    const precedingTextInSubselections = subSelections
+      .map(({ text }) => text)
+      .join(' ');
+    let subSelection = generateSelection({
+      selectedText: _selectedText,
+      precedingText: _precedingText + precedingTextInSubselections,
+      entireText: string,
+      subSelections,
+    });
 
     subSelections.push(subSelection);
   });
@@ -125,9 +171,9 @@ export const subSelectionsFromSubquote = ({ subquote, precedingText: _precedingT
 };
 
 /**
- * Most everything below this is borrowed and adapted from 
+ * Most everything below this is borrowed and adapted from
  * https://github.com/unfoldingWord/selections/blob/master/src/js/selections.js
- * and 
+ * and
  * https://github.com/unfoldingWord/tc-strings/blob/master/src/js/strings.js
  */
 
@@ -138,14 +184,22 @@ export const subSelectionsFromSubquote = ({ subquote, precedingText: _precedingT
  * @param {String} entireText - the text that the selection should be in
  * @return {Object} - the selection object to be used
  */
-export const generateSelection = ({ selectedText, precedingText, entireText }) => {
+export const generateSelection = ({
+  selectedText,
+  precedingText,
+  entireText,
+}) => {
   // replace more than one contiguous space with a single one since HTML/selection only renders 1
   const _entireText = normalizeString(entireText);
   // Getting the occurrences before the current token
   const precedingTokens = tokenizer(precedingText);
-  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (n, val) {
+  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (
+    n,
+    val
+  ) {
     return n + (val === selectedText);
-  }, 0);
+  },
+    0);
   // calculate this occurrence number by adding it to the preceding ones
   let occurrence = precedingOccurrencesInPreviousString + 1;
   // get the total occurrences from the verse
@@ -157,7 +211,7 @@ export const generateSelection = ({ selectedText, precedingText, entireText }) =
   return {
     text: selectedText,
     occurrence: occurrence,
-    occurrences: allOccurrences
+    occurrences: allOccurrences,
   };
 };
 
@@ -174,7 +228,8 @@ export const spliceStringOnRanges = (string, ranges) => {
   ranges.forEach(function (range) {
     const firstCharacterPosition = range[0] - rangeShift; // original range start - the rangeShift
     const beforeSelection = remainingString.slice(0, firstCharacterPosition); // save all the text before the selection
-    if (beforeSelection) { // only add to the array if string isn't empty
+    if (beforeSelection) {
+      // only add to the array if string isn't empty
       selectionArray.push({ text: beforeSelection, selected: false });
     }
     const shiftedRangeStart = range[0] - rangeShift; // range start - the rangeShift
@@ -187,7 +242,7 @@ export const spliceStringOnRanges = (string, ranges) => {
       text: selection,
       selected: true,
       occurrence: occurrence,
-      occurrences: occurrences
+      occurrences: occurrences,
     };
     selectionArray.push(selectionObject); // add the selection to the response array
     // next iteration is using remaining string
@@ -197,7 +252,8 @@ export const spliceStringOnRanges = (string, ranges) => {
     rangeShift += beforeSelection.length; // adjust the rangeShift by the length prior to the selection
     rangeShift += selection.length; // adjust the rangeShift by the length of the selection itself
   });
-  if (remainingString) { // only add to the array if string isn't empty
+  if (remainingString) {
+    // only add to the array if string isn't empty
     selectionArray.push({ text: remainingString, selected: false });
   }
   return selectionArray;
@@ -211,10 +267,13 @@ export const spliceStringOnRanges = (string, ranges) => {
  */
 export const selectionsToRanges = (string, selections) => {
   let ranges = []; // response
-  selections.forEach(selection => {
-    if (string && string.includes(selection.text)) { // conditions to prevent errors
+  selections.forEach((selection) => {
+    if (string && string.includes(selection.text)) {
+      // conditions to prevent errors
       const splitArray = string.split(selection.text); // split the string to get the text between occurrences
-      const beforeSelection = splitArray.slice(0, selection.occurrence).join(selection.text); // get the text before the selection to handle multiple occurrences
+      const beforeSelection = splitArray
+        .slice(0, selection.occurrence)
+        .join(selection.text); // get the text before the selection to handle multiple occurrences
       const start = beforeSelection.length; // the start position happens at the length of the string that comes before it
       const end = start + selection.text.length - 1; // the end position happens at the end of the selection text, but length doesn't account for 0 based position start
       const range = [start, end]; // new range
@@ -243,11 +302,11 @@ export const selectionsToStringSplices = (string, selections) => {
  * @param {array}  ranges - array of ranges [[int,int],...]
  * @returns {array} - array of optimized ranges [[int,int],...]
  */
-export const optimizeRanges = ranges => {
+export const optimizeRanges = (ranges) => {
   let optimizedRanges = []; // response
   if (ranges.length === 1) return ranges; // if there's only one, return it
-  ranges = _.sortBy(ranges, range => range[1]); // order ranges by end char index as secondary
-  ranges = _.sortBy(ranges, range => range[0]); // order ranges by start char index as primary
+  ranges = _.sortBy(ranges, (range) => range[1]); // order ranges by end char index as secondary
+  ranges = _.sortBy(ranges, (range) => range[0]); // order ranges by start char index as primary
   ranges = _.uniq(ranges); // remove duplicates
   // combine overlapping and contiguous ranges
   let runningRange = []; // the running range to merge overlapping and contiguous ranges
@@ -256,17 +315,22 @@ export const optimizeRanges = ranges => {
     const currentEnd = currentRange[1];
     let runningStart = runningRange[0];
     let runningEnd = runningRange[1];
-    if (currentStart >= runningStart && currentStart <= runningEnd + 1) { // the start occurs in the running range and +1 handles contiguous
-      if (currentEnd >= runningStart && currentEnd <= runningEnd) { // if the start occurs inside running range then let's check the end
+    if (currentStart >= runningStart && currentStart <= runningEnd + 1) {
+      // the start occurs in the running range and +1 handles contiguous
+      if (currentEnd >= runningStart && currentEnd <= runningEnd) {
+        // if the start occurs inside running range then let's check the end
         // if the end occurs inside the running range then it's inside it and doesn't matter
-      } else { // the end doesn't occur inside the running range
+      } else {
+        // the end doesn't occur inside the running range
         runningRange[1] = runningEnd = currentEnd; // extend running range
       }
-    } else { // the start does not occur in the running range
+    } else {
+      // the start does not occur in the running range
       if (runningRange.length !== 0) optimizedRanges.push(runningRange); // the running range is closed push it to optimizedRanges
       runningRange = currentRange; // reset the running range to this one
     }
-    if (ranges.length === index + 1 && runningEnd - runningStart >= 0) { // this is the last one and it isn't blank
+    if (ranges.length === index + 1 && runningEnd - runningStart >= 0) {
+      // this is the last one and it isn't blank
       optimizedRanges.push(runningRange); // push the last one to optimizedRanges
     }
   });
@@ -301,7 +365,7 @@ export const selectionArray = (string, selections) => {
  */
 export const rangesToSelections = (string, ranges) => {
   let selections = [];
-  ranges.forEach(range => {
+  ranges.forEach((range) => {
     const start = range[0]; // set the start point
     const end = range[1]; // set the end point
     const length = end - start + 1; // get the length of the sub string
@@ -313,9 +377,10 @@ export const rangesToSelections = (string, ranges) => {
     const selection = {
       text: subString,
       occurrence: occurrence,
-      occurrences: occurrences
+      occurrences: occurrences,
     };
-    if (occurrences > 0) { // there are some edge cases where empty strings get through but don't have occurrences
+    if (occurrences > 0) {
+      // there are some edge cases where empty strings get through but don't have occurrences
       selections.push(selection);
     }
   });
@@ -331,8 +396,8 @@ export const rangesToSelections = (string, ranges) => {
 export const optimizeSelections = (string, selections) => {
   let optimizedSelections; // return
   // filter out the random clicks from the UI
-  selections = selections.filter(selection => {
-    const blankSelection = { text: "", occurrence: 1, occurrences: 0 };
+  selections = selections.filter((selection) => {
+    const blankSelection = { text: '', occurrence: 1, occurrences: 0 };
     return !isEqual(selection, blankSelection);
   });
   let ranges = selectionsToRanges(string, selections); // get char ranges of each selection
@@ -347,11 +412,18 @@ export const optimizeSelections = (string, selections) => {
  * @param {string} string - the text selections are found in
  * @returns {Array} - array of selection objects
  */
-export const removeSelectionFromSelections = (selection, selections, string) => {
+export const removeSelectionFromSelections = (
+  selection,
+  selections,
+  string
+) => {
   selections = Array.from(selections);
-  selections = selections.filter(_selection =>
-    !(_selection.occurrence === selection.occurrence &&
-      _selection.text === selection.text)
+  selections = selections.filter(
+    (_selection) =>
+      !(
+        _selection.occurrence === selection.occurrence &&
+        _selection.text === selection.text
+      )
   );
   selections = optimizeSelections(string, selections);
   return selections;
@@ -371,7 +443,7 @@ export const addSelectionToSelections = (selection, selections, string) => {
 };
 
 /**
- * 
+ *
  * @param {string} string - Entire string to search within 'Blessed be the name of the Lord'
  * @param {string} subString - substring to search for inside of entire string i.e. 'bless, blessed, blessing'
  * @return {number}
@@ -430,7 +502,7 @@ export const occurrences = (string, subString) => {
  * @returns {array} - array of selection objects
  */
 export const checkSelectionOccurrences = (string, selections) => {
-  selections = selections.filter(selection => {
+  selections = selections.filter((selection) => {
     let count = occurrences(string, selection.text);
     return count === selection.occurrences;
   });
@@ -461,13 +533,13 @@ export const occurrencesInString = (string, subString) => {
 
 const tokenizer = (text) => {
   return tokenize({
-    text,
+    text: text,
     greedy: true,
     normalize: true,
   });
 };
 
-export const normalizeString = string => {
+export const normalizeString = (string) => {
   const normalized = tokenizer(string).join(' ');
   return normalized;
 };

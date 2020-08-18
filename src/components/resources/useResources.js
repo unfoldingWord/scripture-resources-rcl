@@ -74,9 +74,15 @@ function useResources({
     if (resources && resources[0] && resources[0].project) {
       const { project } = resources[0];
       if (project.identifier !== projectIdentifier || !usfmJsonArray) {
-        const promises = resources.map((resource) =>
-          resource.project.parseUsfm()
-        );
+        const promises = resources
+          .map((resource) => {
+            try {
+              return resource.project.parseUsfm();
+            } catch {
+              return null;
+            }
+          })
+          .filter((currentPromise) => currentPromise != null);
         const jsonArray = await Promise.all(promises);
         setUsfmJsonArray(jsonArray);
         setProjectIdentifier(project.identifier);
