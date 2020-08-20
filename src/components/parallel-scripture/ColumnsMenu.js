@@ -15,8 +15,11 @@ import { HighlightOff, PlaylistAdd } from '@material-ui/icons';
 import { localString } from '../../core/localStrings';
 import { ResourcesContext } from '../resources/Resources.context';
 
-function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
-  const { state: resources, actions } = React.useContext(ResourcesContext);
+function ColumnsMenu({
+  columns, onColumns, anchorEl, onAnchorEl,
+}) {
+  const { state, actions } = React.useContext(ResourcesContext);
+  const { resources } = state;
 
   const onResourceAddClick = () => {
     actions.addResourceLink(resourceUrl.value);
@@ -35,14 +38,12 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
   };
 
   const isDefaultResourceLink = React.useCallback(
-    (index) => {
-      return (
-        resources &&
+    (index) => (
+      resources &&
         resources[index] &&
         actions.isDefaultResourceLink(resources[index].resourceLink)
-      );
-    },
-    [resources]
+    ),
+    [actions, resources],
   );
 
   const classes = useStyles();
@@ -84,7 +85,9 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
       <MenuItem
         key={'text'}
         disabled
-        style={{ opacity: 1, fontWeight: 600, fontSize: 12 }}
+        style={{
+          opacity: 1, fontWeight: 600, fontSize: 12,
+        }}
       >
         {localString('ManageVersions')}
       </MenuItem>
@@ -116,9 +119,7 @@ function ColumnsMenu({ columns, onColumns, anchorEl, onAnchorEl }) {
 
 const useStyles = makeStyles((theme) => ({
   root: {},
-  action: {
-    padding: '8px',
-  },
+  action: { padding: '8px' },
 }));
 
 export default ColumnsMenu;

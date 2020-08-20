@@ -8,13 +8,13 @@ export const resourcesFromResourceLinks = async ({
   reference,
   config,
 }) => {
-  const promises = resourceLinks.map((resourceLink) => {
-    return resourceFromResourceLink({ resourceLink, reference, config });
-  });
+  const promises = resourceLinks.map((resourceLink) => resourceFromResourceLink({
+    resourceLink, reference, config,
+  }));
 
   // Filter invalid resources (those that did not parse).
   const resources = await (await Promise.all(promises)).filter(
-    (parsedResource) => parsedResource != null
+    (parsedResource) => parsedResource != null,
   );
   return resources;
 };
@@ -26,17 +26,23 @@ export const resourceFromResourceLink = async ({
 }) => {
   try {
     const resource = parseResourceLink({ resourceLink, config });
-    const { projectId, username, repository, tag } = resource;
+    const {
+      projectId, username, repository, tag,
+    } = resource;
     const manifest = await getResourceManifest(resource);
     const projects = manifest.projects.map((project) =>
-      extendProject({ project, resource, reference })
+      extendProject({
+        project, resource, reference,
+      }),
     );
     const project = await projectFromProjects({
       reference,
       projectId,
       projects,
     });
-    const _resource = { ...resource, reference, manifest, projects, project };
+    const _resource = {
+      ...resource, reference, manifest, projects, project,
+    };
     return _resource;
   } catch (e) {
     const errorMessage =
@@ -75,7 +81,9 @@ export const getResourceManifest = async ({
 }) => {
   const repository = `${languageId}_${resourceId}`;
   const path = 'manifest.yaml';
-  const yaml = await getFile({ username, repository, path, tag, config });
+  const yaml = await getFile({
+    username, repository, path, tag, config,
+  });
   const json = yaml ? YAML.safeLoad(yaml) : null;
   return json;
 };
@@ -89,7 +97,9 @@ export const getResourceProjectFile = async ({
   config,
 }) => {
   const repository = `${languageId}_${resourceId}`;
-  const file = await getFile({ username, repository, path, tag, config });
+  const file = await getFile({
+    username, repository, path, tag, config,
+  });
   return file;
 };
 
@@ -100,29 +110,37 @@ export const projectFromProjects = async ({
 }) => {
   let identifier = reference && reference.bookId ? reference.bookId : projectId;
   const project = projects.filter(
-    (project) => project.identifier === identifier
+    (project) => project.identifier === identifier,
   )[0];
   return project;
 };
 
-export const extendProject = ({ project, resource, reference }) => {
+export const extendProject = ({
+  project, resource, reference,
+}) => {
   let _project = { ...project };
   const { projectId, resourceLink } = resource;
   _project.file = async () => getResourceProjectFile({ ...resource, project });
+
   if (project.path.match(/\.usfm$/)) {
     _project.parseUsfm = async () => {
       const start = performance.now();
       let json;
-      if (reference && reference.chapter)
+
+      if (reference && reference.chapter) {
         json = await parseChapter({ project: _project, reference });
-      else json = await parseBook({ project: _project });
+      } else {
+        json = await parseBook({ project: _project });
+      }
+
       const end = performance.now();
       let identifier =
         reference && reference.bookId ? reference.bookId : projectId;
+
       console.log(
         `fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(
-          3
-        )}ms`
+          3,
+        )}ms`,
       );
       return json;
     };
@@ -131,14 +149,14 @@ export const extendProject = ({ project, resource, reference }) => {
 };
 
 export const parseBook = async ({ project }) => {
-  console.log('Parse Book');
+  console.log('parseBook usfmJS.toJSON');
   const usfm = await project.file();
   const json = usfmJS.toJSON(usfm);
   return json;
 };
 
 export const parseChapter = async ({ project, reference }) => {
-  console.log('Parse Chapter');
+  console.log('parseChapter usfmJS.toJSON');
   const usfm = await project.file();
   const thisChapter = parseInt(reference.chapter);
   const nextChapter = thisChapter + 1;
@@ -164,11 +182,13 @@ export const getFile = async ({
   config,
 }) => {
   let url;
+
   if (tag && tag !== 'master' && urlPath) {
     url = path.join(username, repository, 'raw/tag', tag, urlPath);
   } else {
     url = path.join(username, repository, 'raw/branch/master', urlPath);
   }
+
   try {
     const _config = { ...config }; // prevents gitea-react-toolkit from modifying object
     const data = await get({ url, config: _config });
