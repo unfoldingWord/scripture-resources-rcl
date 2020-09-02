@@ -1,8 +1,7 @@
-import React, { useState, useCallback } from 'react';
-import useEffect from 'use-deep-compare-effect';
+import React, { useState, useEffect } from 'react';
+import useEffectDeep from 'use-deep-compare-effect';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import deepFreeze from 'deep-freeze';
 import { ResourcesContext } from '../resources/Resources.context';
 
 import { ScriptureTable } from '../../';
@@ -26,6 +25,9 @@ function ParallelScripture({
   const { resources, books } = state;
 
   useEffect(() => {
+    setOpen(_open);
+  }, [_open]);
+  useEffectDeep(() => {
     const _titles = resources.map((resource) => {
       let _title = `Error: ${resource.resourceLink}`;
 
@@ -80,7 +82,7 @@ function ParallelScripture({
   const currentProject = resources && resources[0] && resources[0]?.project;
   const currentProjectTitle = currentProject?.title;
 
-  useEffect(() => {
+  useEffectDeep(() => {
     if (currentProjectTitle) {
       let ref = '';
 
