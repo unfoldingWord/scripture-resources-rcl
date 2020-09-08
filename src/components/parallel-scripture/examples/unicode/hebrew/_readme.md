@@ -235,3 +235,106 @@ let quoteVariations = [
   selections={quoteVariations}
 />;
 ```
+
+
+### Esther 2:4
+This verse has repeats the same phrase (בְּ⁠עֵינֵי הַ⁠מֶּלֶךְ) but with different cantillation marks.
+
+```js
+import { ParallelScriptureMock } from '../mocks.js';
+
+let quoteVariations = [
+  'וְ⁠הַֽ⁠נַּעֲרָ֗ה אֲשֶׁ֤ר תִּיטַב֙ בְּ⁠עֵינֵ֣י הַ⁠מֶּ֔לֶךְ',
+  'וְ⁠הַ⁠נַּעֲרָה אֲשֶׁר תִּיטַב בְּ⁠עֵינֵי הַ⁠מֶּלֶךְ'
+];
+
+<ParallelScriptureMock
+  bookId='est'
+  testament='old'
+  chapter={2}
+  verse={4}
+  selections={quoteVariations}
+/>;
+```
+
+### Setumah: Nehemiah 3:2
+Setumah Parashah = "closed section."
+
+```js
+import { ParallelScriptureMock } from '../mocks.js';
+
+let quoteVariations = [
+  'יְרֵח֑וֹ',
+  'יְרֵחוֹ',
+];
+
+<ParallelScriptureMock
+  bookId='neh'
+  testament='old'
+  chapter={3}
+  verse={2}
+  selections={quoteVariations}
+/>;
+```
+
+
+### Setumah #2: Nehemiah 3:2
+Setumah Parashah = "closed section."
+
+```js
+import { ParallelScriptureMock } from '../mocks.js';
+
+let quoteVariations = [
+  'בֶּן־אִמְרִֽי'
+];
+
+<ParallelScriptureMock
+  bookId='neh'
+  testament='old'
+  chapter={3}
+  verse={2}
+  selections={quoteVariations}
+/>;
+```
+
+### Neh 1:6: Word Break at Sof Passuq.
+Highlight a word immediately before a sof passuq.
+
+```js
+import { ParallelScriptureMock } from '../mocks.js';
+
+let quoteVariations = [
+  'חָטָֽאנוּ',
+  'חָטָאנוּ'
+];
+
+<ParallelScriptureMock
+  bookId='neh'
+  testament='old'
+  chapter={1}
+  verse={6}
+  selections={quoteVariations}
+/>;
+```
+
+
+### Petuchah: Neh 1:11
+Petuchah Parashah = "open section."
+
+```js
+import { ParallelScriptureMock } from '../mocks.js';
+
+let quoteVariations = [
+  'לַ⁠מֶּֽלֶךְ',
+  'לַ⁠מֶּֽלֶךְ',
+  'לַ⁠מֶּלֶךְ'
+];
+
+<ParallelScriptureMock
+  bookId='neh'
+  testament='old'
+  chapter={1}
+  verse={11}
+  selections={quoteVariations}
+/>;
+```

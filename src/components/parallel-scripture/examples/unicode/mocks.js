@@ -67,7 +67,7 @@ export function ParallelScriptureMock({
             string.normalize('NFKC')
           </th>
           <th colspan='2' style={{ borderRight: '1px solid black' }}>
-            string-punctuation-tokenizer (destructive)
+            string-punctuation-tokenizer
           </th>
         </tr>
         {selections.map((currentSelection) => {
