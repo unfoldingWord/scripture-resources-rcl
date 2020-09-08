@@ -10,7 +10,7 @@ import tokenizer from 'string-punctuation-tokenizer';
  * @param {array} verseObjects - source array of nested verseObjects
  * @param {array} flat - output array that will be filled with flattened verseObjects
  */
-export const flattenVerseObjects = (verseObjects, flat=[]) => {
+export const flattenVerseObjects = (verseObjects, flat = []) => {
   let _verseObjects = [...verseObjects];
   while (_verseObjects.length > 0) {
     const object = _verseObjects.shift();
@@ -28,7 +28,7 @@ export const flattenVerseObjects = (verseObjects, flat=[]) => {
 
 export const verseObjectsToString = (verseObjects) => {
   const flattenedVerseObjects = flattenVerseObjects(verseObjects);
-  const string = flattenedVerseObjects.map(verseObject => verseObject.text).join('');
+  const string = flattenedVerseObjects.map(verseObject => verseObject.text).join(' ');
   return string;
 };
 
@@ -100,11 +100,11 @@ export const occurrenceInjectVerseObjects = (verseObjects) => {
   if (verseObjects && verseObjects.length > 0) {
     const flattenedVerseObjects = flattenVerseObjects(verseObjects);
     _verseObjects = flattenedVerseObjects.map((verseObject, index) => {
-      let _verseObject = {...verseObject};
+      let _verseObject = { ...verseObject };
       if (verseObject.type === 'word') {
         const occurrence = getOccurrence(flattenedVerseObjects, index, verseObject.text);
         const occurrences = getOccurrences(flattenedVerseObjects, verseObject.text);
-        _verseObject = {...verseObject, occurrence, occurrences};
+        _verseObject = { ...verseObject, occurrence, occurrences };
       }
       return _verseObject;
     });
