@@ -76,8 +76,8 @@ function ScriptureTable({
       icon: open ? (
         <UnfoldLess fontSize='small' />
       ) : (
-        <UnfoldMore fontSize='small' />
-      ),
+          <UnfoldMore fontSize='small' />
+        ),
       tooltip: open
         ? localString('CloseScripturePane')
         : localString('ExpandScripturePane'),
@@ -100,8 +100,8 @@ function ScriptureTable({
       icon: filter ? (
         <ShortText fontSize='small' />
       ) : (
-        <Subject fontSize='small' />
-      ),
+          <Subject fontSize='small' />
+        ),
       tooltip: filter
         ? localString('ExpandChapter')
         : localString('CollapseChapter'),
@@ -199,7 +199,7 @@ ScriptureTable.propTypes = {
   /** callback to return the quote when selections made */
   onQuote: PropTypes.func,
   /** set the default open state */
-  open: PropTypes.string,
+  open: PropTypes.bool,
   /** callback to update open state */
   onOpen: PropTypes.func,
 };

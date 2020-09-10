@@ -35,7 +35,7 @@ function AlignedWordsObject({
   }
 
   const words = children.map((verseObject, index) =>
-    <span data-test="aligned-word-object" data-testSelected={selected} onClick={onClick} key={index} className={selected ? classes.selected : undefined}>
+    <span data-test="aligned-word-object" data-testselected={selected} onClick={onClick} key={index} className={selected ? classes.selected : undefined}>
       <WordObject verseObject={verseObject} disableWordPopover={disableWordPopover} />
     </span>
   );
