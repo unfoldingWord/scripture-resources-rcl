@@ -19,7 +19,7 @@ function ColumnsMenu({
   columns, onColumns, anchorEl, onAnchorEl,
 }) {
   const { state, actions } = React.useContext(ResourcesContext);
-  const { resources } = state;
+  const resources = (state != null) ? state.resources : null;
 
   const onResourceAddClick = () => {
     actions.addResourceLink(resourceUrl.value);
@@ -40,8 +40,8 @@ function ColumnsMenu({
   const isDefaultResourceLink = React.useCallback(
     (index) => (
       resources &&
-        resources[index] &&
-        actions.isDefaultResourceLink(resources[index].resourceLink)
+      resources[index] &&
+      actions.isDefaultResourceLink(resources[index].resourceLink)
     ),
     [actions, resources],
   );

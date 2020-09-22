@@ -18,6 +18,40 @@ describe('selectionsFromQuoteAndString', () => {
     expect(output).toStrictEqual(expected);
   });
 
+  it('all occurrences -1', () => {
+    const input = {
+      quote: "καὶ",
+      string: "διὰ τοῦτο, ἐὰν ἔλθω, ὑπομνήσω αὐτοῦ τὰ ἔργα, ἃ ποιεῖ, λόγοις πονηροῖς φλυαρῶν ἡμᾶς; καὶ μὴ ἀρκούμενος ἐπὶ τούτοις, οὔτε αὐτὸς ἐπιδέχεται τοὺς ἀδελφοὺς, καὶ τοὺς βουλομένους κωλύει, καὶ ἐκ τῆς ἐκκλησίας ἐκβάλλει.",
+      occurrence: -1,
+    };
+    debugger;
+    const output = selectionsFromQuoteAndString(input);
+    const expected = [
+      { text: "καὶ", occurrence: 1, occurrences: 3 },
+      { text: "καὶ", occurrence: 2, occurrences: 3 },
+      { text: "καὶ", occurrence: 3, occurrences: 3 },
+    ];
+    expect(output).toStrictEqual(expected);
+  });
+
+  it('skip -1 with ellipsis', () => {
+    debugger;
+
+    const input = {
+      quote: "καὶ…μὴ",
+      string: "διὰ τοῦτο, ἐὰν ἔλθω, ὑπομνήσω αὐτοῦ τὰ ἔργα, ἃ ποιεῖ, λόγοις πονηροῖς φλυαρῶν ἡμᾶς; καὶ μὴ ἀρκούμενος ἐπὶ τούτοις, οὔτε αὐτὸς ἐπιδέχεται τοὺς ἀδελφοὺς, καὶ τοὺς βουλομένους κωλύει, καὶ ἐκ τῆς ἐκκλησίας ἐκβάλλει.",
+      occurrence: -1,
+    };
+    debugger;
+    const output = selectionsFromQuoteAndString(input);
+    const expected = [
+      { text: "καὶ", occurrence: 1, occurrences: 3 },
+      { text: "καὶ", occurrence: 2, occurrences: 3 },
+      { text: "καὶ", occurrence: 3, occurrences: 3 },
+    ];
+    expect(output).toStrictEqual(expected);
+  });
+
   it('ellipsis: repeated word', () => {
     const input = {
       quote: "Θεοῦ…Θεοῦ",
@@ -163,6 +197,8 @@ describe('generateSelection', () => {
   })
 
   it('should return second occurrence for the given text', () => {
+    debugger;
+
     const selectedText = "ἡ";
     const precedingText = "ὅτε δὲ ἡ χρηστότης καὶ ";
     const entireText = "ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,";
