@@ -25,6 +25,7 @@ export const resourceFromResourceLink = async ({
   config,
 }) => {
   try {
+    debugger;
     const resource = parseResourceLink({ resourceLink, config });
     const {
       projectId, username, repository, tag,
@@ -56,6 +57,7 @@ export const resourceFromResourceLink = async ({
 };
 
 export const parseResourceLink = ({ resourceLink, config }) => {
+  debugger;
   const parsed = resourceLink.split('/').filter((string) => string.length > 0);
   const [username, languageId, resourceId, tag, projectId] = parsed;
   const repository = `${languageId}_${resourceId}`;
