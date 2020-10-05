@@ -27,7 +27,6 @@ export const resourceFromResourceLink = async ({
   try {
     const resource = parseResourceLink({ resourceLink, config, reference });
     const manifest = await getResourceManifest(resource);
-    debugger;
     const projects = manifest.projects.map((project) =>
       extendProject({
         project, resource, reference,
@@ -38,14 +37,12 @@ export const resourceFromResourceLink = async ({
       projectId: reference.bookId,
       projects,
     });
-    debugger;
     const _resource = {
       ...resource, reference, manifest, projects, project,
     };
-    debugger;
     return _resource;
   } catch (e) {
-    debugger;
+    console.log(e);
     const errorMessage =
       'scripture-resources-rcl: resources.js: Cannot load resource [' +
       resourceLink +
@@ -71,8 +68,8 @@ export const parseResourceLink = ({ resourceLink, config, reference = {} }) => {
     ([languageId, resourceId] = repository.split('_'));
   } else {
     //ru_gl/ru/rlob/master/tit
-    parsedArray = resourceLink.match(/(.*)\/(.*)\/(.*)\/(.*)\/(.*)/);
-    ([, username, languageId, resourceId, tag = 'master'] = parsedArray);
+    parsedArray = resourceLink.split('/')
+    ([username, languageId, resourceId, tag = 'master'] = parsedArray);
     repository= `${languageId}_${resourceId}`;
   }
   const resource = {
@@ -95,7 +92,6 @@ export const getResourceManifest = async ({
   tag,
   config,
 }) => {
-  debugger;
   const repository = `${languageId}_${resourceId}`;
   const path = 'manifest.yaml';
   const yaml = await getFile({
@@ -117,6 +113,7 @@ export const getResourceProjectFile = async ({
   const file = await getFile({
     username, repository, path, tag, config,
   });
+  debugger;
   return file;
 };
 
@@ -205,7 +202,6 @@ export const getFile = async ({
   } else {
     url = path.join(username, repository, 'raw/branch/master', urlPath);
   }
-
   try {
     const _config = { ...config }; // prevents gitea-react-toolkit from modifying object
     const data = await get({ url, config: _config });
