@@ -22,15 +22,12 @@ export const resourcesFromResourceLinks = async ({
 export const resourceFromResourceLink = async ({
   resourceLink,
   reference,
-  config,
+  config
 }) => {
   try {
-    debugger;
-    const resource = parseResourceLink({ resourceLink, config });
-    const {
-      projectId, username, repository, tag,
-    } = resource;
+    const resource = parseResourceLink({ resourceLink, config, reference });
     const manifest = await getResourceManifest(resource);
+    debugger;
     const projects = manifest.projects.map((project) =>
       extendProject({
         project, resource, reference,
@@ -38,14 +35,17 @@ export const resourceFromResourceLink = async ({
     );
     const project = await projectFromProjects({
       reference,
-      projectId,
+      projectId: reference.bookId,
       projects,
     });
+    debugger;
     const _resource = {
       ...resource, reference, manifest, projects, project,
     };
+    debugger;
     return _resource;
   } catch (e) {
+    debugger;
     const errorMessage =
       'scripture-resources-rcl: resources.js: Cannot load resource [' +
       resourceLink +
@@ -56,11 +56,25 @@ export const resourceFromResourceLink = async ({
   }
 };
 
-export const parseResourceLink = ({ resourceLink, config }) => {
-  debugger;
-  const parsed = resourceLink.split('/').filter((string) => string.length > 0);
-  const [username, languageId, resourceId, tag, projectId] = parsed;
-  const repository = `${languageId}_${resourceId}`;
+export const parseResourceLink = ({ resourceLink, config, reference = {} }) => {
+  let parsedArray, username, repository, languageId,
+   resourceId, projectId = reference.bookId, tag = 'master';
+  if (resourceLink.includes('src/branch')) {
+    //https://git.door43.org/ru_gl/ru_rlob/src/branch/master
+    parsedArray = resourceLink.match(/https?:\/\/.*org\/(.*)\/(.*)\/(.*)\/(.*)\/(.*)/);
+    ([, username, repository, , , tag] =  parsedArray);
+    ([languageId, resourceId] = repository.split('_'));
+  } else if (resourceLink.includes('http')) {
+    //https://git.door43.org/ru_gl/ru_rlob
+    parsedArray = resourceLink.match(/https?:\/\/.*org\/(.*)\/(.*)/);
+    ([,username, repository] = parsedArray);
+    ([languageId, resourceId] = repository.split('_'));
+  } else {
+    //ru_gl/ru/rlob/master/tit
+    parsedArray = resourceLink.match(/(.*)\/(.*)\/(.*)\/(.*)\/(.*)/);
+    ([, username, languageId, resourceId, tag = 'master'] = parsedArray);
+    repository= `${languageId}_${resourceId}`;
+  }
   const resource = {
     resourceLink,
     username,
@@ -81,6 +95,7 @@ export const getResourceManifest = async ({
   tag,
   config,
 }) => {
+  debugger;
   const repository = `${languageId}_${resourceId}`;
   const path = 'manifest.yaml';
   const yaml = await getFile({

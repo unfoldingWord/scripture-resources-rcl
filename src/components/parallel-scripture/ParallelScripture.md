@@ -101,11 +101,12 @@ const defaultResourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/master/3jn',
   'unfoldingWord/en/ult/v5/3jn',
   'unfoldingWord/en/ust/v5/3jn',
+  'ru_gl/ru/rlob/master/3jn'
 ];
 
 const _resourceLinks = [...defaultResourceLinks];
 
-// const reference = {bookId: 'rut', chapter: 1, verse: 1};
+const reference = {bookId: '3jn', chapter: 1, verse: 1};
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',
@@ -114,8 +115,8 @@ const _resourceLinks = [...defaultResourceLinks];
 
 const [resourceLinks, setResourceLinks] = React.useState(_resourceLinks);
 const [resources, setResources] = React.useState([]);
-
 <ResourcesContextProvider
+  reference={reference}
   resourceLinks={resourceLinks}
   defaultResourceLinks={defaultResourceLinks}
   onResourceLinks={setResourceLinks}
