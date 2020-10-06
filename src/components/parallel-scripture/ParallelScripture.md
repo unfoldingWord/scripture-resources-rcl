@@ -101,7 +101,8 @@ const defaultResourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/master/3jn',
   'unfoldingWord/en/ult/v5/3jn',
   'unfoldingWord/en/ust/v5/3jn',
-  'ru_gl/ru/rlob/master/3jn'
+  'ru_gl/ru/rlob/master/3jn',
+  'https://git.door43.org/unfoldingWord/en_ust/src/branch/master
 ];
 
 const _resourceLinks = [...defaultResourceLinks];

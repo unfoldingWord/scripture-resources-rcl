@@ -3,15 +3,14 @@ import YAML from 'js-yaml-parser';
 import { get, getFullTree } from 'gitea-react-toolkit';
 import usfmJS from 'usfm-js';
 
-export const resourcesFromResourceLinks = async ({
+export const resourcesFromResourceLinks = ({
   resourceLinks,
   reference,
   config,
 }) => {
   const promises = resourceLinks.map((resourceLink) => resourceFromResourceLink({
     resourceLink, reference, config,
-  }));
-
+}));
   // Filter invalid resources (those that did not parse).
   const resources = await (await Promise.all(promises)).filter(
     (parsedResource) => parsedResource != null,
@@ -49,7 +48,6 @@ export const resourceFromResourceLink = async ({
       ']';
     console.error(errorMessage);
     console.error(e);
-    return null;
   }
 };
 
@@ -68,7 +66,7 @@ export const parseResourceLink = ({ resourceLink, config, reference = {} }) => {
     ([languageId, resourceId] = repository.split('_'));
   } else {
     //ru_gl/ru/rlob/master/tit
-    parsedArray = resourceLink.split('/')
+    parsedArray = resourceLink.split('/');
     ([username, languageId, resourceId, tag = 'master'] = parsedArray);
     repository= `${languageId}_${resourceId}`;
   }
@@ -113,7 +111,6 @@ export const getResourceProjectFile = async ({
   const file = await getFile({
     username, repository, path, tag, config,
   });
-  debugger;
   return file;
 };
 
@@ -135,7 +132,6 @@ export const extendProject = ({
   let _project = { ...project };
   const { projectId, resourceLink } = resource;
   _project.file = async () => getResourceProjectFile({ ...resource, project });
-
   if (project.path.match(/\.usfm$/)) {
     _project.parseUsfm = async () => {
       const start = performance.now();
