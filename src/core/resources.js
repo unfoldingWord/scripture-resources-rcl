@@ -3,15 +3,14 @@ import YAML from 'js-yaml-parser';
 import { get, getFullTree } from 'gitea-react-toolkit';
 import usfmJS from 'usfm-js';
 
-export const resourcesFromResourceLinks = async ({
+export const resourcesFromResourceLinks = ({
   resourceLinks,
   reference,
   config,
 }) => {
   const promises = resourceLinks.map((resourceLink) => resourceFromResourceLink({
     resourceLink, reference, config,
-  }));
-
+}));
   // Filter invalid resources (those that did not parse).
   const resources = await (await Promise.all(promises)).filter(
     (parsedResource) => parsedResource != null,
@@ -22,13 +21,10 @@ export const resourcesFromResourceLinks = async ({
 export const resourceFromResourceLink = async ({
   resourceLink,
   reference,
-  config,
+  config
 }) => {
   try {
-    const resource = parseResourceLink({ resourceLink, config });
-    const {
-      projectId, username, repository, tag,
-    } = resource;
+    const resource = parseResourceLink({ resourceLink, config, reference });
     const manifest = await getResourceManifest(resource);
     const projects = manifest.projects.map((project) =>
       extendProject({
@@ -37,7 +33,7 @@ export const resourceFromResourceLink = async ({
     );
     const project = await projectFromProjects({
       reference,
-      projectId,
+      projectId: reference.bookId,
       projects,
     });
     const _resource = {
@@ -45,20 +41,35 @@ export const resourceFromResourceLink = async ({
     };
     return _resource;
   } catch (e) {
+    console.log(e);
     const errorMessage =
       'scripture-resources-rcl: resources.js: Cannot load resource [' +
       resourceLink +
       ']';
     console.error(errorMessage);
     console.error(e);
-    return null;
   }
 };
 
-export const parseResourceLink = ({ resourceLink, config }) => {
-  const parsed = resourceLink.split('/').filter((string) => string.length > 0);
-  const [username, languageId, resourceId, tag, projectId] = parsed;
-  const repository = `${languageId}_${resourceId}`;
+export const parseResourceLink = ({ resourceLink, config, reference = {} }) => {
+  let parsedArray, username, repository, languageId,
+   resourceId, projectId = reference.bookId, tag = 'master';
+  if (resourceLink.includes('src/branch')) {
+    //https://git.door43.org/ru_gl/ru_rlob/src/branch/master
+    parsedArray = resourceLink.match(/https?:\/\/.*org\/(.*)\/(.*)\/(.*)\/(.*)\/(.*)/);
+    ([, username, repository, , , tag] =  parsedArray);
+    ([languageId, resourceId] = repository.split('_'));
+  } else if (resourceLink.includes('http')) {
+    //https://git.door43.org/ru_gl/ru_rlob
+    parsedArray = resourceLink.match(/https?:\/\/.*org\/(.*)\/(.*)/);
+    ([,username, repository] = parsedArray);
+    ([languageId, resourceId] = repository.split('_'));
+  } else {
+    //ru_gl/ru/rlob/master/tit
+    parsedArray = resourceLink.split('/');
+    ([username, languageId, resourceId, tag = 'master'] = parsedArray);
+    repository= `${languageId}_${resourceId}`;
+  }
   const resource = {
     resourceLink,
     username,
@@ -121,7 +132,6 @@ export const extendProject = ({
   let _project = { ...project };
   const { projectId, resourceLink } = resource;
   _project.file = async () => getResourceProjectFile({ ...resource, project });
-
   if (project.path.match(/\.usfm$/)) {
     _project.parseUsfm = async () => {
       const start = performance.now();
@@ -188,7 +198,6 @@ export const getFile = async ({
   } else {
     url = path.join(username, repository, 'raw/branch/master', urlPath);
   }
-
   try {
     const _config = { ...config }; // prevents gitea-react-toolkit from modifying object
     const data = await get({ url, config: _config });
