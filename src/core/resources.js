@@ -3,7 +3,7 @@ import YAML from 'js-yaml-parser';
 import { get, getFullTree } from 'gitea-react-toolkit';
 import usfmJS from 'usfm-js';
 
-export const resourcesFromResourceLinks = ({
+export const resourcesFromResourceLinks = async ({
   resourceLinks,
   reference,
   config,
@@ -11,7 +11,7 @@ export const resourcesFromResourceLinks = ({
   const promises = resourceLinks.map((resourceLink) => resourceFromResourceLink({
     resourceLink, reference, config,
 }));
-  // Filter invalid resources (those that did not parse).
+  // Filter invalid resources (those that did not parse)
   const resources = await (await Promise.all(promises)).filter(
     (parsedResource) => parsedResource != null,
   );
