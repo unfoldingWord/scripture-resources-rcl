@@ -19,7 +19,7 @@ function ColumnsMenu({
   columns, onColumns, anchorEl, onAnchorEl,
 }) {
   const { state, actions } = React.useContext(ResourcesContext);
-  const resources = (state != null) ? state.resources : null;
+  const { resources } = state || {};
 
   const onResourceAddClick = () => {
     actions.addResourceLink(resourceUrl.value);

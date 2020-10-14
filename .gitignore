@@ -4,7 +4,8 @@ styleguide
 dist
 .DS_Store
 package-lock.json
-
+.yalc
+yalc.lock
 # Logs
 logs
 *.log
