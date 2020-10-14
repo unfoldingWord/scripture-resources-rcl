@@ -40,8 +40,8 @@ function ColumnsMenu({
   const isDefaultResourceLink = React.useCallback(
     (index) => (
       resources &&
-        resources[index] &&
-        actions.isDefaultResourceLink(resources[index].resourceLink)
+      resources[index] &&
+      actions.isDefaultResourceLink(resources[index].resourceLink)
     ),
     [actions, resources],
   );

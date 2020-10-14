@@ -70,6 +70,9 @@ describe('Checking highlights from rendered component in 3 John', () => {
   it('should have all words highlighted 3JN 1:10', () => {
     generateTest('3jn/1-10');
   })
+  it('should highlight και, all occurences', () => {
+    generateTest('3jn/1-10-2');
+  })
   it('should have all words highlighted 3JN 1:11', () => {
     generateTest('3jn/1-11');
   })
@@ -104,7 +107,7 @@ function generateTest(fileName) {
   const highlightedWordsFromVerseComponent = getHighlightedWordsFromVerseComponent(reference, occurrence, quote, books);
   const expectedHighlightedWords = selectionsFromQuote({ verseObjects, occurrence, quote });
   expectedHighlightedWords.forEach((selectionStringified, index) => {
-    const { text } = JSON.parse(selectionStringified);    
+    const { text } = JSON.parse(selectionStringified);
     expected.push(JSON.parse(selectionStringified));
     expect(highlightedWordsFromVerseComponent[index]).toBe(text);
   })
