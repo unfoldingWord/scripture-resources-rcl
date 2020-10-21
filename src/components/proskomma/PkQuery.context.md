@@ -35,7 +35,7 @@ const pk = new ProsKomma();
 // Try
 // { documents { sequences { blocks { bs { label } text } } } }
 // and
-// { documents { sequences { blocks { c { ... on Token { itemType subType chars } ... on Scope { itemType label } ... on Graft { itemType subType sequenceId } } } } } }
+// { documents { sequences { blocks { items { ... on Token { itemType subType chars } ... on Scope { itemType label } ... on Graft { itemType subType sequenceId } } } } } }
 // and
 // { documents { usfmId: header(id:"id") mainSequence { blocksForScopes(scopes:["chapter/150", "verse/1"]){ text } } } }
 
