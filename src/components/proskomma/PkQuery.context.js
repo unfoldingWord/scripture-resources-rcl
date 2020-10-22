@@ -5,14 +5,14 @@ const PkQuery = class extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            query: '{ docSets: docSetsWithBook(bookCode:"TIT") {' +
-                '  lang abbr document: documentWithBook(bookCode:"TIT") {' +
-                '    book: header(id:"bookCode") ' +
-                '    sequence: mainSequence {' +
-                '      blocks: blocksForScopes(scopes:["chapter/1", "verse/2"]) {' +
-                '        items: prunedItems(requiredScopes:["chapter/1", "verse/2"]) {' +
-                '          ... on Token { itemType subType chars }' +
-                '          ... on Scope { itemType label }' +
+            query: '{ docSets: docSetsWithBook(bookCode:"TIT") {\n' +
+                '  lang abbr document: documentWithBook(bookCode:"TIT") {\n' +
+                '    book: header(id:"bookCode") \n' +
+                '    sequence: mainSequence {\n' +
+                '      blocks: blocksForScopes(scopes:["chapter/1", "verse/2"]) {\n' +
+                '        items: prunedItems(requiredScopes:["chapter/1", "verse/2"]) {\n' +
+                '          ... on Token { itemType subType chars }\n' +
+                '          ... on Scope { itemType label }\n' +
                 '          ... on Graft { itemType } } } } } } }',
             queryResult: ""
         };
@@ -47,11 +47,13 @@ const PkQuery = class extends Component {
             <div>
                 <div>
                     <form>
-                    <input style={{width: "100%"}} type="text" name="query" value={this.state.query}
+                        <h3>Query (editable)</h3>
+                    <textarea style={{padding:"10px", "background-color":"#EEF"}} rows="10" cols="80" type="text" name="query" value={this.state.query}
                            onChange={async (event) => await this.handleChange(event)}/>
                     </form>
                 </div>
                 <div>
+                    <h3>Result</h3>
                     <pre>{this.state.queryResult}</pre>
                 </div>
             </div>
