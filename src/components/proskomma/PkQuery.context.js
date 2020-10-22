@@ -5,7 +5,15 @@ const PkQuery = class extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            query: '{ documents { usfmId: header(id:"id") mainSequence { nBlocks } } }',
+            query: '{ docSets: docSetsWithBook(bookCode:"TIT") {' +
+                '  lang abbr document: documentWithBook(bookCode:"TIT") {' +
+                '    book: header(id:"bookCode") ' +
+                '    sequence: mainSequence {' +
+                '      blocks: blocksForScopes(scopes:["chapter/1", "verse/2"]) {' +
+                '        items: prunedItems(requiredScopes:["chapter/1", "verse/2"]) {' +
+                '          ... on Token { itemType subType chars }' +
+                '          ... on Scope { itemType label }' +
+                '          ... on Graft { itemType } } } } } } }',
             queryResult: ""
         };
         this.handleChange = this.handleChange.bind(this);

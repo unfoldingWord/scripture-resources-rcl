@@ -1,4 +1,4 @@
-export default `\\id TIT
+export default `\\id TIT Bla Bla
 \\ide UTF-8
 \\rem Copyright Information: Creative Commons Attribution-ShareAlike 4.0 License
 \\h तीतुस
