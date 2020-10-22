@@ -2,8 +2,11 @@
 import React, {useState} from 'react';
 import ReactJson from 'react-json-view';
 import en_psa from '../mocks/en_psa.usfm.js';
+import hi_tit from '../mocks/hi_tit.usfm.js';
 import hi_rev from '../mocks/hi_aligned_rev.usfm.js';
-import hi_tit from '../mocks/hi_aligned_tit.usfm.js';
+import bhd_tit from '../mocks/bhd_tit.usfm.js';
+import ugnt_tit from '../mocks/ugnt_tit.usfm.js';
+import eng_tit from '../mocks/en_aligned_tit.usfm.js';
 import { ProsKomma } from 'proskomma';
 import PkQuery from './PkQuery.context';
 
@@ -14,7 +17,9 @@ const pk = new ProsKomma();
 [
     ["en", "ust", en_psa],
     ["hi", "hiv", hi_rev],
-    ["hi", "hiv", hi_tit]
+    ["hi", "hiv", hi_tit],
+    ["ell", "ugnt", ugnt_tit],
+    ["eng", "ult", eng_tit]
 ].map(rec => {
     const [lang, abbr, content] = rec;
     pk.importDocument(
@@ -22,7 +27,7 @@ const pk = new ProsKomma();
       abbr,
       "usfm",
       content,
-      {}
+      {includeScopes:["chapter", "verse/"]}
     )
   }
 );
@@ -31,12 +36,5 @@ const pk = new ProsKomma();
 <div>
   <PkQuery pk={pk} />
 </div>
-
-// Try
-// { documents { sequences { blocks { bs { label } text } } } }
-// and
-// { documents { sequences { blocks { items { ... on Token { itemType subType chars } ... on Scope { itemType label } ... on Graft { itemType subType sequenceId } } } } } }
-// and
-// { documents { usfmId: header(id:"id") mainSequence { blocksForScopes(scopes:["chapter/150", "verse/1"]){ text } } } }
 
 ```

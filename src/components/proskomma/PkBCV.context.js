@@ -81,33 +81,38 @@ const PkBCV = class extends Component {
     }
 
     render() {
+        const labelStyle = {display: "inline-block", width: "5em", "font-weight": "bold"};
+        const inputStyle = {"background-color": "#EEF", "padding": "5px", "margin-top": "5px"};
         return (
             <div>
                 <div>
                     <form>
                         <h3>Verse Reference</h3>
                         <div>
-                            <span style={{display: "inline-block", width: "5em"}}>Book</span>
+                            <span style={labelStyle}>Book</span>
                             <input
                                 name="book"
                                 type="text"
                                 value={this.state.book}
+                                style={inputStyle}
                                 onChange={async (event) => await this.handleChange(event, "book")}/>
                         </div>
                         <div>
-                            <span style={{display: "inline-block", width: "5em"}}>Chapter</span>
+                            <span style={labelStyle}>Chapter</span>
                             <input
                                 name="chapter"
                                 type="text"
                                 value={this.state.chapter}
+                                style={inputStyle}
                                 onChange={async (event) => await this.handleChange(event, "chapter")}/>
                         </div>
                         <div>
-                            <span style={{display: "inline-block", width: "5em"}}>Verse</span>
+                            <span style={labelStyle}>Verse</span>
                             <input
                                 name="verse"
                                 type="text"
                                 value={this.state.verse}
+                                style={inputStyle}
                                 onChange={async (event) => await this.handleChange(event, "verse")}/>
                         </div>
                     </form>
