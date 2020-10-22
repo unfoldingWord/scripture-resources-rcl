@@ -13,7 +13,7 @@ let sections = [
     name: 'Proskomma',
     content: 'src/components/proskomma/_readme.md',
     components: () => {
-      const componentNames = ['PkStatus.context', 'PkQuery.context'];
+      const componentNames = ['PkStatus.context', 'PkQuery.context', 'PkBCV.context'];
       return componentNames.map((componentName) => {
         return path.resolve(
             __dirname,
