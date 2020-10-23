@@ -10,7 +10,7 @@ export const resourcesFromResourceLinks = async ({
 }) => {
   const promises = resourceLinks.map((resourceLink) => resourceFromResourceLink({
     resourceLink, reference, config,
-}));
+  }));
   // Filter invalid resources (those that did not parse)
   const resources = await (await Promise.all(promises)).filter(
     (parsedResource) => parsedResource != null,
@@ -53,23 +53,38 @@ export const resourceFromResourceLink = async ({
 
 export const parseResourceLink = ({ resourceLink, config, reference = {} }) => {
   let parsedArray, username, repository, languageId,
-   resourceId, projectId = reference.bookId, tag = 'master';
+    resourceId, projectId = reference.bookId, tag = 'master';
   if (resourceLink.includes('src/branch')) {
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master
-    parsedArray = resourceLink.match(/https?:\/\/.*org\/(.*)\/(.*)\/(.*)\/(.*)\/(.*)/);
-    ([, username, repository, , , tag] =  parsedArray);
+    //https://git.door43.org/ru_gl/ru_rlob/src/branch/master/3jn
+    parsedArray = resourceLink.match(/https?:\/\/.*org\/([^/]*)\/([^/]*)\/src\/([^/]*)\/([^/]*)/);
+    ([, username, repository, , tag] = parsedArray);
     ([languageId, resourceId] = repository.split('_'));
   } else if (resourceLink.includes('http')) {
     //https://git.door43.org/ru_gl/ru_rlob
-    parsedArray = resourceLink.match(/https?:\/\/.*org\/(.*)\/(.*)/);
-    ([,username, repository] = parsedArray);
+    //https://git.door43.org/ru_gl/ru_rlob/3jn
+    parsedArray = resourceLink.match(/https?:\/\/.*org\/([^/]*)\/([^/]*)/);
+    ([, username, repository] = parsedArray);
+    ([languageId, resourceId] = repository.split('_'));
+  } else if (resourceLink.match(/^\/?([^/]*)\/([^/]*)\/?\/?([^/]*)?\/?$/)) {
+    // /ru_gl/ru_rlob
+    // /ru_gl/ru_rlob/3jn
+    parsedArray = resourceLink.match(/^\/?([^/]*)\/([^/]*)\/?\/?([^/]*)?\/?$/);
+    ([, username, repository, projectId = reference.bookId] = parsedArray);
     ([languageId, resourceId] = repository.split('_'));
   } else {
+    //ru_gl/ru/rlob/master/
     //ru_gl/ru/rlob/master/tit
     parsedArray = resourceLink.split('/');
-    ([username, languageId, resourceId, tag = 'master'] = parsedArray);
-    repository= `${languageId}_${resourceId}`;
+    ([username, languageId, resourceId, tag = 'master', projectId = reference.bookId] = parsedArray);
+    repository = `${languageId}_${resourceId}`;
   }
+
+  if (!projectId || projectId == '' || projectId.length == 0) {
+    projectId = reference.bookId;
+  }
+  resourceLink = `${username}/${languageId}/${resourceId}/${tag}/${projectId}`;
+
   const resource = {
     resourceLink,
     username,
