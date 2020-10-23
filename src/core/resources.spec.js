@@ -21,16 +21,12 @@ describe('parseResourceLink without books', () => {
         const resourceLink = `https://git.door43.org/ru_gl/ru_rlob`;
         let resource = parseResourceLink({ resourceLink, config, reference });
 
-        console.log(JSON.stringify(resource));
-
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
 
     it('should be ru_rlob', () => {
         const resourceLink = `https://git.door43.org/ru_gl/ru_rlob/src/branch/master`;
         let resource = parseResourceLink({ resourceLink, config, reference });
-
-        console.log(JSON.stringify(resource));
 
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
@@ -39,8 +35,6 @@ describe('parseResourceLink without books', () => {
         const resourceLink = `/ru_gl/ru_rlob`;
         let resource = parseResourceLink({ resourceLink, config, reference });
 
-        console.log(JSON.stringify(resource));
-
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
 
@@ -48,16 +42,12 @@ describe('parseResourceLink without books', () => {
         const resourceLink = `ru_gl/ru_rlob`;
         let resource = parseResourceLink({ resourceLink, config, reference });
 
-        console.log(JSON.stringify(resource));
-
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
 
     it('should be ru_rlob', () => {
         const resourceLink = `ru_gl/ru/rlob/master/`;
         let resource = parseResourceLink({ resourceLink, config, reference });
-
-        console.log(JSON.stringify(resource));
 
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
@@ -69,16 +59,12 @@ describe('parseResourceLink with books', () => {
         const resourceLink = `https://git.door43.org/ru_gl/ru_rlob/3jn`;
         let resource = parseResourceLink({ resourceLink, config, reference });
 
-        console.log(JSON.stringify(resource));
-
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
 
     it('should be ru_rlob', () => {
         const resourceLink = `https://git.door43.org/ru_gl/ru_rlob/src/branch/master/3jn`;
         let resource = parseResourceLink({ resourceLink, config, reference });
-
-        console.log(JSON.stringify(resource));
 
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
@@ -87,8 +73,6 @@ describe('parseResourceLink with books', () => {
         const resourceLink = `/ru_gl/ru_rlob/3jn`;
         let resource = parseResourceLink({ resourceLink, config, reference });
 
-        console.log(JSON.stringify(resource));
-
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
 
@@ -96,16 +80,12 @@ describe('parseResourceLink with books', () => {
         const resourceLink = `ru_gl/ru_rlob/3jn`;
         let resource = parseResourceLink({ resourceLink, config, reference });
 
-        console.log(JSON.stringify(resource));
-
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
 
     it('should be ru_rlob', () => {
         const resourceLink = `ru_gl/ru/rlob/master/3jn`;
         let resource = parseResourceLink({ resourceLink, config, reference });
-
-        console.log(JSON.stringify(resource));
 
         expect(resource).toStrictEqual(resourceExpectedValue);
     });
