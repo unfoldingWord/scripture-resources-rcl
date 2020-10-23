@@ -40,11 +40,7 @@ describe('selectionsFromQuoteAndString', () => {
       occurrence: -1,
     };
     const output = selectionsFromQuoteAndString(input);
-    const expected = [
-      { text: "καὶ", occurrence: 1, occurrences: 3 },
-      { text: "καὶ", occurrence: 2, occurrences: 3 },
-      { text: "καὶ", occurrence: 3, occurrences: 3 },
-    ];
+    const expected = [];
     expect(output).toStrictEqual(expected);
   });
 
