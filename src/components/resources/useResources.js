@@ -13,7 +13,7 @@ function useResources({
   reference,
   config,
   onResources,
-  onResourceLinks = () => {},
+  onResourceLinks = () => { },
 }) {
   const [projectIdentifier, setProjectIdentifier] = useState();
   const [usfmJsonArray, setUsfmJsonArray] = useState();
@@ -59,9 +59,9 @@ function useResources({
     [config, onResourceLinks, reference, resourceLinks],
   );
 
-  const isDefaultResourceLink = (_resourceLink) =>(
+  const isDefaultResourceLink = (_resourceLink) => (
     defaultResourceLinks != null &&
-      defaultResourceLinks.includes(_resourceLink)
+    defaultResourceLinks.includes(_resourceLink)
   );
 
   const parseUsfm = useCallback(async () => {
@@ -70,7 +70,7 @@ function useResources({
     if (resources && resources[0] && resources[0].project) {
       const { project } = resources[0];
 
-      if (!loading && (project.identifier !== projectIdentifier || !usfmJsonArray)) {
+      if (!loading && (project.identifier !== projectIdentifier || !usfmJsonArray || usfmJsonArray.length != resourceLinks.length)) {
         setLoading(true);
         const promises = resources
           .map((resource) => {
@@ -89,7 +89,7 @@ function useResources({
     }
     setLoading(false);
     return response;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectIdentifier, resources, usfmJsonArray]);
 
   useEffect(() => {
