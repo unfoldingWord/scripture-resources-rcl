@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
+import PkBase from './PkBase';
+import PropTypes from "prop-types";
 
-const PkQuery = class extends Component {
+const PkQuery = class extends PkBase {
+
+    // Query handling is a bit weird since it isn't normal to have user-editable queries
 
     constructor(props) {
         super(props);
+        this.queryTemplate = '';
         this.state = {
             query: '{ docSets: docSetsWithBook(bookCode:"TIT") {\n' +
                 '  lang: selector(id:"lang") abbr: selector(id:"abbr") document: documentWithBook(bookCode:"TIT") {\n' +
@@ -13,33 +18,12 @@ const PkQuery = class extends Component {
                 '        items: prunedItems(requiredScopes:["chapter/1", "verse/2"]) {\n' +
                 '          ... on Token { itemType subType chars }\n' +
                 '          ... on Scope { itemType label }\n' +
-                '          ... on Graft { itemType } } } } } } }',
-            queryResult: ""
+                '          ... on Graft { itemType } } } } } } }'
         };
-        this.handleChange = this.handleChange.bind(this);
     }
 
-    componentDidMount() {
-        this.doQuery();
-    }
-
-    handleChange(event) {
-        if (event) {
-            this.setState(
-                {query: event.target.value},
-                () => this.doQuery()
-                );
-        }
-    }
-
-    async doQuery() {
-        let result;
-        try {
-            result = JSON.stringify(await this.props.pk.gqlQuery(this.state.query), null, 2);
-        } catch (err) {
-            result = `ERROR: ${err}`;
-        }
-        this.setState({queryResult: result});
+    substitutedQuery() {
+        return this.state.query;
     }
 
     render() {
@@ -48,18 +32,27 @@ const PkQuery = class extends Component {
                 <div>
                     <form>
                         <h3>Query (editable)</h3>
-                    <textarea style={{padding:"10px", "backgroundColor":"#EEF"}} rows="10" cols="80" type="text" name="query" value={this.state.query}
-                           onChange={async (event) => await this.handleChange(event)}/>
+                    <textarea
+                        style={{padding:"10px", "backgroundColor":"#EEF"}}
+                        rows="10"
+                        cols="80"
+                        type="text"
+                        name="query"
+                        value={this.state.query}
+                        onChange={async (event) => await this.handleChange(event, "query")}
+                    />
                     </form>
                 </div>
-                <div>
-                    <h3>Result</h3>
-                    <pre>{this.state.queryResult}</pre>
-                </div>
+                {this.rawQueryHTML()}
             </div>
         );
     };
 
 }
+
+PkQuery.propTypes = {
+    /** The ProsKomma instance */
+    "pk": PropTypes.string.isRequired,
+};
 
 export default PkQuery;

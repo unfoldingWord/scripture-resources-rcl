@@ -42,13 +42,17 @@ const PkBase = class extends Component {
         this.setState({queryResult: result});
     }
 
-    render() {
+    rawQueryHTML() {
         return (
             <div>
                 <h3>Raw GraphQL Result</h3>
                 <pre>{this.state.queryResult}</pre>
             </div>
         );
+    }
+
+    render() {
+        return this.rawQueryHTML();
     };
 
 }
