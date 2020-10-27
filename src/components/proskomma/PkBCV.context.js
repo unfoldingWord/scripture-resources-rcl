@@ -36,33 +36,26 @@ const PkBCV = class extends PkBase {
                 <div>
                     <form>
                         <h3>Verse Reference</h3>
-                        <div>
-                            <span style={labelStyle}>Book</span>
-                            <input
-                                name="book"
-                                type="text"
-                                value={this.state.book}
-                                style={inputStyle}
-                                onChange={async (event) => await this.handleChange(event, "book")}/>
-                        </div>
-                        <div>
-                            <span style={labelStyle}>Chapter</span>
-                            <input
-                                name="chapter"
-                                type="text"
-                                value={this.state.chapter}
-                                style={inputStyle}
-                                onChange={async (event) => await this.handleChange(event, "chapter")}/>
-                        </div>
-                        <div>
-                            <span style={labelStyle}>Verse</span>
-                            <input
-                                name="verse"
-                                type="text"
-                                value={this.state.verse}
-                                style={inputStyle}
-                                onChange={async (event) => await this.handleChange(event, "verse")}/>
-                        </div>
+                        {
+                            [["Book", "book"], ["Chapter", "chapter"], ["Verse", "verse"]]
+                                .map(
+                                    rec =>
+
+                                        <div>
+                                            <span style={labelStyle}>{rec[0]}</span>
+                                            <input
+                                                name={rec[1]}
+                                                type="text"
+                                                value={this.state[rec[1]]}
+                                                style={inputStyle}
+                                                onChange={
+                                                    async (event) =>
+                                                        await this.handleChange(event, rec[1])
+                                                }
+                                            />
+                                        </div>
+                                )
+                        }
                     </form>
                 </div>
         );
