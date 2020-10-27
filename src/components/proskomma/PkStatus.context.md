@@ -12,14 +12,16 @@ const pk = new ProsKomma();
 
 // We give it some USFM
 [
-    ["en", "ust", en_psa],
-    ["hi", "hiv", hi_rev],
-    ["hi", "hiv", hi_tit]
+    ["eng", "ust", en_psa],
+    ["hin", "hiv", hi_rev],
+    ["hin", "hiv", hi_tit]
 ].map(rec => {
     const [lang, abbr, content] = rec;
     pk.importDocument(
-      lang,
-      abbr,
+      {
+        lang: lang,
+        abbr: abbr
+      },
       "usfm",
       content,
       {}
@@ -28,8 +30,7 @@ const pk = new ProsKomma();
 );
 
 // We display basic status information by introspection
-<div>
-  <PkStatus pk={pk} />
-</div>
-
+            <div>
+              <PkStatus pk={pk} />
+            </div>
 ```

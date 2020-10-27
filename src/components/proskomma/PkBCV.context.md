@@ -14,16 +14,18 @@ const pk = new ProsKomma();
 
 // We give it some USFM
 [
-    ["en", "ust", en_psa],
-    ["hi", "hiv", hi_rev],
-    ["hi", "hiv", hi_tit],
+    ["eng", "ust", en_psa],
+    ["hin", "hiv", hi_rev],
+    ["hin", "hiv", hi_tit],
     ["ell", "ugnt", ugnt_tit],
     ["eng", "ult", eng_tit]
 ].map(rec => {
     const [lang, abbr, content] = rec;
     pk.importDocument(
-      lang,
-      abbr,
+      {
+        lang: lang,
+        abbr: abbr
+      },
       "usfm",
       content,
       {

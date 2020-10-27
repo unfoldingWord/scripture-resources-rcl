@@ -6,7 +6,7 @@ const PkBCV = class extends Component {
         super(props);
         this.jsonResult = {};
         this.queryTemplate = '{ docSets: docSetsWithBook(bookCode:"%book%") {\n' +
-            '  lang abbr document: documentWithBook(bookCode:"%book%") {\n' +
+            '  lang: selector(id:"lang") abbr: selector(id:"abbr") document: documentWithBook(bookCode:"%book%") {\n' +
             '    book: header(id:"bookCode") \n' +
             '    sequence: mainSequence {\n' +
             '      blocks: blocksForScopes(scopes:["chapter/%chapter%", "verse/%verse%"]) {\n' +
@@ -67,9 +67,10 @@ const PkBCV = class extends Component {
 
         };
         if ("data" in this.jsonResult) {
+            let count = 0;
             return this.jsonResult.data.docSets.map(ds => {
                 return (
-                    <div>
+                    <div key={`n${count++}`}>
                         <h4>{`${ds.lang}/${ds.abbr}`}</h4>
                         <p>{verseText(ds.document.sequence.blocks)}</p>
                     </div>
@@ -81,8 +82,8 @@ const PkBCV = class extends Component {
     }
 
     render() {
-        const labelStyle = {display: "inline-block", width: "5em", "font-weight": "bold"};
-        const inputStyle = {"background-color": "#EEF", "padding": "5px", "margin-top": "5px"};
+        const labelStyle = {display: "inline-block", width: "5em", "fontWeight": "bold"};
+        const inputStyle = {"backgroundColor": "#EEF", "padding": "5px", "marginTop": "5px"};
         return (
             <div>
                 <div>

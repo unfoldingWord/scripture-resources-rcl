@@ -6,7 +6,7 @@ const PkQuery = class extends Component {
         super(props);
         this.state = {
             query: '{ docSets: docSetsWithBook(bookCode:"TIT") {\n' +
-                '  lang abbr document: documentWithBook(bookCode:"TIT") {\n' +
+                '  lang: selector(id:"lang") abbr: selector(id:"abbr") document: documentWithBook(bookCode:"TIT") {\n' +
                 '    book: header(id:"bookCode") \n' +
                 '    sequence: mainSequence {\n' +
                 '      blocks: blocksForScopes(scopes:["chapter/1", "verse/2"]) {\n' +
@@ -48,7 +48,7 @@ const PkQuery = class extends Component {
                 <div>
                     <form>
                         <h3>Query (editable)</h3>
-                    <textarea style={{padding:"10px", "background-color":"#EEF"}} rows="10" cols="80" type="text" name="query" value={this.state.query}
+                    <textarea style={{padding:"10px", "backgroundColor":"#EEF"}} rows="10" cols="80" type="text" name="query" value={this.state.query}
                            onChange={async (event) => await this.handleChange(event)}/>
                     </form>
                 </div>
