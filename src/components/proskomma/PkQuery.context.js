@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import PkBase from './PkBase';
+import React from 'react';
 import PropTypes from "prop-types";
+import PkBase from './PkBase';
 
 const PkQuery = class extends PkBase {
 

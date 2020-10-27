@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
+import PropTypes from "prop-types";
+import PkBase from './PkBase';
 
-const PkBCV = class extends Component {
+const PkBCV = class extends PkBase {
 
     constructor(props) {
         super(props);
-        this.jsonResult = {};
         this.queryTemplate = '{ docSets: docSetsWithBook(bookCode:"%book%") {\n' +
             '  lang: selector(id:"lang") abbr: selector(id:"abbr") document: documentWithBook(bookCode:"%book%") {\n' +
             '    book: header(id:"bookCode") \n' +
@@ -15,16 +16,11 @@ const PkBCV = class extends Component {
             '          ... on Scope { itemType label }\n' +
             '          ... on Graft { itemType } } } } } } }';
         this.state = {
+            ...super.state,
             book: "TIT",
             chapter: "3",
-            verse: "5",
-            queryResult: ""
+            verse: "5"
         };
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    componentDidMount() {
-        this.doQuery();
     }
 
     substitutedQuery() {
@@ -33,59 +29,10 @@ const PkBCV = class extends Component {
             .replace(/%verse%/g, this.state.verse);
     }
 
-    handleChange(event, field) {
-        if (event) {
-            this.setState(
-                {[field]: event.target.value},
-                () => this.doQuery()
-            );
-        }
-    }
-
-    async doQuery() {
-        let result;
-        try {
-            this.jsonResult = await this.props.pk.gqlQuery(this.substitutedQuery());
-            result = JSON.stringify(this.jsonResult, null, 2);
-        } catch (err) {
-            result = `ERROR: ${err}`;
-            this.jsonResult = {};
-        }
-        this.setState({queryResult: result});
-    }
-
-    versesText() {
-        const verseText = blocks => {
-            return blocks.map(
-                b => b.items.map(
-                    i => i.itemType === "token" ? i.chars : ""
-                ).map(
-                    t => t.replace(/[ \n\r\t]+/, " ")
-                ).join("")
-            ).join(" ")
-                .trim();
-
-        };
-        if ("data" in this.jsonResult) {
-            let count = 0;
-            return this.jsonResult.data.docSets.map(ds => {
-                return (
-                    <div key={`n${count++}`}>
-                        <h4>{`${ds.lang}/${ds.abbr}`}</h4>
-                        <p>{verseText(ds.document.sequence.blocks)}</p>
-                    </div>
-                );
-            });
-        } else {
-            return (<div>Calculating...</div>);
-        }
-    }
-
-    render() {
+    formHTML() {
         const labelStyle = {display: "inline-block", width: "5em", "fontWeight": "bold"};
         const inputStyle = {"backgroundColor": "#EEF", "padding": "5px", "marginTop": "5px"};
         return (
-            <div>
                 <div>
                     <form>
                         <h3>Verse Reference</h3>
@@ -118,18 +65,54 @@ const PkBCV = class extends Component {
                         </div>
                     </form>
                 </div>
-                <div>
+        );
+    }
+
+    versesText() {
+        const verseText = blocks => {
+            return blocks.map(
+                b => b.items.map(
+                    i => i.itemType === "token" ? i.chars : ""
+                ).map(
+                    t => t.replace(/[ \n\r\t]+/, " ")
+                ).join("")
+            ).join(" ")
+                .trim();
+
+        };
+        if ("data" in this.jsonResult) {
+            let count = 0;
+            return this.jsonResult.data.docSets.map(ds => {
+                return (
+                    <div key={`n${count++}`}>
+                        <h4>{`${ds.lang}/${ds.abbr}`}</h4>
+                        <p>{verseText(ds.document.sequence.blocks)}</p>
+                    </div>
+                );
+            });
+        } else {
+            return (<div>Calculating...</div>);
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                {this.formHTML()}
+               <div>
                     <h3>Text for Verse</h3>
                     <div>{this.versesText()}</div>
                 </div>
-                <div>
-                    <h3>Raw GraphQL Result</h3>
-                    <pre>{this.state.queryResult}</pre>
-                </div>
+                {this.rawQueryHTML()}
             </div>
         );
     };
 
 }
+
+PkBCV.propTypes = {
+    /** The ProsKomma instance */
+    "pk": PropTypes.string.isRequired,
+};
 
 export default PkBCV;
