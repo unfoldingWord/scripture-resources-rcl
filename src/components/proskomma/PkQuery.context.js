@@ -10,15 +10,25 @@ const PkQuery = class extends PkBase {
         super(props);
         this.queryTemplate = '';
         this.state = {
-            query: '{ docSets: docSetsWithBook(bookCode:"TIT") {\n' +
-                '  lang: selector(id:"lang") abbr: selector(id:"abbr") document: documentWithBook(bookCode:"TIT") {\n' +
+            query: '{\n' +
+                '  docSets: docSetsWithBook(bookCode:"TIT") {\n' +
+                '  org: selector(id:"org")\n' +
+                '  lang: selector(id:"lang")\n' +
+                '  abbr: selector(id:"abbr")\n' +
+                '  document: documentWithBook(bookCode:"TIT") {\n' +
                 '    book: header(id:"bookCode") \n' +
                 '    sequence: mainSequence {\n' +
                 '      blocks: blocksForScopes(scopes:["chapter/1", "verse/2"]) {\n' +
                 '        items: prunedItems(requiredScopes:["chapter/1", "verse/2"]) {\n' +
                 '          ... on Token { itemType subType chars }\n' +
                 '          ... on Scope { itemType label }\n' +
-                '          ... on Graft { itemType } } } } } } }'
+                '          ... on Graft { itemType }\n' +
+                '          }\n' +
+                '        }\n' +
+                '      }\n' +
+                '    }\n' +
+                '  }\n' +
+                '}'
         };
     }
 
@@ -34,7 +44,7 @@ const PkQuery = class extends PkBase {
                         <h3>Query (editable)</h3>
                     <textarea
                         style={{padding:"10px", "backgroundColor":"#EEF"}}
-                        rows="10"
+                        rows="20"
                         cols="80"
                         type="text"
                         name="query"
