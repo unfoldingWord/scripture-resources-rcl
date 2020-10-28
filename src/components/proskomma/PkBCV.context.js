@@ -6,7 +6,7 @@ const PkBCV = class extends PkBase {
 
     constructor(props) {
         super(props);
-        this.queryTemplate = '{ docSets: docSetsWithBook(bookCode:"%book%") {\n' +
+        this.queryTemplate = '{ docSets(withBook:"%book%") {\n' +
             '  org: selector(id:"org")' +
             '  lang: selector(id:"lang")' +
             '  abbr: selector(id:"abbr")' +

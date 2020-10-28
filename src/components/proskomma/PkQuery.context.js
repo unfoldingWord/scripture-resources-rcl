@@ -11,7 +11,7 @@ const PkQuery = class extends PkBase {
         this.queryTemplate = '';
         this.state = {
             query: '{\n' +
-                '  docSets: docSetsWithBook(bookCode:"TIT") {\n' +
+                '  docSets(withBook:"TIT") {\n' +
                 '  org: selector(id:"org")\n' +
                 '  lang: selector(id:"lang")\n' +
                 '  abbr: selector(id:"abbr")\n' +

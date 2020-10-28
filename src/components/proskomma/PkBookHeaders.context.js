@@ -7,7 +7,11 @@ const PkBookHeaders = class extends PkBase {
     constructor(props) {
         super(props);
         this.queryTemplate = '{ ' +
-            '  docSets (selectorKeys:%selectorKeys% selectorValues:%selectorValues%) {' +
+            '  docSets (' +
+            '    selectorKeys:%selectorKeys%' +
+            '    selectorValues:%selectorValues%' +
+            '    withBook:"%bookCode%"' +
+            '  ) {' +
             '    selectorString' +
             '    selectors { key value }' +
             '    document: documentWithBook(bookCode:"%bookCode%") {' +
