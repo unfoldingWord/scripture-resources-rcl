@@ -62,7 +62,7 @@ const PkQuery = class extends PkBase {
 
 PkQuery.propTypes = {
     /** The ProsKomma instance */
-    "pk": PropTypes.string.isRequired,
+    "pk": PropTypes.object.isRequired,
 };
 
 export default PkQuery;

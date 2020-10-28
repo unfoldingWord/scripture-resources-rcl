@@ -27,7 +27,8 @@ const PkBCV = class extends PkBase {
     }
 
     substitutedQuery() {
-        return this.queryTemplate.replace(/%book%/g, this.state.book)
+        return this.queryTemplate
+            .replace(/%book%/g, this.state.book)
             .replace(/%chapter%/g, this.state.chapter)
             .replace(/%verse%/g, this.state.verse);
     }
@@ -108,7 +109,7 @@ const PkBCV = class extends PkBase {
 
 PkBCV.propTypes = {
     /** The ProsKomma instance */
-    "pk": PropTypes.string.isRequired,
+    "pk": PropTypes.object.isRequired,
 };
 
 export default PkBCV;

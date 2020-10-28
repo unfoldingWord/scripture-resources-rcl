@@ -59,7 +59,7 @@ const PkBase = class extends Component {
 
 PkBase.propTypes = {
     /** The ProsKomma instance */
-    "pk": PropTypes.string.isRequired,
+    "pk": PropTypes.object.isRequired,
 };
 
 export default PkBase;
