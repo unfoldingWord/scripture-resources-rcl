@@ -8113,10 +8113,10 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gitea-react-toolkit@^1.3.10:
-  version "1.3.10"
-  resolved "https://registry.yarnpkg.com/gitea-react-toolkit/-/gitea-react-toolkit-1.3.10.tgz#28df6131decab97c1386ec0f4facd05554e073bd"
-  integrity sha512-OUBjbDxdKWODJE60uXf4bqbuPa8eOlZiYKWLrydfCfuFkq+CSIJHw3RCEnflRs+o2trfjruN4fhqopobs0ouzg==
+gitea-react-toolkit@^1.3.12:
+  version "1.3.12"
+  resolved "https://registry.yarnpkg.com/gitea-react-toolkit/-/gitea-react-toolkit-1.3.12.tgz#d8e2f3ecd489a950f8ce876c91e90f511495fe7d"
+  integrity sha512-lhUcIqNCkt+0a+92BOn89Dm4L6DN+eJF4nDy7FBPcdVtCn8AxKG5b+00fn/bgNXq3bNetUkPd+w6rFjPWXhgYg==
   dependencies:
     awesome-debounce-promise "2.1.0"
     axios "0.19.0"
@@ -8124,7 +8124,7 @@ gitea-react-toolkit@^1.3.10:
     base-64 "0.1.0"
     jszip "3.2.1"
     localforage "1.7.3"
-    markdown-translatable "^1.1.4"
+    markdown-translatable "^1.2.1"
     prop-types "15.7.2"
     react-json-view "^1.19.1"
     use-deep-compare-effect "^1.3.1"
@@ -11297,10 +11297,10 @@ markdown-to-jsx@^6.9.3:
     prop-types "^15.6.2"
     unquote "^1.1.0"
 
-markdown-translatable@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/markdown-translatable/-/markdown-translatable-1.1.4.tgz#6b1777463f2bfd1e17d823e825a147c7b0d9a90d"
-  integrity sha512-NaC7s9KSVh6I2Dvbs0U6F0TYtfDEDhhSPqPoG2ymDKfR6vjyq7/yOhRQCJT343qiJuoH3ubCjibhSMkMzUZccg==
+markdown-translatable@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/markdown-translatable/-/markdown-translatable-1.2.1.tgz#136ea96c4c6f51d9aeb1ff78c0330786a7fe68f6"
+  integrity sha512-tUwKEflZucYbWxnDjnPHuaSa47Gby2+YtZj7Ig81/G53hg5Nv6/4ewhIBeR6kyGJ3cbQyGFxj7QhxsEauE5TsA==
   dependencies:
     deep-freeze "^0.0.1"
     lodash.debounce "^4.0.8"
