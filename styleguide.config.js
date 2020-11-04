@@ -16,8 +16,9 @@ let sections = [
             const componentNames = [
                 'PkBase',
                 'PkQuery.context',
-                'PkBCV.context',
-                'PkBookHeaders.context'
+                'PkNaiveBCV.context',
+                'PkBookHeaders.context',
+                'PkReference.context'
             ];
             return componentNames.map((componentName) => {
                 return path.resolve(

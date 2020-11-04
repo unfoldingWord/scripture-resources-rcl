@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import PkBase from './PkBase';
 
-const PkBCV = class extends PkBase {
+const PkNaiveBCV = class extends PkBase {
 
     constructor(props) {
         super(props);
@@ -107,9 +107,9 @@ const PkBCV = class extends PkBase {
 
 }
 
-PkBCV.propTypes = {
+PkNaiveBCV.propTypes = {
     /** The ProsKomma instance */
     "pk": PropTypes.object.isRequired,
 };
 
-export default PkBCV;
+export default PkNaiveBCV;
