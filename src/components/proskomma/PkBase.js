@@ -26,6 +26,15 @@ const PkBase = class extends Component {
         }
     }
 
+    handleCheckboxChange(event, field) {
+        if (event) {
+            this.setState(
+                {[field]: event.target.checked},
+                () => this.doQuery()
+            );
+        }
+    }
+
     substitutedQuery() {
         return this.queryTemplate;
     }

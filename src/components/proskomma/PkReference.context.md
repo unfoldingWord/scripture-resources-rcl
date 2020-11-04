@@ -7,7 +7,7 @@ import hi_rev from '../mocks/hi_aligned_rev.usfm.js';
 import ugnt_tit from '../mocks/ugnt_tit.usfm.js';
 import eng_tit from '../mocks/en_aligned_tit.usfm.js';
 import { UWProsKomma } from 'uw-proskomma';
-import PkNaiveBCV from './PkNaiveBCV.context';
+import PkReference from './PkReference.context';
 
 // We create an instance of Proskomma using the uW-adapted subClass
 const pk = new UWProsKomma();
@@ -39,10 +39,10 @@ const pk = new UWProsKomma();
 
 // We use GraphQL to query it
 <div>
-  <PkNaiveBCV pk={pk} />
+  <PkReference pk={pk} />
 </div>
 
-// The GraphQL query finds chapter/verse using scopes directly.
-// See below for an easier and more flexible way to do this...
-
+// Note that this implementation is vulnerable to injection attacks
+// ie you should usually sanity-check user-supplied data before
+// inserting it into queries
 ```

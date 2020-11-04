@@ -16,7 +16,6 @@ let sections = [
             const componentNames = [
                 'PkBase',
                 'PkQuery.context',
-                'PkNaiveBCV.context',
                 'PkBookHeaders.context',
                 'PkReference.context'
             ];
