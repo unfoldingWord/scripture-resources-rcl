@@ -23,7 +23,8 @@ const PkReference = class extends PkBase {
             lang: "",
             book: "TIT",
             cv: "3:5",
-            showBlocks: true
+            showBlocks: true,
+            showCV: false
         };
     }
 
@@ -64,18 +65,23 @@ const PkReference = class extends PkBase {
                                     </div>
                             )
                     }
-                    <div>
-                        <span style={labelStyle}>Show Blocks</span>
-                        <input
-                            type="checkbox"
-                            name="showBlocks"
-                            checked={this.state.showBlocks}
-                            onChange={
-                                async (event) =>
-                                    await this.handleCheckboxChange(event, "showBlocks")
-                            }
-                        />
-                    </div>
+                    {
+                        [["Show Blocks", "showBlocks"], ["Show CV", "showCV"]].map(
+                            rec =>
+                                <div>
+                                    <span style={labelStyle}>{rec[0]}</span>
+                                    <input
+                                        type="checkbox"
+                                        name={rec[1]}
+                                        checked={this.state[rec[1]]}
+                                        onChange={
+                                            async (event) =>
+                                                await this.handleCheckboxChange(event, rec[1])
+                                        }
+                                    />
+                                </div>
+                        )
+                    }
                 </form>
             </div>
         );
@@ -85,7 +91,19 @@ const PkReference = class extends PkBase {
         const docHtml = blocks => {
             const blocksText = blocks.map(
                 b => b.items.map(
-                    i => i.itemType === "token" ? i.chars : ""
+                    i => {
+                        if (i.itemType === "token") {
+                            return i.chars;
+                        } else if (this.state.showCV && i.itemType === "startScope") {
+                            if (i.label.startsWith("chapter/")) {
+                                return `[c${i.label.split("/")[1]}] `;
+                            } else if (i.label.startsWith("verse/")) {
+                                return `[v${i.label.split("/")[1]}] `;
+                            }
+                        } else {
+                            return "";
+                        }
+                    }
                 ).map(
                     t => t.replace(/[ \n\r\t]+/, " ")
                 ).join("")
