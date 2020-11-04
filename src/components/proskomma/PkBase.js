@@ -61,8 +61,8 @@ const PkBase = class extends Component {
     rawQueryHTML() {
         return (
             <div>
-                <h3>Raw GraphQL Result ({this.state.queryTime} msec)</h3>
-                <pre>{this.state.queryResult}</pre>
+                <h2>Raw GraphQL Result ({this.state.queryTime} msec)</h2>
+                <pre style={{fontSize: "x-small"}}>{this.state.queryResult}</pre>
             </div>
         );
     }

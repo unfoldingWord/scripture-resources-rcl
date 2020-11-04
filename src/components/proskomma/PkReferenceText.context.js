@@ -46,7 +46,7 @@ const PkReferenceText = class extends PkBase {
         return (
             <div>
                 <form>
-                    <h3>Chapter/Verse Reference</h3>
+                    <h2>Chapter/Verse Reference</h2>
                     {
                         [["Lang", "lang"], ["Book", "book"], ["CV Spec", "cv"]]
                             .map(
@@ -103,7 +103,7 @@ const PkReferenceText = class extends PkBase {
                 return <span style={{color: "red"}}>{` [graft ${i.subType}] `}</span>;
             } else if (i.itemType === "startScope") {
                 if (i.label.startsWith("chapter/")) {
-                    return <i style={{color: "green"}}>{`[c${i.label.split("/")[1]}] `}</i>;
+                    return <i style={{color: "green", fontWeight: "bold"}}>{`[c${i.label.split("/")[1]}] `}</i>;
                 } else if (i.label.startsWith("verse/")) {
                     return <i style={{color: "green"}}>{`[v${i.label.split("/")[1]}] `}</i>;
                 } else if (i.label.startsWith("span/")) {
@@ -129,10 +129,12 @@ const PkReferenceText = class extends PkBase {
                             <Fragment>
                                 {
                                     block.bg.map(
-                                        g => <p key={itemCount++} style={{color: "red"}}>{`[graft ${g.subType}]`}</p>
+                                        g => <div key={itemCount++}
+                                                  style={{color: "red"}}>{`[graft ${g.subType}]`}</div>
                                     )
                                 }
-                                <p key={`i${itemCount++}`}><b style={{color: "green"}}>[{block.bs.label.split("/")[1]}] </b> {blockHtml}</p>
+                                <div key={`i${itemCount++}`}><b
+                                    style={{color: "blue"}}>[{block.bs.label.split("/")[1]}] </b> {blockHtml}</div>
                             </Fragment>
                         );
                     }
@@ -173,8 +175,12 @@ const PkReferenceText = class extends PkBase {
                     in {this.state.queryTime} msec
                 </div>
                 <div>
-                    <h2>Text for Verse</h2>
-                    <div>{this.versesText()}</div>
+                    {
+                        ("errors" in this.jsonResult) ?
+                            <h2>Error when running query</h2> :
+                            <h2>Text for Reference '{this.state.book} {this.state.cv}'</h2>
+                    }
+                    <div style={{fontSize: "small"}}>{this.versesText()}</div>
                 </div>
                 {this.rawQueryHTML()}
             </div>
