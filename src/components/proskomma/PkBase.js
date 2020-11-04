@@ -8,7 +8,8 @@ const PkBase = class extends Component {
         this.jsonResult = {};
         this.queryTemplate = '{ processor packageVersion nDocSets nDocuments selectors { name type } }';
         this.state = {
-            queryResult: ""
+            queryResult: "",
+            queryTime: 0
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -41,20 +42,26 @@ const PkBase = class extends Component {
 
     async doQuery() {
         let result;
+        let endTime;
+        const startTime = Date.now();
         try {
             this.jsonResult = await this.props.pk.gqlQuery(this.substitutedQuery());
+            endTime = Date.now();
             result = JSON.stringify(this.jsonResult, null, 2);
         } catch (err) {
             result = `ERROR: ${err}`;
             this.jsonResult = {};
         }
-        this.setState({queryResult: result});
+        this.setState({
+            queryResult: result,
+            queryTime: endTime - startTime
+        });
     }
 
     rawQueryHTML() {
         return (
             <div>
-                <h3>Raw GraphQL Result</h3>
+                <h3>Raw GraphQL Result ({this.state.queryTime} msec)</h3>
                 <pre>{this.state.queryResult}</pre>
             </div>
         );

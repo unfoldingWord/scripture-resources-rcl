@@ -17,7 +17,7 @@ let sections = [
                 'PkBase',
                 'PkQuery.context',
                 'PkBookHeaders.context',
-                'PkReference.context'
+                'PkReferenceText.context'
             ];
             return componentNames.map((componentName) => {
                 return path.resolve(

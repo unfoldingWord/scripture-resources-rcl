@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import PkBase from './PkBase';
 
-const PkReference = class extends PkBase {
+const PkReferenceText = class extends PkBase {
 
     constructor(props) {
         super(props);
@@ -136,6 +136,7 @@ const PkReference = class extends PkBase {
         return (
             <div>
                 {this.formHTML()}
+                <div style={{fontStyle: "italic", marginTop: "1em"}}>Query completed in {this.state.queryTime} msec</div>
                 <div>
                     <h3>Text for Verse</h3>
                     <div>{this.versesText()}</div>
@@ -147,9 +148,9 @@ const PkReference = class extends PkBase {
 
 }
 
-PkReference.propTypes = {
+PkReferenceText.propTypes = {
     /** The ProsKomma instance */
     "pk": PropTypes.object.isRequired,
 };
 
-export default PkReference;
+export default PkReferenceText;

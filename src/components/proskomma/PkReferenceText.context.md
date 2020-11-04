@@ -7,7 +7,7 @@ import hi_rev from '../mocks/hi_aligned_rev.usfm.js';
 import ugnt_tit from '../mocks/ugnt_tit.usfm.js';
 import eng_tit from '../mocks/en_aligned_tit.usfm.js';
 import { UWProsKomma } from 'uw-proskomma';
-import PkReference from './PkReference.context';
+import PkReferenceText from './PkReferenceText.context';
 
 // We create an instance of Proskomma using the uW-adapted subClass
 const pk = new UWProsKomma();
@@ -39,7 +39,7 @@ const pk = new UWProsKomma();
 
 // We use GraphQL to query it
 <div>
-  <PkReference pk={pk} />
+  <PkReferenceText pk={pk} />
 </div>
 
 // Note that this implementation is vulnerable to injection attacks
