@@ -12,17 +12,17 @@ const PkQuery = class extends PkBase {
         this.state = {
             query: '{\n' +
                 '  docSets(withBook:"TIT") {\n' +
-                '  org: selector(id:"org")\n' +
-                '  lang: selector(id:"lang")\n' +
-                '  abbr: selector(id:"abbr")\n' +
-                '  document: documentWithBook(bookCode:"TIT") {\n' +
-                '    book: header(id:"bookCode") \n' +
-                '    sequence: mainSequence {\n' +
-                '      blocks: blocksForScopes(scopes:["chapter/1", "verse/2"]) {\n' +
-                '        items: prunedItems(requiredScopes:["chapter/1", "verse/2"]) {\n' +
-                '          ... on Token { itemType subType chars }\n' +
-                '          ... on Scope { itemType label }\n' +
-                '          ... on Graft { itemType }\n' +
+                '    org: selector(id:"org")\n' +
+                '    lang: selector(id:"lang")\n' +
+                '    abbr: selector(id:"abbr")\n' +
+                '    document: documentWithBook(bookCode:"TIT") {\n' +
+                '      book: header(id:"bookCode") \n' +
+                '      sequence: mainSequence {\n' +
+                '        blocks(withScopes:["chapter/1", "verse/2"]) {\n' +
+                '          items(withScopes:["chapter/1", "verse/2"]) {\n' +
+                '            ... on Token { itemType subType chars }\n' +
+                '            ... on Scope { itemType label }\n' +
+                '            ... on Graft { itemType }\n' +
                 '          }\n' +
                 '        }\n' +
                 '      }\n' +

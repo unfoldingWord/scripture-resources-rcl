@@ -6,7 +6,7 @@ import hi_tit from '../mocks/hi_tit.usfm.js';
 import hi_rev from '../mocks/hi_aligned_rev.usfm.js';
 import ugnt_tit from '../mocks/ugnt_tit.usfm.js';
 import eng_tit from '../mocks/en_aligned_tit.usfm.js';
-import { UWProsKomma } from '@mvahowe/uw-proskomma';
+import { UWProsKomma } from 'uw-proskomma';
 import PkBCV from './PkBCV.context';
 
 // We create an instance of Proskomma using the uW-adapted subClass
@@ -41,5 +41,8 @@ const pk = new UWProsKomma();
 <div>
   <PkBCV pk={pk} />
 </div>
+
+// The GraphQL query finds chapter/verse using scopes directly.
+// See below for an easier and more flexible way to do this...
 
 ```

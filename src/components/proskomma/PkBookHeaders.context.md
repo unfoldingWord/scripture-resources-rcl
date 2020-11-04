@@ -6,7 +6,7 @@ import hi_tit from '../mocks/hi_tit.usfm.js';
 import hi_rev from '../mocks/hi_aligned_rev.usfm.js';
 import ugnt_tit from '../mocks/ugnt_tit.usfm.js';
 import eng_tit from '../mocks/en_aligned_tit.usfm.js';
-import { UWProsKomma } from '@mvahowe/uw-proskomma';
+import { UWProsKomma } from 'uw-proskomma';
 import PkBookHeaders from './PkBookHeaders.context';
 
 // We create an instance of Proskomma using the uW-adapted subClass

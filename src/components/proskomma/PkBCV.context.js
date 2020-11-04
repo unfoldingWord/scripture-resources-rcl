@@ -13,8 +13,8 @@ const PkBCV = class extends PkBase {
             '  document: documentWithBook(bookCode:"%book%") {\n' +
             '    book: header(id:"bookCode") \n' +
             '    sequence: mainSequence {\n' +
-            '      blocks: blocksForScopes(scopes:["chapter/%chapter%", "verse/%verse%"]) {\n' +
-            '        items: prunedItems(requiredScopes:["chapter/%chapter%", "verse/%verse%"]) {\n' +
+            '      blocks(withScopes:["chapter/%chapter%", "verse/%verse%"]) {\n' +
+            '        items(withScopes:["chapter/%chapter%", "verse/%verse%"]) {\n' +
             '          ... on Token { itemType subType chars }\n' +
             '          ... on Scope { itemType label }\n' +
             '          ... on Graft { itemType } } } } } } }';

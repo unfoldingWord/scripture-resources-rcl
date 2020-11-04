@@ -4,7 +4,7 @@ import ReactJson from 'react-json-view';
 import en_psa from '../mocks/en_psa.usfm.js';
 import hi_rev from '../mocks/hi_aligned_rev.usfm.js';
 import hi_tit from '../mocks/hi_aligned_tit.usfm.js';
-import { UWProsKomma } from '@mvahowe/uw-proskomma';
+import { UWProsKomma } from 'uw-proskomma';
 import PkBase from './PkBase';
 
 // PkBase provides basic (async) query functionality.
