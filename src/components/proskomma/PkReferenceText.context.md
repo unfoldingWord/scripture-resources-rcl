@@ -30,8 +30,7 @@ const pk = new UWProsKomma();
       "usfm",
       content,
       {
-        includeScopes:["chapter", "verse/"],
-        includeGrafts:[]
+        includeScopes:["chapter", "verse/", "span/"]
       }
     )
   }

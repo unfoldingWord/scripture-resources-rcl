@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from "prop-types";
 import PkBase from './PkBase';
 
@@ -14,17 +14,18 @@ const PkReferenceText = class extends PkBase {
             '    book: header(id:"bookCode") \n' +
             '    sequence: mainSequence {\n' +
             '      blocks(withScriptureCV:"%cv%") {\n' +
+            '        bs { label }' +
+            '        bg { subType }' +
             '        items(withScriptureCV:"%cv%") {\n' +
             '          ... on Token { itemType subType chars }\n' +
             '          ... on Scope { itemType label }\n' +
-            '          ... on Graft { itemType } } } } } } }';
+            '          ... on Graft { itemType subType} } } } } } }';
         this.state = {
             ...super.state,
             lang: "",
             book: "TIT",
             cv: "3:5",
-            showBlocks: true,
-            showCV: false
+            showFormatting: false
         };
     }
 
@@ -66,7 +67,7 @@ const PkReferenceText = class extends PkBase {
                             )
                     }
                     {
-                        [["Show Blocks", "showBlocks"], ["Show CV", "showCV"]].map(
+                        [["Format", "showFormatting"]].map(
                             rec =>
                                 <div>
                                     <span style={labelStyle}>{rec[0]}</span>
@@ -88,44 +89,76 @@ const PkReferenceText = class extends PkBase {
     }
 
     versesText() {
-        const docHtml = blocks => {
-            const blocksText = blocks.map(
-                b => b.items.map(
-                    i => {
-                        if (i.itemType === "token") {
-                            return i.chars;
-                        } else if (this.state.showCV && i.itemType === "startScope") {
-                            if (i.label.startsWith("chapter/")) {
-                                return `[c${i.label.split("/")[1]}] `;
-                            } else if (i.label.startsWith("verse/")) {
-                                return `[v${i.label.split("/")[1]}] `;
-                            }
-                        } else {
-                            return "";
-                        }
-                    }
-                ).map(
-                    t => t.replace(/[ \n\r\t]+/, " ")
-                ).join("")
-            );
-            if (this.state.showBlocks) {
-                return (blocksText.map(b => <p>{b}</p>));
+        const itemText = i => {
+            if (i.itemType === "token") {
+                return i.chars.replace(/[ \n\r\t]+/, " ");
             } else {
-                return (<p>{blocksText.join(" ").trim()}</p>);
+                return "";
             }
-        };
+        }
+        const itemHtml = i => {
+            if (i.itemType === "token") {
+                return i.chars.replace(/[ \n\r\t]+/, " ");
+            } else if (i.itemType === "graft") {
+                return <span style={{color: "red"}}>{` [graft ${i.subType}] `}</span>;
+            } else if (i.itemType === "startScope") {
+                if (i.label.startsWith("chapter/")) {
+                    return <i style={{color: "green"}}>{`[c${i.label.split("/")[1]}] `}</i>;
+                } else if (i.label.startsWith("verse/")) {
+                    return <i style={{color: "green"}}>{`[v${i.label.split("/")[1]}] `}</i>;
+                } else if (i.label.startsWith("span/")) {
+                    return <span style={{color: "blue"}}>{`[${i.label.split("/")[1]}]`}</span>;
+                }
+            } else if (i.itemType === "endScope") {
+                if (i.label.startsWith("span/")) {
+                    return <span style={{color: "blue"}}>{`[/${i.label.split("/")[1]}]`}</span>;
+                }
+            } else {
+                return "";
+            }
+        }
+        const blocksHtml = blocks => {
+            if (this.state.showFormatting) {
+                let itemCount = 1;
+                return blocks.map(
+                    block => {
+                        const blockHtml = block.items.map(
+                            i => itemHtml(i)
+                        );
+                        return (
+                            <Fragment>
+                                {
+                                    block.bg.map(
+                                        g => <p key={itemCount++} style={{color: "red"}}>{`[graft ${g.subType}]`}</p>
+                                    )
+                                }
+                                <p key={`i${itemCount++}`}><b style={{color: "green"}}>[{block.bs.label.split("/")[1]}] </b> {blockHtml}</p>
+                            </Fragment>
+                        );
+                    }
+                )
+            } else {
+                const blocksTextString = blocks.map(
+                    block => block.items.map(
+                        i => itemText(i)
+                    ).map(
+                        t => t.replace(/[ \n\r\t]+/, " ")
+                    ).join("")
+                ).join(" ");
+                return (<p>{blocksTextString.trim()}</p>);
+            }
+        }
         if ("errors" in this.jsonResult) {
             return (<div>{JSON.stringify(this.jsonResult.errors, null, 2)}</div>);
         } else if (!("data" in this.jsonResult)) {
             return (<div>Calculating...</div>);
         } else {
-            console.log(JSON.stringify(this.jsonResult, null, 2));
             let count = 0;
             return this.jsonResult.data.docSets.map(ds => {
                 return (
                     <div key={`n${count++}`}>
-                        <h4>{`${ds.lang}/${ds.abbr}`}</h4>
-                        {docHtml(ds.document.sequence.blocks)}
+                        <h3>{`${ds.lang}/${ds.abbr}`}</h3>
+                        {blocksHtml(ds.document.sequence.blocks)}
                     </div>
                 );
             });
@@ -136,9 +169,11 @@ const PkReferenceText = class extends PkBase {
         return (
             <div>
                 {this.formHTML()}
-                <div style={{fontStyle: "italic", marginTop: "1em"}}>Query completed in {this.state.queryTime} msec</div>
+                <div style={{fontStyle: "italic", marginTop: "1em"}}>Query completed
+                    in {this.state.queryTime} msec
+                </div>
                 <div>
-                    <h3>Text for Verse</h3>
+                    <h2>Text for Verse</h2>
                     <div>{this.versesText()}</div>
                 </div>
                 {this.rawQueryHTML()}
@@ -148,7 +183,8 @@ const PkReferenceText = class extends PkBase {
 
 }
 
-PkReferenceText.propTypes = {
+PkReferenceText
+    .propTypes = {
     /** The ProsKomma instance */
     "pk": PropTypes.object.isRequired,
 };
