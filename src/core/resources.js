@@ -121,8 +121,10 @@ export const getResourceProjectFile = async ({
   tag,
   project: { path },
   config,
+  filePath,
 }) => {
   const repository = `${languageId}_${resourceId}`;
+  path = filePath ? path.join(path, filePath) : path;
   const file = await getFile({
     username, repository, path, tag, config,
   });
@@ -146,7 +148,7 @@ export const extendProject = ({
 }) => {
   let _project = { ...project };
   const { projectId, resourceLink } = resource;
-  _project.file = async () => getResourceProjectFile({ ...resource, project });
+  _project.file = async (filePath) => getResourceProjectFile({ ...resource, project, filePath });
   if (project.path.match(/\.usfm$/)) {
     _project.parseUsfm = async () => {
       const start = performance.now();
