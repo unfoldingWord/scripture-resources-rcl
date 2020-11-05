@@ -25,11 +25,7 @@ function useRsrc({
         setResource(__resource);
       },
     );
-  }, [resourceLink, reference, config, update]);
-
-  const update = useCallback(
-
-  );
+  }, [resourceLink, reference, config]);
 
   const parseUsfm = useCallback(async () => {
     if (resource && resource.project) {
