@@ -19,7 +19,6 @@ function useRsrc({
       resourceLink, reference, config,
     }).then(
       (_resource) => {
-        console.log('_resource', _resource);
         const __resource = _resource && deepFreeze(_resource);
         setResource(__resource);
       },

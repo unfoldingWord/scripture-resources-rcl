@@ -131,8 +131,6 @@ export const getResourceProjectFile = async ({
   const repository = `${languageId}_${resourceId}`;
   projectPath = filePath ? path.join(projectPath, filePath) : projectPath;
 
-  console.log('filePath', filePath);
-  console.log('projectPath', projectPath);
   const file = await getFile({
     username, repository, path: projectPath, tag, config,
   });
