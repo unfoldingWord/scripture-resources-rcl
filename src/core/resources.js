@@ -21,6 +21,7 @@ export const resourcesFromResourceLinks = async ({
 export const resourceFromResourceLink = async ({
   resourceLink,
   reference,
+  filePath,
   config,
 }) => {
   try {
@@ -30,7 +31,7 @@ export const resourceFromResourceLink = async ({
     const manifest = await getResourceManifest(resource);
     const projects = manifest.projects.map((project) =>
       extendProject({
-        project, resource, reference,
+        project, resource, reference, filePath,
       }),
     );
     const project = await projectFromProjects({
@@ -152,13 +153,13 @@ export const projectFromProjects = ({
 };
 
 export const extendProject = ({
-  project, resource, reference,
+  project, resource, reference, filePath,
 }) => {
   let _project = { ...project };
   const { projectId, resourceLink } = resource;
 
   // eslint-disable-next-line require-await
-  _project.file = async (filePath) => getResourceProjectFile({
+  _project.file = async () => getResourceProjectFile({
     ...resource, project, filePath,
   });
 

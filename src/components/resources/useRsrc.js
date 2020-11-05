@@ -7,6 +7,7 @@ import { resourceFromResourceLink } from '../../core';
 
 function useRsrc({
   config,
+  filePath,
   reference,
   resourceLink,
 }) {
@@ -16,16 +17,15 @@ function useRsrc({
 
   useEffect(() => {
     resourceFromResourceLink({
-      resourceLink, reference, config,
+      resourceLink, reference, config, filePath,
     }).then(
       (_resource) => {
-        // TODO:
         console.log('_resource', _resource);
         const __resource = _resource && deepFreeze(_resource);
         setResource(__resource);
       },
     );
-  }, [resourceLink, reference, config]);
+  }, [resourceLink, reference, config, filePath]);
 
   const parseUsfm = useCallback(async () => {
     if (resource && resource.project) {
