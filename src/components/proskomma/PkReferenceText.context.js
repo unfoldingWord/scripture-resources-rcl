@@ -13,7 +13,7 @@ const PkReferenceText = class extends PkBase {
             '  document: documentWithBook(bookCode:"%book%") {\n' +
             '    book: header(id:"bookCode") \n' +
             '    sequence: mainSequence {\n' +
-            '      blocks(withScriptureCV:"%cv%") {\n' +
+            '      blocks(withScriptureCV:"%cv%"%withStrongs%) {\n' +
             '        bs { label }' +
             '        bg { subType }' +
             '        items(withScriptureCV:"%cv%") {\n' +
@@ -25,6 +25,8 @@ const PkReferenceText = class extends PkBase {
             lang: "",
             book: "TIT",
             cv: "3:5",
+            strongs: "",
+            anyStrongs: false,
             showFormatting: false
         };
     }
@@ -34,10 +36,16 @@ const PkReferenceText = class extends PkBase {
         if (this.state.lang !== "") {
             langClause = ` selectorKeys:["lang"] selectorValues:["${this.state.lang}"]`;
         }
+        let strongsClause = "";
+        if (this.state.strongs) {
+            const whichStrongs = this.state.anyStrongs? "Any": "All";
+            strongsClause = ` with${whichStrongs}Strongs:[${this.state.strongs.split(" ").map(s => `"${s.trim()}"`).join(", ")}]`;
+        }
         return this.queryTemplate
             .replace(/%book%/g, this.state.book)
             .replace(/%cv%/g, this.state.cv)
-            .replace(/%lang%/g, langClause);
+            .replace(/%lang%/g, langClause)
+            .replace(/%withStrongs%/g, strongsClause);
     }
 
     formHTML() {
@@ -48,7 +56,7 @@ const PkReferenceText = class extends PkBase {
                 <form>
                     <h2>Chapter/Verse Reference</h2>
                     {
-                        [["Lang", "lang"], ["Book", "book"], ["CV Spec", "cv"]]
+                        [["Lang", "lang"], ["Book", "book"], ["CV Spec", "cv"], ["Strongs", "strongs"]]
                             .map(
                                 rec =>
                                     <div>
@@ -67,7 +75,7 @@ const PkReferenceText = class extends PkBase {
                             )
                     }
                     {
-                        [["Format", "showFormatting"]].map(
+                        [["Format", "showFormatting"], ["Any Strongs", "anyStrongs"]].map(
                             rec =>
                                 <div>
                                     <span style={labelStyle}>{rec[0]}</span>
@@ -108,10 +116,14 @@ const PkReferenceText = class extends PkBase {
                     return <i style={{color: "green"}}>{`[v${i.label.split("/")[1]}] `}</i>;
                 } else if (i.label.startsWith("span/")) {
                     return <span style={{color: "blue"}}>{`[${i.label.split("/")[1]}]`}</span>;
+                } else if (i.label.includes("strong") && this.state.strongs.includes(i.label.split("/").reverse()[0])) {
+                    return <span style={{color: "purple", backgroundColor: "yellow", fontWeight: "bold"}}>{`<`}</span>;
                 }
             } else if (i.itemType === "endScope") {
                 if (i.label.startsWith("span/")) {
                     return <span style={{color: "blue"}}>{`[/${i.label.split("/")[1]}]`}</span>;
+                } else if (i.label.includes("strong") && this.state.strongs.includes(i.label.split("/").reverse()[0])) {
+                    return <span style={{color: "purple", backgroundColor: "yellow", fontWeight: "bold"}}>{`>`}</span>;
                 }
             } else {
                 return "";

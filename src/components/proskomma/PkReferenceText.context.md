@@ -2,8 +2,6 @@
 import React, {useState} from 'react';
 import ReactJson from 'react-json-view';
 import en_psa from '../mocks/en_psa.usfm.js';
-import hi_tit from '../mocks/hi_tit.usfm.js';
-import hi_rev from '../mocks/hi_aligned_rev.usfm.js';
 import ugnt_tit from '../mocks/ugnt_tit.usfm.js';
 import eng_tit from '../mocks/en_aligned_tit.usfm.js';
 import { UWProsKomma } from 'uw-proskomma';
@@ -15,8 +13,6 @@ const pk = new UWProsKomma();
 // We give it some USFM
 [
     ["unfoldingWord", "en", "ust", en_psa],
-    ["unfoldingWord", "hi", "hiv", hi_rev],
-    ["unfoldingWord", "hi", "hiv", hi_tit],
     ["unfoldingWord", "grc", "ugnt", ugnt_tit],
     ["unfoldingWord", "en", "ult", eng_tit]
 ].map(rec => {
@@ -29,9 +25,7 @@ const pk = new UWProsKomma();
       },
       "usfm",
       content,
-      {
-        includeScopes:["chapter", "verse/", "span/"]
-      }
+      {}
     )
   }
 );
