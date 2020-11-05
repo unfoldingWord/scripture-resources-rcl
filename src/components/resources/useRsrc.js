@@ -37,11 +37,16 @@ function useRsrc({
     }
   }, [projectIdentifier, resource, usfmJson]);
 
+  const getFile = useCallback(async () => {
+    const file = await resource.project?.file();
+    return file;
+  }, [resource]);
+
   return {
     state: resource,
     actions: {
+      getFile,
       parseUsfm,
-      getFile: resource.project?.file,
     },
   };
 }
