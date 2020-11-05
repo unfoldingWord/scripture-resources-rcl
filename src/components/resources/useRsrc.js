@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
@@ -10,7 +10,7 @@ function useRsrc({
   reference,
   resourceLink,
 }) {
-  const [resource, setResource] = React.useState({});
+  const [resource, setResource] = useState({});
   const [usfmJson, setUsfmJson] = useState(null);
   const [projectIdentifier, setProjectIdentifier] = useState('');
 
@@ -21,16 +21,14 @@ function useRsrc({
       (_resource) => {
         // TODO:
         console.log('_resource', _resource);
-        update(_resource);
+        const __resource = _resource && deepFreeze(_resource);
+        setResource(__resource);
       },
     );
   }, [resourceLink, reference, config, update]);
 
   const update = useCallback(
-    (_resource) => {
-      const __resource = _resource && deepFreeze(_resource);
-      setResource(__resource);
-    },
+
   );
 
   const parseUsfm = useCallback(async () => {
@@ -49,7 +47,7 @@ function useRsrc({
     state: resource,
     actions: {
       parseUsfm,
-      getFile: resource.project.file,
+      getFile: resource.project?.file,
     },
   };
 }
