@@ -15,9 +15,9 @@ const pk = new UWProsKomma();
 
 // We give it some USFM
 [
-    ["unfoldingWord", "eng", "ust", en_psa],
-    ["unfoldingWord", "hin", "hiv", hi_rev],
-    ["unfoldingWord", "hin", "hiv", hi_tit]
+    ["unfoldingWord", "en", "ust", en_psa],
+    ["unfoldingWord", "hi", "hiv", hi_rev],
+    ["unfoldingWord", "hi", "hiv", hi_tit]
 ].map(rec => {
     const [org, lang, abbr, content] = rec;
     pk.importDocument(
