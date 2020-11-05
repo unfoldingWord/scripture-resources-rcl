@@ -1,6 +1,6 @@
 import path from 'path';
 import YAML from 'js-yaml-parser';
-import { get, getFullTree } from 'gitea-react-toolkit';
+import { get } from 'gitea-react-toolkit';
 import usfmJS from 'usfm-js';
 
 export const resourcesFromResourceLinks = async ({
@@ -21,10 +21,12 @@ export const resourcesFromResourceLinks = async ({
 export const resourceFromResourceLink = async ({
   resourceLink,
   reference,
-  config
+  config,
 }) => {
   try {
-    const resource = parseResourceLink({ resourceLink, config, reference });
+    const resource = parseResourceLink({
+      resourceLink, config, reference,
+    });
     const manifest = await getResourceManifest(resource);
     const projects = manifest.projects.map((project) =>
       extendProject({
@@ -51,9 +53,12 @@ export const resourceFromResourceLink = async ({
   }
 };
 
-export const parseResourceLink = ({ resourceLink, config, reference = {} }) => {
+export const parseResourceLink = ({
+  resourceLink, config, reference = {},
+}) => {
   let parsedArray, username, repository, languageId,
     resourceId, projectId = reference.bookId, tag = 'master';
+
   if (resourceLink.includes('src/branch')) {
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master/3jn
@@ -125,13 +130,16 @@ export const getResourceProjectFile = async ({
 }) => {
   const repository = `${languageId}_${resourceId}`;
   path = filePath ? path.join(path, filePath) : path;
+
+  console.log('filePath', filePath);
+  console.log('path', path);
   const file = await getFile({
     username, repository, path, tag, config,
   });
   return file;
 };
 
-export const projectFromProjects = async ({
+export const projectFromProjects = ({
   reference,
   projectId,
   projects,
@@ -148,7 +156,12 @@ export const extendProject = ({
 }) => {
   let _project = { ...project };
   const { projectId, resourceLink } = resource;
-  _project.file = async (filePath) => getResourceProjectFile({ ...resource, project, filePath });
+
+  // eslint-disable-next-line require-await
+  _project.file = async (filePath) => getResourceProjectFile({
+    ...resource, project, filePath,
+  });
+
   if (project.path.match(/\.usfm$/)) {
     _project.parseUsfm = async () => {
       const start = performance.now();
@@ -215,6 +228,7 @@ export const getFile = async ({
   } else {
     url = path.join(username, repository, 'raw/branch/master', urlPath);
   }
+
   try {
     const _config = { ...config }; // prevents gitea-react-toolkit from modifying object
     const data = await get({ url, config: _config });
