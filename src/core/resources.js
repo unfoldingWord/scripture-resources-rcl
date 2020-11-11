@@ -35,7 +35,7 @@ export const resourceFromResourceLink = async ({
     );
     const project = await projectFromProjects({
       reference,
-      projectId: reference.bookId,
+      projectId: reference ? reference.bookId : '',
       projects,
     });
     const _resource = {
@@ -81,7 +81,7 @@ export const parseResourceLink = ({
     //ru_gl/ru/rlob/master/
     //ru_gl/ru/rlob/master/tit
     parsedArray = resourceLink.split('/');
-    ([username, languageId, resourceId, tag = 'master', projectId = reference.bookId] = parsedArray);
+    ([username, languageId, resourceId, tag = 'master', projectId] = parsedArray);
     repository = `${languageId}_${resourceId}`;
   }
 
@@ -188,7 +188,7 @@ export const extendProject = ({
 
 export const parseBook = async ({ project }) => {
   console.log('parseBook usfmJS.toJSON');
-  const usfm = await project.file();
+  const usfm = (await project.file() || '');
   const json = usfmJS.toJSON(usfm);
   return json;
 };
@@ -196,19 +196,25 @@ export const parseBook = async ({ project }) => {
 export const parseChapter = async ({ project, reference }) => {
   console.log('parseChapter usfmJS.toJSON');
   const usfm = await project.file();
-  const thisChapter = parseInt(reference.chapter);
-  const nextChapter = thisChapter + 1;
-  const regexpString =
-    '(\\\\c\\s*' +
-    thisChapter +
-    '\\s*(.*?\n?)*?)(?:(\\\\c\\s*' +
-    nextChapter +
-    '|$))';
-  const regexp = new RegExp(regexpString, '');
-  const matches = usfm.match(regexp);
-  const chapter = matches[1];
-  const json = usfmJS.toJSON(chapter);
-  return json;
+  if (usfm) {
+    const thisChapter = parseInt(reference.chapter);
+    const nextChapter = thisChapter + 1;
+    const regexpString =
+      '(\\\\c\\s*' +
+      thisChapter +
+      '\\s*(.*?\n?)*?)(?:(\\\\c\\s*' +
+      nextChapter +
+      '|$))';
+    const regexp = new RegExp(regexpString, '');
+    const matches = usfm.match(regexp);
+
+    let chapter = '';
+    if (matches) {
+      chapter = matches[1];
+    }
+    const json = usfmJS.toJSON(chapter);
+    return json;
+  }
 };
 
 // https://git.door43.org/unfoldingword/en_ult/raw/branch/master/manifest.yaml

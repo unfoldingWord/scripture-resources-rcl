@@ -4,14 +4,16 @@ export const referenceIdsFromBooks = ({ books }) => {
   const referenceIds = new Set([]);
 
   books.forEach((book) => {
-    Object.keys(book.chapters).forEach((chapterKey) => {
-      const chapter = book.chapters[chapterKey];
+    if (book) {
+      Object.keys(book.chapters).forEach((chapterKey) => {
+        const chapter = book.chapters[chapterKey];
 
-      Object.keys(chapter).forEach((verseKey) => {
-        const referenceId = chapterKey + ':' + verseKey;
-        referenceIds.add(referenceId);
+        Object.keys(chapter).forEach((verseKey) => {
+          const referenceId = chapterKey + ':' + verseKey;
+          referenceIds.add(referenceId);
+        });
       });
-    });
+    }
   });
   return [...referenceIds];
 };
@@ -40,28 +42,32 @@ export const rangeFromVerseAndVerseKeys = (({ verseKeys, verseKey }) => {
 export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
   const versesData = books.map((book, index) => {
     const reference = referenceFromReferenceId(referenceId);
-    const chapterData = book.chapters[reference.chapter];
-    let verseData = chapterData && chapterData[reference.verse];
-    let range;
+    //if (book && book.chapters && book.chapters.length > reference.chapter) {
+    if (book) {
 
-    if (!verseData) {
-      const verseKeys = Object.keys(chapterData);
-      range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
-      verseData = chapterData[range];
+      const chapterData = book.chapters[reference.chapter];
+      let verseData = chapterData && chapterData[reference.verse];
+      let range;
+
+      if (!verseData && chapterData) {
+        const verseKeys = Object.keys(chapterData);
+        range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
+        verseData = chapterData[range];
+      }
+
+      if (index === 0 && verseData && verseData.verseObjects && verseData.verseObjects.length) {
+        const _verseData = { ...verseData };
+        _verseData.verseObjects = occurrenceInjectVerseObjects(_verseData.verseObjects);
+        verseData = _verseData;
+      }
+
+      let verseTitle = reference.verse;
+
+      if (!(verseTitle === 'front' || verseTitle === 'back')) {
+        verseTitle = range ? reference.chapter + ':' + range : reference.chapter + ':' + reference.verse;
+      }
+      return { verseData, verseTitle };
     }
-
-    if (index === 0 && verseData && verseData.verseObjects && verseData.verseObjects.length) {
-      const _verseData = { ...verseData };
-      _verseData.verseObjects = occurrenceInjectVerseObjects(_verseData.verseObjects);
-      verseData = _verseData;
-    }
-
-    let verseTitle = reference.verse;
-
-    if ( !(verseTitle === 'front' || verseTitle === 'back') ) {
-      verseTitle = range ? reference.chapter+':'+range : reference.chapter+':'+reference.verse;
-    }
-    return { verseData, verseTitle };
   });
   return versesData;
 };
