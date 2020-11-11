@@ -10,10 +10,10 @@ const PkReferenceText = class extends PkBase {
             '  org: selector(id:"org")' +
             '  lang: selector(id:"lang")' +
             '  abbr: selector(id:"abbr")' +
-            '  document: documentWithBook(bookCode:"%book%") {\n' +
+            '  document(bookCode:"%book%") {\n' +
             '    book: header(id:"bookCode") \n' +
             '    sequence: mainSequence {\n' +
-            '      blocks(withScriptureCV:"%cv%"%withStrongs%) {\n' +
+            '      blocks(withScriptureCV:"%cv%"%atts%) {\n' +
             '        bs { label }' +
             '        bg { subType }' +
             '        items(withScriptureCV:"%cv%") {\n' +
@@ -36,16 +36,25 @@ const PkReferenceText = class extends PkBase {
         if (this.state.lang !== "") {
             langClause = ` selectorKeys:["lang"] selectorValues:["${this.state.lang}"]`;
         }
-        let strongsClause = "";
+        let attsClause = "";
         if (this.state.strongs) {
-            const whichStrongs = this.state.anyStrongs? "Any": "All";
-            strongsClause = ` with${whichStrongs}Strongs:[${this.state.strongs.split(" ").map(s => `"${s.trim()}"`).join(", ")}]`;
+            const attSpecs = "[" +
+                "{attType:\"spanWithAtts\", tagName:\"w\", attKey:\"strong\", valueN:0}," +
+                "{attType:\"spanWithAtts\", tagName:\"w\", attKey:\"strongs\", valueN:0}," +
+                "{attType:\"milestone\", tagName:\"zaln\", attKey:\"x-strong\", valueN:0}," +
+                "]";
+            const strongsChoices = this.state.strongs.split(" ").map(s => `["${s.trim()}"]`);
+            const attSpecsArray = Array(strongsChoices.length);
+            attSpecsArray.fill(attSpecs);
+            const attSpecsArrayClause = `attSpecs:[${attSpecsArray.join(", ")}]`;
+            const attValuesClause = `attValues:[${strongsChoices.join(", ")}]`;
+            attsClause = ` ${attSpecsArrayClause} ${attValuesClause} allAtts:${!this.state.anyStrongs}`;
         }
         return this.queryTemplate
             .replace(/%book%/g, this.state.book)
             .replace(/%cv%/g, this.state.cv)
             .replace(/%lang%/g, langClause)
-            .replace(/%withStrongs%/g, strongsClause);
+            .replace(/%atts%/g, attsClause);
     }
 
     formHTML() {

@@ -14,7 +14,7 @@ const PkBookHeaders = class extends PkBase {
             '  ) {' +
             '    selectorString' +
             '    selectors { key value }' +
-            '    document: documentWithBook(bookCode:"%bookCode%") {' +
+            '    document(bookCode:"%bookCode%") {' +
             '      headers { key value }' +
             '    }' +
             '  }' +
