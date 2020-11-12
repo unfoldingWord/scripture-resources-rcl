@@ -34,7 +34,7 @@ const PkReferenceText = class extends PkBase {
     substitutedQuery() {
         let langClause = "";
         if (this.state.lang !== "") {
-            langClause = ` selectorKeys:["lang"] selectorValues:["${this.state.lang}"]`;
+            langClause = ` withSelectors:[{key:"lang", value:"${this.state.lang}"}]`;
         }
         let attsClause = "";
         if (this.state.strongs) {

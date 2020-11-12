@@ -41,8 +41,7 @@ const pk = new UWProsKomma();
 <div>
   <PkBookHeaders
     pk={pk}
-    selectorKeys={["org"]}
-    selectorValues={["unfoldingWord"]}
+    withSelectors={[{key:"org", value:"unfoldingWord"}]}
     bookCode="TIT"
   />
 </div>

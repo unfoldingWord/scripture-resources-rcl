@@ -8,8 +8,7 @@ const PkBookHeaders = class extends PkBase {
         super(props);
         this.queryTemplate = '{ ' +
             '  docSets (' +
-            '    selectorKeys:%selectorKeys%' +
-            '    selectorValues:%selectorValues%' +
+            '    withSelectors:%withSelectors%' +
             '    withBook:"%bookCode%"' +
             '  ) {' +
             '    selectorString' +
@@ -22,11 +21,8 @@ const PkBookHeaders = class extends PkBase {
     }
 
     substitutedQuery() {
-        const stringifyArray = a => '[' + a.map(i => `"${i}"`).join(", ") + ']';
-
         return this.queryTemplate
-            .replace(/%selectorKeys%/g, stringifyArray(this.props.selectorKeys))
-            .replace(/%selectorValues%/g, stringifyArray(this.props.selectorValues))
+            .replace(/%withSelectors%/g, `[${this.props.withSelectors.map(s => `{key:"${s.key}", value:"${s.value}"}`)}]`)
             .replace(/%bookCode%/g, this.props.bookCode);
     }
 
