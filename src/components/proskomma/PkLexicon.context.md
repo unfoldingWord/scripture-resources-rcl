@@ -1,22 +1,17 @@
 ```
 import React, {useState} from 'react';
 import ReactJson from 'react-json-view';
-import en_psa from '../mocks/en_psa.usfm.js';
-import ugnt_tit from '../mocks/ugnt_tit.usfm.js';
-import eng_tit from '../mocks/en_aligned_tit.usfm.js';
-import hi_rev from '../mocks/hi_aligned_rev.usfm.js';
+import lexicon from './dodson_short.js';
 import { UWProsKomma } from 'uw-proskomma';
 import PkQuery from './PkQuery.context';
 
 // We create an instance of Proskomma using the uW-adapted subClass
 const pk = new UWProsKomma();
 
-// We give it some USFM
+// We give it a lexicon document
+// This one is abbreviated, use dodson.js for a complete NT lexicon
 [
-    ["unfoldingWord", "en", "ust", en_psa],
-    ["unfoldingWord", "hi", "hiv", hi_rev],
-    ["unfoldingWord", "grc", "ugnt", ugnt_tit],
-    ["unfoldingWord", "en", "ult", eng_tit]
+    ["proskomma", "en", "lexicon", lexicon]
 ].map(rec => {
     const [org, lang, abbr, content] = rec;
     pk.importDocument(
@@ -25,7 +20,7 @@ const pk = new UWProsKomma();
         lang: lang,
         abbr: abbr
       },
-      "usfm",
+      "lexicon",
       content,
       {}
     )
@@ -34,6 +29,7 @@ const pk = new UWProsKomma();
 
 // We use GraphQL to query it
 <div>
-  <PkQuery pk={pk} />
+  <PkLexicon pk={pk} />
 </div>
+
 ```
