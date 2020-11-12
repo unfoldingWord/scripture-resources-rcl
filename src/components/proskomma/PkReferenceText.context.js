@@ -25,8 +25,9 @@ const PkReferenceText = class extends PkBase {
             lang: "",
             book: "TIT",
             cv: "3:5",
-            strongs: "",
-            anyStrongs: false,
+            search: "",
+            lemma: "",
+            anyMatch: false,
             showFormatting: false
         };
     }
@@ -37,18 +38,26 @@ const PkReferenceText = class extends PkBase {
             langClause = ` withSelectors:[{key:"lang", value:"${this.state.lang}"}]`;
         }
         let attsClause = "";
-        if (this.state.strongs) {
-            const attSpecs = "[" +
-                "{attType:\"spanWithAtts\", tagName:\"w\", attKey:\"strong\", valueN:0}," +
-                "{attType:\"spanWithAtts\", tagName:\"w\", attKey:\"strongs\", valueN:0}," +
-                "{attType:\"milestone\", tagName:\"zaln\", attKey:\"x-strong\", valueN:0}," +
-                "]";
-            const strongsChoices = this.state.strongs.split(" ").map(s => `["${s.trim()}"]`);
-            const attSpecsArray = Array(strongsChoices.length);
+        if (this.state.search) {
+            const searchChoices = this.state.search.split(" ").map(s => `["${s.trim()}"]`);
+            let attSpecs;
+            if (searchChoices[0].includes("G")) {
+                attSpecs = "[" +
+                    "{attType:\"spanWithAtts\", tagName:\"w\", attKey:\"strong\", valueN:0}," +
+                    "{attType:\"spanWithAtts\", tagName:\"w\", attKey:\"strongs\", valueN:0}," +
+                    "{attType:\"milestone\", tagName:\"zaln\", attKey:\"x-strong\", valueN:0}," +
+                    "]";
+            } else {
+                attSpecs = "[" +
+                    "{attType:\"spanWithAtts\", tagName:\"w\", attKey:\"lemma\", valueN:0}," +
+                    "{attType:\"milestone\", tagName:\"zaln\", attKey:\"x-lemma\", valueN:0}," +
+                    "]";
+            }
+            const attSpecsArray = Array(searchChoices.length);
             attSpecsArray.fill(attSpecs);
             const attSpecsArrayClause = `attSpecs:[${attSpecsArray.join(", ")}]`;
-            const attValuesClause = `attValues:[${strongsChoices.join(", ")}]`;
-            attsClause = ` ${attSpecsArrayClause} ${attValuesClause} allAtts:${!this.state.anyStrongs}`;
+            const attValuesClause = `attValues:[${searchChoices.join(", ")}]`;
+            attsClause = ` ${attSpecsArrayClause} ${attValuesClause} allAtts:${!this.state.anyMatch}`;
         }
         return this.queryTemplate
             .replace(/%book%/g, this.state.book)
@@ -65,7 +74,7 @@ const PkReferenceText = class extends PkBase {
                 <form>
                     <h2>Chapter/Verse Reference</h2>
                     {
-                        [["Lang", "lang"], ["Book", "book"], ["CV Spec", "cv"], ["Strongs", "strongs"]]
+                        [["Lang", "lang"], ["Book", "book"], ["CV Spec", "cv"], ["Search", "search"]]
                             .map(
                                 rec =>
                                     <div>
@@ -84,7 +93,7 @@ const PkReferenceText = class extends PkBase {
                             )
                     }
                     {
-                        [["Format", "showFormatting"], ["Any Strongs", "anyStrongs"]].map(
+                        [["Format", "showFormatting"], ["Any Match", "anyMatch"]].map(
                             rec =>
                                 <div>
                                     <span style={labelStyle}>{rec[0]}</span>
@@ -125,13 +134,13 @@ const PkReferenceText = class extends PkBase {
                     return <i style={{color: "green"}}>{`[v${i.label.split("/")[1]}] `}</i>;
                 } else if (i.label.startsWith("span/")) {
                     return <span style={{color: "blue"}}>{`[${i.label.split("/")[1]}]`}</span>;
-                } else if (i.label.includes("strong") && this.state.strongs.includes(i.label.split("/").reverse()[0])) {
+                } else if ((i.label.includes("strong") || i.label.includes("lemma")) && this.state.search.includes(i.label.split("/").reverse()[0])) {
                     return <span style={{color: "purple", backgroundColor: "yellow", fontWeight: "bold"}}>{`<`}</span>;
                 }
             } else if (i.itemType === "endScope") {
                 if (i.label.startsWith("span/")) {
                     return <span style={{color: "blue"}}>{`[/${i.label.split("/")[1]}]`}</span>;
-                } else if (i.label.includes("strong") && this.state.strongs.includes(i.label.split("/").reverse()[0])) {
+                } else if ((i.label.includes("strong") || i.label.includes("lemma")) && this.state.search.includes(i.label.split("/").reverse()[0])) {
                     return <span style={{color: "purple", backgroundColor: "yellow", fontWeight: "bold"}}>{`>`}</span>;
                 }
             } else {
