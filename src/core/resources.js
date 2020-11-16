@@ -42,7 +42,6 @@ export const resourceFromResourceLink = async ({
       }),
     );
     const projectId = reference ? reference.projectId || reference.bookId : '';
-    console.log('projectId', projectId);
     const project = await projectFromProjects({
       reference,
       projectId,
