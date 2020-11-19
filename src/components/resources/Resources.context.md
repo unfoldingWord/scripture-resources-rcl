@@ -1,4 +1,4 @@
-### useResources
+# useResources
 
 *What is a custom hook?*  Here are some common characteristics based
 on how this package uses them.
@@ -8,8 +8,11 @@ on how this package uses them.
 built-in React `useEffect()` hooks.
 1. Additional processing may also be performed.
 1. Finally the funtion will return an object with two properties:
+
 - state
+
 - actions
+
 1. `actions` will be one or more ways to delete, modify, or add to the state value(s).
 1. Once an actions updates the state, then the `useEffect()` hooks inside the custom hook
 will cause an update to data. These updates are made by `useState()` functions. Thus, 
@@ -23,7 +26,6 @@ more `useState()` and `useEffect()` hooks).
 This technique ensures that data is only stored and maintained in one place, but yet 
 made available to any rendering component that requires it. *Note that rendering component
 may udpate the data using the actions available via the context which is managing the data.*
-
 
 ```js
 import { useContext } from 'react';
@@ -43,8 +45,6 @@ function Component( { stateActions }) {
     </>
   );
 };
-
-
 
 const config = {
   server: 'https://git.door43.org',
@@ -75,7 +75,7 @@ const resourceStateActions = useResources({
 
 ```
 
-### Resources Context Provider - A Simple Example
+## Resources Context Provider - A Simple Example
 
 ```js
 import {Paper} from '@material-ui/core';
@@ -87,8 +87,8 @@ function Component () {
   // - Note how this component is able to access data that is not
   // directly provided to it. The data is stored elsewhere in an
   // enclosing component -- the "context". This component might
-  // have multiple contexts. 
-  // - Note further that the data is NOT copied to this component; it 
+  // have multiple contexts.
+  // - Note further that the data is NOT copied to this component; it
   // is only stored once and when it changes all enclosed components
   // are able to respond, re-render, etc.
   const resourcesContext = React.useContext(ResourcesContext);
@@ -139,7 +139,7 @@ const [ resources, setResources ] = React.useState([]);
   <ResourcesContextProvider
     reference={reference}
     resources={resources}
-    resourceLinks={resourceLinks} 
+    resourceLinks={resourceLinks}
     onResources={setResources}
     config={config}
   >
@@ -149,6 +149,7 @@ const [ resources, setResources ] = React.useState([]);
 ```
 
 ### Complex Example: Find Book Order based on fewest new UTW articles
+
 ```js
 import {Paper, TextField} from '@material-ui/core';
 import ReactJson from 'react-json-view';
@@ -255,7 +256,7 @@ const [ resources, setResources ] = React.useState( [] );
   <TextField id="seed" defaultValue={seed.join(', ')} variant='outlined' label='seed' onBlur={updateSeed} />
   <ResourcesContextProvider
     resources={resources}
-    resourceLinks={resourceLinks} 
+    resourceLinks={resourceLinks}
     onResources={setResources}
     config={config}
   >

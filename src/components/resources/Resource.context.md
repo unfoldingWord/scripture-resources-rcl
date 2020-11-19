@@ -1,4 +1,6 @@
-### Fetch Project File and Parse USFM
+# Resource
+
+## Fetch Project File and Parse USFM
 
 ```js
 import React, {useState} from 'react';
@@ -44,11 +46,9 @@ const [ resource, setResource ] = React.useState();
     <Component />
   </ResourceContextProvider>
 </div>
- 
 ```
 
-
-### Complex example
+## Complex example
 
 ```js
 import {Paper, TextField} from '@material-ui/core';
@@ -93,7 +93,7 @@ function Component ({seed}) {
     if (resource && resource.projects) {
       const promises = resource.projects
       // .filter(p => p.categories.includes('bible-nt'))
-      .map(articlesByProject);      
+      .map(articlesByProject);
       Promise.all(promises).then(projects => {
         const bookIndex = {};
         projects.forEach(project => bookIndex[project.identifier] = Array.from(project.articles));
@@ -116,7 +116,7 @@ function Component ({seed}) {
           Object.keys(_bookIndex).forEach(bookId => { // remove completed articles from index
             _bookIndex[bookId] = _bookIndex[bookId].filter(article => !articles.includes(article));
           });
-        });        
+        });
         setBookOrder(_bookOrder);
       });
     }
@@ -162,5 +162,60 @@ const [ resource, setResource ] = React.useState( {} );
   <Component seed={seed} />
   </ResourceContextProvider>
 </>
+```
 
+## useRsrc
+
+A custom hook to retrieve resources from DCS. Unlike useResource it allows to retrieve files that are in a subfolder trhough the filePath value.
+
+```jsx
+import React, { useEffect, useState } from 'react';
+import { BlockEditable } from 'markdown-translatable';
+import useRsrc from './useRsrc';
+
+function Component() {
+  const [markdown, setMarkdown] = useState('');
+  const reference = {
+    projectId: 'bible',
+    chapter: 1,
+    verse: 1,
+    filePath: 'kt/jesus.md',
+  };
+  const resourceLink = 'unfoldingWord/en/tw/master';
+  const config = {
+    server: 'https://git.door43.org',
+    cache: {
+      maxAge: 1 * 1 * 1 * 60 * 1000, // override cache to 1 minute
+    },
+  };
+
+  const { state, actions } = useRsrc({
+    resourceLink,
+    reference,
+    config,
+  });
+
+  useEffect(() => {
+    async function getFile() {
+      const file = await actions.getFile();
+      setMarkdown(file || '');
+    }
+
+    if (actions.getFile) {
+      getFile();
+    }
+  });
+
+  console.log('state', state);
+  console.log('actions', actions);
+
+  return (
+    <BlockEditable
+      markdown={markdown}
+      preview={true}
+    />
+  );
+}
+
+<Component />;
 ```

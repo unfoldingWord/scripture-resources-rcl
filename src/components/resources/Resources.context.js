@@ -17,7 +17,7 @@ export function ResourcesContextProvider({
   children,
 }) {
   const val = useResources({
-    resources,
+    resources: resources || [],
     resourceLinks,
     defaultResourceLinks,
     onResourceLinks,
