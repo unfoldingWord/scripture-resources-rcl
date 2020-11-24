@@ -4,11 +4,13 @@ import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
 
 import { resourceFromResourceLink } from '../../core';
+import tsvToJson from '../../core/tsvToJson';
 
 function useRsrc({
   config, reference, resourceLink,
 }) {
   const [resource, setResource] = useState({});
+  const [content, setContent] = useState(null);
   const [usfmJson, setUsfmJson] = useState(null);
   const [projectIdentifier, setProjectIdentifier] = useState('');
 
@@ -23,6 +25,21 @@ function useRsrc({
     });
   }, [resourceLink, reference, config]);
 
+  useEffect(() => {
+    async function getFile() {
+      let file = await resource.project?.file();
+      const isTSV = resource?.project?.path.includes('.tsv');
+
+      if (isTSV) {
+        file = tsvToJson(file);
+      }
+
+      setContent(file);
+    }
+
+    getFile();
+  }, [config, resource]);
+
   const parseUsfm = useCallback(async () => {
     if (resource && resource.project) {
       const { project } = resource;
@@ -35,17 +52,12 @@ function useRsrc({
     }
   }, [projectIdentifier, resource, usfmJson]);
 
-  const getFile = useCallback(async () => {
-    const file = await resource.project?.file();
-    return file;
-  }, [resource]);
-
   return {
-    state: resource,
-    actions: {
-      getFile,
-      parseUsfm,
+    state: {
+      content,
+      resource,
     },
+    actions: { parseUsfm },
   };
 }
 
