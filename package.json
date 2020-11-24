@@ -21,7 +21,8 @@
     "nyc:report": "nyc report --reporter=json-summary --reporter=text",
     "test": "nyc start-test 6060 cypress:run && npm run nyc:report",
     "test:unit": "jest",
-    "create-coverage-badge": "bash scripts/create-badge-json.sh"
+    "create-coverage-badge": "bash scripts/create-badge-json.sh",
+    "postpublish": "git tag v$npm_package_version && git push origin v$npm_package_version"
   },
   "eslintConfig": {
     "extends": "react-app",
