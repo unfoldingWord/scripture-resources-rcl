@@ -9,14 +9,12 @@ import tsvToJson from '../../core/tsvToJson';
 function useRsrc({
   config, reference, resourceLink,
 }) {
-  const [loading, setLoading] = useState(false);
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
   const [usfmJson, setUsfmJson] = useState(null);
   const [projectIdentifier, setProjectIdentifier] = useState('');
 
   useEffect(() => {
-    setLoading(true);
     resourceFromResourceLink({
       resourceLink,
       reference,
@@ -24,7 +22,6 @@ function useRsrc({
     }).then((_resource) => {
       const __resource = _resource && deepFreeze(_resource);
       setResource(__resource);
-      setLoading(false);
     });
   }, [resourceLink, reference, config]);
 
@@ -57,7 +54,6 @@ function useRsrc({
 
   return {
     state: {
-      loading,
       content,
       resource,
     },
