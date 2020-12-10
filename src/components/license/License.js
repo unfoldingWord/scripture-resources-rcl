@@ -12,7 +12,12 @@ export const License = ({
 }) => {
 
   const classes = useStyles();
-  const openLink = useCallback((link) => window.open(link, '_blank'), []);
+  const openLink = useCallback((link) => {
+    if (typeof window !== 'undefined' ) {
+      window.open(link, '_blank');
+    }
+  }, []);
+  
   const onClickLicense = (e) => { e.stopPropagation(); openLink(licenseLink); }
   
   let _iconProps = {

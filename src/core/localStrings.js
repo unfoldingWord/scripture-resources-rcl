@@ -38,10 +38,16 @@ const strings = {
 };
 
 export const localString = (id) => {
-  let lang = navigator.language.split(/-|_/)[0];
+  let lang;
+  if (typeof window !== 'undefined' )
+  {
+    if (navigator) {
+        lang = navigator.language.split(/-|_/)[0];
+    }
+  }
   // if language is unknown (not sure this can actually happen)
-  if (lang === undefined) {
-    lang = 'en';
+  if (!lang) {
+      lang = 'en';
   }
   // if there are no strings for the language
   if (strings[lang] === undefined) {
