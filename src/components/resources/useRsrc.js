@@ -56,6 +56,7 @@ function useRsrc({
     state: {
       content,
       resource,
+      usfm: usfmJson,
     },
     actions: { parseUsfm },
   };
