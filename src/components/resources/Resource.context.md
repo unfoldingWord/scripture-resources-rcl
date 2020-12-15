@@ -18,21 +18,19 @@ const config = {
     maxAge: 1 * 1 * 1 * 60 * 1000, // override cache to 1 minute
   },
 };
-
-const {
-  state: { content, usfm },
-  actions,
-} = useRsrc({
-  resourceLink,
-  reference,
-  config,
-});
 function Component() {
-  useEffect(() => {
-    if (content) {
-      actions.parseUsfm();
-    }
-  }, [content]);
+  const {
+    state: { content, usfm },
+    actions,
+  } = useRsrc({
+    resourceLink,
+    reference,
+    config,
+    options: {
+      usfm: true,
+    },
+  });
+  console.log("usfm", usfm);
   return <BlockEditable markdown={content || ""} />;
 }
 
