@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {VerseObject} from '.';
+import { VerseObject } from '.';
 
 export const VerseObjects = ({
   verseObjects,
@@ -9,7 +9,6 @@ export const VerseObjects = ({
   showUnsupported,
   disableWordPopover,
 }) => {
-
   const verseObjectComponents = verseObjects.map((verseObject, index) =>
     <VerseObject
       key={index}
@@ -17,7 +16,7 @@ export const VerseObjects = ({
       paragraphs={paragraphs}
       showUnsupported={showUnsupported}
       disableWordPopover={disableWordPopover}
-    />
+    />,
   );
 
   return (
@@ -31,7 +30,7 @@ VerseObjects.propTypes = {
   verseObjects: PropTypes.array.isRequired,
   /** render verses paragraphs, use explicit paragraphs */
   paragraphs: PropTypes.bool,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
   showUnsupported: PropTypes.bool,
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
