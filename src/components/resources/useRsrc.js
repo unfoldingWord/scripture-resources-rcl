@@ -6,6 +6,9 @@ import { resourceFromResourceLink } from '../../core';
 import tsvToJson from '../../core/tsvToJson';
 
 function useRsrc({ config, reference, resourceLink }) {
+  console.log('====================================');
+  console.log('useRsrc');
+  console.log('====================================');
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -22,7 +25,12 @@ function useRsrc({ config, reference, resourceLink }) {
         const __resource = _resource && deepFreeze(_resource);
         setResource(__resource);
       })
-      .catch(() => setIsError(true));
+      .catch((e) => {
+        console.log('====================================');
+        console.log('e', e);
+        console.log('====================================');
+        setIsError(true);
+      });
   }, [resourceLink, reference, config]);
 
   useEffect(() => {
@@ -53,9 +61,10 @@ function useRsrc({ config, reference, resourceLink }) {
   }, [projectIdentifier, resource, usfmJson]);
 
   console.log('useRsrc', { isError });
-
+  content.greeting = 'hello';
   return {
     state: {
+      greeting: 'hello',
       isError,
       content,
       resource,

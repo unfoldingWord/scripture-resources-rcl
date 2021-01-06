@@ -65,6 +65,7 @@ export const resourceFromResourceLink = async ({
       ']';
     console.error(errorMessage);
     console.error(e);
+    throw e;
   }
 };
 
