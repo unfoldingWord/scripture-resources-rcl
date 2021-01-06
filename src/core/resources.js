@@ -13,11 +13,11 @@ export const resourcesFromResourceLinks = async ({
       resourceLink,
       reference,
       config,
-    }),
+    })
   );
   // Filter invalid resources (those that did not parse)
   const resources = await (await Promise.all(promises)).filter(
-    (parsedResource) => parsedResource != null,
+    (parsedResource) => parsedResource != null
   );
   return resources;
 };
@@ -34,13 +34,15 @@ export const resourceFromResourceLink = async ({
       reference,
     });
     const manifest = await getResourceManifest(resource);
-    const projects = manifest.projects.map((project) =>
-      extendProject({
-        project,
-        resource,
-        reference,
-      }),
-    );
+    const projects = manifest
+      ? manifest.projects.map((project) =>
+          extendProject({
+            project,
+            resource,
+            reference,
+          })
+        )
+      : [];
     const projectId = reference ? reference.projectId || reference.bookId : '';
     const project = await projectFromProjects({
       reference,
@@ -66,9 +68,7 @@ export const resourceFromResourceLink = async ({
   }
 };
 
-export const parseResourceLink = ({
-  resourceLink, config, reference = {},
-}) => {
+export const parseResourceLink = ({ resourceLink, config, reference = {} }) => {
   let parsedArray,
     username,
     repository,
@@ -81,7 +81,7 @@ export const parseResourceLink = ({
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master/3jn
     parsedArray = resourceLink.match(
-      /https?:\/\/.*org\/([^/]*)\/([^/]*)\/src\/([^/]*)\/([^/]*)/,
+      /https?:\/\/.*org\/([^/]*)\/([^/]*)\/src\/([^/]*)\/([^/]*)/
     );
     [, username, repository, , tag] = parsedArray;
     [languageId, resourceId] = repository.split('_');
@@ -158,7 +158,11 @@ export const getResourceProjectFile = async ({
   filePath,
 }) => {
   const repository = `${languageId}_${resourceId}`;
-  projectPath = filePath && filePath.length ? path.join(projectPath, filePath) : projectPath;
+
+  projectPath =
+    filePath && filePath.length
+      ? path.join(projectPath, filePath)
+      : projectPath;
 
   const file = await getFile({
     username,
@@ -170,21 +174,17 @@ export const getResourceProjectFile = async ({
   return file;
 };
 
-export const projectFromProjects = ({
-  reference, projectId, projects,
-}) => {
+export const projectFromProjects = ({ reference, projectId, projects }) => {
   const identifier = reference
     ? reference?.projectId || reference?.bookId
     : projectId;
   const project = projects.filter(
-    (project) => project.identifier === identifier,
+    (project) => project.identifier === identifier
   )[0];
   return project;
 };
 
-export const extendProject = ({
-  project, resource, reference,
-}) => {
+export const extendProject = ({ project, resource, reference }) => {
   let _project = { ...project };
   const { projectId, resourceLink } = resource;
 
@@ -215,8 +215,8 @@ export const extendProject = ({
 
       console.log(
         `fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(
-          3,
-        )}ms`,
+          3
+        )}ms`
       );
       return json;
     };

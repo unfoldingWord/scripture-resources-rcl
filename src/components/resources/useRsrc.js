@@ -2,15 +2,13 @@ import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
-
 import { resourceFromResourceLink } from '../../core';
 import tsvToJson from '../../core/tsvToJson';
 
-function useRsrc({
-  config, reference, resourceLink,
-}) {
+function useRsrc({ config, reference, resourceLink }) {
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
+  const [isError, setIsError] = useState(false);
   const [usfmJson, setUsfmJson] = useState(null);
   const [projectIdentifier, setProjectIdentifier] = useState('');
 
@@ -19,10 +17,12 @@ function useRsrc({
       resourceLink,
       reference,
       config,
-    }).then((_resource) => {
-      const __resource = _resource && deepFreeze(_resource);
-      setResource(__resource);
-    });
+    })
+      .then((_resource) => {
+        const __resource = _resource && deepFreeze(_resource);
+        setResource(__resource);
+      })
+      .catch(() => setIsError(true));
   }, [resourceLink, reference, config]);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function useRsrc({
       setContent(file);
     }
 
-    getFile();
+    getFile().catch(() => setIsError(true));
   }, [config, resource]);
 
   const parseUsfm = useCallback(async () => {
@@ -54,6 +54,7 @@ function useRsrc({
 
   return {
     state: {
+      isError,
       content,
       resource,
     },
