@@ -52,6 +52,8 @@ function useRsrc({ config, reference, resourceLink }) {
     }
   }, [projectIdentifier, resource, usfmJson]);
 
+  console.log({ isError });
+
   return {
     state: {
       isError,
