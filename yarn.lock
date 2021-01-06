@@ -6352,6 +6352,11 @@ domhandler@^3.0, domhandler@^3.0.0:
   dependencies:
     domelementtype "^2.0.1"
 
+domino@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/domino/-/domino-2.1.6.tgz#fe4ace4310526e5e7b9d12c7de01b7f485a57ffe"
+  integrity sha512-3VdM/SXBZX2omc9JF9nOPCtDaYQ67BGp5CoLpIQlO2KCAPETs8TcDHacF26jXadGbvUteZzRTeos2fhID5+ucQ==
+
 domutils@1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/domutils/-/domutils-1.5.1.tgz#dcd8488a26f563d61079e48c9f7b7e32373682cf"
@@ -11281,6 +11286,19 @@ markdown-translatable@1.2.8:
     react-markdown "4.0.6"
     showdown "^1.9.1"
     turndown "^6.0.0"
+    turndown-plugin-gfm "^1.0.2"
+
+markdown-translatable@1.2.9:
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/markdown-translatable/-/markdown-translatable-1.2.9.tgz#915129c02f2451503d23b3f4eef0d7eb8fcb9da9"
+  integrity sha512-1PCuqNud8fkomkDA59tqD6XCjes+Ai5SJFYX4/thFjtzgf600b/p/CLoC9qBB5MbBnUBGlRWooCi+BtVKqOjXw==
+  dependencies:
+    deep-freeze "^0.0.1"
+    md5 "^2.2.1"
+    prop-types "^15.7.2"
+    react-markdown "4.0.6"
+    showdown "^1.9.1"
+    turndown "^7.0.0"
     turndown-plugin-gfm "^1.0.2"
 
 math-random@^1.0.1:
@@ -16222,6 +16240,13 @@ turndown@^6.0.0:
   integrity sha512-UVJBhSyRHCpNKtQ00mNWlYUM/i+tcipkb++F0PrOpt0L7EhNd0AX9mWEpL2dRFBu7LWXMp4HgAMA4OeKKnN7og==
   dependencies:
     jsdom "^16.2.0"
+
+turndown@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/turndown/-/turndown-7.0.0.tgz#19b2a6a2d1d700387a1e07665414e4af4fec5225"
+  integrity sha512-G1FfxfR0mUNMeGjszLYl3kxtopC4O9DRRiMlMDDVHvU1jaBkGFg4qxIyjIk2aiKLHyDyZvZyu4qBO2guuYBy3Q==
+  dependencies:
+    domino "^2.1.6"
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
