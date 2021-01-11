@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {Skeleton} from '@material-ui/lab';
 import {Waypoint} from 'react-waypoint';
 
 import {VerseObjects} from '../verse-objects';
+import { useHandleCopy } from './helpers';
 
 export const Verse = ({
   verseKey,
@@ -15,7 +16,8 @@ export const Verse = ({
   direction,
   renderOffscreen,
 }) => {
-
+  const verseRef = useRef(null);
+  useHandleCopy(verseRef.current)
 
   const classes = useStyles();
 
@@ -58,7 +60,7 @@ export const Verse = ({
   if (paragraphs) style.display = 'inline';
 
   return (
-    <div className={classes.verse} style={style} dir={direction}>
+    <div ref={verseRef} className={classes.verse} style={style} dir={direction}>
       {verse}
     </div>
   );
