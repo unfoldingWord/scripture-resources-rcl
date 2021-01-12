@@ -42,16 +42,16 @@ function useRsrc({
   const parseUsfm = useCallback(async () => {
     const { chapter, verse } = reference;
     const { project } = resource;
-    const usfm = await project.parseUsfm();
+    const bibleJson = await project.parseUsfm();
 
     if (chapter) {
       if (verse) {
-        return usfm.chapters[chapter][verse];
+        return bibleJson.chapters[chapter][verse];
       } else {
-        return usfm.chapters[chapter];
+        return bibleJson.chapters[chapter];
       }
     } else {
-      return usfm;
+      return bibleJson;
     }
   }, [reference, resource]);
 
