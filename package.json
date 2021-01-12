@@ -13,7 +13,7 @@
     "start": "styleguidist server",
     "build": "styleguidist build",
     "deploy": "git push",
-    "prepublishOnly": "rm -fr ./dist & babel ./src --out-dir ./dist -s inline",
+    "prepublishOnly": "rm -fr ./dist && babel ./src --out-dir ./dist -s inline",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "lint": "eslint ./src",
