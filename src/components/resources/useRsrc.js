@@ -9,7 +9,7 @@ import tsvToJson from '../../core/tsvToJson';
 function useRsrc({
   config, reference, resourceLink, options = {},
 }) {
-  const [usfmJson, setUsfmJson] = useState(null);
+  const [bibleJson, setBibleJson] = useState(null);
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
 
@@ -56,16 +56,16 @@ function useRsrc({
   }, [reference, resource]);
 
   useEffect(() => {
-    if (resource && resource.project && options.getUsfmJson) {
-      parseUsfm().then(setUsfmJson);
+    if (resource && resource.project && options.getBibleJson) {
+      parseUsfm().then(setBibleJson);
     }
-  }, [options.getUsfmJson, parseUsfm, resource]);
+  }, [options.getBibleJson, parseUsfm, resource]);
 
   return {
     state: {
       content,
       resource,
-      usfmJson,
+      bibleJson,
     },
   };
 }
