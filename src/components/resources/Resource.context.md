@@ -30,7 +30,6 @@ function Component() {
       getBibleJson: true,
     },
   });
-  console.log("bibleJson", bibleJson);
   return <BlockEditable markdown={content || ""} />;
 }
 
