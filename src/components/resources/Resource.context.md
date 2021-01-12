@@ -20,14 +20,14 @@ const config = {
 };
 function Component() {
   const {
-    state: { content, usfmJson },
+    state: { content, bibleJson },
     actions,
   } = useRsrc({
     resourceLink,
     reference,
     config,
     options: {
-      getUsfmJson: true,
+      getBibleJson: true,
     },
   });
   return <BlockEditable markdown={content || ""} />;
