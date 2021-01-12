@@ -20,17 +20,17 @@ const config = {
 };
 function Component() {
   const {
-    state: { content, usfm },
+    state: { content, usfmJson },
     actions,
   } = useRsrc({
     resourceLink,
     reference,
     config,
     options: {
-      usfm: true,
+      getUsfmJson: true,
     },
   });
-  console.log("usfm", usfm);
+  console.log("usfmJson", usfmJson);
   return <BlockEditable markdown={content || ""} />;
 }
 
