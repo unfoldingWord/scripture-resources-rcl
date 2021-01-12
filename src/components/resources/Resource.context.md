@@ -30,7 +30,6 @@ function Component() {
       getUsfmJson: true,
     },
   });
-  console.log("usfmJson", usfmJson);
   return <BlockEditable markdown={content || ""} />;
 }
 
