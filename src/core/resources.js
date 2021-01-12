@@ -232,7 +232,6 @@ export const parseBook = async ({ project }) => {
 };
 
 export const parseChapter = async ({ project, reference }) => {
-  console.log('parseChapter usfmJS.toJSON');
   const usfm = await project.file();
 
   if (usfm) {

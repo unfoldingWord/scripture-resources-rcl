@@ -3,6 +3,7 @@ name: Install, Build & Run Cypress
 on: [push]
 env:
   CHILD_CONCURRENCY: 1
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: ${{ secrets.ACTIONS_ALLOW_UNSECURE_COMMANDS}}
   NODE_ENV: test
   COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 jobs:

@@ -13,7 +13,7 @@ let sections = [
     name: 'Resources ',
     content: 'src/components/resources/_readme.md',
     components: () => {
-      const componentNames = ['Resource.context', 'Resources.context'];
+      const componentNames = ['Resource.context'];
       return componentNames.map((componentName) => {
         return path.resolve(
           __dirname,

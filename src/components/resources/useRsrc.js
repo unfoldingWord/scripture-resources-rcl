@@ -7,12 +7,11 @@ import { resourceFromResourceLink } from '../../core';
 import tsvToJson from '../../core/tsvToJson';
 
 function useRsrc({
-  config, reference, resourceLink,
+  config, reference, resourceLink, options = {},
 }) {
+  const [usfmJson, setUsfmJson] = useState(null);
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
-  const [usfmJson, setUsfmJson] = useState(null);
-  const [projectIdentifier, setProjectIdentifier] = useState('');
 
   useEffect(() => {
     resourceFromResourceLink({
@@ -41,23 +40,33 @@ function useRsrc({
   }, [config, resource]);
 
   const parseUsfm = useCallback(async () => {
-    if (resource && resource.project) {
-      const { project } = resource;
+    const { chapter, verse } = reference;
+    const { project } = resource;
+    const bibleJson = await project.parseUsfm();
 
-      if (project.identifier !== projectIdentifier || !usfmJson) {
-        const json = await project.parseUsfm();
-        setUsfmJson(json);
-        setProjectIdentifier(project.identifier);
+    if (chapter) {
+      if (verse) {
+        return bibleJson.chapters[chapter][verse];
+      } else {
+        return bibleJson.chapters[chapter];
       }
+    } else {
+      return bibleJson;
     }
-  }, [projectIdentifier, resource, usfmJson]);
+  }, [reference, resource]);
+
+  useEffect(() => {
+    if (resource && resource.project && options.getUsfmJson) {
+      parseUsfm().then(setUsfmJson);
+    }
+  }, [options.getUsfmJson, parseUsfm, resource]);
 
   return {
     state: {
       content,
       resource,
+      usfmJson,
     },
-    actions: { parseUsfm },
   };
 }
 
