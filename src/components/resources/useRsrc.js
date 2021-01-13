@@ -39,27 +39,27 @@ function useRsrc({
     getFile();
   }, [config, resource]);
 
-  const parseUsfm = useCallback(async () => {
-    const { chapter, verse } = reference;
-    const { project } = resource;
-    const bibleJson = await project.parseUsfm();
-
-    if (chapter) {
-      if (verse) {
-        return bibleJson.chapters[chapter][verse];
-      } else {
-        return bibleJson.chapters[chapter];
-      }
-    } else {
-      return bibleJson;
-    }
-  }, [reference, resource]);
-
   useEffect(() => {
     if (resource && resource.project && options.getBibleJson) {
+      const parseUsfm = async () => {
+        const { chapter, verse } = reference;
+        const { project } = resource;
+        const bibleJson = await project.parseUsfm();
+
+        if (chapter) {
+          if (verse) {
+            return bibleJson.chapters[chapter][verse];
+          } else {
+            return bibleJson.chapters[chapter];
+          }
+        } else {
+          return bibleJson;
+        }
+      };
+
       parseUsfm().then(setBibleJson);
     }
-  }, [options.getBibleJson, parseUsfm, resource]);
+  }, [options.getBibleJson, resource]);
 
   return {
     state: {
