@@ -47,10 +47,14 @@ function useRsrc({
         const bibleJson = await project.parseUsfm();
 
         if (chapter) {
-          if (verse) {
-            return bibleJson.chapters[chapter][verse];
-          } else {
-            return bibleJson.chapters[chapter];
+          try {
+            if (verse) {
+              return bibleJson.chapters[chapter][verse];
+            } else {
+              return bibleJson.chapters[chapter];
+            }
+          } catch (e) {
+            return null; // return null if chapter or verse missing
           }
         } else {
           return bibleJson;
