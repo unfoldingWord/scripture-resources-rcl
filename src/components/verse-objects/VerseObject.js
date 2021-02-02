@@ -20,8 +20,6 @@ function VerseObject({
 }) {
   const { type } = verseObject;
   let component;
-  console.log('VerseObject', verseObject);
-  console.log('type', type);
 
   switch (type) {
     case 'text':
@@ -42,11 +40,7 @@ function VerseObject({
       );
       break;
     case 'word':
-      console.log('word', { verseObject });
-
       if (verseObject.strong) {
-        console.log('NOT ELSE');
-
         component = (
           <AlignedWordsObject
             children={[verseObject]}
@@ -55,7 +49,6 @@ function VerseObject({
           />
         );
       } else {
-        console.log('ELSE');
         component = (
           <WordObject
             verseObject={verseObject}

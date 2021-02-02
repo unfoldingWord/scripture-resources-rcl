@@ -116,9 +116,7 @@ function ScriptureTable({
   const rows = useMemo(
     () => () =>
       _referenceIds.map((referenceId) => {
-        console.log({ referenceId });
         const verses = versesFromReferenceIdAndBooks({ referenceId, books });
-        console.log({ verses });
 
         const row = (
           <Row
@@ -208,7 +206,7 @@ ScriptureTable.propTypes = {
   onOpen: PropTypes.func,
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {},
   wrapY: {
     overflowY: 'auto',

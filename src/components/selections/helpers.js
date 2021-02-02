@@ -68,10 +68,8 @@ export const isSelected = ({ word, selections }) => {
 };
 
 export const areSelected = ({ words, selections }) => {
-  console.log({ words, selections });
   let selected = false;
   const _selections = words.map((word) => selectionFromWord(word));
-  console.log({ _selections });
 
   _selections.forEach((selection) => {
     //if (selections.includes(_s)) selected = true;
@@ -84,20 +82,6 @@ export const areSelected = ({ words, selections }) => {
       const text = selections[i].text; //already normalized.
       const occ = selections[i].occurrence;
       const occs = selections[i].occurrences;
-
-      if (text === 'χάριν') {
-        console.log({
-          text,
-          occ,
-          occs,
-          value: selections[i],
-        });
-        console.log({
-          _text,
-          _occ,
-          _occs,
-        });
-      }
 
       if (text === _text && occ === _occ && occs === _occs) {
         selected = true;

@@ -14,15 +14,16 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   let onClick = () => {};
+
   let selected;
 
   const _selectionsContext = useContext(SelectionsContext);
-  console.log({ originalWords });
 
   if (_selectionsContext) {
     const {
@@ -31,8 +32,11 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
     } = _selectionsContext;
     selected = areSelected(originalWords);
     onClick = () => {
-      if (selected) removeSelections(originalWords);
-      else addSelections(originalWords);
+      if (selected) {
+        removeSelections(originalWords);
+      } else {
+        addSelections(originalWords);
+      }
     };
   }
 
@@ -59,6 +63,7 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
     const _originalWords = originalWords.map((verseObject, index) => (
       <OriginalWordObject key={index} verseObject={verseObject} />
     ));
+
     component = (
       <>
         <span
@@ -76,9 +81,7 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
           anchorEl={anchorEl}
           onClose={handleClose}
           className={classes.popover}
-          classes={{
-            paper: classes.paper,
-          }}
+          classes={{ paper: classes.paper }}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
@@ -106,19 +109,11 @@ AlignedWordsObject.propTypes = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  open: {
-    backgroundColor: 'lightgoldenrodyellow',
-  },
+  open: { backgroundColor: 'lightgoldenrodyellow' },
   closed: {},
-  popover: {
-    pointerEvents: 'none',
-  },
-  paper: {
-    padding: theme.spacing(1),
-  },
-  selected: {
-    backgroundColor: 'yellow',
-  },
+  popover: { pointerEvents: 'none' },
+  paper: { padding: theme.spacing(1) },
+  selected: { backgroundColor: 'yellow' },
 }));
 
 export default AlignedWordsObject;
