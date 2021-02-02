@@ -34,9 +34,7 @@ function ParallelScripture({
       if (resource.manifest) {
         const {
           manifest: {
-            dublin_core: {
-              title, version, rights,
-            },
+            dublin_core: { title, version, rights },
           },
         } = resource;
         let branchOrTag = 'tag';
@@ -68,7 +66,7 @@ function ParallelScripture({
         );
 
         _title = (
-          <Typography variant='caption'>
+          <Typography variant="caption">
             {title} v{version}
             {rightsIcon}
           </Typography>

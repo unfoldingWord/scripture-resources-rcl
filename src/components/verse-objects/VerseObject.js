@@ -13,17 +13,21 @@ import {
 
 function VerseObject({
   verseObject,
-  originalWords=[],
+  originalWords = [],
   paragraphs,
   showUnsupported,
   disableWordPopover,
 }) {
-  const {type} = verseObject;
+  const { type } = verseObject;
   let component;
+  console.log('VerseObject', verseObject);
+  console.log('type', type);
 
   switch (type) {
     case 'text':
-      component = <TextObject verseObject={verseObject} paragraphs={paragraphs} />;
+      component = (
+        <TextObject verseObject={verseObject} paragraphs={paragraphs} />
+      );
       break;
     case 'quote':
       component = <TextObject verseObject={verseObject} />;
@@ -38,7 +42,11 @@ function VerseObject({
       );
       break;
     case 'word':
+      console.log('word', { verseObject });
+
       if (verseObject.strong) {
+        console.log('NOT ELSE');
+
         component = (
           <AlignedWordsObject
             children={[verseObject]}
@@ -47,22 +55,30 @@ function VerseObject({
           />
         );
       } else {
-        component = <WordObject verseObject={verseObject} disableWordPopover={disableWordPopover} />;
+        console.log('ELSE');
+        component = (
+          <WordObject
+            verseObject={verseObject}
+            disableWordPopover={disableWordPopover}
+          />
+        );
       }
       break;
     case 'section':
       component = <SectionObject verseObject={verseObject} />;
       break;
     case 'paragraph':
-      component = <div/>;
+      component = <div />;
       break;
     case 'footnote':
       component = <FootnoteObject verseObject={verseObject} />;
       break;
     default:
-      if (showUnsupported) component = <UnsupportedObject verseObject={verseObject} />;
+      if (showUnsupported) {
+        component = <UnsupportedObject verseObject={verseObject} />;
+      }
       break;
-  };
+  }
 
   return (
     <>
@@ -70,7 +86,7 @@ function VerseObject({
       {verseObject.nextChar}
     </>
   );
-};
+}
 
 VerseObject.propTypes = {
   verseObject: PropTypes.shape({
@@ -87,7 +103,7 @@ VerseObject.propTypes = {
   originalWords: PropTypes.array,
   /** render verses paragraphs, use explicit paragraphs */
   paragraphs: PropTypes.bool,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
   showUnsupported: PropTypes.bool,
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
