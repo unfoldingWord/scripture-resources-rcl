@@ -15,6 +15,7 @@ export const Verse = ({
   disableWordPopover,
   direction,
   renderOffscreen,
+  reference
 }) => {
   const verseRef = useRef(null);
   useHandleCopy(verseRef.current)
@@ -60,7 +61,7 @@ export const Verse = ({
   if (paragraphs) style.display = 'inline';
 
   return (
-    <div ref={verseRef} className={classes.verse} style={style} dir={direction}>
+    <div ref={verseRef} className={classes.verse} style={style} dir={direction} onClick={() => alert(JSON.stringify(reference))}>
       {verse}
     </div>
   );

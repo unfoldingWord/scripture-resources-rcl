@@ -8,7 +8,7 @@ import usfm from '../mocks/en_psa.usfm.js';
 const book = usfmJS.toJSON(usfm);
 
 <div style={{height: '300px', overflow: 'scroll'}}>
-  <Book book={book} paragraphs showUnsupported />
+  <Book book={book} paragraphs showUnsupported reference={{bookId: 'psa'}} />
 </div>
 ```
 
@@ -37,6 +37,6 @@ const book = usfmJS.toJSON(usfm);
 const direction = 'rtl';
 
 <div style={{height: '300px', overflow: 'scroll'}}>
-  <Book book={book} showUnsupported direction={direction} />
+  <Book book={book} showUnsupported direction={direction} reference={{bookId: 'rut'}} />
 </div>
 ```
