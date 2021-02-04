@@ -1,17 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-import {
-  BookHeaders,
-  Chapters,
-} from '..';
+import { BookHeaders, Chapters } from '..';
 
 export const Book = ({
-  book: {
-    headers,
-    chapters,
-  },
+  book: { headers, chapters },
   paragraphs,
   renderOffscreen,
   showUnsupported,
@@ -21,7 +15,11 @@ export const Book = ({
   const classes = useStyles();
 
   const bookHeaders = (
-    <BookHeaders headers={headers} direction={direction} showUnsupported={showUnsupported} />
+    <BookHeaders
+      headers={headers}
+      direction={direction}
+      showUnsupported={showUnsupported}
+    />
   );
 
   const _chapters = (
@@ -52,7 +50,7 @@ Book.propTypes = {
   paragraphs: PropTypes.bool,
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.bool,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
@@ -60,11 +58,9 @@ Book.propTypes = {
   disableWordPopover: PropTypes.bool,
 };
 
-const useStyles = makeStyles(theme => ({
-  book: {
-  },
-  bookName: {
-  },
+const useStyles = makeStyles(() => ({
+  book: {},
+  bookName: {},
 }));
 
 export default Book;

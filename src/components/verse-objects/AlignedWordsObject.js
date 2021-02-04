@@ -5,49 +5,65 @@ import { Popover } from '@material-ui/core';
 
 import { SelectionsContext } from '../selections/Selections.context';
 
-import {
-  WordObject,
-  OriginalWordObject,
-} from '.';
+import { WordObject, OriginalWordObject } from '.';
 
-function AlignedWordsObject({
-  children,
-  originalWords,
-  disableWordPopover,
-}) {
+function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleOpen = event => { setAnchorEl(event.currentTarget); };
-  const handleClose = () => { setAnchorEl(null); };
+  const handleOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  let onClick = () => { };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  let onClick = () => {};
+
   let selected;
 
   const _selectionsContext = useContext(SelectionsContext);
+
   if (_selectionsContext) {
-    const { state: selections, actions: { areSelected, addSelections, removeSelections } } = _selectionsContext;
+    const {
+      state: selections,
+      actions: { areSelected, addSelections, removeSelections },
+    } = _selectionsContext;
     selected = areSelected(originalWords);
     onClick = () => {
-      if (selected) removeSelections(originalWords);
-      else addSelections(originalWords);
+      if (selected) {
+        removeSelections(originalWords);
+      } else {
+        addSelections(originalWords);
+      }
     };
   }
 
-  const words = children.map((verseObject, index) =>
-    <span data-test="aligned-word-object" data-testselected={selected} onClick={onClick} key={index} className={selected ? classes.selected : undefined}>
-      <WordObject verseObject={verseObject} disableWordPopover={disableWordPopover} />
+  const words = children.map((verseObject, index) => (
+    <span
+      data-test="aligned-word-object"
+      data-testselected={selected}
+      onClick={onClick}
+      key={index}
+      className={selected ? classes.selected : undefined}
+    >
+      <WordObject
+        verseObject={verseObject}
+        disableWordPopover={disableWordPopover}
+      />
     </span>
-  );
+  ));
 
   let component = words;
 
   if (!disableWordPopover) {
     const open = Boolean(anchorEl);
     const id = open ? 'popover' : undefined;
-    const _originalWords = originalWords.map((verseObject, index) =>
+    const _originalWords = originalWords.map((verseObject, index) => (
       <OriginalWordObject key={index} verseObject={verseObject} />
-    );
+    ));
+
     component = (
       <>
         <span
@@ -55,7 +71,7 @@ function AlignedWordsObject({
           aria-haspopup="true"
           onMouseEnter={handleOpen}
           onMouseLeave={handleClose}
-          className={(open ? classes.open : classes.closed)}
+          className={open ? classes.open : classes.closed}
         >
           {words}
         </span>
@@ -65,9 +81,7 @@ function AlignedWordsObject({
           anchorEl={anchorEl}
           onClose={handleClose}
           className={classes.popover}
-          classes={{
-            paper: classes.paper,
-          }}
+          classes={{ paper: classes.paper }}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
@@ -78,19 +92,13 @@ function AlignedWordsObject({
           }}
           disableRestoreFocus
         >
-          <>
-            {_originalWords}
-          </>
+          <>{_originalWords}</>
         </Popover>
       </>
     );
   }
 
-  return (
-    <>
-      {component}
-    </>
-  );
+  return <>{component}</>;
 }
 
 AlignedWordsObject.propTypes = {
@@ -100,21 +108,12 @@ AlignedWordsObject.propTypes = {
   disableWordPopover: PropTypes.bool,
 };
 
-const useStyles = makeStyles(theme => ({
-  open: {
-    backgroundColor: 'lightgoldenrodyellow',
-  },
-  closed: {
-  },
-  popover: {
-    pointerEvents: 'none',
-  },
-  paper: {
-    padding: theme.spacing(1),
-  },
-  selected: {
-    backgroundColor: 'yellow',
-  },
+const useStyles = makeStyles((theme) => ({
+  open: { backgroundColor: 'lightgoldenrodyellow' },
+  closed: {},
+  popover: { pointerEvents: 'none' },
+  paper: { padding: theme.spacing(1) },
+  selected: { backgroundColor: 'yellow' },
 }));
 
 export default AlignedWordsObject;
