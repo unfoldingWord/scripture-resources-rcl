@@ -131,7 +131,7 @@ function ColumnsMenu({
 const useStyles = makeStyles((theme) => ({
   root: {},
   action: { padding: '8px' },
-  close: { padding: '0px' , alignContent: 'right'},
+  close: { padding: '0px' },
 }));
 
 export default ColumnsMenu;
