@@ -83,7 +83,7 @@ function ColumnsMenu({
 
   return (
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => onAnchorEl()}>
-        <MenuItem style={{justifyContent: "flex-end"}}>
+      <MenuItem style={{justifyContent: "flex-end"}}>
         <IconButton 
           aria-label='Close' 
           onClick={() => {onAnchorEl()}} 
@@ -92,8 +92,8 @@ function ColumnsMenu({
         >
           <CloseIcon fontSize='small' /> 
         </IconButton>
-
       </MenuItem>
+      
       <MenuItem
         key={'text'}
         disabled
