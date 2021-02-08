@@ -8,10 +8,11 @@ import {
   Grid,
   TextField,
   Tooltip,
+  Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { HighlightOff, PlaylistAdd } from '@material-ui/icons';
-
+import CloseIcon from '@material-ui/icons/Close';
 import { localString } from '../../core/localStrings';
 import { ResourcesContext } from '../resources/Resources.context';
 
@@ -82,6 +83,17 @@ function ColumnsMenu({
 
   return (
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => onAnchorEl()}>
+        <MenuItem style={{justifyContent: "flex-end"}}>
+        <IconButton 
+          aria-label='Close' 
+          onClick={() => {onAnchorEl()}} 
+          className={classes.close}
+          disabled={false}
+        >
+          <CloseIcon fontSize='small' /> 
+        </IconButton>
+
+      </MenuItem>
       <MenuItem
         key={'text'}
         disabled
@@ -120,6 +132,7 @@ function ColumnsMenu({
 const useStyles = makeStyles((theme) => ({
   root: {},
   action: { padding: '8px' },
+  close: { padding: '0px' , alignContent: 'right'},
 }));
 
 export default ColumnsMenu;
