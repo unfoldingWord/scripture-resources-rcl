@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   Checkbox,
   IconButton,
@@ -8,7 +8,6 @@ import {
   Grid,
   TextField,
   Tooltip,
-  Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { HighlightOff, PlaylistAdd } from '@material-ui/icons';
@@ -93,7 +92,7 @@ function ColumnsMenu({
           <CloseIcon fontSize='small' /> 
         </IconButton>
       </MenuItem>
-      
+
       <MenuItem
         key={'text'}
         disabled
