@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
@@ -12,6 +12,7 @@ function useRsrc({
   const [bibleJson, setBibleJson] = useState(null);
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
+  const resource_ = resource || {}; // TRICKY - prevents crash in recent `use-deep-compare-effect` module when resource is not found
 
   useEffect(() => {
     resourceFromResourceLink({
@@ -26,8 +27,8 @@ function useRsrc({
 
   useEffect(() => {
     async function getFile() {
-      let file = await resource.project?.file();
-      const isTSV = resource?.project?.path.includes('.tsv');
+      let file = await resource_.project?.file();
+      const isTSV = resource_.project?.path.includes('.tsv');
 
       if (isTSV) {
         file = tsvToJson(file);
@@ -37,13 +38,13 @@ function useRsrc({
     }
 
     getFile();
-  }, [config, resource]);
+  }, [config, resource_]);
 
   useEffect(() => {
-    if (resource && resource.project && options.getBibleJson) {
+    if (resource_ && resource_.project && options.getBibleJson) {
       const parseUsfm = async () => {
         const { chapter, verse } = reference;
-        const { project } = resource;
+        const { project } = resource_;
         const bibleJson = await project.parseUsfm();
 
         if (chapter) {
@@ -63,7 +64,7 @@ function useRsrc({
 
       parseUsfm().then(setBibleJson);
     }
-  }, [options.getBibleJson, resource]);
+  }, [options.getBibleJson, resource_]);
 
   return {
     state: {
