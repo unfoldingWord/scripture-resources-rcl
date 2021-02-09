@@ -11,25 +11,25 @@ To add resources to the app, please omit bookId from the end:
 `STR/hi/irv/master`
 
 ```js
-import { TextField } from "@material-ui/core";
+import { TextField } from '@material-ui/core';
 import {
   ParallelScripture,
   ResourcesContext,
   ResourcesContextProvider,
-} from "scripture-resources-rcl";
-import useEffect from "use-deep-compare-effect";
+} from 'scripture-resources-rcl';
+import useEffect from 'use-deep-compare-effect';
 
 function Component() {
-  const [bookId, setBookId] = React.useState("3jn");
+  const [bookId, setBookId] = React.useState('3jn');
   const [chapter, setChapter] = React.useState(1);
   const [verse, setVerse] = React.useState(10);
-  const [quote, setQuote] = React.useState("καὶ…μὴ");
+  const [quote, setQuote] = React.useState('καὶ…μὴ');
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
     () => (
       <form noValidate autoComplete="off">
-        <div style={{ padding: "1em 0" }}>
+        <div style={{ padding: '1em 0' }}>
           <TextField
             id="bookId"
             label="BookId"
@@ -52,7 +52,7 @@ function Component() {
             onBlur={(event) => setVerse(parseInt(event.target.value))}
           />
         </div>
-        <div style={{ padding: "1em 0" }}>
+        <div style={{ padding: '1em 0' }}>
           <TextField
             id="quote"
             label="Quote"
@@ -95,19 +95,19 @@ function Component() {
     </>
   );
 }
-const config = { server: "https://git.door43.org" };
+const config = { server: 'https://git.door43.org' };
 
 const defaultResourceLinks = [
-  "unfoldingWord/el-x-koine/ugnt/master/3jn",
-  "unfoldingWord/en/ult/v5/3jn",
-  "unfoldingWord/en/ust/v5/3jn",
-  "ru_gl/ru/rlob/master/3jn",
-  "https://git.door43.org/unfoldingWord/en_ust/src/branch/master",
+  'unfoldingWord/el-x-koine/ugnt/master/3jn',
+  'unfoldingWord/en/ult/v5/3jn',
+  'unfoldingWord/en/ust/v5/3jn',
+  'ru_gl/ru/rlob/master/3jn',
+  'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
 ];
 
 const _resourceLinks = [...defaultResourceLinks];
 
-const reference = { bookId: "3jn", chapter: 1, verse: 1 };
+const reference = { bookId: '3jn', chapter: 1, verse: 1 };
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',
