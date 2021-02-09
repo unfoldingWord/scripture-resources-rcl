@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useCallback, useContext, useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {Skeleton} from '@material-ui/lab';
@@ -6,6 +6,7 @@ import {Waypoint} from 'react-waypoint';
 
 import {VerseObjects} from '../verse-objects';
 import { useHandleCopy } from './helpers';
+import { ReferenceSelectedContext } from '../reference/ReferenceSelectedContext';
 
 export const Verse = ({
   verseKey,
@@ -17,6 +18,9 @@ export const Verse = ({
   renderOffscreen,
   reference
 }) => {
+  const referenceSelectedContext = useContext(ReferenceSelectedContext);
+  const update = referenceSelectedContext?.actions?.update;
+
   const verseRef = useRef(null);
   useHandleCopy(verseRef.current)
 
@@ -57,11 +61,17 @@ export const Verse = ({
     }
   }, [verseKey, verseObjects, paragraphs, showUnsupported, disableWordPopover, viewed]);
 
+  const handleClick = useCallback(reference => {
+    const _reference = {...reference, verse: parseInt(verseKey) };
+    if (update) update(_reference);
+    /** WARN: ReferenceSelectedContext is not part of useCallback dependencies! */
+  }, [update]);
+
   const style = {};
   if (paragraphs) style.display = 'inline';
 
   return (
-    <div ref={verseRef} className={classes.verse} style={style} dir={direction} onClick={() => alert(JSON.stringify(reference))}>
+    <div ref={verseRef} className={classes.verse} style={style} dir={direction} onClick={() => handleClick(reference)}>
       {verse}
     </div>
   );
