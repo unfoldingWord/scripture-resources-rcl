@@ -19,7 +19,10 @@ export const referenceIdsFromBooks = ({ books }) => {
 };
 
 export const isVerseKeyInRange = (({ range, verseKey }) => {
-  const [first, last] = range.split('-');
+  verseKey = (typeof verseKey === 'string') ? parseInt(verseKey) : verseKey;
+  let [first, last] = range.split('-');
+  first = parseInt(first);
+  last = parseInt(last);
   const inRange = first <= verseKey && verseKey <= last;
   return inRange;
 });
