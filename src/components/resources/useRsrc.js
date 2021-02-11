@@ -80,7 +80,7 @@ function useRsrc({
 
       parseUsfm().then(setBibleJson);
     }
-  }, [options.getBibleJson, resource_, reference]);
+  }, [options.getBibleJson, resource_]);
 
   return {
     state: {
