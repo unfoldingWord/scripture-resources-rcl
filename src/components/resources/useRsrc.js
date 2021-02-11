@@ -10,8 +10,8 @@ import { rangeFromVerseAndVerseKeys } from '../parallel-scripture/helpers';
 function useRsrc({
   config, reference, resourceLink, options = {},
 }) {
-  const [bibleJson, setBibleJson] = useState(null);
-  const [matchedVerse, setMatchedVerse] = useState(null);
+  const [bibleRef, setBibleRef] = useState({});
+  const { bibleJson, matchedVerse } = bibleRef;
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
   const resource_ = resource || {}; // TRICKY - prevents crash in recent `use-deep-compare-effect` module when resource is not found
@@ -55,30 +55,31 @@ function useRsrc({
 
             if (verse) {
               let verseJson = chapterJson[verse];
+              let matchedVerse;
 
               if (!verseJson) { // if verse not found, check verse spans
                 const verseKey = rangeFromVerseAndVerseKeys({ verseKeys: Object.keys(chapterJson), verseKey:verse });
-                setMatchedVerse(verseKey);
 
                 if (verseKey) {
                   verseJson = chapterJson[verseKey];
                 }
+                matchedVerse = verseKey;
               } else {
-                setMatchedVerse(verse);
+                matchedVerse = verse;
               }
-              return verseJson;
+              return { bibleJson: verseJson, matchedVerse };
             } else {
-              return chapterJson;
+              return { bibleJson: chapterJson };
             }
           } catch (e) {
-            return null; // return null if chapter or verse missing
+            return { bibleJson: null }; // return null if chapter or verse missing
           }
         } else {
-          return bibleJson;
+          return { bibleJson };
         }
       };
 
-      parseUsfm().then(setBibleJson);
+      parseUsfm().then(setBibleRef);
     }
   }, [options.getBibleJson, resource_]);
 
