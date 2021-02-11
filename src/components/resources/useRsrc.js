@@ -2,7 +2,6 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
-
 import { resourceFromResourceLink } from '../../core';
 import tsvToJson from '../../core/tsvToJson';
 import { rangeFromVerseAndVerseKeys } from '../parallel-scripture/helpers';
@@ -11,10 +10,9 @@ function useRsrc({
   config, reference, resourceLink, options = {},
 }) {
   const [bibleRef, setBibleRef] = useState({});
-  const { bibleJson, matchedVerse } = bibleRef;
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
-  const resource_ = resource || {}; // TRICKY - prevents crash in recent `use-deep-compare-effect` module when resource is not found
+  const { bibleJson, matchedVerse } = bibleRef || {};
 
   useEffect(() => {
     resourceFromResourceLink({
@@ -22,15 +20,16 @@ function useRsrc({
       reference,
       config,
     }).then((_resource) => {
-      const __resource = _resource && deepFreeze(_resource);
+      let __resource = _resource && deepFreeze(_resource);
+      __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found
       setResource(__resource);
     });
   }, [resourceLink, reference, config]);
 
   useEffect(() => {
     async function getFile() {
-      let file = await resource_.project?.file();
-      const isTSV = resource_.project?.path.includes('.tsv');
+      let file = await resource.project?.file();
+      const isTSV = resource?.project?.path.includes('.tsv');
 
       if (isTSV) {
         file = tsvToJson(file);
@@ -40,13 +39,15 @@ function useRsrc({
     }
 
     getFile();
-  }, [config, resource_]);
+  }, [config, resource]);
 
   useEffect(() => {
-    if (resource_ && resource_.project && options.getBibleJson) {
+    if (resource && resource.project && options.getBibleJson) {
+      let matchedVerse_;
+
       const parseUsfm = async () => {
         const { chapter, verse } = reference;
-        const { project } = resource_;
+        const { project } = resource;
         const bibleJson = await project.parseUsfm();
 
         if (chapter) {
@@ -55,7 +56,6 @@ function useRsrc({
 
             if (verse) {
               let verseJson = chapterJson[verse];
-              let matchedVerse;
 
               if (!verseJson) { // if verse not found, check verse spans
                 const verseKey = rangeFromVerseAndVerseKeys({ verseKeys: Object.keys(chapterJson), verseKey:verse });
@@ -63,25 +63,27 @@ function useRsrc({
                 if (verseKey) {
                   verseJson = chapterJson[verseKey];
                 }
-                matchedVerse = verseKey;
+                matchedVerse_ = verseKey;
               } else {
-                matchedVerse = verse;
+                matchedVerse_ = verse;
               }
-              return { bibleJson: verseJson, matchedVerse };
+              return verseJson;
             } else {
-              return { bibleJson: chapterJson };
+              return chapterJson;
             }
           } catch (e) {
-            return { bibleJson: null }; // return null if chapter or verse missing
+            return null; // return null if chapter missing or error
           }
         } else {
-          return { bibleJson };
+          return bibleJson;
         }
       };
 
-      parseUsfm().then(setBibleRef);
+      parseUsfm().then(function (ref) {
+        setBibleRef({ bibleJson: ref, matchedVerse: matchedVerse_ });
+      });
     }
-  }, [options.getBibleJson, resource_]);
+  }, [options.getBibleJson, resource]);
 
   return {
     state: {
