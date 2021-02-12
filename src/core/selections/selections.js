@@ -33,6 +33,7 @@ export const selectionsFromQuoteAndString = ({
   string: rawString,
   occurrence,
 }) => {
+  console.log("selectionsFromQuoteAndString() quote,rawString,occurence:", quote, rawString, occurrence);
   let string = normalizeString(rawString);
   // Calculate hasEllipsis before normalizing quote.
   let subquotes = quote.split('…').map(normalizeString);

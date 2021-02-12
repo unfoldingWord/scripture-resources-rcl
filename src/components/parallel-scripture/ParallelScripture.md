@@ -20,11 +20,11 @@ import {
 import useEffect from 'use-deep-compare-effect';
 
 function Component() {
-  const [bookId, setBookId] = React.useState('3jn');
+  const [bookId, setBookId] = React.useState('tit');
   const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState(10);
-  const [quote, setQuote] = React.useState('καὶ…μὴ');
-  const [occurrence, setOccurrence] = React.useState(-1);
+  const [verse, setVerse] = React.useState(3);
+  const [quote, setQuote] = React.useState('καιροῖς ἰδίοις');
+  const [occurrence, setOccurrence] = React.useState(1);
 
   const form = React.useMemo(
     () => (
@@ -98,16 +98,16 @@ function Component() {
 const config = { server: 'https://git.door43.org' };
 
 const defaultResourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/master/3jn',
-  'unfoldingWord/en/ult/v5/3jn',
-  'unfoldingWord/en/ust/v5/3jn',
-  'ru_gl/ru/rlob/master/3jn',
+  'unfoldingWord/el-x-koine/ugnt/master/tit',
+  'unfoldingWord/en/ult/v5/tit',
+  'unfoldingWord/en/ust/v5/tit',
+  'ru_gl/ru/rlob/master/tit',
   'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
 ];
 
 const _resourceLinks = [...defaultResourceLinks];
 
-const reference = { bookId: '3jn', chapter: 1, verse: 1 };
+const reference = { bookId: 'tit', chapter: 1, verse: 3 };
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',

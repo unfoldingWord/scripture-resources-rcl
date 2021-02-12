@@ -33,8 +33,10 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
     selected = areSelected(originalWords);
     onClick = () => {
       if (selected) {
+        console.log("AlignedWordsObject(), onClick(), removeSelections() originalWords, selected:", originalWords, selected);
         removeSelections(originalWords);
       } else {
+        console.log("AlignedWordsObject(), onClick(), addSelections() originalWords, selected:", originalWords, selected);
         addSelections(originalWords);
       }
     };

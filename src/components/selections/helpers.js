@@ -101,11 +101,14 @@ export const addSelection = ({ word, selections }) => {
 
 export const addSelections = ({ words, selections }) => {
   let _selections = new Set(selections);
+  console.log("./helpers.addSelections() new Set(selections):", _selections);
 
   words.forEach((word) => {
     const selection = selectionFromWord(word);
+    console.log("./helpers.addSelections() forEach(word):", word, selection);
     _selections.add(selection);
   });
+  //console.log("./helpers.addSelections() returns:", [..._selections]);
   return [..._selections];
 };
 
