@@ -28,16 +28,11 @@ export const isVerseKeyInRange = (({ range, verseKey }) => {
 });
 
 export const rangeFromVerseAndVerseKeys = (({ verseKeys, verseKey }) => {
-  let range;
-
-  verseKeys.forEach(_verseKey => {
+  const range = verseKeys.find(_verseKey => {
     if (_verseKey.includes('-')) { // if the verseKey includes - it is a range
-      const inRange = isVerseKeyInRange({ range: _verseKey, verseKey });
-
-      if (inRange) {
-        range = _verseKey;
-      }
-    };
+      return isVerseKeyInRange({ range: _verseKey, verseKey });
+    }
+    return false;
   });
   return range;
 });
