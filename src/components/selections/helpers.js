@@ -68,27 +68,57 @@ export const isSelected = ({ word, selections }) => {
 };
 
 export const areSelected = ({ words, selections }) => {
+  console.log("---\n---\nareSelected() words, selections", words, selections);
   let selected = false;
   const _selections = words.map((word) => selectionFromWord(word));
+  console.log("areSelected() _selections:", _selections);
 
+  for (let j=0; j<_selections.length; j++) {
+    const _selection = JSON.parse(_selections[j]);
+    let _text = normalizeString(_selection.text);
+    let _occ = _selection.occurrence;
+    let _occs = _selection.occurrences;
+    console.log("areSelected() parsed selection:", _selection);
+
+    for (let i = 0; i < selections.length; i++) {
+      const text = selections[i].text; //already normalized.
+      const occ = selections[i].occurrence;
+      const occs = selections[i].occurrences;
+      console.log("areSelected() comparing:", text, " vs ", _text, occ, " vs ", _occ, occs, " vs ", _occs);
+      if (text === _text && occ === _occ && occs === _occs) {
+        console.log("areSelected() selected is true");
+        console.log("...details; text, occ, occs", text, occ, occs);
+        console.log("........vs; _text, _occ, _occs", _text, _occ, _occs);
+        selected = true;
+        break;
+      }
+    }
+    if ( selected ) break;
+  }
+  if ( !selected ) console.log("areSelected() selected is false");
+  /*
   _selections.forEach((selection) => {
     //if (selections.includes(_s)) selected = true;
     const _selection = JSON.parse(selection);
     let _text = normalizeString(_selection.text);
     let _occ = _selection.occurrence;
     let _occs = _selection.occurrences;
+    console.log("areSelected() parsed selection:", _selection);
 
     for (let i = 0; i < selections.length; i++) {
       const text = selections[i].text; //already normalized.
       const occ = selections[i].occurrence;
       const occs = selections[i].occurrences;
-
+      //console.log("areSelected() for loop, selections[i]:", selections[i]);
       if (text === _text && occ === _occ && occs === _occs) {
+        console.log("areSelected() match! selected is true, break");
+        console.log("areSelected() details; text, occ, occs", text, occ, occs);
         selected = true;
         break;
       }
     }
   });
+  */
   return selected;
 };
 

@@ -12,10 +12,12 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpen = (event) => {
+    console.log("AlignedWordsObject() handleOpen()")
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
+    console.log("AlignedWordsObject() handleClose()")
     setAnchorEl(null);
   };
 
@@ -32,6 +34,7 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
     } = _selectionsContext;
     selected = areSelected(originalWords);
     onClick = () => {
+      /*
       if (selected) {
         console.log("AlignedWordsObject(), onClick(), removeSelections() originalWords, selected:", originalWords, selected);
         removeSelections(originalWords);
@@ -39,6 +42,7 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
         console.log("AlignedWordsObject(), onClick(), addSelections() originalWords, selected:", originalWords, selected);
         addSelections(originalWords);
       }
+      */
     };
   }
 

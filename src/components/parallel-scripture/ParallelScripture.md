@@ -99,10 +99,12 @@ const config = { server: 'https://git.door43.org' };
 
 const defaultResourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/master/tit',
+  ///*
   'unfoldingWord/en/ult/v5/tit',
   'unfoldingWord/en/ust/v5/tit',
   'ru_gl/ru/rlob/master/tit',
   'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
+  //*/
 ];
 
 const _resourceLinks = [...defaultResourceLinks];

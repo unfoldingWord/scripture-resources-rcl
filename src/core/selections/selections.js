@@ -77,6 +77,7 @@ export const selectionsFromQuoteAndString = ({
     /** Adding the previous subquote to account for repeated ellipsis words i.e. Θεοῦ…Θεοῦ */
     precedingText += subquote;
   });
+  console.log("selectionsFromQuoteAndString() returns selections:", selections);
   return selections;
 };
 
