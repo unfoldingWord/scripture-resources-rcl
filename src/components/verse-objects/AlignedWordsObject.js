@@ -31,6 +31,7 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
       actions: { areSelected, addSelections, removeSelections },
     } = _selectionsContext;
     selected = areSelected(originalWords);
+    /*
     onClick = () => {
       if (selected) {
         removeSelections(originalWords);
@@ -38,6 +39,7 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
         addSelections(originalWords);
       }
     };
+    */
   }
 
   const words = children.map((verseObject, index) => (
