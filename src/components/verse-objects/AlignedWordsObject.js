@@ -19,7 +19,6 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
     setAnchorEl(null);
   };
 
-  let onClick = () => {};
 
   let selected;
 
@@ -31,22 +30,12 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
       actions: { areSelected, addSelections, removeSelections },
     } = _selectionsContext;
     selected = areSelected(originalWords);
-    /*
-    onClick = () => {
-      if (selected) {
-        removeSelections(originalWords);
-      } else {
-        addSelections(originalWords);
-      }
-    };
-    */
   }
 
   const words = children.map((verseObject, index) => (
     <span
       data-test="aligned-word-object"
       data-testselected={selected}
-      onClick={onClick}
       key={index}
       className={selected ? classes.selected : undefined}
     >
