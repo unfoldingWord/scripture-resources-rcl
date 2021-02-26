@@ -19,6 +19,7 @@ export const Chapter = ({
   showUnsupported,
   direction,
   disableWordPopover,
+  reference
 }) => {
   const classes = useStyles();
   const [viewed, setViewed] = useState(renderOffscreen);
@@ -44,6 +45,7 @@ export const Chapter = ({
           showUnsupported={showUnsupported}
           direction={direction}
           disableWordPopover={disableWordPopover}
+          reference={reference}
         />
       );
       setVerses(_verses);

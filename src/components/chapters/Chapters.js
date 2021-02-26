@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
+import useEffect from 'use-deep-compare-effect';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -11,6 +12,7 @@ export const Chapters = ({
   showUnsupported,
   direction,
   disableWordPopover,
+  reference,
 }) => {
   const classes = useStyles();
   const [_chapters, setChapters] = useState([]);
@@ -28,12 +30,13 @@ export const Chapters = ({
           showUnsupported={showUnsupported}
           direction={direction}
           disableWordPopover={disableWordPopover}
+          reference={{ ...reference, chapter: chapterKey }}
         />
       );
       return _chapter
     });
     setChapters(__chapters);
-  }, [chapters, paragraphs, renderOffscreen, direction, disableWordPopover, showUnsupported]);
+  }, [chapters, paragraphs, renderOffscreen, direction, disableWordPopover, showUnsupported, reference]);
 
   return (
     <div className={classes.chapters} dir='auto'>
