@@ -11,6 +11,7 @@ export const Book = ({
   showUnsupported,
   direction,
   disableWordPopover,
+  reference,
 }) => {
   const classes = useStyles();
 
@@ -25,6 +26,7 @@ export const Book = ({
   const _chapters = (
     <Chapters
       chapters={chapters}
+      reference={reference}
       paragraphs={paragraphs}
       renderOffscreen={renderOffscreen}
       showUnsupported={showUnsupported}
@@ -56,6 +58,7 @@ Book.propTypes = {
   direction: PropTypes.string,
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
+  reference: PropTypes.object,
 };
 
 const useStyles = makeStyles(() => ({
