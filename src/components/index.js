@@ -5,5 +5,6 @@ export * from './verses';
 export * from './parallel-scripture';
 export * from './usfm';
 export * from './resources';
+export * from './reference';
 export * from './license';
 export * from './selections';

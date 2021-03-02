@@ -13,6 +13,20 @@ let sections = [
     name: 'Resources ',
     content: 'src/components/resources/_readme.md',
     components: () => {
+      const componentNames = ['Resources.context'];
+      return componentNames.map((componentName) => {
+        return path.resolve(
+          __dirname,
+          `src/components/resources`,
+          `${componentName}.js`
+        );
+      });
+    },
+  },
+  {
+    name: 'Resource ',
+    content: 'src/components/resources/_readme.md',
+    components: () => {
       const componentNames = ['Resource.context'];
       return componentNames.map((componentName) => {
         return path.resolve(
