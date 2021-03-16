@@ -97,6 +97,7 @@ function useRsrc({
 
       parseUsfm().then(function (ref) {
         setBibleRef({ bibleJson: ref, matchedVerse: matchedVerse_ });
+        setContent(ref);
         setLoadingContent(null); // done
       });
     }
