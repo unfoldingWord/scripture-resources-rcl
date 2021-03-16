@@ -12,23 +12,30 @@ function useRsrc({
   const [bibleRef, setBibleRef] = useState({});
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
+  const [loading, setLoading] = useState(null); // flag for when loading resource
   const { bibleJson, matchedVerse } = bibleRef || {};
 
   useEffect(() => {
+    const resourceTag = JSON.stringify({ resourceLink, reference, config });
+    setLoading(resourceTag);
     resourceFromResourceLink({
       resourceLink,
       reference,
       config,
     }).then((_resource) => {
       let __resource = _resource && deepFreeze(_resource);
-      __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found
+      __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found (is null)
       setResource(__resource);
+      setLoading(null); // loading finished
+    }).catch(error => {
+      console.warn(`useRsrc() - error fetching resource for: ${resourceTag}`, error);
+      setLoading(null); // loading finished
     });
   }, [resourceLink, reference, config]);
 
   useEffect(() => {
     async function getFile() {
-      let file = await resource.project?.file();
+      let file = await resource.project?.file(); // TODO - this causes a fetch of file, other fetch is in parseUsfm
       const isTSV = resource?.project?.path.includes('.tsv');
 
       if (isTSV) {
@@ -38,14 +45,16 @@ function useRsrc({
       setContent(file);
     }
 
-    getFile();
+    if (!options.getBibleJson) { // get file only if we are not fetching bible json data
+      getFile();
+    }
   }, [config, resource]);
 
   useEffect(() => {
     if (resource && resource.project && options.getBibleJson) {
       let matchedVerse_;
 
-      const parseUsfm = async () => {
+      const parseUsfm = async () => { // TODO - this causes a fetch of file as well
         const { chapter, verse } = reference;
         const { project } = resource;
         const bibleJson = await project.parseUsfm();
@@ -91,6 +100,7 @@ function useRsrc({
       resource,
       bibleJson,
       matchedVerse,
+      loading,
     },
   };
 }
