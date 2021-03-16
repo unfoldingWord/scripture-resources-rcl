@@ -12,12 +12,14 @@ function useRsrc({
   const [bibleRef, setBibleRef] = useState({});
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
-  const [loading, setLoading] = useState(null); // flag for when loading resource
+  const [loadingResource, setLoadingResource] = useState(null); // flag for when loading resource
+  const [loadingContent, setLoadingContent] = useState(null); // flag for when loading content from resource
   const { bibleJson, matchedVerse } = bibleRef || {};
 
   useEffect(() => {
     const resourceTag = JSON.stringify({ resourceLink, reference, config });
-    setLoading(resourceTag);
+    setLoadingResource(resourceTag);
+    setLoadingContent(null);
     resourceFromResourceLink({
       resourceLink,
       reference,
@@ -25,11 +27,15 @@ function useRsrc({
     }).then((_resource) => {
       let __resource = _resource && deepFreeze(_resource);
       __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found (is null)
+
+      if (_resource) { // if successful loading resource, we move to getting content
+        setLoadingContent(resourceTag);
+      }
       setResource(__resource);
-      setLoading(null); // loading finished
+      setLoadingResource(null); // done
     }).catch(error => {
       console.warn(`useRsrc() - error fetching resource for: ${resourceTag}`, error);
-      setLoading(null); // loading finished
+      setLoadingResource(null); // done
     });
   }, [resourceLink, reference, config]);
 
@@ -43,6 +49,7 @@ function useRsrc({
       }
 
       setContent(file);
+      setLoadingContent(null); // done
     }
 
     if (!options.getBibleJson) { // get file only if we are not fetching bible json data
@@ -90,6 +97,7 @@ function useRsrc({
 
       parseUsfm().then(function (ref) {
         setBibleRef({ bibleJson: ref, matchedVerse: matchedVerse_ });
+        setLoadingContent(null); // done
       });
     }
   }, [options.getBibleJson, resource]);
@@ -100,7 +108,8 @@ function useRsrc({
       resource,
       bibleJson,
       matchedVerse,
-      loading,
+      loadingResource,
+      loadingContent,
     },
   };
 }
