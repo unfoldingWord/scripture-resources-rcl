@@ -41,7 +41,7 @@ function useRsrc({
 
   useEffect(() => {
     async function getFile() {
-      let file = await resource.project?.file(); // TODO - this causes a fetch of file, other fetch is in parseUsfm
+      let file = await resource.project?.file();
       const isTSV = resource?.project?.path.includes('.tsv');
 
       if (isTSV) {
@@ -61,7 +61,7 @@ function useRsrc({
     if (resource && resource.project && options.getBibleJson) {
       let matchedVerse_;
 
-      const parseUsfm = async () => { // TODO - this causes a fetch of file as well
+      const parseUsfm = async () => {
         const { chapter, verse } = reference;
         const { project } = resource;
         const bibleJson = await project.parseUsfm();
