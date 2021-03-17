@@ -20,6 +20,7 @@ function useRsrc({
     const resourceTag = JSON.stringify({ resourceLink, reference, config });
     setLoadingResource(resourceTag);
     setLoadingContent(null);
+    setResource({});
     resourceFromResourceLink({
       resourceLink,
       reference,
@@ -41,8 +42,8 @@ function useRsrc({
 
   useEffect(() => {
     async function getFile() {
-      let file = await resource.project?.file();
-      const isTSV = resource?.project?.path.includes('.tsv');
+      let file = await resource?.project?.file();
+      const isTSV = resource?.project?.path?.includes('.tsv');
 
       if (isTSV) {
         file = tsvToJson(file);
@@ -58,13 +59,19 @@ function useRsrc({
   }, [config, resource]);
 
   useEffect(() => {
-    if (resource && resource.project && options.getBibleJson) {
+    if (options.getBibleJson) {
       let matchedVerse_;
 
       const parseUsfm = async () => {
+        if (!resource?.project.?parseUsfm) { // if no project found or no usfm
+          setContent(null);
+          return null;
+        }
+
         const { chapter, verse } = reference;
         const { project } = resource;
         const bibleJson = await project.parseUsfm();
+        setContent(bibleJson);
 
         if (chapter) {
           try {
@@ -74,30 +81,29 @@ function useRsrc({
               let verseJson = chapterJson[verse];
 
               if (!verseJson) { // if verse not found, check verse spans
-                const verseKey = rangeFromVerseAndVerseKeys({ verseKeys: Object.keys(chapterJson), verseKey:verse });
+                const verseKey = rangeFromVerseAndVerseKeys({verseKeys: Object.keys(chapterJson), verseKey: verse});
 
                 if (verseKey) {
                   verseJson = chapterJson[verseKey];
                 }
                 matchedVerse_ = verseKey;
-              } else {
+              } else { // verse found
                 matchedVerse_ = verse;
               }
               return verseJson;
-            } else {
+            } else { // didn't specify verse, so return whole chapter
               return chapterJson;
             }
           } catch (e) {
             return null; // return null if chapter missing or error
           }
-        } else {
+        } else { // didn't specify chapter, so return whole book
           return bibleJson;
         }
       };
 
       parseUsfm().then(function (ref) {
         setBibleRef({ bibleJson: ref, matchedVerse: matchedVerse_ });
-        setContent(ref);
         setLoadingContent(null); // done
       });
     }
