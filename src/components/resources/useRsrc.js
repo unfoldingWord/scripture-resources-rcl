@@ -21,6 +21,7 @@ function useRsrc({
     setLoadingResource(resourceTag);
     setLoadingContent(null);
     setResource({});
+    console.log(`useRsrc(${resourceLink}) - fetching resource`);
     resourceFromResourceLink({
       resourceLink,
       reference,
@@ -28,8 +29,10 @@ function useRsrc({
     }).then((_resource) => {
       let __resource = _resource && deepFreeze(_resource);
       __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found (is null)
+      console.log(`useRsrc(${resourceLink}) - resource fetched`);
 
       if (_resource) { // if successful loading resource, we move to getting content
+        console.log(`useRsrc(${resourceLink}) - resource empty`);
         setLoadingContent(resourceTag);
       }
       setResource(__resource);
@@ -42,8 +45,13 @@ function useRsrc({
 
   useEffect(() => {
     async function getFile() {
+      console.log(`useRsrc(${resourceLink}) - getting project file`);
       let file = await resource?.project?.file();
       const isTSV = resource?.project?.path?.includes('.tsv');
+
+      if (!file) {
+        console.log(`useRsrc(${resourceLink}) - project file not found!`);
+      }
 
       if (isTSV) {
         file = tsvToJson(file);
@@ -63,7 +71,9 @@ function useRsrc({
       let matchedVerse_;
 
       const parseUsfm = async () => {
-        if (!resource?.project.?parseUsfm) { // if no project found or no usfm
+        if (!resource?.project?.parseUsfm) {
+          // if no project found or no usfm
+          console.log(`useRsrc(${resourceLink}) - no usfm project in resource!`);
           setContent(null);
           return null;
         }
@@ -103,6 +113,7 @@ function useRsrc({
       };
 
       parseUsfm().then(function (ref) {
+        console.log(`useRsrc(${resourceLink}) - parsed usfm project`);
         setBibleRef({ bibleJson: ref, matchedVerse: matchedVerse_ });
         setLoadingContent(null); // done
       });
