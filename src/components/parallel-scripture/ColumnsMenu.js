@@ -20,9 +20,12 @@ function ColumnsMenu({
 }) {
   const { state, actions } = React.useContext(ResourcesContext);
   const { resources } = state || {};
+  
+const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
-  const onResourceAddClick = () => {
-    actions.addResourceLink(resourceUrl.value);
+  const onResourceAddClick = async () => {
+    const isSuccess = await actions.addResourceLink(resourceUrl.value);
+    setIsResourceAddError(!isSuccess);
   };
 
   const removeResourceLink = (index) => {
@@ -124,6 +127,20 @@ function ColumnsMenu({
           </IconButton>
         </Tooltip>
       </MenuItem>
+
+      {isResourceAddError && 
+        <MenuItem
+          key={'text'}
+          disabled
+          style={{
+            opacity: 1, fontWeight: 600, fontSize: 12, color: 'red',
+          }}
+        >
+          <div aria-label='AddResourceError'>
+            {localString('AddResourceError')}
+          </div>
+        </MenuItem>
+      }
     </Menu>
   );
 }
