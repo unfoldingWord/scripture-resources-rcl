@@ -24,12 +24,18 @@ function ColumnsMenu({
 const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
   const onResourceAddClick = async () => {
-    const isSuccess = await actions.addResourceLink(resourceUrl.value);
-    setIsResourceAddError(!isSuccess);
+    if (actions && actions.addResourceLink)
+    {
+      const isSuccess = await actions.addResourceLink(resourceUrl.value);
+      setIsResourceAddError(!isSuccess);
+    }
   };
 
   const removeResourceLink = (index) => {
-    actions.remove(index);
+    if (actions && actions.remove)
+    {
+      actions.remove(index);
+    }
   };
 
   const toggleColumn = (index) => {
@@ -108,25 +114,27 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
       {menuItems}
 
-      <MenuItem>
-        <TextField
-          id='resourceUrl'
-          label={localString('ResourcePath')}
-          variant='outlined'
-          defaultValue=''
-          style={{ valign: 'middle' }}
-        />
-        <Tooltip title={localString('AddResource')} arrow>
-          <IconButton
-            aria-label={localString('AddResource')}
-            onClick={onResourceAddClick}
-            className={(classes.action, classes.menuIconButton)}
-            size='small'
-          >
-            <PlaylistAdd fontSize='small' />
-          </IconButton>
-        </Tooltip>
-      </MenuItem>
+      {actions && actions.addResourceLink && 
+        <MenuItem>
+          <TextField
+            id='resourceUrl'
+            label={localString('ResourcePath')}
+            variant='outlined'
+            defaultValue=''
+            style={{ valign: 'middle' }}
+          />
+          <Tooltip title={localString('AddResource')} arrow>
+            <IconButton
+              aria-label={localString('AddResource')}
+              onClick={onResourceAddClick}
+              className={(classes.action, classes.menuIconButton)}
+              size='small'
+            >
+              <PlaylistAdd fontSize='small' />
+            </IconButton>
+          </Tooltip>
+        </MenuItem>
+      }
 
       {isResourceAddError && 
         <MenuItem
