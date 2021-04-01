@@ -89,12 +89,17 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
     </MenuItem>
   ));
 
+  const onCloseMenu = () => {
+    setIsResourceAddError(false);
+    onAnchorEl();
+  };
+
   return (
-    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => onAnchorEl()}>
+    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={onCloseMenu}>
       <MenuItem style={{justifyContent: "flex-end"}}>
         <IconButton 
           aria-label='Close' 
-          onClick={() => {onAnchorEl()}} 
+          onClick={onCloseMenu} 
           className={classes.close}
           disabled={false}
         >
