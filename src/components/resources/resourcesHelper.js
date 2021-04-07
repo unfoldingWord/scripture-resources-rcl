@@ -21,20 +21,26 @@ export const removeResourceLink = (resourceLinks, index) => {
   return _resourceLinks;
 };
 
-export const tryAddResourceLink = (
+export const tryAddResourceLink = async (
   resourceLinks,
   newResourceLink,
   reference,
   config,
   onResourceLinks
 ) => {
-  resourceFromResourceLink({
+  const isSuccess = await resourceFromResourceLink({
     resourceLink: newResourceLink,
     reference,
     config,
-  }).then((_parsedResource) => {
+  })
+  .then((_parsedResource) => {
     if (_parsedResource != null) {
       onResourceLinks([...resourceLinks, newResourceLink]);
+      return true;
+    } else {
+      return false;
     }
   });
+  
+  return isSuccess;
 };

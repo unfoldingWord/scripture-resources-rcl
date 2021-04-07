@@ -20,13 +20,22 @@ function ColumnsMenu({
 }) {
   const { state, actions } = React.useContext(ResourcesContext);
   const { resources } = state || {};
+  
+const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
-  const onResourceAddClick = () => {
-    actions.addResourceLink(resourceUrl.value);
+  const onResourceAddClick = async () => {
+    if (actions && actions.addResourceLink)
+    {
+      const isSuccess = await actions.addResourceLink(resourceUrl.value);
+      setIsResourceAddError(!isSuccess);
+    }
   };
 
   const removeResourceLink = (index) => {
-    actions.remove(index);
+    if (actions && actions.remove)
+    {
+      actions.remove(index);
+    }
   };
 
   const toggleColumn = (index) => {
@@ -80,12 +89,17 @@ function ColumnsMenu({
     </MenuItem>
   ));
 
+  const onCloseMenu = () => {
+    setIsResourceAddError(false);
+    onAnchorEl();
+  };
+
   return (
-    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => onAnchorEl()}>
+    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={onCloseMenu}>
       <MenuItem style={{justifyContent: "flex-end"}}>
         <IconButton 
           aria-label='Close' 
-          onClick={() => {onAnchorEl()}} 
+          onClick={onCloseMenu} 
           className={classes.close}
           disabled={false}
         >
@@ -105,25 +119,41 @@ function ColumnsMenu({
 
       {menuItems}
 
-      <MenuItem>
-        <TextField
-          id='resourceUrl'
-          label={localString('ResourcePath')}
-          variant='outlined'
-          defaultValue=''
-          style={{ valign: 'middle' }}
-        />
-        <Tooltip title={localString('AddResource')} arrow>
-          <IconButton
-            aria-label={localString('AddResource')}
-            onClick={onResourceAddClick}
-            className={(classes.action, classes.menuIconButton)}
-            size='small'
-          >
-            <PlaylistAdd fontSize='small' />
-          </IconButton>
-        </Tooltip>
-      </MenuItem>
+      {actions && actions.addResourceLink && 
+        <MenuItem>
+          <TextField
+            id='resourceUrl'
+            label={localString('ResourcePath')}
+            variant='outlined'
+            defaultValue=''
+            style={{ valign: 'middle' }}
+          />
+          <Tooltip title={localString('AddResource')} arrow>
+            <IconButton
+              aria-label={localString('AddResource')}
+              onClick={onResourceAddClick}
+              className={(classes.action, classes.menuIconButton)}
+              size='small'
+            >
+              <PlaylistAdd fontSize='small' />
+            </IconButton>
+          </Tooltip>
+        </MenuItem>
+      }
+
+      {isResourceAddError && 
+        <MenuItem
+          key={'text'}
+          disabled
+          style={{
+            opacity: 1, fontWeight: 600, fontSize: 12, color: 'red',
+          }}
+        >
+          <div aria-label='AddResourceError'>
+            {localString('AddResourceError')}
+          </div>
+        </MenuItem>
+      }
     </Menu>
   );
 }

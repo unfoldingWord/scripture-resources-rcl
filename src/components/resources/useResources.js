@@ -47,14 +47,16 @@ function useResources({
   );
 
   const addResourceLink = useCallback(
-    (newResourceLink) => {
-      tryAddResourceLink(
+    async (newResourceLink) => {
+      const isSuccess = await tryAddResourceLink(
         resourceLinks,
         newResourceLink,
         reference,
         config,
         onResourceLinks,
       );
+      
+      return isSuccess;
     },
     [config, onResourceLinks, reference, resourceLinks],
   );
