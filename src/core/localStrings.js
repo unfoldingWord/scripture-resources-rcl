@@ -21,7 +21,7 @@ const strings = {
     //ViewVersions: 'View Versions',
     ManageVersions: 'Manage Versions',
     AddResource: 'Add Resource',
-    AddResourceError: 'Error: Could not add resource',
+    AddResourceError: 'Error: Could not add the resource. Please check the URL.',
     ResourcePath: 'Resource Path',
     ExpandChapter: 'Expand Chapter',
     CollapseChapter: 'Collapse Chapter',
