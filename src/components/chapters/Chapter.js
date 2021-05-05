@@ -22,7 +22,7 @@ export const Chapter = ({
   reference
 }) => {
   const classes = useStyles();
-  const [viewed, setViewed] = useState(renderOffscreen);
+  const [viewed, setViewed] = useState(!renderOffscreen);
   
   const onVisibility = (isVisible) => {
     if (isVisible) setViewed(true);
@@ -46,6 +46,7 @@ export const Chapter = ({
           direction={direction}
           disableWordPopover={disableWordPopover}
           reference={reference}
+          renderOffscreen={renderOffscreen}
         />
       );
       setVerses(_verses);

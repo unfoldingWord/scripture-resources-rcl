@@ -37,7 +37,7 @@ function Row({
   );
 
   const [cells, setCells] = useState(skeleton);
-  const [viewed, setViewed] = useState(renderOffscreen);
+  const [viewed, setViewed] = useState(!renderOffscreen);
 
   useEffect(() => {
     if (viewed) {
