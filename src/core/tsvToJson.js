@@ -18,6 +18,5 @@ export default function tsvToJson(tsv){
     }
   }
 
-
   return result;
 }
