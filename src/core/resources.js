@@ -27,13 +27,17 @@ export const resourceFromResourceLink = async ({
   reference,
   config,
 }) => {
+  let manifestHttpResponse = null;
+
   try {
     const resource = parseResourceLink({
       resourceLink,
       config,
       reference,
     });
-    const manifest = await getResourceManifest(resource);
+    resource.fullResponse = true;
+    const { manifest, response } = await getResourceManifest(resource);
+    manifestHttpResponse = response;
     const projects = manifest.projects.map((project) =>
       extendProject({
         project,
@@ -53,6 +57,7 @@ export const resourceFromResourceLink = async ({
       manifest,
       projects,
       project,
+      manifestHttpResponse,
     };
     return _resource;
   } catch (e) {
@@ -63,6 +68,7 @@ export const resourceFromResourceLink = async ({
       ']';
     console.error(errorMessage);
     console.error(e);
+    return { manifestHttpResponse };
   }
 };
 
