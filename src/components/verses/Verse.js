@@ -37,7 +37,7 @@ export const Verse = ({
     </>
   );
   const [verse, setVerse] = useState(skeleton);
-  const [viewed, setViewed] = useState(renderOffscreen);
+  const [viewed, setViewed] = useState(!renderOffscreen);
 
   useEffect(() => {
     if (viewed) {
