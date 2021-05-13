@@ -27,13 +27,17 @@ export const resourceFromResourceLink = async ({
   reference,
   config,
 }) => {
+  let manifestHttpResponse = null;
+
   try {
     const resource = parseResourceLink({
       resourceLink,
       config,
       reference,
     });
-    const manifest = await getResourceManifest(resource);
+    resource.fullResponse = true;
+    const { manifest, response } = await getResourceManifest(resource);
+    manifestHttpResponse = response;
     const projects = manifest.projects.map((project) =>
       extendProject({
         project,
@@ -53,6 +57,7 @@ export const resourceFromResourceLink = async ({
       manifest,
       projects,
       project,
+      manifestHttpResponse,
     };
     return _resource;
   } catch (e) {
@@ -63,6 +68,7 @@ export const resourceFromResourceLink = async ({
       ']';
     console.error(errorMessage);
     console.error(e);
+    return { manifestHttpResponse };
   }
 };
 
@@ -134,18 +140,21 @@ export const getResourceManifest = async ({
   resourceId,
   tag,
   config,
+  fullResponse,
 }) => {
   const repository = `${languageId}_${resourceId}`;
   const path = 'manifest.yaml';
-  const yaml = await getFile({
+  const response = await getFile({
     username,
     repository,
     path,
     tag,
     config,
+    fullResponse,
   });
-  const json = yaml ? YAML.safeLoad(yaml) : null;
-  return json;
+  const yaml = fullResponse ? (response?.data || null) : response;
+  const manifest = yaml ? YAML.safeLoad(yaml) : null;
+  return fullResponse ? { manifest, response } : manifest;
 };
 
 export const getResourceProjectFile = async ({
@@ -264,6 +273,7 @@ export const getFile = async ({
   path: urlPath = '',
   tag,
   config,
+  fullResponse,
 }) => {
   let url;
 
@@ -275,8 +285,12 @@ export const getFile = async ({
 
   try {
     const _config = { ...config }; // prevents gitea-react-toolkit from modifying object
-    const data = await get({ url, config: _config });
-    return data;
+    const response = await get({
+      url,
+      config: _config,
+      fullResponse,
+    });
+    return response;
   } catch (error) {
     console.error(error);
     return null;
