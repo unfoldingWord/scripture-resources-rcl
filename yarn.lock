@@ -8031,10 +8031,10 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gitea-react-toolkit@1.7.0-alpha.2:
-  version "1.7.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/gitea-react-toolkit/-/gitea-react-toolkit-1.7.0-alpha.2.tgz#33cde9214fb7156db3c61093b8f6d1a2d87d1658"
-  integrity sha512-derXmkFgUdT7XZym669wB+iVWeCzPwY8fQ3BjNxcLpTbYZs8kXf2NPp7h11xdE5azkDSKQb6YAuwUL6pMtBD4Q==
+gitea-react-toolkit@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/gitea-react-toolkit/-/gitea-react-toolkit-1.7.0.tgz#f88c256b2aa5ad35c8493da617839f3aaa7624be"
+  integrity sha512-usGkVDhM1yfzomgUERxHFCp07ri+tqrwpL0J7m0p4e3l/n562I65ZicTzwv/Ucvp8PH9Vt7j0wo7L4ZGtc7LXA==
   dependencies:
     awesome-debounce-promise "2.1.0"
     axios "0.19.0"
@@ -11159,20 +11159,6 @@ markdown-to-jsx@^6.9.3:
   dependencies:
     prop-types "^15.6.2"
     unquote "^1.1.0"
-
-markdown-translatable@1.2.13:
-  version "1.2.13"
-  resolved "https://registry.yarnpkg.com/markdown-translatable/-/markdown-translatable-1.2.13.tgz#d4b30fdad0884f0eac1d7b9a50332765bda3f9e6"
-  integrity sha512-qbLdB1G0pDH30RrUVRxGmZ7waxQyOl3/+VUTFUC5HdhRdSVa+b3nXFqneh/yFKH0i4D9DSa8OWN4o+0MLV3iPQ==
-  dependencies:
-    deep-freeze "^0.0.1"
-    md5 "^2.2.1"
-    prop-types "^15.7.2"
-    react-headroom "^3.1.0"
-    react-markdown "4.0.6"
-    showdown "^1.9.1"
-    turndown "^7.0.0"
-    turndown-plugin-gfm "^1.0.2"
 
 markdown-translatable@1.2.16:
   version "1.2.16"
