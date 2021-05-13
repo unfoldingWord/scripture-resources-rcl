@@ -12,6 +12,7 @@ export const Verses = ({
   direction,
   disableWordPopover,
   reference,
+  renderOffscreen
 }) => {
   const classes = useStyles();
   let [_verses, setVerses] = useState();
@@ -41,6 +42,7 @@ export const Verses = ({
           showUnsupported={showUnsupported}
           disableWordPopover={disableWordPopover}
           reference={ {...reference, verse: verseKey} }
+          renderOffscreen={renderOffscreen}
         />
       );
       if (verseKey === 'front') setFront(verse);

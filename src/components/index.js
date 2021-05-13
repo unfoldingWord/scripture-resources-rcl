@@ -4,6 +4,7 @@ export * from './verse-objects';
 export * from './verses';
 export * from './parallel-scripture';
 export * from './usfm';
+export * from './reference';
 export * from './resources';
 export * from './license';
 export * from './selections';
