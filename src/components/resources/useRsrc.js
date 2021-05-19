@@ -53,7 +53,8 @@ function useRsrc({
       setLoadingContent(null); // done
     }
 
-    if (!options.getBibleJson) { // get file only if we are not fetching bible json data
+    // if resource loaded then get file only if we are not fetching bible json data
+    if (Object.keys(resource).length && !options.getBibleJson) {
       getFile();
     }
   }, [config, resource]);
