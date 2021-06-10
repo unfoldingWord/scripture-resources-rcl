@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
-import { resourceFromResourceLink } from '../../core';
+import { getResponseData, resourceFromResourceLink } from '../../core';
 import tsvToJson from '../../core/tsvToJson';
 import { rangeFromVerseAndVerseKeys } from '../parallel-scripture/helpers';
 
@@ -42,7 +42,8 @@ function useRsrc({
 
   useEffect(() => {
     async function getFile() {
-      let file = await resource?.project?.file();
+      const response = await resource?.project?.file();
+      let file = getResponseData(response);
       const isTSV = resource?.project?.path?.includes('.tsv');
 
       if (isTSV) {
