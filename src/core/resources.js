@@ -259,6 +259,11 @@ export const extendProject = ({
   return _project;
 };
 
+/**
+ * get data from http response and decode data in base64 format
+ * @param {object} response - http response
+ * @return {*} - response data decoded
+ */
 export function getResponseData(response) {
   let data = response?.data;
   data = (data?.encoding === 'base64') ? decodeBase64ToUtf8(data.content) : data;
