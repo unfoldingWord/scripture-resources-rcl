@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
-import { resourceFromResourceLink } from '../../core';
+import { getResponseData, resourceFromResourceLink } from '../../core';
 import tsvToJson from '../../core/tsvToJson';
 import { rangeFromVerseAndVerseKeys } from '../parallel-scripture/helpers';
 
@@ -15,11 +15,13 @@ function useRsrc({
   const [loadingResource, setLoadingResource] = useState(null); // flag for when loading resource
   const [loadingContent, setLoadingContent] = useState(null); // flag for when loading content from resource
   const { bibleJson, matchedVerse } = bibleRef || {};
+  const [fetchResponse, setFetchResponse] = useState(null);
 
   useEffect(() => {
     const resourceTag = JSON.stringify({ resourceLink, reference, config });
     setLoadingResource(resourceTag);
     setLoadingContent(null);
+    setFetchResponse(null);
     setResource({});
     resourceFromResourceLink({
       resourceLink,
@@ -42,7 +44,9 @@ function useRsrc({
 
   useEffect(() => {
     async function getFile() {
-      let file = await resource?.project?.file();
+      const response = await resource?.project?.file();
+      setFetchResponse(response);
+      let file = getResponseData(response);
       const isTSV = resource?.project?.path?.includes('.tsv');
 
       if (isTSV) {
@@ -71,8 +75,9 @@ function useRsrc({
 
         const { chapter, verse } = reference;
         const { project } = resource;
-        const bibleJson = await project.parseUsfm();
+        const { json: bibleJson, response } = await project.parseUsfm();
         setContent(bibleJson);
+        setFetchResponse(response);
 
         if (chapter) {
           try {
@@ -118,6 +123,7 @@ function useRsrc({
       matchedVerse,
       loadingResource,
       loadingContent,
+      fetchResponse,
     },
   };
 }
