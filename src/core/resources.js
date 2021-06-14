@@ -233,14 +233,15 @@ export const extendProject = ({
   if (project.path.match(/\.usfm$/)) {
     _project.parseUsfm = async () => {
       const start = performance.now();
-      let json;
+      let results;
 
       if (reference && reference.chapter) {
-        json = await parseChapter({ project: _project, reference });
+        results = await parseChapter({ project: _project, reference });
       } else {
-        json = await parseBook({ project: _project });
+        results = await parseBook({ project: _project });
       }
 
+      const { json, response } = results || {};
       const end = performance.now();
       let identifier =
         reference && reference.bookId
@@ -252,7 +253,7 @@ export const extendProject = ({
           3,
         )}ms`,
       );
-      return json;
+      return { json, response };
     };
   }
   return _project;
@@ -269,7 +270,7 @@ export const parseBook = async ({ project }) => {
   const response = (await project.file()) || '';
   const usfm = getResponseData(response);
   const json = usfmJS.toJSON(usfm);
-  return json;
+  return { json, response };
 };
 
 export const parseChapter = async ({ project, reference }) => {
@@ -295,7 +296,7 @@ export const parseChapter = async ({ project, reference }) => {
     }
 
     const json = usfmJS.toJSON(chapter);
-    return json;
+    return { json, response };
   }
 };
 
