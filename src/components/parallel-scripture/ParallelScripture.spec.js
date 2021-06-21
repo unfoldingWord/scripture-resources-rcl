@@ -116,7 +116,7 @@ const [resources, setResources] = React.useState([]);
 </ResourcesContextProvider>;
 
 
-describe('parse and download resource', () => {
+describe('parse and download resource parallel', () => {
     it('should be RLOB 2jn', async () => {
         const resourceLink = `https://git.door43.org/ru_gl/ru_rlob`;
         let content = await resourceFromResourceLink({ resourceLink, reference2jn, config });
