@@ -96,8 +96,9 @@ export const parseResourceLink = ({
     // /api/v1/repos/ru_gl/ru_rlob/contents/manifest.yaml?ref=v0.9
     [, username, repository, , , ref] = matched;
     [languageId, resourceId] = repository.split('_');
-  } else if (resourceLink.includes('src/branch')) {
+  } else if (resourceLink.includes('src/branch') || resourceLink.includes('src/tag')) {
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master
+    //https://git.door43.org/ru_gl/ru_rlob/src/tag/v1.1.1
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master/3jn
     parsedArray = resourceLink.match(
       /https?:\/\/.*org\/([^/]*)\/([^/]*)\/src\/([^/]*)\/([^/]*)/

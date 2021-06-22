@@ -25,7 +25,7 @@ const resourceExpectedValue = {
     "username": "ru_gl",
 }
 
-describe('parse and download resource', () => {
+describe('resourceFromResourceLink- parse and download resource', () => {
     it('should be RLOB 3jn', async () => {
         const resourceLink = `https://git.door43.org/ru_gl/ru_rlob`;
         const book = await resourceFromResourceLink({ resourceLink, reference, config });
@@ -107,35 +107,66 @@ describe('parseResourceLink without books', () => {
     expect(resource).toStrictEqual(resourceExpectedValue_);
   });
 
-  it('should be ru_rlob', () => {
+  it('should be ru_rlob from https://git.door43.org/ru_gl/ru_rlob', () => {
     const resourceLink = `https://git.door43.org/ru_gl/ru_rlob`;
     let resource = parseResourceLink({ resourceLink, config, reference });
 
     expect(resource).toStrictEqual(resourceExpectedValue);
   });
 
-  it('should be ru_rlob', () => {
+  it('should be ru_rlob from https://git.door43.org/ru_gl/ru_rlob/src/branch/master', () => {
     const resourceLink = `https://git.door43.org/ru_gl/ru_rlob/src/branch/master`;
     let resource = parseResourceLink({ resourceLink, config, reference });
 
     expect(resource).toStrictEqual(resourceExpectedValue);
   });
 
-  it('should be ru_rlob', () => {
+  it('should be ru_rlob from https://git.door43.org/ru_gl/ru_rlob/src/tag/v2.0.0', () => {
+    const resourceExpectedValue_ = {
+      ...resourceExpectedValue,
+      ref: `v2.0.0`,
+      resourceLink: `ru_gl/ru/rlob/v2.0.0/3jn`,
+    };
+    const resourceLink = `https://git.door43.org/ru_gl/ru_rlob/src/tag/v2.0.0`;
+    let resource = parseResourceLink({ resourceLink, config, reference });
+
+    expect(resource).toStrictEqual(resourceExpectedValue_);
+  });
+
+  it('should be ru_rlob from https://git.door43.org/ru_gl/ru_rlob/src/branch/other', () => {
+    const resourceExpectedValue_ = {
+      ...resourceExpectedValue,
+      ref: `v2.0.0`,
+      resourceLink: `ru_gl/ru/rlob/v2.0.0/3jn`,
+    };
+    const resourceLink = `https://git.door43.org/ru_gl/ru_rlob/src/tag/v2.0.0`;
+    let resource = parseResourceLink({ resourceLink, config, reference });
+
+    expect(resource).toStrictEqual(resourceExpectedValue_);
+  });
+
+  it('should be ru_rlob from https://git.door43.org/ru_gl/ru_rlob/src/branch/master', () => {
+    const resourceLink = `https://git.door43.org/ru_gl/ru_rlob/src/branch/master`;
+    let resource = parseResourceLink({ resourceLink, config, reference });
+
+    expect(resource).toStrictEqual(resourceExpectedValue);
+  });
+
+  it('should be ru_rlob from /ru_gl/ru_rlob', () => {
     const resourceLink = `/ru_gl/ru_rlob`;
     let resource = parseResourceLink({ resourceLink, config, reference });
 
     expect(resource).toStrictEqual(resourceExpectedValue);
   });
 
-  it('should be ru_rlob', () => {
+  it('should be ru_rlob from ru_gl/ru_rlob', () => {
     const resourceLink = `ru_gl/ru_rlob`;
     let resource = parseResourceLink({ resourceLink, config, reference });
 
     expect(resource).toStrictEqual(resourceExpectedValue);
   });
 
-  it('should be ru_rlob', () => {
+  it('should be ru_rlob from ru_gl/ru/rlob/master/', () => {
     const resourceLink = `ru_gl/ru/rlob/master/`;
     let resource = parseResourceLink({ resourceLink, config, reference });
 
