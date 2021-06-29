@@ -116,7 +116,7 @@ const [resources, setResources] = React.useState([]);
 </ResourcesContextProvider>;
 
 
-describe('ParallelScripture: resourceFromResourceLink: parse and download resource parallel', () => {
+describe('ParallelScripture: resourceFromResourceLink: parse and download resource', () => {
     it('should be RLOB 2jn', async () => {
         const resourceLink = `https://git.door43.org/ru_gl/ru_rlob`;
         let content = await resourceFromResourceLink({ resourceLink, reference2jn, config });
