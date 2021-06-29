@@ -76,7 +76,7 @@ describe('resourceFromResourceLink- parse and download resource', () => {
 
   it('should be RLOB 2jn', async () => {
     const resourceLink = `https://git.door43.org/ru_gl/ru_rlob`;
-    let content = await resourceFromResourceLink({ resourceLink, reference2jn, config });
+    let content = await resourceFromResourceLink({ resourceLink, reference: reference2jn, config });
     //console.log(content.projects[1]);
     expect(content.projects.length).toBeGreaterThan(0);
   })
@@ -208,10 +208,16 @@ describe('parseResourceLink with books', () => {
     });
 
     it('should be ru_rlob tag', () => {
+      const resourceExpectedValue_ = {
+        ...resourceExpectedValue,
+        ref: `v0.9`,
+        resourceLink: `ru_gl/ru/rlob/v0.9/3jn`,
+      };
+
       const resourceLink = `https://git.door43.org/ru_gl/ru_rlob/src/tag/v0.9/3jn`;
       let resource = parseResourceLink({ resourceLink, config, reference });
 
-      expect(resource).toStrictEqual(resourceExpectedValue);
+      expect(resource).toStrictEqual(resourceExpectedValue_);
     });
 
     it('should be ru_rlob branch', () => {
