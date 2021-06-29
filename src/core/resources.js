@@ -180,6 +180,7 @@ export const getResourceProjectFile = async ({
   username,
   languageId,
   resourceId,
+  ref,
   tag,
   project: { path: projectPath },
   config,
@@ -193,6 +194,7 @@ export const getResourceProjectFile = async ({
     username,
     repository,
     path: projectPath,
+    ref,
     tag,
     config,
     fullResponse: true,
@@ -324,7 +326,6 @@ export const getFile = async ({
 
   try {
     const _config = { ...config }; // prevents gitea-react-toolkit from modifying object
-    console.log(`getFile - get url: ${url}, config:`, _config);
     const response = await get({
       url,
       config: _config,
