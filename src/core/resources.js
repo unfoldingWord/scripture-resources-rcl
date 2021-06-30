@@ -81,31 +81,35 @@ export const parseResourceLink = ({
     languageId,
     resourceId,
     projectId = reference.projectId || reference.bookId,
-    tag = 'master',
-    doRefFetch = false,
+    tag,
+    ref,
     matched;
+  ref = ref || tag || 'master'; // fallback to using tag if ref not given
   const versionHttpMatch = /https?:\/\/.*org\/api\/v1\/repos\/([^/]*)\/([^/]*)\/([^/]*)([/][^/]*)*\?ref=([^/]+)/;
   const versionLinkMatch = /\/api\/v1\/repos\/([^/]*)\/([^/]*)\/([^/]*)([/][^/]*)*\?ref=([^/]+)/;
 
   if (matched = resourceLink.match(versionHttpMatch)) {
     //https://git.door43.org/api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9
     //https://git.door43.org/api/v1/repos/ru_gl/ru_rlob/contents/manifest.yaml?ref=v0.9
-    [, username, repository, , , tag] = matched;
+    [, username, repository, , , ref] = matched;
     [languageId, resourceId] = repository.split('_');
-    doRefFetch = true;
   } else if (matched = resourceLink.match(versionLinkMatch)) {
     // /api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9
     // /api/v1/repos/ru_gl/ru_rlob/contents/manifest.yaml?ref=v0.9
-    [, username, repository, , , tag] = matched;
+    [, username, repository, , , ref] = matched;
     [languageId, resourceId] = repository.split('_');
-    doRefFetch = true;
-  } else if (resourceLink.includes('src/branch')) {
+  } else if (resourceLink.includes('src/branch') ||
+    resourceLink.includes('src/tag') ||
+    resourceLink.includes('raw/branch') ||
+    resourceLink.includes('raw/tag')){
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master
+    //https://git.door43.org/ru_gl/ru_rlob/src/tag/v1.1.1
+    //https://git.door43.org/ru_gl/ru_rlob/raw/tag/v1.1.1
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master/3jn
     parsedArray = resourceLink.match(
-      /https?:\/\/.*org\/([^/]*)\/([^/]*)\/src\/([^/]*)\/([^/]*)/
+      /https?:\/\/.*org\/([^/]*)\/([^/]*)\/([^/]*)\/([^/]*)\/([^/]*)/
     );
-    [, username, repository, , tag] = parsedArray;
+    [, username, repository, , , ref] = parsedArray;
     [languageId, resourceId] = repository.split('_');
   } else if (resourceLink.includes('http')) {
     //https://git.door43.org/ru_gl/ru_rlob
@@ -128,30 +132,26 @@ export const parseResourceLink = ({
     //ru_gl/ru/rlob/master/
     //ru_gl/ru/rlob/master/tit
     parsedArray = resourceLink.split('/');
-    [username, languageId, resourceId, tag = 'master', projectId] = parsedArray;
+    [username, languageId, resourceId, ref = 'master', projectId] = parsedArray;
     repository = `${languageId}_${resourceId}`;
   }
 
   if (!projectId || projectId == '' || projectId.length == 0) {
     projectId = reference.projectId || reference.bookId;
   }
-  resourceLink = `${username}/${languageId}/${resourceId}/${tag}/${projectId}`;
+  resourceLink = `${username}/${languageId}/${resourceId}/${ref}/${projectId}`;
 
-  const resource = {
+  return {
     resourceLink,
     username,
     repository,
     languageId,
     resourceId,
-    tag,
+    tag: ref,
+    ref,
     projectId,
     config,
   };
-
-  if (doRefFetch) {
-    resource.doRefFetch = doRefFetch;
-  }
-  return resource;
 };
 
 export const getResourceManifest = async ({
@@ -159,17 +159,19 @@ export const getResourceManifest = async ({
   languageId,
   resourceId,
   tag,
+  ref,
   config,
   fullResponse,
   doRefFetch,
 }) => {
+  ref = ref || tag; // fallback to using tag if ref not given
   const repository = `${languageId}_${resourceId}`;
   const path = 'manifest.yaml';
   const response = await getFile({
     username,
     repository,
     path,
-    tag,
+    ref,
     config,
     fullResponse,
     doRefFetch,
@@ -183,6 +185,7 @@ export const getResourceProjectFile = async ({
   username,
   languageId,
   resourceId,
+  ref,
   tag,
   project: { path: projectPath },
   config,
@@ -196,6 +199,7 @@ export const getResourceProjectFile = async ({
     username,
     repository,
     path: projectPath,
+    ref,
     tag,
     config,
     fullResponse: true,
@@ -207,9 +211,7 @@ export const getResourceProjectFile = async ({
 export const projectFromProjects = ({
   reference, projectId, projects,
 }) => {
-  const identifier = reference
-    ? reference?.projectId || reference?.bookId
-    : projectId;
+  const identifier = reference ? (reference?.projectId || reference?.bookId) : projectId;
   const project = projects.filter(
     (project) => project.identifier === identifier,
   )[0];
@@ -311,19 +313,17 @@ export const getFile = async ({
   repository,
   path: urlPath = '',
   tag,
+  ref,
   config,
   fullResponse,
-  doRefFetch,
 }) => {
   let url;
 
-  if (tag && tag !== 'master' && urlPath) {
-    if (doRefFetch) {
-      url = path.join('api/v1/repos', username, repository, 'contents', urlPath) + '?ref=' + tag;
-    } else {
-      url = path.join(username, repository, 'raw/tag', tag, urlPath);
-    }
-  } else {
+  if (ref) {
+    url = path.join('api/v1/repos', username, repository, 'contents', urlPath) + `?ref=${ref}`;
+  } else if (tag && tag !== 'master') {
+    url = path.join(username, repository, 'raw/tag', tag, urlPath);
+  } else { // default to master
     url = path.join(username, repository, 'raw/branch/master', urlPath);
   }
 
