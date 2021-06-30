@@ -130,7 +130,7 @@ ParallelScripture.propTypes = {
   /** set the height to ensure rendering work properly   */
   height: PropTypes.string.isRequired,
   /** set the default open state */
-  open: PropTypes.string,
+  open: PropTypes.bool,
 };
 
 export default ParallelScripture;
