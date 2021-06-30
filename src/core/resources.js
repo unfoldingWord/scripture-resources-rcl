@@ -211,7 +211,7 @@ export const getResourceProjectFile = async ({
 export const projectFromProjects = ({
   reference, projectId, projects,
 }) => {
-  const identifier = reference ? reference?.projectId || reference?.bookId : projectId;
+  const identifier = reference ? (reference?.projectId || reference?.bookId) : projectId;
   const project = projects.filter(
     (project) => project.identifier === identifier,
   )[0];
