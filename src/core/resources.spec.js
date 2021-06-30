@@ -21,6 +21,7 @@ const resourceExpectedValue = {
     "repository": "ru_rlob",
     "resourceId": "rlob",
     "resourceLink": "ru_gl/ru/rlob/master/3jn",
+    "tag": "master",
     "ref": "master",
     "username": "ru_gl",
 }
@@ -86,6 +87,7 @@ describe('parseResourceLink without books', () => {
   it('should be ru_rlob from https://git.door43.org/api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9', () => {
     const resourceExpectedValue_ = {
       ...resourceExpectedValue,
+      tag: `v0.9`,
       ref: `v0.9`,
       resourceLink: `ru_gl/ru/rlob/v0.9/3jn`
     };
@@ -98,6 +100,7 @@ describe('parseResourceLink without books', () => {
   it('should be ru_rlob from /api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9', () => {
     const resourceExpectedValue_ = {
       ...resourceExpectedValue,
+      tag: `v0.9`,
       ref: `v0.9`,
       resourceLink: `ru_gl/ru/rlob/v0.9/3jn`,
     };
@@ -124,6 +127,7 @@ describe('parseResourceLink without books', () => {
   it('should be ru_rlob from https://git.door43.org/ru_gl/ru_rlob/src/tag/v2.0.0', () => {
     const resourceExpectedValue_ = {
       ...resourceExpectedValue,
+      tag: `v2.0.0`,
       ref: `v2.0.0`,
       resourceLink: `ru_gl/ru/rlob/v2.0.0/3jn`,
     };
@@ -136,6 +140,7 @@ describe('parseResourceLink without books', () => {
   it('should be ru_rlob from https://git.door43.org/ru_gl/ru_rlob/src/branch/other', () => {
     const resourceExpectedValue_ = {
       ...resourceExpectedValue,
+      tag: `v2.0.0`,
       ref: `v2.0.0`,
       resourceLink: `ru_gl/ru/rlob/v2.0.0/3jn`,
     };
@@ -148,6 +153,7 @@ describe('parseResourceLink without books', () => {
   it('should be ru_rlob from https://git.door43.org/ru_gl/ru_rlob/src/tag/v2.0.0', () => {
     const resourceExpectedValue_ = {
       ...resourceExpectedValue,
+      tag: `v2.0.0`,
       ref: `v2.0.0`,
       resourceLink: `ru_gl/ru/rlob/v2.0.0/3jn`,
     };
@@ -160,6 +166,7 @@ describe('parseResourceLink without books', () => {
   it('should be ru_rlob from https://git.door43.org/ru_gl/ru_rlob/raw/branch/other', () => {
     const resourceExpectedValue_ = {
       ...resourceExpectedValue,
+      tag: `v2.0.0`,
       ref: `v2.0.0`,
       resourceLink: `ru_gl/ru/rlob/v2.0.0/3jn`,
     };
@@ -210,6 +217,7 @@ describe('parseResourceLink with books', () => {
     it('should be ru_rlob tag', () => {
       const resourceExpectedValue_ = {
         ...resourceExpectedValue,
+        tag: `v0.9`,
         ref: `v0.9`,
         resourceLink: `ru_gl/ru/rlob/v0.9/3jn`,
       };

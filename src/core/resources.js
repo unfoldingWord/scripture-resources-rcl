@@ -81,8 +81,10 @@ export const parseResourceLink = ({
     languageId,
     resourceId,
     projectId = reference.projectId || reference.bookId,
-    ref = 'master',
+    tag,
+    ref,
     matched;
+  ref = ref || tag || 'master'; // fallback to using tag if ref not given
   const versionHttpMatch = /https?:\/\/.*org\/api\/v1\/repos\/([^/]*)\/([^/]*)\/([^/]*)([/][^/]*)*\?ref=([^/]+)/;
   const versionLinkMatch = /\/api\/v1\/repos\/([^/]*)\/([^/]*)\/([^/]*)([/][^/]*)*\?ref=([^/]+)/;
 
@@ -145,6 +147,7 @@ export const parseResourceLink = ({
     repository,
     languageId,
     resourceId,
+    tag: ref,
     ref,
     projectId,
     config,
@@ -155,11 +158,13 @@ export const getResourceManifest = async ({
   username,
   languageId,
   resourceId,
+  tag,
   ref,
   config,
   fullResponse,
   doRefFetch,
 }) => {
+  ref = ref || tag; // fallback to using tag if ref not given
   const repository = `${languageId}_${resourceId}`;
   const path = 'manifest.yaml';
   const response = await getFile({
@@ -206,9 +211,7 @@ export const getResourceProjectFile = async ({
 export const projectFromProjects = ({
   reference, projectId, projects,
 }) => {
-  const identifier = reference
-    ? reference?.projectId || reference?.bookId
-    : projectId;
+  const identifier = reference ? reference?.projectId || reference?.bookId : projectId;
   const project = projects.filter(
     (project) => project.identifier === identifier,
   )[0];
