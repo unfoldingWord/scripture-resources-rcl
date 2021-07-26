@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect from 'use-deep-compare-effect';
@@ -16,9 +16,12 @@ function useRsrc({
   const [loadingContent, setLoadingContent] = useState(null); // flag for when loading content from resource
   const { bibleJson, matchedVerse } = bibleRef || {};
   const [fetchResponse, setFetchResponse] = useState(null);
+  const [triggeredReloadCount, setReloadCount] = useState(0);
 
   useEffect(() => {
-    const resourceTag = JSON.stringify({ resourceLink, reference, config });
+    const resourceTag = JSON.stringify({
+      resourceLink, reference, config,
+    });
     setLoadingResource(resourceTag);
     setLoadingContent(null);
     setFetchResponse(null);
@@ -40,7 +43,7 @@ function useRsrc({
       console.warn(`useRsrc() - error fetching resource for: ${resourceTag}`, error);
       setLoadingResource(null); // done
     });
-  }, [resourceLink, reference, config]);
+  }, [resourceLink, reference, config, triggeredReloadCount]);
 
   useEffect(() => {
     async function getFile() {
@@ -61,7 +64,7 @@ function useRsrc({
     if (Object.keys(resource).length && !options.getBibleJson) {
       getFile();
     }
-  }, [config, resource]);
+  }, [config, options.getBibleJson, resource]);
 
   useEffect(() => {
     if (options.getBibleJson) {
@@ -113,7 +116,11 @@ function useRsrc({
         setLoadingContent(null); // done
       });
     }
-  }, [options.getBibleJson, resource]);
+  }, [options.getBibleJson, reference, resource]);
+
+  const reloadResource = useCallback(() => {
+    setReloadCount(triggeredReloadCount + 1);
+  }, [triggeredReloadCount]);
 
   return {
     state: {
@@ -125,6 +132,7 @@ function useRsrc({
       loadingContent,
       fetchResponse,
     },
+    actions: { reloadResource },
   };
 }
 
