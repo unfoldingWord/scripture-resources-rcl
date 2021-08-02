@@ -98,6 +98,15 @@ export const parseResourceLink = ({
     // /api/v1/repos/ru_gl/ru_rlob/contents/manifest.yaml?ref=v0.9
     [, username, repository, , , ref] = matched;
     [languageId, resourceId] = repository.split('_');
+  } else if (matched = resourceLink.match(/https?:\/\/.*org\/([^/]*)\/([^/]*).git/)) {
+    // https://git.door43.org/Door43-Catalog/en_ust.git
+    [, username, repository] = matched;
+    [languageId, resourceId] = repository.split('_');
+  } else if (resourceLink.includes('/u/')) {
+    // https://door43.org/u/unfoldingWord/en_ult/
+    parsedArray = resourceLink.match(/https?:\/\/.*org\/u\/([^/]*)\/([^/]*)/);
+    [, username, repository] = parsedArray;
+    [languageId, resourceId] = repository.split('_');
   } else if (resourceLink.includes('src/branch') ||
     resourceLink.includes('src/tag') ||
     resourceLink.includes('raw/branch') ||
