@@ -1,3 +1,4 @@
+// default build config (used for everything but production)
 module.exports = {
   'presets': ['@babel/preset-env', '@babel/preset-react'],
   'plugins': [
