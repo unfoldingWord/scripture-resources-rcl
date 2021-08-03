@@ -19,8 +19,8 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "nyc:report": "nyc report --reporter=json-summary --reporter=text",
-    "test": "nyc start-test 6060 cypress:run && npm run nyc:report",
-    "test:unit": "jest",
+    "test": "set NODE_ENV=test&& nyc start-test 6060 cypress:run && npm run nyc:report",
+    "test:unit": "set NODE_ENV=test&& jest",
     "create-coverage-badge": "bash scripts/create-badge-json.sh"
   },
   "eslintConfig": {
@@ -115,7 +115,8 @@
       "!**/vendor/**"
     ],
     "testMatch": [
-      "<rootDir>**/**.spec.js"
+      "<rootDir>/src/**/**.spec.js",
+      "<rootDir>/__tests__/**/**.spec.js"
     ],
     "testPathIgnorePatterns": [
       "node_modules",
