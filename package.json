@@ -13,14 +13,14 @@
     "start": "styleguidist server",
     "build": "styleguidist build",
     "deploy": "git push",
-    "prepublishOnly": "rm -fr ./dist && babel ./src --out-dir ./dist -s inline",
+    "prepublishOnly": "rm -fr ./dist && babel --config-file ./babel.prod.config.js ./src --out-dir ./dist -s inline",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "nyc:report": "nyc report --reporter=json-summary --reporter=text",
-    "test": "set NODE_ENV=test&& nyc start-test 6060 cypress:run && npm run nyc:report",
-    "test:unit": "set NODE_ENV=test&& jest",
+    "test": "nyc start-test 6060 cypress:run && npm run nyc:report",
+    "test:unit": "jest",
     "create-coverage-badge": "bash scripts/create-badge-json.sh"
   },
   "eslintConfig": {
