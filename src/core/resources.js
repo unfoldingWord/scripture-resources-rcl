@@ -61,13 +61,11 @@ export const resourceFromResourceLink = async ({
     };
     return _resource;
   } catch (e) {
-    console.log(e);
     const errorMessage =
       'scripture-resources-rcl: resources.js: Cannot load resource [' +
       resourceLink +
       ']';
-    console.error(errorMessage);
-    console.error(e);
+    console.error(errorMessage, e);
     return { manifestHttpResponse };
   }
 };
@@ -277,8 +275,12 @@ export const extendProject = ({
  */
 export function getResponseData(response) {
   let data = response?.data;
-  data = (data?.encoding === 'base64') ? decodeBase64ToUtf8(data.content) : data;
-  return data;
+
+  if (!data?.errors) { // make sure was not a fetch error
+    data = (data?.encoding === 'base64') ? decodeBase64ToUtf8(data.content) : data;
+    return data;
+  }
+  return null;
 }
 
 export const parseBook = async ({ project }) => {
