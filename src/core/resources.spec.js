@@ -84,6 +84,36 @@ describe('resourceFromResourceLink- parse and download resource', () => {
 })
 
 describe('parseResourceLink without books', () => {
+  it('should be en_ult from https://git.door43.org/Door43-Catalog/en_ust.git', () => {
+    const resourceExpectedValue_ = {
+      ...resourceExpectedValue,
+      languageId: 'en',
+      repository: 'en_ult',
+      resourceId: 'ult',
+      username: 'unfoldingWord',
+      resourceLink: `unfoldingWord/en/ult/master/3jn`,
+    };
+    const resourceLink = `https://door43.org/u/unfoldingWord/en_ult/`;
+    let resource = parseResourceLink({ resourceLink, config, reference });
+
+    expect(resource).toStrictEqual(resourceExpectedValue_);
+  });
+
+  it('should be en_ult from https://door43.org/u/unfoldingWord/en_ult/', () => {
+    const resourceExpectedValue_ = {
+      ...resourceExpectedValue,
+      languageId: 'en',
+      repository: 'en_ult',
+      resourceId: 'ult',
+      username: 'unfoldingWord',
+      resourceLink: `unfoldingWord/en/ult/master/3jn`,
+    };
+    const resourceLink = `https://door43.org/u/unfoldingWord/en_ult/`;
+    let resource = parseResourceLink({ resourceLink, config, reference });
+
+    expect(resource).toStrictEqual(resourceExpectedValue_);
+  });
+
   it('should be ru_rlob from https://git.door43.org/api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9', () => {
     const resourceExpectedValue_ = {
       ...resourceExpectedValue,

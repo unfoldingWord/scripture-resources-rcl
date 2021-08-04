@@ -61,13 +61,11 @@ export const resourceFromResourceLink = async ({
     };
     return _resource;
   } catch (e) {
-    console.log(e);
     const errorMessage =
       'scripture-resources-rcl: resources.js: Cannot load resource [' +
       resourceLink +
       ']';
-    console.error(errorMessage);
-    console.error(e);
+    console.error(errorMessage, e);
     return { manifestHttpResponse };
   }
 };
@@ -97,6 +95,15 @@ export const parseResourceLink = ({
     // /api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9
     // /api/v1/repos/ru_gl/ru_rlob/contents/manifest.yaml?ref=v0.9
     [, username, repository, , , ref] = matched;
+    [languageId, resourceId] = repository.split('_');
+  } else if (matched = resourceLink.match(/https?:\/\/.*org\/([^/]*)\/([^/]*).git/)) {
+    // https://git.door43.org/Door43-Catalog/en_ust.git
+    [, username, repository] = matched;
+    [languageId, resourceId] = repository.split('_');
+  } else if (resourceLink.includes('/u/')) {
+    // https://door43.org/u/unfoldingWord/en_ult/
+    parsedArray = resourceLink.match(/https?:\/\/.*org\/u\/([^/]*)\/([^/]*)/);
+    [, username, repository] = parsedArray;
     [languageId, resourceId] = repository.split('_');
   } else if (resourceLink.includes('src/branch') ||
     resourceLink.includes('src/tag') ||
@@ -268,8 +275,12 @@ export const extendProject = ({
  */
 export function getResponseData(response) {
   let data = response?.data;
-  data = (data?.encoding === 'base64') ? decodeBase64ToUtf8(data.content) : data;
-  return data;
+
+  if (!data?.errors) { // make sure was not a fetch error
+    data = (data?.encoding === 'base64') ? decodeBase64ToUtf8(data.content) : data;
+    return data;
+  }
+  return null;
 }
 
 export const parseBook = async ({ project }) => {

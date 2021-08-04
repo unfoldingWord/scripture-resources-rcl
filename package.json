@@ -1,7 +1,7 @@
 {
   "name": "scripture-resources-rcl",
   "description": "A React Component Library for Rendering Scripture Resources.",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "homepage": "https://scripture-resources-rcl.netlify.com/",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
     "start": "styleguidist server",
     "build": "styleguidist build",
     "deploy": "git push",
-    "prepublishOnly": "rm -fr ./dist && babel ./src --out-dir ./dist -s inline",
+    "prepublishOnly": "rm -fr ./dist && babel --config-file ./babel.prod.config.js ./src --out-dir ./dist -s inline",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "lint": "eslint ./src",
@@ -115,7 +115,8 @@
       "!**/vendor/**"
     ],
     "testMatch": [
-      "<rootDir>**/**.spec.js"
+      "<rootDir>/src/**/**.spec.js",
+      "<rootDir>/__tests__/**/**.spec.js"
     ],
     "testPathIgnorePatterns": [
       "node_modules",
