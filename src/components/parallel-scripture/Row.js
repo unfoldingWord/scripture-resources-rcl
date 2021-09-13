@@ -17,6 +17,7 @@ function Row({
   referenceId,
   verses,
   renderOffscreen,
+  getLexiconData,
 }) {
 
   const classes = useStyles();
@@ -57,6 +58,7 @@ function Row({
               direction='auto'
               renderOffscreen
               disableWordPopover
+              getLexiconData={getLexiconData}
             />) : <span>&nbsp;</span>
             }
           </TableCell>
@@ -85,6 +87,8 @@ function Row({
 Row.propTypes = {
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.bool,
+  /** optional function to lookup lexicon data */
+  getLexiconData: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({

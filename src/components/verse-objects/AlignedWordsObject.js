@@ -3,11 +3,19 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Popover } from '@material-ui/core';
 
-import { SelectionsContext } from '../selections/Selections.context';
+// TRICKY - importing from direct path gets around exported css styles which crashes nextjs
+import { lookupStrongsNumbers } from 'tc-ui-toolkit/lib/ScripturePane/helpers/lexiconHelpers';
+import { default as WordLexiconDetails } from 'tc-ui-toolkit/lib/WordLexiconDetails/index';
 
+import { SelectionsContext } from '../selections/Selections.context';
 import { WordObject, OriginalWordObject } from '.';
 
-function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
+function AlignedWordsObject({
+  children,
+  originalWords,
+  disableWordPopover,
+  getLexiconData,
+}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -19,9 +27,7 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
     setAnchorEl(null);
   };
 
-
   let selected;
-
   const _selectionsContext = useContext(SelectionsContext);
 
   if (_selectionsContext) {
@@ -42,18 +48,40 @@ function AlignedWordsObject({ children, originalWords, disableWordPopover }) {
       <WordObject
         verseObject={verseObject}
         disableWordPopover={disableWordPopover}
+        getLexiconData={getLexiconData}
       />
     </span>
   ));
 
   let component = words;
 
+  function getOriginalWordObject(index, wordObject) {
+    let message = null;
+    const strong = wordObject?.strong || wordObject?.strongs;
+
+    if (getLexiconData) {
+      if (strong) {
+        const lexiconData = lookupStrongsNumbers(strong, getLexiconData);
+
+        if (lexiconData) {
+          const isHebrew = lexiconData['uhl'];
+          return (
+            <WordLexiconDetails lexiconData={lexiconData} wordObject={wordObject} translate={translate}
+              isHebrew={!!isHebrew}/>
+          );
+        }
+      }
+      message = `Lexicon Data not found !`;
+    }
+
+    // show basic word data if getLexiconData not defined
+    return <OriginalWordObject key={index} verseObject={wordObject} message={message}/>;
+  }
+
   if (!disableWordPopover) {
     const open = Boolean(anchorEl);
     const id = open ? 'popover' : undefined;
-    const _originalWords = originalWords.map((verseObject, index) => (
-      <OriginalWordObject key={index} verseObject={verseObject} />
-    ));
+    const _originalWords = originalWords.map((verseObject, index) => getOriginalWordObject(index, verseObject));
 
     component = (
       <>
@@ -97,6 +125,8 @@ AlignedWordsObject.propTypes = {
   originalWords: PropTypes.arrayOf(PropTypes.object),
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
+  /** optional function to lookup lexicon data */
+  getLexiconData: PropTypes.func,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -106,5 +136,10 @@ const useStyles = makeStyles((theme) => ({
   paper: { padding: theme.spacing(1) },
   selected: { backgroundColor: 'yellow' },
 }));
+
+function translate(key) {
+  // TODO pass translate function
+  return key;
+}
 
 export default AlignedWordsObject;

@@ -12,7 +12,8 @@ export const Verses = ({
   direction,
   disableWordPopover,
   reference,
-  renderOffscreen
+  renderOffscreen,
+  getLexiconData,
 }) => {
   const classes = useStyles();
   let [_verses, setVerses] = useState();
@@ -43,6 +44,7 @@ export const Verses = ({
           disableWordPopover={disableWordPopover}
           reference={ {...reference, verse: verseKey} }
           renderOffscreen={renderOffscreen}
+          getLexiconData={getLexiconData}
         />
       );
       if (verseKey === 'front') setFront(verse);
@@ -68,12 +70,16 @@ Verses.propTypes = {
   paragraphs: PropTypes.bool,
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.bool,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
+  /** reference for verse (bookId, chapter, verse) */
+  reference: PropTypes.object,
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
+  /** optional function to lookup lexicon data */
+  getLexiconData: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({
