@@ -19,6 +19,8 @@ function MilestoneObject ({
     content,
   },
   disableWordPopover,
+  getLexiconData,
+  translate,
 }) {
   let component;
   switch (tag) {
@@ -28,6 +30,8 @@ function MilestoneObject ({
           key={index}
           verseObject={child}
           disableWordPopover={disableWordPopover}
+          getLexiconData={getLexiconData}
+          translate={translate}
         />
       );
       break;
@@ -48,6 +52,8 @@ function MilestoneObject ({
             verseObject={children[0]}
             originalWords={_originalWords}
             disableWordPopover={disableWordPopover}
+            getLexiconData={getLexiconData}
+            translate={translate}
           />
         );
       } else {
@@ -56,6 +62,8 @@ function MilestoneObject ({
             originalWords={_originalWords}
             children={children}
             disableWordPopover={disableWordPopover}
+            getLexiconData={getLexiconData}
+            translate={translate}
           />
         );
       }
@@ -87,6 +95,10 @@ MilestoneObject.propTypes = {
   originalWords: PropTypes.array,
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
+  /** optional function to lookup lexicon data */
+  getLexiconData: PropTypes.func,
+  /** optional function for localization */
+  translate: PropTypes.func,
 };
 
 export default MilestoneObject;
