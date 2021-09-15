@@ -18,6 +18,7 @@ export const Verse = ({
   renderOffscreen,
   reference,
   getLexiconData,
+  translate,
 }) => {
   const referenceSelectedContext = useContext(ReferenceSelectedContext);
   const update = referenceSelectedContext?.actions?.update;
@@ -56,6 +57,7 @@ export const Verse = ({
             showUnsupported={showUnsupported}
             disableWordPopover={disableWordPopover}
             getLexiconData={getLexiconData}
+            translate={translate}
           />
         </>
       );
@@ -96,6 +98,8 @@ Verse.propTypes = {
   reference: PropTypes.object,
   /** optional function to lookup lexicon data */
   getLexiconData: PropTypes.func,
+  /** optional function for localization */
+  translate: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({

@@ -14,6 +14,7 @@ export const Verses = ({
   reference,
   renderOffscreen,
   getLexiconData,
+  translate,
 }) => {
   const classes = useStyles();
   let [_verses, setVerses] = useState();
@@ -45,6 +46,7 @@ export const Verses = ({
           reference={ {...reference, verse: verseKey} }
           renderOffscreen={renderOffscreen}
           getLexiconData={getLexiconData}
+          translate={translate}
         />
       );
       if (verseKey === 'front') setFront(verse);
@@ -80,6 +82,8 @@ Verses.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** optional function to lookup lexicon data */
   getLexiconData: PropTypes.func,
+  /** optional function for localization */
+  translate: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({

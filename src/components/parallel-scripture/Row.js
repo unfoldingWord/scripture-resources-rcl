@@ -18,6 +18,7 @@ function Row({
   verses,
   renderOffscreen,
   getLexiconData,
+  translate,
 }) {
 
   const classes = useStyles();
@@ -59,6 +60,7 @@ function Row({
               renderOffscreen
               disableWordPopover
               getLexiconData={getLexiconData}
+              translate={translate}
             />) : <span>&nbsp;</span>
             }
           </TableCell>
@@ -89,6 +91,8 @@ Row.propTypes = {
   renderOffscreen: PropTypes.bool,
   /** optional function to lookup lexicon data */
   getLexiconData: PropTypes.func,
+  /** optional function for localization */
+  translate: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({

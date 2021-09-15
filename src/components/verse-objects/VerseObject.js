@@ -18,6 +18,7 @@ function VerseObject({
   showUnsupported,
   disableWordPopover,
   getLexiconData,
+  translate,
 }) {
   const { type } = verseObject;
   let component;
@@ -38,6 +39,7 @@ function VerseObject({
           originalWords={originalWords}
           disableWordPopover={disableWordPopover}
           getLexiconData={getLexiconData}
+          translate={translate}
         />
       );
       break;
@@ -49,6 +51,7 @@ function VerseObject({
             originalWords={[verseObject]}
             disableWordPopover={disableWordPopover}
             getLexiconData={getLexiconData}
+            translate={translate}
           />
         );
       } else {
@@ -105,6 +108,8 @@ VerseObject.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** optional function to lookup lexicon data */
   getLexiconData: PropTypes.func,
+  /** optional function for localization */
+  translate: PropTypes.func,
 };
 
 export default VerseObject;

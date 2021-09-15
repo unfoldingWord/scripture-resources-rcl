@@ -9,6 +9,7 @@ export const VerseObjects = ({
   showUnsupported,
   disableWordPopover,
   getLexiconData,
+  translate,
 }) => {
   const verseObjectComponents = verseObjects.map((verseObject, index) =>
     <VerseObject
@@ -18,6 +19,7 @@ export const VerseObjects = ({
       showUnsupported={showUnsupported}
       disableWordPopover={disableWordPopover}
       getLexiconData={getLexiconData}
+      translate={translate}
     />
   );
 
@@ -38,6 +40,8 @@ VerseObjects.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** optional function to lookup lexicon data */
   getLexiconData: PropTypes.func,
+  /** optional function for localization */
+  translate: PropTypes.func,
 };
 
 export default VerseObjects;

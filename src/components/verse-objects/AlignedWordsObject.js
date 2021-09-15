@@ -15,6 +15,7 @@ function AlignedWordsObject({
   originalWords,
   disableWordPopover,
   getLexiconData,
+  translate,
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -66,8 +67,12 @@ function AlignedWordsObject({
         if (lexiconData) {
           const isHebrew = lexiconData['uhl'];
           return (
-            <WordLexiconDetails lexiconData={lexiconData} wordObject={wordObject} translate={translate}
-              isHebrew={!!isHebrew}/>
+            <WordLexiconDetails
+              lexiconData={lexiconData}
+              wordObject={wordObject}
+              translate={translate || translate_}
+              isHebrew={!!isHebrew}
+            />
           );
         }
       }
@@ -127,6 +132,8 @@ AlignedWordsObject.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** optional function to lookup lexicon data */
   getLexiconData: PropTypes.func,
+  /** optional function for localization */
+  translate: PropTypes.func,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -137,8 +144,8 @@ const useStyles = makeStyles((theme) => ({
   selected: { backgroundColor: 'yellow' },
 }));
 
-function translate(key) {
-  // TODO pass translate function
+// fallback translate function
+function translate_(key) {
   return key;
 }
 
