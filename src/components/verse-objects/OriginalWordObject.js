@@ -5,7 +5,6 @@ import {
 } from '@material-ui/core';
 
 function OriginalWordObject ({
-  message,
   verseObject,
   verseObject: {
     content,
@@ -19,7 +18,6 @@ function OriginalWordObject ({
   const _lemma = lemma ? <><br/><em>lemma:</em> {lemma}</> : '';
   const _strong = strong ? <><br/><em>strong:</em> {strong}</> : '';
   const _morph = morph ? <><br/><em>morph:</em> {morph}</> : '';
-  const _message = message ? <><br/><br/><em>{message}</em></> : '';
 
   return (
     <Typography>
@@ -27,7 +25,6 @@ function OriginalWordObject ({
       {_lemma}
       {_strong}
       {_morph}
-      {_message}
     </Typography>
   );
 };
@@ -44,8 +41,6 @@ OriginalWordObject.propTypes = {
     occurrence: PropTypes.string,
     occurrences: PropTypes.string,
   }).isRequired,
-  // optional text message to add
-  message: PropTypes.string,
 };
 
 export default OriginalWordObject;
