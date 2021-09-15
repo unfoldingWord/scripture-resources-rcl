@@ -1,7 +1,7 @@
 {
   "name": "scripture-resources-rcl",
   "description": "A React Component Library for Rendering Scripture Resources.",
-  "version": "5.2.0-alpha.5",
+  "version": "5.2.0",
   "homepage": "https://scripture-resources-rcl.netlify.com/",
   "repository": {
     "type": "git",
@@ -85,7 +85,8 @@
     "react-styleguidist": "^9.1.14",
     "start-server-and-test": "^1.10.6",
     "style-loader": "^1.0.0",
-    "webpack": "^4.44.2"
+    "webpack": "^4.44.2",
+    "word-aligner": "^1.0.0"
   },
   "peerDependencies": {
     "@material-ui/core": "^4.7.0",
@@ -93,7 +94,8 @@
     "@material-ui/lab": "^4.0.0-alpha.32",
     "@material-ui/styles": "^4.4.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "word-aligner": "^1.0.0"
   },
   "main": "dist/index.js",
   "files": [
