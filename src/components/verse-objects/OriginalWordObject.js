@@ -12,13 +12,13 @@ function OriginalWordObject ({
     strong,
     lemma,
     morph,
-  },
+  }
 }) {
+
   const _text = text || content;
   const _lemma = lemma ? <><br/><em>lemma:</em> {lemma}</> : '';
   const _strong = strong ? <><br/><em>strong:</em> {strong}</> : '';
   const _morph = morph ? <><br/><em>morph:</em> {morph}</> : '';
-
   return (
     <Typography>
       <strong>{_text}</strong>
