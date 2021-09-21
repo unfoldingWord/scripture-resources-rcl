@@ -16807,7 +16807,7 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.3"
 
-tc-ui-toolkit@5.3.3:
+tc-ui-toolkit@^5.3.3:
   version "5.3.3"
   resolved "https://registry.yarnpkg.com/tc-ui-toolkit/-/tc-ui-toolkit-5.3.3.tgz#67d5fd6cb6b165a124c0f1490fad7c963fcaf043"
   integrity sha512-Op9iUXXqyd1gJIimgS80quXDEYa9SGxJDPJSGBmKKx3XahqPMDSZdgyuJM9Lvhi6B6bAeiT4iLED3JZY4fQZoQ==
@@ -16993,9 +16993,9 @@ tmp@^0.0.33:
     os-tmpdir "~1.0.2"
 
 tmpl@1.0.x:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.4.tgz"
-  integrity sha1-I2QN17QtAEM5ERQIIOXPRA5SHdE=
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.5.tgz#8683e0b902bb9c20c4f726e3c0b69f36518c07cc"
+  integrity sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
