@@ -1,6 +1,6 @@
 import path from 'path';
 import YAML from 'js-yaml-parser';
-import { get } from 'gitea-react-toolkit';
+import { decodeBase64ToUtf8, get } from 'gitea-react-toolkit';
 import usfmJS from 'usfm-js';
 
 export const resourcesFromResourceLinks = async ({
@@ -61,13 +61,11 @@ export const resourceFromResourceLink = async ({
     };
     return _resource;
   } catch (e) {
-    console.log(e);
     const errorMessage =
       'scripture-resources-rcl: resources.js: Cannot load resource [' +
       resourceLink +
       ']';
-    console.error(errorMessage);
-    console.error(e);
+    console.error(errorMessage, e);
     return { manifestHttpResponse };
   }
 };
@@ -81,15 +79,44 @@ export const parseResourceLink = ({
     languageId,
     resourceId,
     projectId = reference.projectId || reference.bookId,
-    tag = 'master';
+    tag,
+    ref,
+    matched;
+  ref = ref || tag || 'master'; // fallback to using tag if ref not given
+  const versionHttpMatch = /https?:\/\/.*org\/api\/v1\/repos\/([^/]*)\/([^/]*)\/([^/]*)([/][^/]*)*\?ref=([^/]+)/;
+  const versionLinkMatch = /\/api\/v1\/repos\/([^/]*)\/([^/]*)\/([^/]*)([/][^/]*)*\?ref=([^/]+)/;
 
-  if (resourceLink.includes('src/branch')) {
+  if (matched = resourceLink.match(versionHttpMatch)) {
+    //https://git.door43.org/api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9
+    //https://git.door43.org/api/v1/repos/ru_gl/ru_rlob/contents/manifest.yaml?ref=v0.9
+    [, username, repository, , , ref] = matched;
+    [languageId, resourceId] = repository.split('_');
+  } else if (matched = resourceLink.match(versionLinkMatch)) {
+    // /api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9
+    // /api/v1/repos/ru_gl/ru_rlob/contents/manifest.yaml?ref=v0.9
+    [, username, repository, , , ref] = matched;
+    [languageId, resourceId] = repository.split('_');
+  } else if (matched = resourceLink.match(/https?:\/\/.*org\/([^/]*)\/([^/]*).git/)) {
+    // https://git.door43.org/Door43-Catalog/en_ust.git
+    [, username, repository] = matched;
+    [languageId, resourceId] = repository.split('_');
+  } else if (resourceLink.includes('/u/')) {
+    // https://door43.org/u/unfoldingWord/en_ult/
+    parsedArray = resourceLink.match(/https?:\/\/.*org\/u\/([^/]*)\/([^/]*)/);
+    [, username, repository] = parsedArray;
+    [languageId, resourceId] = repository.split('_');
+  } else if (resourceLink.includes('src/branch') ||
+    resourceLink.includes('src/tag') ||
+    resourceLink.includes('raw/branch') ||
+    resourceLink.includes('raw/tag')){
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master
+    //https://git.door43.org/ru_gl/ru_rlob/src/tag/v1.1.1
+    //https://git.door43.org/ru_gl/ru_rlob/raw/tag/v1.1.1
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master/3jn
     parsedArray = resourceLink.match(
-      /https?:\/\/.*org\/([^/]*)\/([^/]*)\/src\/([^/]*)\/([^/]*)/,
+      /https?:\/\/.*org\/([^/]*)\/([^/]*)\/([^/]*)\/([^/]*)\/([^/]*)/
     );
-    [, username, repository, , tag] = parsedArray;
+    [, username, repository, , , ref] = parsedArray;
     [languageId, resourceId] = repository.split('_');
   } else if (resourceLink.includes('http')) {
     //https://git.door43.org/ru_gl/ru_rlob
@@ -112,26 +139,26 @@ export const parseResourceLink = ({
     //ru_gl/ru/rlob/master/
     //ru_gl/ru/rlob/master/tit
     parsedArray = resourceLink.split('/');
-    [username, languageId, resourceId, tag = 'master', projectId] = parsedArray;
+    [username, languageId, resourceId, ref = 'master', projectId] = parsedArray;
     repository = `${languageId}_${resourceId}`;
   }
 
   if (!projectId || projectId == '' || projectId.length == 0) {
     projectId = reference.projectId || reference.bookId;
   }
-  resourceLink = `${username}/${languageId}/${resourceId}/${tag}/${projectId}`;
+  resourceLink = `${username}/${languageId}/${resourceId}/${ref}/${projectId}`;
 
-  const resource = {
+  return {
     resourceLink,
     username,
     repository,
     languageId,
     resourceId,
-    tag,
+    tag: ref,
+    ref,
     projectId,
     config,
   };
-  return resource;
 };
 
 export const getResourceManifest = async ({
@@ -139,20 +166,24 @@ export const getResourceManifest = async ({
   languageId,
   resourceId,
   tag,
+  ref,
   config,
   fullResponse,
+  doRefFetch,
 }) => {
+  ref = ref || tag; // fallback to using tag if ref not given
   const repository = `${languageId}_${resourceId}`;
   const path = 'manifest.yaml';
   const response = await getFile({
     username,
     repository,
     path,
-    tag,
+    ref,
     config,
     fullResponse,
+    doRefFetch,
   });
-  const yaml = fullResponse ? (response?.data || null) : response;
+  const yaml = getResponseData(response);
   const manifest = yaml ? YAML.safeLoad(yaml) : null;
   return fullResponse ? { manifest, response } : manifest;
 };
@@ -161,10 +192,12 @@ export const getResourceProjectFile = async ({
   username,
   languageId,
   resourceId,
+  ref,
   tag,
   project: { path: projectPath },
   config,
   filePath,
+  doRefFetch,
 }) => {
   const repository = `${languageId}_${resourceId}`;
   projectPath = filePath && filePath.length ? path.join(projectPath, filePath) : projectPath;
@@ -173,8 +206,11 @@ export const getResourceProjectFile = async ({
     username,
     repository,
     path: projectPath,
+    ref,
     tag,
     config,
+    fullResponse: true,
+    doRefFetch,
   });
   return file;
 };
@@ -182,9 +218,7 @@ export const getResourceProjectFile = async ({
 export const projectFromProjects = ({
   reference, projectId, projects,
 }) => {
-  const identifier = reference
-    ? reference?.projectId || reference?.bookId
-    : projectId;
+  const identifier = reference ? (reference?.projectId || reference?.bookId) : projectId;
   const project = projects.filter(
     (project) => project.identifier === identifier,
   )[0];
@@ -208,14 +242,15 @@ export const extendProject = ({
   if (project.path.match(/\.usfm$/)) {
     _project.parseUsfm = async () => {
       const start = performance.now();
-      let json;
+      let results;
 
       if (reference && reference.chapter) {
-        json = await parseChapter({ project: _project, reference });
+        results = await parseChapter({ project: _project, reference });
       } else {
-        json = await parseBook({ project: _project });
+        results = await parseBook({ project: _project });
       }
 
+      const { json, response } = results || {};
       const end = performance.now();
       let identifier =
         reference && reference.bookId
@@ -227,21 +262,38 @@ export const extendProject = ({
           3,
         )}ms`,
       );
-      return json;
+      return { json, response };
     };
   }
   return _project;
 };
 
+/**
+ * get data from http response and decode data in base64 format
+ * @param {object} response - http response
+ * @return {*} - response data decoded
+ */
+export function getResponseData(response) {
+  let data = response?.data;
+
+  if (!data?.errors) { // make sure was not a fetch error
+    data = (data?.encoding === 'base64') ? decodeBase64ToUtf8(data.content) : data;
+    return data;
+  }
+  return null;
+}
+
 export const parseBook = async ({ project }) => {
   console.log('parseBook usfmJS.toJSON');
-  const usfm = (await project.file()) || '';
+  const response = (await project.file()) || '';
+  const usfm = getResponseData(response);
   const json = usfmJS.toJSON(usfm);
-  return json;
+  return { json, response };
 };
 
 export const parseChapter = async ({ project, reference }) => {
-  const usfm = await project.file();
+  const response = await project.file();
+  const usfm = getResponseData(response);
 
   if (usfm) {
     const thisChapter = parseInt(reference.chapter);
@@ -262,7 +314,7 @@ export const parseChapter = async ({ project, reference }) => {
     }
 
     const json = usfmJS.toJSON(chapter);
-    return json;
+    return { json, response };
   }
 };
 
@@ -272,14 +324,17 @@ export const getFile = async ({
   repository,
   path: urlPath = '',
   tag,
+  ref,
   config,
   fullResponse,
 }) => {
   let url;
 
-  if (tag && tag !== 'master' && urlPath) {
+  if (ref) {
+    url = path.join('api/v1/repos', username, repository, 'contents', urlPath) + `?ref=${ref}`;
+  } else if (tag && tag !== 'master') {
     url = path.join(username, repository, 'raw/tag', tag, urlPath);
-  } else {
+  } else { // default to master
     url = path.join(username, repository, 'raw/branch/master', urlPath);
   }
 

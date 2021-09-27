@@ -16,7 +16,9 @@ export const Verse = ({
   disableWordPopover,
   direction,
   renderOffscreen,
-  reference
+  reference,
+  getLexiconData,
+  translate,
 }) => {
   const referenceSelectedContext = useContext(ReferenceSelectedContext);
   const update = referenceSelectedContext?.actions?.update;
@@ -54,6 +56,8 @@ export const Verse = ({
             paragraphs={paragraphs}
             showUnsupported={showUnsupported}
             disableWordPopover={disableWordPopover}
+            getLexiconData={getLexiconData}
+            translate={translate}
           />
         </>
       );
@@ -84,10 +88,18 @@ Verse.propTypes = {
   paragraphs: PropTypes.bool,
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.bool,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
   showUnsupported: PropTypes.bool,
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
+  /** override text direction detection */
+  direction: PropTypes.string,
+  /** reference for verse (bookId, chapter, verse) */
+  reference: PropTypes.object,
+  /** optional function to lookup lexicon data */
+  getLexiconData: PropTypes.func,
+  /** optional function for localization */
+  translate: PropTypes.func,
 };
 
 const useStyles = makeStyles(theme => ({
