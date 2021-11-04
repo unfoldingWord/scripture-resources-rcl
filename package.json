@@ -1,7 +1,7 @@
 {
   "name": "scripture-resources-rcl",
   "description": "A React Component Library for Rendering Scripture Resources.",
-  "version": "5.2.0",
+  "version": "4.1.8",
   "homepage": "https://scripture-resources-rcl.netlify.com/",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
     "start": "styleguidist server",
     "build": "styleguidist build",
     "deploy": "git push",
-    "prepublishOnly": "rm -fr ./dist && babel --config-file ./babel.prod.config.js ./src --out-dir ./dist -s inline",
+    "prepublishOnly": "rm -fr ./dist && babel ./src --out-dir ./dist -s inline",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "lint": "eslint ./src",
@@ -49,8 +49,8 @@
     "usfm-js": "^2.0.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.8",
-    "@babel/core": "^7.14.8",
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
@@ -84,9 +84,7 @@
     "react-styleguidist": "^9.1.14",
     "start-server-and-test": "^1.10.6",
     "style-loader": "^1.0.0",
-    "tc-ui-toolkit": "^5.3.3",
-    "webpack": "^4.44.2",
-    "word-aligner": "^1.0.0"
+    "webpack": "^4.44.2"
   },
   "peerDependencies": {
     "@material-ui/core": "^4.7.0",
@@ -94,9 +92,7 @@
     "@material-ui/lab": "^4.0.0-alpha.32",
     "@material-ui/styles": "^4.4.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "tc-ui-toolkit": "^5.3.3",
-    "word-aligner": "^1.0.0"
+    "react-dom": "^16.13.1"
   },
   "main": "dist/index.js",
   "files": [
@@ -119,8 +115,7 @@
       "!**/vendor/**"
     ],
     "testMatch": [
-      "<rootDir>/src/**/**.spec.js",
-      "<rootDir>/__tests__/**/**.spec.js"
+      "<rootDir>**/**.spec.js"
     ],
     "testPathIgnorePatterns": [
       "node_modules",
