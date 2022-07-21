@@ -1,7 +1,7 @@
 import {
   selectionsFromQuoteAndVerseObjects,
   normalizeString,
-} from '../../core/selections/selections';
+} from "../../core/selections/selections";
 
 // const stringify = (array) => array.map(object => JSON.stringify(object));
 //export const parsify = (array) => array.map(string => JSON.parse(string));
@@ -26,17 +26,19 @@ export const quoteFromVerse = ({ selections, verseObjects }) => {
   verseObjects.forEach((verseObject, index) => {
     const { type, text } = verseObject;
 
-    if (type === 'word') {
+    if (type === "word") {
       const match = _selections.includes(text);
-      const quotedWord = match ? text : '…';
+      const quotedWord = match ? text : "&";
       quotedWords.push(quotedWord);
     }
   });
 
   const quote = quotedWords
-    .join(' ')
-    .replace(/( ?… ?)+/g, ' … ')
-    .replace(/(^[… ]+|[… ]+$)/g, '');
+    .join(" ")
+    .replace(/( ?… ?)+/g, " & ")
+    .replace(/(^[… ]+|[… ]+…)/g, "")
+    .replace(/( ?& ?)+/g, " & ")
+    .replace(/(^[& ]+|[& ]+$)/g, "");
   return quote;
 };
 

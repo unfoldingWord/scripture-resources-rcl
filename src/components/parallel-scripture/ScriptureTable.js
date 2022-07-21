@@ -1,25 +1,25 @@
-import React, { useState, useMemo } from 'react';
-import useEffect from 'use-deep-compare-effect';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useMemo } from "react";
+import useEffect from "use-deep-compare-effect";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   ShortText,
   Subject,
   ViewColumn,
   UnfoldMore,
   UnfoldLess,
-} from '@material-ui/icons';
-import { Table, TableBody } from '@material-ui/core';
-import deepFreeze from 'deep-freeze';
-import { localString } from '../../core/localStrings';
+} from "@material-ui/icons";
+import { Table, TableBody } from "@material-ui/core";
+import deepFreeze from "deep-freeze";
+import { localString } from "../../core/localStrings";
 
-import { Row, Headers, Toolbar, ColumnsMenu } from '..';
-import { SelectionsContextProvider } from '../selections/Selections.context';
+import { Row, Headers, Toolbar, ColumnsMenu } from "..";
+import { SelectionsContextProvider } from "../selections/Selections.context";
 import {
   referenceIdsFromBooks,
   referenceIdFromReference,
   versesFromReferenceIdAndBooks,
-} from './helpers';
+} from "./helpers";
 
 function ScriptureTable({
   title,
@@ -47,6 +47,7 @@ function ScriptureTable({
   if (
     reference &&
     reference.verse &&
+    books &&
     books[0] &&
     books[0].chapters &&
     books[0].chapters[reference.chapter]
@@ -77,13 +78,13 @@ function ScriptureTable({
         <UnfoldMore fontSize="small" />
       ),
       tooltip: open
-        ? localString('CloseScripturePane')
-        : localString('ExpandScripturePane'),
+        ? localString("CloseScripturePane")
+        : localString("ExpandScripturePane"),
       onClick: () => onOpen && onOpen(!open),
     },
     {
       icon: <ViewColumn fontSize="small" />,
-      tooltip: localString('ManageVersions'),
+      tooltip: localString("ManageVersions"),
       onClick: (event) => setColumnsMenuAnchorEl(event.currentTarget),
       menu: (
         <ColumnsMenu
@@ -101,8 +102,8 @@ function ScriptureTable({
         <Subject fontSize="small" />
       ),
       tooltip: filter
-        ? localString('ExpandChapter')
-        : localString('CollapseChapter'),
+        ? localString("ExpandChapter")
+        : localString("CollapseChapter"),
       onClick: () => setFilter(!filter),
     },
   ];
@@ -142,7 +143,7 @@ function ScriptureTable({
 
       if (element) {
         element.scrollIntoView(true);
-        document.getElementById('wrapY').scrollTop -= 30;
+        document.getElementById("wrapY").scrollTop -= 30;
       }
     }
   }, [filter, reference]);
@@ -209,8 +210,8 @@ ScriptureTable.propTypes = {
 const useStyles = makeStyles(() => ({
   root: {},
   wrapY: {
-    overflowY: 'auto',
-    overflowX: 'auto',
+    overflowY: "auto",
+    overflowX: "auto",
   },
   table: {},
   tableBody: {},
