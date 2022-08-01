@@ -1,12 +1,14 @@
-import { useState, useCallback } from "react";
-import PropTypes from "prop-types";
-import deepFreeze from "deep-freeze";
-import useEffect from "use-deep-compare-effect";
-import { getResponseData, resourceFromResourceLink } from "../../core";
-import tsvToJson from "../../core/tsvToJson";
-import { rangeFromVerseAndVerseKeys } from "../parallel-scripture/helpers";
+import { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import deepFreeze from 'deep-freeze';
+import useEffect from 'use-deep-compare-effect';
+import { getResponseData, resourceFromResourceLink } from '../../core';
+import tsvToJson from '../../core/tsvToJson';
+import { rangeFromVerseAndVerseKeys } from '../parallel-scripture/helpers';
 
-function useRsrc({ config, reference, resourceLink, options = {} }) {
+function useRsrc({
+  config, reference, resourceLink, options = {},
+}) {
   const [bibleRef, setBibleRef] = useState({});
   const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
@@ -18,9 +20,7 @@ function useRsrc({ config, reference, resourceLink, options = {} }) {
 
   useEffect(() => {
     const resourceTag = JSON.stringify({
-      resourceLink,
-      reference,
-      config,
+      resourceLink, reference, config,
     });
     setLoadingResource(resourceTag);
     setLoadingContent(null);
@@ -30,25 +30,19 @@ function useRsrc({ config, reference, resourceLink, options = {} }) {
       resourceLink,
       reference,
       config,
-    })
-      .then((_resource) => {
-        let __resource = _resource && deepFreeze(_resource);
-        __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found (is null)
+    }).then((_resource) => {
+      let __resource = _resource && deepFreeze(_resource);
+      __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found (is null)
 
-        if (_resource) {
-          // if successful loading resource, we move to getting content
-          setLoadingContent(resourceTag);
-        }
-        setResource(__resource);
-        setLoadingResource(null); // done
-      })
-      .catch((error) => {
-        console.warn(
-          `useRsrc() - error fetching resource for: ${resourceTag}`,
-          error
-        );
-        setLoadingResource(null); // done
-      });
+      if (_resource) { // if successful loading resource, we move to getting content
+        setLoadingContent(resourceTag);
+      }
+      setResource(__resource);
+      setLoadingResource(null); // done
+    }).catch(error => {
+      console.warn(`useRsrc() - error fetching resource for: ${resourceTag}`, error);
+      setLoadingResource(null); // done
+    });
   }, [resourceLink, reference, config, triggeredReloadCount]);
 
   useEffect(() => {
@@ -56,7 +50,7 @@ function useRsrc({ config, reference, resourceLink, options = {} }) {
       const response = await resource?.project?.file();
       setFetchResponse(response);
       let file = getResponseData(response);
-      const isTSV = resource?.project?.path?.includes(".tsv");
+      const isTSV = resource?.project?.path?.includes('.tsv');
 
       if (isTSV) {
         file = tsvToJson(file);
@@ -77,8 +71,7 @@ function useRsrc({ config, reference, resourceLink, options = {} }) {
       let matchedVerse_;
 
       const parseUsfm = async () => {
-        if (!resource?.project?.parseUsfm) {
-          // if no project found or no usfm
+        if (!resource?.project?.parseUsfm) { // if no project found or no usfm
           setContent(null);
           return null;
         }
@@ -86,9 +79,8 @@ function useRsrc({ config, reference, resourceLink, options = {} }) {
         const { chapter, verse } = reference;
         const { project } = resource;
         const { json: bibleJson, response } = await project.parseUsfm();
+        setContent(bibleJson);
         setFetchResponse(response);
-        // ToDo !!! load some markup text here - from where ?
-        setContent("");
 
         if (chapter) {
           try {
@@ -97,36 +89,29 @@ function useRsrc({ config, reference, resourceLink, options = {} }) {
             if (verse) {
               let verseJson = chapterJson[verse];
 
-              if (!verseJson) {
-                // if verse not found, check verse spans
-                const verseKey = rangeFromVerseAndVerseKeys({
-                  verseKeys: Object.keys(chapterJson),
-                  verseKey: verse,
-                });
+              if (!verseJson) { // if verse not found, check verse spans
+                const verseKey = rangeFromVerseAndVerseKeys({ verseKeys: Object.keys(chapterJson), verseKey:verse });
 
                 if (verseKey) {
                   verseJson = chapterJson[verseKey];
                 }
                 matchedVerse_ = verseKey;
-              } else {
-                // verse found
+              } else { // verse found
                 matchedVerse_ = verse;
               }
               return verseJson;
-            } else {
-              // didn't specify verse, so return whole chapter
+            } else { // didn't specify verse, so return whole chapter
               return chapterJson;
             }
           } catch (e) {
             return null; // return null if chapter missing or error
           }
-        } else {
-          // didn't specify chapter, so return whole book
+        } else { // didn't specify chapter, so return whole book
           return bibleJson;
         }
       };
 
-      parseUsfm().then(function(ref) {
+      parseUsfm().then(function (ref) {
         setBibleRef({ bibleJson: ref, matchedVerse: matchedVerse_ });
         setLoadingContent(null); // done
       });
@@ -136,6 +121,7 @@ function useRsrc({ config, reference, resourceLink, options = {} }) {
   const reloadResource = useCallback(() => {
     setReloadCount(triggeredReloadCount + 1);
   }, [triggeredReloadCount]);
+
   return {
     state: {
       content,
