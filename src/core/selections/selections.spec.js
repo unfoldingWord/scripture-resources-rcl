@@ -2,7 +2,15 @@ import {
   selectionsFromQuoteAndString,
   generateSelection,
   getPrecedingText,
+  normalizeString,
 } from "./selections";
+
+const normalizedText = (arr) => arr.map( obj => {
+  return {
+    ...obj,
+    text: normalizeString(obj.text),
+  }
+})
 
 describe("selectionsFromQuoteAndString", () => {
   it("phrase at beginning", () => {
@@ -18,7 +26,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "ἀρχῇ", occurrence: 1, occurrences: 1 },
       { text: "ἦν", occurrence: 1, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("all occurrences -1", () => {
@@ -34,7 +42,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "καὶ", occurrence: 2, occurrences: 3 },
       { text: "καὶ", occurrence: 3, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("skip -1 with ampersand", () => {
@@ -46,7 +54,7 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("ampersand: repeated word", () => {
@@ -61,7 +69,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "Θεοῦ", occurrence: 1, occurrences: 2 },
       { text: "Θεοῦ", occurrence: 2, occurrences: 2 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("ampersand: repeating ending word preceding first.", () => {
@@ -76,7 +84,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "Θεὸς", occurrence: 1, occurrences: 1 },
       { text: "λόγος", occurrence: 3, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("ampersand: repeating ending word preceding first.", () => {
@@ -91,7 +99,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "Θεὸς", occurrence: 2, occurrences: 2 },
       { text: "λόγος", occurrence: 3, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("ampersand: simple, short", () => {
@@ -107,7 +115,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "λόγος", occurrence: 1, occurrences: 3 },
       { text: "πρὸς", occurrence: 1, occurrences: 1 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("ampersand: first occurrence of repeated quote", () => {
@@ -123,7 +131,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "λόγος", occurrence: 1, occurrences: 3 },
       { text: "Θεόν", occurrence: 1, occurrences: 1 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("ampersand: second occurrence of repeated quote", () => {
@@ -139,7 +147,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "λόγος", occurrence: 2, occurrences: 3 },
       { text: "Θεόν", occurrence: 1, occurrences: 1 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("repeated phrase: first occurrence", () => {
@@ -154,7 +162,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "ὁ", occurrence: 1, occurrences: 3 },
       { text: "λόγος", occurrence: 1, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("repeated phrase: second occurrence", () => {
@@ -169,7 +177,7 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "ὁ", occurrence: 2, occurrences: 3 },
       { text: "λόγος", occurrence: 2, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("repeated phrase: last occurrence", () => {
@@ -184,17 +192,19 @@ describe("selectionsFromQuoteAndString", () => {
       { text: "ὁ", occurrence: 3, occurrences: 3 },
       { text: "λόγος", occurrence: 3, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    expect(output).toStrictEqual(normalizedText(expected));
   });
 });
 
 describe("generateSelection", () => {
   it("should only contain one occurrence for the given text", () => {
-    const precedingText =
-      "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν";
-    const entireText =
-      "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν τοῦ σωτῆρος ἡμῶν θεοῦ";
-    const selectedText = `τοῦ`;
+    const precedingText = normalizeString(
+      "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν"
+    );
+    const entireText = normalizeString(
+      "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν τοῦ σωτῆρος ἡμῶν θεοῦ"
+    );
+    const selectedText = normalizeString(`τοῦ`);
     const expectedSelection = {
       text: selectedText,
       occurrence: 1,
@@ -209,10 +219,11 @@ describe("generateSelection", () => {
   });
 
   it("should return second occurrence for the given text", () => {
-    const selectedText = "ἡ";
-    const precedingText = "ὅτε δὲ ἡ χρηστότης καὶ ";
-    const entireText =
-      "ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,";
+    const selectedText = normalizeString("ἡ");
+    const precedingText = normalizeString("ὅτε δὲ ἡ χρηστότης καὶ ");
+    const entireText = normalizeString(
+      "ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,"
+    );
     const expectedSelection = {
       text: selectedText,
       occurrence: 2,
