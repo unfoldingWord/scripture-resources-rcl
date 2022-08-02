@@ -1,5 +1,5 @@
 import {
-  selectionsFromQuoteAndString, generateSelection, getPrecedingText
+  selectionsFromQuoteAndString, generateSelection, getPrecedingText, normalizeString,
 } from './selections';
 
 describe('selectionsFromQuoteAndString', () => {
@@ -15,7 +15,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "ἀρχῇ", occurrence: 1, occurrences: 1 },
       { text: "ἦν", occurrence: 1, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('all occurrences -1', () => {
@@ -30,7 +30,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "καὶ", occurrence: 2, occurrences: 3 },
       { text: "καὶ", occurrence: 3, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('skip -1 with ellipsis', () => {
@@ -41,7 +41,7 @@ describe('selectionsFromQuoteAndString', () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('ellipsis: repeated word', () => {
@@ -55,7 +55,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "Θεοῦ", occurrence: 1, occurrences: 2 },
       { text: "Θεοῦ", occurrence: 2, occurrences: 2 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('ellipsis: repeating ending word preceding first.', () => {
@@ -69,7 +69,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "Θεὸς", occurrence: 1, occurrences: 1 },
       { text: "λόγος", occurrence: 3, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('ellipsis: repeating ending word preceding first.', () => {
@@ -83,7 +83,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "Θεὸς", occurrence: 2, occurrences: 2 },
       { text: "λόγος", occurrence: 3, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('ellipsis: simple, short', () => {
@@ -98,7 +98,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "λόγος", occurrence: 1, occurrences: 3 },
       { text: "πρὸς", occurrence: 1, occurrences: 1 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('ellipsis: first occurrence of repeated quote', () => {
@@ -113,7 +113,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "λόγος", occurrence: 1, occurrences: 3 },
       { text: "Θεόν", occurrence: 1, occurrences: 1 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('ellipsis: second occurrence of repeated quote', () => {
@@ -128,7 +128,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "λόγος", occurrence: 2, occurrences: 3 },
       { text: "Θεόν", occurrence: 1, occurrences: 1 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('repeated phrase: first occurrence', () => {
@@ -142,7 +142,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "ὁ", occurrence: 1, occurrences: 3 },
       { text: "λόγος", occurrence: 1, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('repeated phrase: second occurrence', () => {
@@ -156,7 +156,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "ὁ", occurrence: 2, occurrences: 3 },
       { text: "λόγος", occurrence: 2, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 
   it('repeated phrase: last occurrence', () => {
@@ -170,7 +170,7 @@ describe('selectionsFromQuoteAndString', () => {
       { text: "ὁ", occurrence: 3, occurrences: 3 },
       { text: "λόγος", occurrence: 3, occurrences: 3 },
     ];
-    expect(output).toStrictEqual(expected);
+    verifyExpectedOutput(expected, output);
   });
 });
 
@@ -178,7 +178,7 @@ describe('generateSelection', () => {
   it('should only contain one occurrence for the given text', () => {
     const precedingText = "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν";
     const entireText = "ἐφανέρωσεν δὲ καιροῖς ἰδίοις τὸν λόγον αὐτοῦ ἐν κηρύγματι ὃ ἐπιστεύθην ἐγὼ κατ’ ἐπιταγὴν τοῦ σωτῆρος ἡμῶν θεοῦ";
-    const selectedText = `τοῦ`;
+    const selectedText = normalizeString(`τοῦ`);
     const expectedSelection = {
       text: selectedText,
       occurrence: 1,
@@ -189,7 +189,7 @@ describe('generateSelection', () => {
   })
 
   it('should return second occurrence for the given text', () => {
-    const selectedText = "ἡ";
+    const selectedText = normalizeString("ἡ");
     const precedingText = "ὅτε δὲ ἡ χρηστότης καὶ ";
     const entireText = "ὅτε δὲ ἡ χρηστότης καὶ ἡ φιλανθρωπία ἐπεφάνη τοῦ Σωτῆρος ἡμῶν, Θεοῦ,";
     const expectedSelection = {
@@ -221,3 +221,15 @@ describe('getPrecedingText', () => {
     expect(precedingText).toBe('');
   })
 })
+
+// helpers
+
+function verifyExpectedOutput(expected, output) {
+  const expectedNomalized = expected.map(word => {
+    return {
+      ...word,
+      text: normalizeString(word.text),
+    };
+  });
+  expect(output).toStrictEqual(expectedNomalized);
+}

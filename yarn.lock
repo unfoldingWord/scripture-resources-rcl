@@ -16468,10 +16468,10 @@ string-punctuation-tokenizer@2.0.0:
   dependencies:
     xregexp "^4.1.1"
 
-string-punctuation-tokenizer@2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/string-punctuation-tokenizer/-/string-punctuation-tokenizer-2.1.2.tgz"
-  integrity sha512-jFVSLxWca5xIjaoi8vTSipXXK0Ng3+BdbfAtjCgqS4ZxHTGLYvKrGaARpATtBHIAOEMXhwMaBKLrypnyQ6cR6A==
+string-punctuation-tokenizer@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/string-punctuation-tokenizer/-/string-punctuation-tokenizer-2.2.0.tgz#058465f994e29bfb93eaf4a9a2503d3ab6a50a18"
+  integrity sha512-QOTErphviG7wtzhM6A0tVZugwPtfHFNySboO0SEkruFwW/d2HHalSHWri4230HG/F6egvJx76kZdtYY359+rrA==
   dependencies:
     xregexp "^4.1.1"
 
