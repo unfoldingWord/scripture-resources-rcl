@@ -2,11 +2,12 @@ import React from "react";
 import { TextField } from "@material-ui/core";
 import {
   ParallelScripture,
-  ResourcesContext,
   ResourcesContextProvider,
 } from "scripture-resources-rcl";
-import useEffect from "use-deep-compare-effect";
 
+// To do: Implement a new strategy for how to test functional components 
+// - probably by using React Testing Library instead of Enzyme
+/*
 function Component() {
   const [bookId, setBookId] = React.useState("2jn");
   const [chapter, setChapter] = React.useState(1);
@@ -115,8 +116,8 @@ const [resources, setResources] = React.useState([]);
 >
   <Component />
 </ResourcesContextProvider>;
-
-describe("ParallelScripture: resourceFromResourceLink: parse and download resource", () => {
+*/
+describe.skip("ParallelScripture: resourceFromResourceLink: parse and download resource", () => {
   it("should be RLOB 2jn", async () => {
     const resourceLink = `https://git.door43.org/ru_gl/ru_rlob`;
     let content = await resourceFromResourceLink({

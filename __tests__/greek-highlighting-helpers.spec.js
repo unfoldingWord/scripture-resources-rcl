@@ -1,8 +1,15 @@
-import { generateSelection, selectionsFromQuoteAndVerseObjects, getPrecedingText } from "../src/core/selections/selections";
+import { selectionsFromQuoteAndVerseObjects, normalizeString } from "../src/core/selections/selections";
 import path from 'path';
 import usfmJS from 'usfm-js';
 import ugnt_tit from './fixtures/books/ugnt_tit.js';
 import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
+  
+const normalizedText = (arr) => arr.map( obj => {
+return {
+    ...obj,
+    text: normalizeString(obj.text),
+}
+})
 
 describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
     it('should have all words highlighted Titus 1:1', () => {
@@ -95,5 +102,5 @@ function generateTest(fileName) {
     const { quote, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
     const { verseObjects } = books[bookName].chapters[chapter][verse];
     const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
-    expect(selections).toMatchObject(expected);
+    expect(selections).toMatchObject(normalizedText(expected));
 }
