@@ -8,8 +8,15 @@ import useEffect from 'use-deep-compare-effect';
 const usfmJSON = usfmJS.toJSON(usfm);
 const {chapters} = usfmJSON;
 const chapterKey = '1';
-const verses = chapters[chapterKey];
+const testMoreVerses = chapters["2"];
+const adaptedKeysObj = {}
+Object.keys(testMoreVerses).forEach( key => {
+  const newKey = "2:"+key
+  adaptedKeysObj[newKey] = testMoreVerses[key]
+})
+const verses = {...chapters[chapterKey], ...adaptedKeysObj};
 
+console.log(verses)
 const [referenceSelected, setReferenceSelected] = React.useState({});
 
 useEffect(
