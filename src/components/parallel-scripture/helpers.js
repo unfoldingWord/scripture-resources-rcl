@@ -40,9 +40,8 @@ export const rangeFromVerseAndVerseKeys = (({ verseKeys, verseKey }) => {
 export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
   const versesData = books.map((book, index) => {
     const reference = referenceFromReferenceId(referenceId);
-    //if (book && book.chapters && book.chapters.length > reference.chapter) {
-    if (book) {
 
+    if (book && book.chapters) {
       const chapterData = book.chapters[reference.chapter];
       let verseData = chapterData && chapterData[reference.verse];
       let range;

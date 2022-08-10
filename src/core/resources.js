@@ -262,7 +262,7 @@ export const extendProject = ({
           3,
         )}ms`,
       );
-      return { json, response };
+      return json;
     };
   }
   return _project;

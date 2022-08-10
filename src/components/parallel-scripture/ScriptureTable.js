@@ -47,6 +47,7 @@ function ScriptureTable({
   if (
     reference &&
     reference.verse &&
+    books &&
     books[0] &&
     books[0].chapters &&
     books[0].chapters[reference.chapter]
@@ -54,6 +55,10 @@ function ScriptureTable({
     const chapter = books[0].chapters[reference.chapter];
     const verse = chapter[reference.verse];
     verseObjects = verse ? verse.verseObjects : [];
+    console.log(verseObjects);
+    console.log(reference);
+  } else {
+    console.log('no vrese objects');
   }
 
   useEffect(() => {
@@ -110,7 +115,7 @@ function ScriptureTable({
   let _referenceIds = referenceIds;
 
   if (filter && reference.chapter && reference.verse) {
-    _referenceIds = [referenceIdFromReference(reference)];
+    _referenceIds = ['1:1','1:2'];//[referenceIdFromReference(reference)];
   }
 
   const rows = useMemo(

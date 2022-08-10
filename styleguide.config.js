@@ -58,7 +58,10 @@ let sections = [
     name: 'Parallel Scripture ',
     content: 'src/components/parallel-scripture/_readme.md',
     components: () => {
-      const componentNames = ['ParallelScripture', 'ScriptureTable'];
+      const componentNames = [
+        'ParallelScripture',
+        'ScriptureTable'
+      ];
       return componentNames.map((componentName) => {
         return path.resolve(
           __dirname,
