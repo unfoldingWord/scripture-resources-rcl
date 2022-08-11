@@ -30,7 +30,15 @@ function Component() {
       getBibleJson: true,
     },
   });
-  return <BlockEditable markdown={content || ""} />;
+// The BlockEditable needs a string - not json content
+  // so we just stringify the first characters here
+  // - as a stop-gap measure
+  return (
+    <BlockEditable
+      markdown={(content && JSON.stringify(content).slice(0, 1000)) || ""}
+    />
+    //  return <BlockEditable markdown={content || ""} />;
+  );
 }
 
 <Component />;
