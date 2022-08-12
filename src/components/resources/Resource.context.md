@@ -50,8 +50,8 @@ A custom hook to retrieve resources from DCS through a structured query. The res
 
 ```js
 import React from "react";
-import {Verses} from "scripture-resources-rcl";
-import useBcvQuery from '../resources/useBcvQuery.js';
+import {Verses} from "../verses/Verses.js";
+import useBcvQuery from './useBcvQuery.js';
 
 const query = {
   title: "unfoldingWord® Simplified Text",

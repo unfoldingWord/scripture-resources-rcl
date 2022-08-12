@@ -1,5 +1,5 @@
 ```js
-import {Verses} from "scripture-resources-rcl";
+import {Verses} from "./Verses.js";
 import ReferenceSelectedContextProvider from '../reference/ReferenceSelectedContext';
 import usfmJS from 'usfm-js';
 import usfm from '../mocks/hi_tit.usfm.js';
