@@ -87,8 +87,9 @@ const arrayToObject = (array, keyField) =>
   }, {});
 
 function Component() {
-  const result3 = useBcvQuery(query,options);
-  const bookResult = result3.state && result3.state.resultTree && result3.state.resultTree.book;
+  const result = useBcvQuery(query,options);
+  const bookResult = 
+          result.state && result.state.resultTree && result.state.resultTree.book;
 
   // transform tree result to an array
   const vObjArray = [];
@@ -108,7 +109,9 @@ function Component() {
   const verses = arrayToObject(vObjArray,"id");
   return (
     <>
-     {(verses && (Object.keys(verses).length>0)) && <Verses verses={verses} paragraphs showUnsupported />}
+     {(verses 
+        && (Object.keys(verses).length>0)) 
+        && <Verses verses={verses} paragraphs showUnsupported />}
     </>
   );
 }
