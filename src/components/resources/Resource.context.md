@@ -91,7 +91,7 @@ function Component() {
   const bookResult = 
           result.state && result.state.resultTree && result.state.resultTree.book;
 
-  // transform tree result to an array
+  // transform tree result to flat array
   const vObjArray = [];
   if (bookResult) {
     Object.entries(bookResult).forEach(([bookKey, { ch }]) => {
