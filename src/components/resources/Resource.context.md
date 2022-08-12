@@ -1,8 +1,8 @@
 ## useRsrc
 
-A custom hook to retrieve resources from DCS. Unlike useResource it allows to retrieve files that are in a subfolder trhough the filePath value.
+A custom hook to retrieve resources from DCS. Unlike useResource it allows to retrieve files that are in a subfolder through the filePath value.
 
-```jsx
+```js
 import React, { useEffect, useState } from "react";
 import { BlockEditable } from "markdown-translatable";
 import useRsrc from "./useRsrc";
@@ -38,6 +38,78 @@ function Component() {
       markdown={(content && JSON.stringify(content).slice(0, 1000)) || ""}
     />
     //  return <BlockEditable markdown={content || ""} />;
+  );
+}
+
+<Component />;
+```
+
+## useBcvQuery
+
+A custom hook to retrieve resources from DCS through a structured query. The result is in a tree structure, which can be transformed to any other format as needed.
+
+```js
+import React from "react";
+import {Verses} from "scripture-resources-rcl";
+import useBcvQuery from '../resources/useBcvQuery.js';
+
+const query = {
+  title: "unfoldingWord® Simplified Text",
+  version: "38",
+  resourceLink: "unfoldingWord/en/ust/master",
+  server: "https://git.door43.org",
+  owner: "unfoldingWord",
+  languageId: "en",
+  projectId: "ust",
+  branch: "master",
+  book: {
+    tit: {
+      ch: {
+        2: { v: { 15: { verseObjects: [] } } },
+        3: { v: { 1: { verseObjects: [] } } },
+      },
+    },
+  },
+}
+
+const options = {
+  cache: {
+    maxAge: 1 * 1 * 1 * 60 * 1000, // override cache to 1 minute
+  },
+}
+
+const arrayToObject = (array, keyField) =>
+  array.reduce((obj, item) => {
+    let iCopy = Object.assign({}, item);
+    delete iCopy[keyField];
+    obj[item[keyField]] = iCopy;
+    return obj;
+  }, {});
+
+function Component() {
+  const result3 = useBcvQuery(query,options);
+  const bookResult = result3.state && result3.state.resultTree && result3.state.resultTree.book;
+
+  // transform tree result to an array
+  const vObjArray = [];
+  if (bookResult) {
+    Object.entries(bookResult).forEach(([bookKey, { ch }]) => {
+      Object.entries(ch).forEach(([chNum, { v }]) => {
+        Object.entries(v).forEach(([vNum, { verseObjects }]) => {
+          if (verseObjects && verseObjects.length>0) {
+            vObjArray.push({ id: `${chNum}:${vNum}`, verseObjects });
+          }
+        })
+      })
+    })
+  }
+
+  // transform array to single non-hierarchical object
+  const verses = arrayToObject(vObjArray,"id");
+  return (
+    <>
+     {(verses && (Object.keys(verses).length>0)) && <Verses verses={verses} paragraphs showUnsupported />}
+    </>
   );
 }
 

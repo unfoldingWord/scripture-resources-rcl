@@ -24,10 +24,13 @@ export const Verses = ({
 
   useEffect(() => {
     if (!direction) {
-      const verseText = verses['1'].verseObjects.map(verseObject => verseObject.text).join('');
-      const hebrew = isHebrew(verseText);
-      if (hebrew) setDir('rtl');
-      else setDir('auto');
+      const verseKeys = Object.keys(verses);
+
+      if (verseKeys.length>0) {
+        const verseText = verses[verseKeys[0]].verseObjects.map(verseObject => verseObject.text).join('');
+        const hebrew = isHebrew(verseText);
+        setDir((hebrew) ? 'rtl' : 'auto');
+      }
     }
   }, [verses, direction]);
 
