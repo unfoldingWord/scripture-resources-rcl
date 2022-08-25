@@ -71,7 +71,8 @@ export const Verse = ({
     /** WARN: ReferenceSelectedContext is not part of useCallback dependencies! */
   }, [update]);
 
-  const style = {};
+  const style = direction === 'rtl' ? { fontSize: `1.7em` } : { fontSize: `1em` }
+  //const style = {};
   if (paragraphs) style.display = 'inline';
 
   return (

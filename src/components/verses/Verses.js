@@ -47,6 +47,7 @@ export const Verses = ({
           renderOffscreen={renderOffscreen}
           getLexiconData={getLexiconData}
           translate={translate}
+          direction={direction}
         />
       );
       if (verseKey === 'front') setFront(verse);
