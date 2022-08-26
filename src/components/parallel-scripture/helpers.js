@@ -4,7 +4,7 @@ export const referenceIdsFromBooks = ({ books }) => {
   const referenceIds = new Set([]);
 
   books.forEach((book) => {
-    if (book) {
+    if (book && book.chapters) {
       Object.keys(book.chapters).forEach((chapterKey) => {
         const chapter = book.chapters[chapterKey];
 
@@ -41,7 +41,7 @@ export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
   const versesData = books.map((book, index) => {
     const reference = referenceFromReferenceId(referenceId);
     //if (book && book.chapters && book.chapters.length > reference.chapter) {
-    if (book) {
+    if (book && book.chapters && book.chapters.length > reference.chapter) {
 
       const chapterData = book.chapters[reference.chapter];
       let verseData = chapterData && chapterData[reference.verse];
