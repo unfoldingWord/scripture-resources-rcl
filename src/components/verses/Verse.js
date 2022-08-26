@@ -84,7 +84,7 @@ export const Verse = ({
   const style = _dir === 'rtl' ? { fontSize: `1.7em` } : { fontSize: `1em` }
   //const style = {};
   if (paragraphs) style.display = 'inline';
-  console.log("direction, style=", direction, style);
+  // console.log("direction, style=", direction, style);
   return (
     <div ref={verseRef} className={classes.verse} style={style} dir={_dir} onClick={() => handleClick(reference)}>
       {verse}
