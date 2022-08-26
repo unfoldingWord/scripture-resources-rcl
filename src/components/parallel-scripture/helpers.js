@@ -77,8 +77,8 @@ export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
       } else {
         return;
       }
-      console.log("index, book, and reference=", index, book, reference);
-      console.log("chapterData=", _chapters[reference.chapter]);
+      // console.log("index, book, and reference=", index, book, reference);
+      // console.log("chapterData=", _chapters[reference.chapter]);
       const chapterData = _chapters[reference.chapter];
       let verseData = chapterData && chapterData[reference.verse];
       let range;
