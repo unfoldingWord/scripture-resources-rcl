@@ -1,12 +1,12 @@
-import { useState, useCallback } from "react";
-import PropTypes from "prop-types";
-import deepFreeze from "deep-freeze";
-import useEffect from "use-deep-compare-effect";
-import { resourceFromResourceLink } from "../../core";
+import { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import deepFreeze from 'deep-freeze';
+import useEffect from 'use-deep-compare-effect';
+import { resourceFromResourceLink } from '../../core';
 
 const bcvErrorCodes = Object.freeze({
-  NoBook: Symbol("no book specified"),
-  TooManyBooks: Symbol("too many books specified"),
+  NoBook: Symbol('no book specified'),
+  TooManyBooks: Symbol('too many books specified'),
 });
 
 const arrayToObject = (array, keyField) =>
@@ -48,6 +48,7 @@ const useBcvQuery = (query, options = {}) => {
   const [resultTree, setResultTree] = useState({ ...query });
   const [errorCode, setErrorCode] = useState(undefined);
   const [success, setSuccess] = useState(false);
+  const [content, setContent] = useState(null);
   const [loadingResource, setLoadingResource] = useState(null); // flag for when loading resource
   const [loadingContent, setLoadingContent] = useState(null); // flag for when loading content from resource
   const [fetchResponse, setFetchResponse] = useState(null);
@@ -122,25 +123,24 @@ const useBcvQuery = (query, options = {}) => {
 
       const { project } = resource;
       const { json: bibleJson, response } = await project.parseUsfm();
+      setContent(bibleJson); // Deprecated - use resultTree instead
       setFetchResponse(response);
       const _chObj = Object.keys(curBook.ch).map(chapter => {
-        const _vObj = Object.keys(curBook.ch[chapter].v).map(verse => {
-          return {
-            verse,
-            ...curBook.ch[chapter].v[verse],
-            ...bibleJson.chapters[chapter][verse],
-          };
-        });
+        const _vObj = Object.keys(curBook.ch[chapter].v).map(verse => ({
+          verse,
+          ...curBook.ch[chapter].v[verse],
+          ...bibleJson.chapters[chapter][verse],
+        }));
         return {
-          chapter, 
-          v: arrayToObject(_vObj,"verse"),
+          chapter,
+          v: arrayToObject(_vObj,'verse'),
         };
       });
 
-      return({
+      return ({
         ...query,
         ...resource,
-        book: { [bookId]: { ch: arrayToObject(_chObj,"chapter") } },
+        book: { [bookId]: { ch: arrayToObject(_chObj,'chapter') } },
       });
     };
 
@@ -161,6 +161,8 @@ const useBcvQuery = (query, options = {}) => {
       loadingContent,
       success,
       resultTree,
+      content, // Deprecated field - use resultTree instead
+      resource, // Deprecated field - use resultTree instead
       errorCode,
       fetchResponse,
     },
@@ -178,9 +180,9 @@ useBcvQuery.propTypes = {
       book: PropTypes.objectOf(
         PropTypes.shape({
           ch: PropTypes.objectOf(
-            PropTypes.shape({
-              v: PropTypes.objectOf(PropTypes.shape({})),
-            }),
+            PropTypes.shape(
+              { v: PropTypes.objectOf(PropTypes.shape({})) },
+            ),
           ),
         }),
       ),
@@ -189,9 +191,9 @@ useBcvQuery.propTypes = {
 };
 
 /* optional (in options)
-// the overriding cache settings 
+// the overriding cache settings
 cache: PropTypes.shape({
-  // cache age in ms 
+  // cache age in ms
   maxAge: PropTypes.number,
 }),
 */
