@@ -74,7 +74,6 @@ export const Verse = ({
   }, [update]);
 
   const verseText = verseObjects.map(verseObject => verseObject.text).join('');
-  console.log("verseText", verseText);
   const hebrew = isHebrew(verseText);
   let _dir = direction || 'auto';
   if (hebrew) {
@@ -84,7 +83,7 @@ export const Verse = ({
   const style = _dir === 'rtl' ? { fontSize: `1.7em` } : { fontSize: `1em` }
   //const style = {};
   if (paragraphs) style.display = 'inline';
-  // console.log("direction, style=", direction, style);
+
   return (
     <div ref={verseRef} className={classes.verse} style={style} dir={_dir} onClick={() => handleClick(reference)}>
       {verse}
