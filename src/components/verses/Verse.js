@@ -8,6 +8,8 @@ import {VerseObjects} from '../verse-objects';
 import { useHandleCopy } from './helpers';
 import { ReferenceSelectedContext } from '../reference/ReferenceSelectedContext';
 
+import {isHebrew} from '../../core';
+
 export const Verse = ({
   verseKey,
   verseObjects,
@@ -71,11 +73,19 @@ export const Verse = ({
     /** WARN: ReferenceSelectedContext is not part of useCallback dependencies! */
   }, [update]);
 
-  const style = {};
+  const verseText = verseObjects.map(verseObject => verseObject.text).join('');
+  const hebrew = isHebrew(verseText);
+  let _dir = direction || 'auto';
+  if (hebrew) {
+    _dir = 'rtl';
+  }
+
+  const style = _dir === 'rtl' ? { fontSize: `1.7em` } : { fontSize: `1em` }
+  //const style = {};
   if (paragraphs) style.display = 'inline';
 
   return (
-    <div ref={verseRef} className={classes.verse} style={style} dir={direction} onClick={() => handleClick(reference)}>
+    <div ref={verseRef} className={classes.verse} style={style} dir={_dir} onClick={() => handleClick(reference)}>
       {verse}
     </div>
   );
