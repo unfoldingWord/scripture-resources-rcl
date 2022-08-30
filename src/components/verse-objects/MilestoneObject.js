@@ -89,8 +89,8 @@ MilestoneObject.propTypes = {
     strong: PropTypes.string,
     lemma: PropTypes.string,
     morph: PropTypes.string,
-    occurrence: PropTypes.string,
-    occurrences: PropTypes.string,
+    occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    occurrences: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }).isRequired,
   originalWords: PropTypes.array,
   /** disable popovers for aligned and original language words */

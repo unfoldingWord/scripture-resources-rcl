@@ -41,7 +41,7 @@ SelectionsContextProvider.propTypes = {
   /** the verses where quote may be found */
   verseObjects: PropTypes.array,
   /** if quote occurs mulitple times, this is the occurence of the one selected */
-  occurrence: PropTypes.number,
+  occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   /** action taken when quote is provided */
   onQuote: PropTypes.func,
 };

@@ -68,6 +68,7 @@ function AlignedWordsObject({
           const isHebrew = lexiconData['uhl'];
           return (
             <WordLexiconDetails
+              key={index}
               lexiconData={lexiconData}
               wordObject={wordObject}
               translate={translate || translate_}

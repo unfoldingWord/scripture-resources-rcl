@@ -17,7 +17,6 @@ const arrayToObject = (array, keyField) =>
     return obj;
   }, {});
 
-
 // the query parameter is a tree with four levels: root, book, ch (chapter) and v (verse)
 
 /*
@@ -42,7 +41,7 @@ cexport const queryTit2_15_3_1 = {
   },
 */
 
-const useBcvQuery = (query, options = {}) => {
+function useBcvQuery(query, options = {}) {
   const [bookId, setBookId] = useState(undefined);
   const [resource, setResource] = useState({});
   const [resultTree, setResultTree] = useState({ ...query });
@@ -58,7 +57,7 @@ const useBcvQuery = (query, options = {}) => {
   const maxBooksAllowed = 1; // To do later: Multiple books is not yet implemented
 
   useEffect(() => {
-    const bookLevel = query.book;
+    const bookLevel = query && query.book;
 
     if (!bookLevel) {
       setErrorCode(bcvErrorCodes.NoBook);
@@ -106,7 +105,7 @@ const useBcvQuery = (query, options = {}) => {
           .catch((error) => {
             console.warn(
               `useBcvQuery() - error fetching resource for: ${resourceTag}`,
-              error,
+              error
             );
             setLoadingResource(null); // done
           });
@@ -133,15 +132,15 @@ const useBcvQuery = (query, options = {}) => {
         }));
         return {
           chapter,
-          v: arrayToObject(_vObj,'verse'),
+          v: arrayToObject(_vObj, 'verse'),
         };
       });
 
-      return ({
+      return {
         ...query,
         ...resource,
-        book: { [bookId]: { ch: arrayToObject(_chObj,'chapter') } },
-      });
+        book: { [bookId]: { ch: arrayToObject(_chObj, 'chapter') } },
+      };
     };
 
     insertParsedUsfmInResult().then(function (res) {
@@ -161,14 +160,14 @@ const useBcvQuery = (query, options = {}) => {
       loadingContent,
       success,
       resultTree,
-      content, // Deprecated field - use resultTree instead
-      resource, // Deprecated field - use resultTree instead
+      content,
+      resource,
       errorCode,
       fetchResponse,
     },
     actions: { reloadResource },
   };
-};
+}
 
 useBcvQuery.propTypes = {
   props: PropTypes.shape({
@@ -180,12 +179,17 @@ useBcvQuery.propTypes = {
       book: PropTypes.objectOf(
         PropTypes.shape({
           ch: PropTypes.objectOf(
-            PropTypes.shape(
-              { v: PropTypes.objectOf(PropTypes.shape({})) },
-            ),
+            PropTypes.shape({ v: PropTypes.objectOf(PropTypes.shape({})) }),
           ),
         }),
       ),
+    }),
+    options: PropTypes.shape({
+      /** the overriding cache settings */
+      cache: PropTypes.shape({
+        /** cache age in ms */
+        maxAge: PropTypes.number,
+      }),
     }),
   }),
 };
