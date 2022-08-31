@@ -1,7 +1,7 @@
-import isEqual from "deep-equal";
-import _ from "lodash";
-import { tokenize } from "string-punctuation-tokenizer";
-import { verseObjectsToString } from "./verseObjects";
+import isEqual from 'deep-equal';
+import _ from 'lodash';
+import { tokenize } from 'string-punctuation-tokenizer';
+import { verseObjectsToString } from './verseObjects';
 
 export const selectionsFromQuoteAndVerseObjects = ({
   quote,
@@ -35,7 +35,7 @@ export const selectionsFromQuoteAndString = ({
 }) => {
   let string = normalizeString(rawString);
   // Calculate hasAmpersand before normalizing quote.
-  let subquotes = quote.split("&").map(normalizeString);
+  let subquotes = quote.split('&').map(normalizeString);
   let selections = [];
   const hasAmpersand = subquotes.length > 1;
   quote = normalizeString(quote);
@@ -50,7 +50,7 @@ export const selectionsFromQuoteAndString = ({
   }
 
   let precedingOccurrences = 0;
-  let precedingText = "";
+  let precedingText = '';
   subquotes.forEach((subquote, index) => {
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
     const currentOccurrence = getCurrentOccurrenceFromPrecedingText(
@@ -107,17 +107,17 @@ export const getCurrentOccurrenceFromPrecedingText = (
  * @param {*} occurrence - The occurrence of the quote to search for
  */
 export const getStringFromAmpersand = (_string, quote, occurrence) => {
-  const [lower, upper] = quote.split("&");
+  const [lower, upper] = quote.split('&');
   const reg = new RegExp(
-    "(?:.*?" +
+    '(?:.*?' +
       lower +
-      ".*" +
+      '.*' +
       upper +
       `){${occurrence - 1}}.*?(` +
       lower +
-      ".*" +
+      '.*' +
       upper +
-      ").*"
+      ').*'
   );
   const string = _string.slice(0);
   const matches = string.match(reg) || [];
@@ -153,14 +153,14 @@ export const subSelectionsFromSubquote = ({
 }) => {
   //Splitting by tokenization here causes issues because we are still
   //comparing those characters at this level
-  const selectedTokens = subquote.split(" ");
+  const selectedTokens = subquote.split(' ');
   const subSelections = [];
   selectedTokens.forEach((_selectedText) => {
     //Adding the preceding text from the subSelections to ensure that
     //Repeated words are accounted for
     const precedingTextInSubselections = subSelections
       .map(({ text }) => text)
-      .join(" ");
+      .join(' ');
     let subSelection = generateSelection({
       selectedText: _selectedText,
       precedingText: _precedingText + precedingTextInSubselections,
@@ -400,7 +400,7 @@ export const optimizeSelections = (string, selections) => {
   let optimizedSelections; // return
   // filter out the random clicks from the UI
   selections = selections.filter((selection) => {
-    const blankSelection = { text: "", occurrence: 1, occurrences: 0 };
+    const blankSelection = { text: '', occurrence: 1, occurrences: 0 };
     return !isEqual(selection, blankSelection);
   });
   let ranges = selectionsToRanges(string, selections); // get char ranges of each selection
@@ -454,15 +454,15 @@ export const addSelectionToSelections = (selection, selections, string) => {
 export const getQuoteOccurrencesInVerse = (string, subString) => {
   let n = 0;
   if (subString.length <= 0) return 0;
-  if (subString.split(",").length > 1) {
-    let stringArray = subString.split(",");
+  if (subString.split(',').length > 1) {
+    let stringArray = subString.split(',');
     stringArray.forEach((element) => {
       n += getQuoteOccurrencesInVerse(string, element.trim());
     });
     return n;
   }
-  if (subString.includes("...")) subString = subString.replace("...", ".*");
-  const regex = new RegExp(`\\W+${subString}\\W+`, "g");
+  if (subString.includes('...')) subString = subString.replace('...', '.*');
+  const regex = new RegExp(`\\W+${subString}\\W+`, 'g');
   let matchedSubstring;
   while ((matchedSubstring = regex.exec(string)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matchedSubstring
@@ -543,6 +543,6 @@ const tokenizer = (text) => {
 };
 
 export const normalizeString = (string) => {
-  const normalized = tokenizer(string).join(" ");
+  const normalized = tokenizer(string).join(' ');
   return normalized;
 };
