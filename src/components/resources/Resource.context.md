@@ -56,8 +56,6 @@ import useBcvQuery from './useBcvQuery.js';
 const query = {
   title: "unfoldingWord® Simplified Text",
   version: "38",
-  resourceLink: "unfoldingWord/en/ust/master",
-  server: "https://git.door43.org",
   owner: "unfoldingWord",
   languageId: "en",
   projectId: "ust",
@@ -86,8 +84,13 @@ const arrayToObject = (array, keyField) =>
     return obj;
   }, {});
 
+const resourceLink = "unfoldingWord/en/ust/master"
+const server = "https://git.door43.org"
+
 function Component() {
-  const result = useBcvQuery(query,options);
+  const result = useBcvQuery(
+    server, resourceLink, query, options
+  );
   const bookResult = 
           result.state && result.state.resultTree && result.state.resultTree.book;
 

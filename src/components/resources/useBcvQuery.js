@@ -41,7 +41,7 @@ cexport const queryTit2_15_3_1 = {
   },
 */
 
-function useBcvQuery(query, options = {}) {
+function useBcvQuery(server, resourceLink, query, options = {}) {
   const [bookId, setBookId] = useState(undefined);
   const [resource, setResource] = useState({});
   const [resultTree, setResultTree] = useState({ ...query });
@@ -75,19 +75,19 @@ function useBcvQuery(query, options = {}) {
 
         const reference = { projectId: _bookId };
         const resourceTag = JSON.stringify({
-          resourceLink: query.resourceLink,
+          resourceLink,
           reference,
-          server: query.server,
+          server,
         });
         setLoadingResource(resourceTag);
         setLoadingContent(null);
         setFetchResponse(null);
         setResource({});
         resourceFromResourceLink({
-          resourceLink: query.resourceLink,
+          resourceLink,
           reference,
           config: {
-            server: query.server,
+            server,
             cache: options.cache,
           },
         })
@@ -105,13 +105,13 @@ function useBcvQuery(query, options = {}) {
           .catch((error) => {
             console.warn(
               `useBcvQuery() - error fetching resource for: ${resourceTag}`,
-              error
+              error,
             );
             setLoadingResource(null); // done
           });
       }
     }
-  }, [query, options.cache, triggeredReloadCount]);
+  }, [query, options.cache, triggeredReloadCount, resourceLink, server]);
 
   useEffect(() => {
     const insertParsedUsfmInResult = async () => {
@@ -171,11 +171,11 @@ function useBcvQuery(query, options = {}) {
 
 useBcvQuery.propTypes = {
   props: PropTypes.shape({
+    /** The server for fetching */
+    server: PropTypes.string.isRequired,
+    /** The link to parse and fetch the resource manifest */
+    resourceLink: PropTypes.string.isRequired,
     query: PropTypes.shape({
-      /** The server for fetching */
-      server: PropTypes.string.isRequired,
-      /** The link to parse and fetch the resource manifest */
-      resourceLink: PropTypes.string.isRequired,
       book: PropTypes.objectOf(
         PropTypes.shape({
           ch: PropTypes.objectOf(
