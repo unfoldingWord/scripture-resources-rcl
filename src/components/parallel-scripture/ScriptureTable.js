@@ -65,6 +65,7 @@ function ScriptureTable({
   }, [titles]);
 
   useEffect(() => {
+    if ( !books ) return;
     const _referenceIds = referenceIdsFromBooks({ books });
     setReferenceIds(_referenceIds);
   }, [books]);
