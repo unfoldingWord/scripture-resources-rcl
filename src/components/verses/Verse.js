@@ -8,6 +8,8 @@ import {VerseObjects} from '../verse-objects';
 import { useHandleCopy } from './helpers';
 import { ReferenceSelectedContext } from '../reference/ReferenceSelectedContext';
 
+import {isHebrew} from '../../core';
+
 export const Verse = ({
   verseKey,
   verseObjects,
@@ -77,7 +79,9 @@ export const Verse = ({
     _dir = 'rtl';
   }
 
-  const style = _dir === 'rtl' ? { fontSize: `1.7em` } : { fontSize: `1em` }
+  const style = _dir === 'rtl' 
+    ? { fontSize: `1.7em`, fontFamily: `EzraSILSRRegular` } 
+    : { fontSize: `1em`, fontFamily: `Noto Sans`}  
   //const style = {};
   if (paragraphs) style.display = 'inline';
 
