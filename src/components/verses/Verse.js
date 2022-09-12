@@ -71,7 +71,14 @@ export const Verse = ({
     /** WARN: ReferenceSelectedContext is not part of useCallback dependencies! */
   }, [update]);
 
-  const style = {};
+  const hebrew = isHebrew(verseText);
+  let _dir = direction || 'auto';
+  if (hebrew) {
+    _dir = 'rtl';
+  }
+
+  const style = _dir === 'rtl' ? { fontSize: `1.7em` } : { fontSize: `1em` }
+  //const style = {};
   if (paragraphs) style.display = 'inline';
 
   return (
