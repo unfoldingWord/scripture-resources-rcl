@@ -83,11 +83,12 @@ export const Verse = ({
   const style = _dir === 'rtl' 
     ? { fontSize: `1.7em`, fontFamily: `EzraSILSRRegular` } 
     : { fontSize: `1em`, fontFamily: `Noto Sans`}  
+
   //const style = {};
   if (paragraphs) style.display = 'inline';
 
   return (
-    <div ref={verseRef} className={classes.verse} style={style} dir={direction} onClick={() => handleClick(reference)}>
+    <div ref={verseRef} className={classes.verse} style={style} dir={_dir} onClick={() => handleClick(reference)}>
       {verse}
     </div>
   );
