@@ -80,9 +80,9 @@ export const Verse = ({
     _dir = 'rtl';
   }
 
-  const style = _dir === 'rtl' 
-    ? { fontSize: `1.7em`, fontFamily: `EzraSILSRRegular` } 
-    : { fontSize: `1em`, fontFamily: `Noto Sans`}  
+  const style = _dir === 'rtl'
+    ? { fontSize: `1.7em`, fontFamily: `EzraSILSRRegular` }
+    : { fontSize: `1.2em`,}
 
   //const style = {};
   if (paragraphs) style.display = 'inline';
