@@ -48,10 +48,12 @@ function ScriptureTable({
     reference &&
     reference.verse &&
     books[0] &&
-    books[0].chapters &&
-    books[0].chapters[reference.chapter]
+  ((books[0].chapters &&
+		books[0].chapters[reference.chapter]) ||
+  ((books[0].json.chapters &&
+	    books[0].json.chapters[reference.chapter]) ))
   ) {
-    const chapter = books[0].chapters[reference.chapter];
+    const chapter = books[0].json ? books[0].json.chapters[reference.chapter] : books[0].chapters[reference.chapter];
     const verse = chapter[reference.verse];
     verseObjects = verse ? verse.verseObjects : [];
   }
