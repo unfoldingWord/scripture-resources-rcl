@@ -4,6 +4,13 @@ import usfmJS from 'usfm-js';
 import deepEqual from 'deep-equal';
 import ugnt_tit from './fixtures/books/ugnt_tit.js';
 import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
+import ugnt_php from './fixtures/books/ugnt_php.js';
+
+describe('selectionHelpers.selectionsFromQuoteAndVerseObjects PHP', () => {
+  it('should have all words highlighted PHP 2:1', () => {
+    generateTest('php/2-1');
+  })
+})
 
 describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
     it('should have all words highlighted Titus 1:1', () => {
@@ -23,6 +30,9 @@ describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
     })
     it('should have all words highlighted Titus 1:4', () => {
         generateTest('tit/1-4');
+    })
+    it('should have all words highlighted Titus 1:4-2 with double ellipsis', () => {
+      generateTest('tit/1-4-2');
     })
     it('should have all words highlighted Titus 1:5', () => {
         generateTest('tit/1-5');
@@ -85,9 +95,11 @@ describe('selectionHelpers.selectionsFromQuoteAndVerseObjects 3JN', () => {
 
 const UGNT_TIT = usfmJS.toJSON(ugnt_tit);
 const UGNT_3JN = usfmJS.toJSON(ugnt_3jn);
+const UGNT_PHP = usfmJS.toJSON(ugnt_php);
 const books = {
     'tit': UGNT_TIT,
-    '3jn': UGNT_3JN
+    '3jn': UGNT_3JN,
+    'php': UGNT_PHP,
 };
 
 function generateTest(fileName) {
