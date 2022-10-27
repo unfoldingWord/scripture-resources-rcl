@@ -1,6 +1,7 @@
-import { generateSelection, selectionsFromQuoteAndVerseObjects, getPrecedingText } from "../src/core/selections/selections";
+import { selectionsFromQuoteAndVerseObjects, normalizeString } from '../src/core/selections/selections';
 import path from 'path';
 import usfmJS from 'usfm-js';
+import deepEqual from 'deep-equal';
 import ugnt_tit from './fixtures/books/ugnt_tit.js';
 import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
 
@@ -90,10 +91,36 @@ const books = {
 };
 
 function generateTest(fileName) {
-    const [bookName, reference] = fileName.split('/');
-    const [chapter, verse] = reference.split('-');
-    const { quote, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
-    const { verseObjects } = books[bookName].chapters[chapter][verse];
-    const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
-    expect(selections).toMatchObject(expected);
+  const [bookName, reference] = fileName.split('/');
+  const [chapter, verse] = reference.split('-');
+  const { quote, occurrence, expected } = require(path.join(__dirname, './fixtures/highlighting', fileName));
+
+  if (expected && expected.length) { // make sure expected text is normalized
+    for (let i = 0; i < expected.length; i++) {
+      const expectedSelection = expected[i];
+      const selectionText = expectedSelection.text;
+      if (selectionText) {
+        const normalizedText = normalizeString(selectionText);
+        if (normalizedText !== selectionText) {
+          expectedSelection.text = normalizedText;
+        }
+      }
+    }
+  }
+
+  const { verseObjects } = books[bookName].chapters[chapter][verse];
+  const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
+
+  // log details to console if there is a miscompare of data
+  if (!deepEqual(selections, expected)) {
+    for (let i = 0; i < expected.length; i++) {
+      const selection = selections[i];
+      const expected_ = expected[i];
+      if (!deepEqual(selection, expected_)) {
+        console.warn(`For file ${fileName}, selectionsFromQuoteAndVerseObjects() results do not match expected`);
+        console.warn(`For expected selection ${i}, results do not match expected`);
+      }
+    }
+  }
+  expect(selections).toMatchObject(expected);
 }
