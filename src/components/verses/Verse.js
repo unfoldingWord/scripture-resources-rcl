@@ -72,7 +72,7 @@ export const Verse = ({
     if (update) update(_reference);
     /** WARN: ReferenceSelectedContext is not part of useCallback dependencies! */
   }, [update]);
-
+  
   const verseText = verseObjects.map(verseObject => verseObject.text).join('');
   const hebrew = isHebrew(verseText);
   let _dir = direction || 'auto';
@@ -80,7 +80,10 @@ export const Verse = ({
     _dir = 'rtl';
   }
 
-  const style = _dir === 'rtl' ? { fontSize: `1.7em` } : { fontSize: `1em` }
+  const style = _dir === 'rtl'
+    ? { fontSize: `1.7em`, fontFamily: `EzraSILSRRegular` }
+    : { fontSize: `1.2em`,}
+
   //const style = {};
   if (paragraphs) style.display = 'inline';
 
