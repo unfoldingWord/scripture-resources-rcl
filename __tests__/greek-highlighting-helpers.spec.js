@@ -10,6 +10,12 @@ describe('selectionHelpers.selectionsFromQuoteAndVerseObjects PHP', () => {
   it('should have all words highlighted PHP 2:1', () => {
     generateTest('php/2-1');
   })
+  it('should have all words highlighted PHP 2:1 2', () => {
+    generateTest('php/2-1-2');
+  })
+  it('should have all words highlighted PHP 2:1 3', () => {
+    generateTest('php/2-1-3');
+  })
 })
 
 describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
