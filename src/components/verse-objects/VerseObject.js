@@ -30,7 +30,20 @@ function VerseObject({
       );
       break;
     case 'quote':
-      component = <TextObject verseObject={verseObject} />;
+        if(verseObject.children){
+          component = (
+            <MilestoneObject
+              verseObject={verseObject}
+              originalWords={originalWords}
+              disableWordPopover={disableWordPopover}
+              getLexiconData={getLexiconData}
+              translate={translate}
+            />
+          );
+        }else{
+          component = <TextObject verseObject={verseObject} />;
+        }
+
       break;
     case 'milestone':
       component = (

@@ -49,10 +49,12 @@ function ScriptureTable({
     reference.verse &&
     books &&
     books[0] &&
-    books[0].chapters &&
-    books[0].chapters[reference.chapter]
+  ((books[0].chapters &&
+		books[0].chapters[reference.chapter]) ||
+  ((books[0].json.chapters &&
+	    books[0].json.chapters[reference.chapter]) ))
   ) {
-    const chapter = books[0].chapters[reference.chapter];
+    const chapter = books[0].json ? books[0].json.chapters[reference.chapter] : books[0].chapters[reference.chapter];
     const verse = chapter[reference.verse];
     verseObjects = verse ? verse.verseObjects : [];
   }
@@ -66,6 +68,7 @@ function ScriptureTable({
   }, [titles]);
 
   useEffect(() => {
+    if ( !books ) return;
     const _referenceIds = referenceIdsFromBooks({ books });
     setReferenceIds(_referenceIds);
   }, [books]);
