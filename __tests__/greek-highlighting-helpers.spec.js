@@ -16,6 +16,18 @@ describe('selectionHelpers.selectionsFromQuoteAndVerseObjects PHP', () => {
   it('should have all words highlighted PHP 2:1 3', () => {
     generateTest('php/2-1-3');
   })
+  it('should have all words highlighted PHP 2:1 4', () => {
+    generateTest('php/2-1-4');
+  })
+  it('should have all words highlighted PHP 2:1 5', () => {
+    generateTest('php/2-1-5');
+  })
+  it('should have all words highlighted PHP 2:1 6', () => {
+    generateTest('php/2-1-6');
+  })
+  it('should have all words highlighted PHP 2:1 7', () => {
+    generateTest('php/2-1-7');
+  })
 })
 
 describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {

@@ -1,8 +1,29 @@
 import isEqual from 'deep-equal';
+import xre from 'xregexp';
 import _ from 'lodash';
 import { tokenize } from 'string-punctuation-tokenizer';
 import { verseObjectsToString } from './verseObjects';
 
+/**
+ * This function takes a search string and create a regex search string to match a whole word
+ * @param {string} string - string to search for
+ * @returns {RegExp} regex expression
+ */
+export const getRegexForWord = (string) => {
+  const START_WORD_REGEX = '(?<=[\\s,.:;“"\'‘({]|^)';
+  const END_WORD_REGEX = '(?=[\\s,.:;“"\'‘!?)}]|$)';
+  const search = `${START_WORD_REGEX}${string}${END_WORD_REGEX}`;
+  const regex = xre(search, "u");
+  return regex;
+};
+
+/**
+ * The function will find the quote in the verse object
+ * @param {string} quote - The orignal quote to find
+ * @param {object} verseObjects - verse ojects to search
+ * @param {number} occurrence - The occurence to match
+ * @returns {[]} - The quotes we found
+ */
 export const selectionsFromQuoteAndVerseObjects = ({
   quote,
   verseObjects,
@@ -16,18 +37,29 @@ export const selectionsFromQuoteAndVerseObjects = ({
   return selections;
 };
 
-export const getPrecedingOccurrences = (_string, subquote) => {
-  const precedingTokens = tokenizer(_string);
-  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (
-    n,
-    val
-  ) {
-    return n + (val === subquote);
-  },
-    0);
-  return precedingOccurrencesInPreviousString;
+/**
+ * This counts the number of subquotes in the string
+ * @param {string} string - string we are searching in
+ * @param {string} subquote - string we are searching for
+ * @returns {number} number
+ */
+export const getPrecedingOccurrences = (string, subquote) => {
+  if(!string || !subquote){
+    return 0;
+  }
+  const regex = getRegexForWord(subquote);
+  const matches = xre.match(string, regex, 'all');
+  const count = matches && matches.length || 0;
+  return count;
 };
 
+/**
+ * The function will find the quote inside the string
+ * @param {string} quote - The orignal quote to find  
+ * @param {string} string - orignal text to search
+ * @param {number} occurrence - The occurence to match
+ * @returns {[]} - The quotes we found
+ */
 export const selectionsFromQuoteAndString = ({
   quote,
   string: rawString,
@@ -51,8 +83,9 @@ export const selectionsFromQuoteAndString = ({
 
   let precedingOccurrences = 0;
   let precedingText = '';
-  subquotes.forEach((subquote, index) => {
+  subquotes.forEach((subquote) => {
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
+    const index = precedingOccurrences + 1;
     const currentOccurrence = getCurrentOccurrenceFromPrecedingText(
       occurrence,
       index,
@@ -62,7 +95,7 @@ export const selectionsFromQuoteAndString = ({
       string,
       subquote,
       currentOccurrence,
-      index
+      precedingOccurrences
     );
 
     const subSelections = subSelectionsFromSubquote({
@@ -126,15 +159,14 @@ export const getStringFromEllipsis = (_string, quote, occurrence) => {
 
 /**
  *
- * @param {string} _string - The entire string to use to find the preceding text
+ * @param {string} string - The entire string to use to find the preceding text
  * @param {string} subquote - The subquote to find the preceding text of
  * @param {number} occurrence - The occurrence of the string in the entire string
  * @param {number} index - The index of the subquote
  */
-export const getPrecedingText = (_string, subquote, occurrence, index = 0) => {
-  const string = _string.slice(0);
-  let splitString = string.split(subquote);
-
+export const getPrecedingText = (string, subquote, occurrence, index = 0) => {
+  const regex = getRegexForWord(subquote);
+  let splitString = xre.split(string, regex);
   if (occurrence === -1) {
     //Need every occurrence of the subquote
     //Using the index instead of the occurrence
@@ -521,17 +553,7 @@ export const checkSelectionOccurrences = (string, selections) => {
  * modified to fit our use cases, return zero for '' substring, and no use case for overlapping.
  */
 export const occurrencesInString = (string, subString) => {
-  if (subString.length <= 0) return 0;
-  var occurrences = 0;
-  var position = 0;
-  var step = subString.length;
-  while (position < string.length) {
-    position = string.indexOf(subString, position);
-    if (position === -1) break;
-    ++occurrences;
-    position += step;
-  }
-  return occurrences;
+ return getPrecedingOccurrences(string, subString);
 };
 
 const tokenizer = (text) => {
