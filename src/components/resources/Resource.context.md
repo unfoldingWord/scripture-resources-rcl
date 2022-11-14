@@ -30,7 +30,7 @@ function Component() {
       getBibleJson: true,
     },
   });
-// The BlockEditable needs a string - not json content
+  // The BlockEditable needs a string - not json content
   // so we just stringify the first characters here
   // - as a stop-gap measure
   return (

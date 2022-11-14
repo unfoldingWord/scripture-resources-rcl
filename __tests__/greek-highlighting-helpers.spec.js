@@ -1,4 +1,4 @@
-import { selectionsFromQuoteAndVerseObjects, normalizeString } from '../src/core/selections/selections';
+import { selectionsFromQuoteAndVerseObjects, normalizeString } from "../src/core/selections/selections";
 import path from 'path';
 import usfmJS from 'usfm-js';
 import deepEqual from 'deep-equal';
@@ -28,6 +28,13 @@ describe('selectionHelpers.selectionsFromQuoteAndVerseObjects PHP', () => {
   it('should have all words highlighted PHP 2:1 7', () => {
     generateTest('php/2-1-7');
   })
+})
+  
+const normalizedText = (arr) => arr.map( obj => {
+return {
+    ...obj,
+    text: normalizeString(obj.text),
+}
 })
 
 describe('selectionHelpers.selectionsFromQuoteAndVerseObjects Titus', () => {
