@@ -160,4 +160,3 @@ export const referenceFromReferenceId = (referenceId) => {
   const [chapter, verse] = referenceId.split(':');
   return { chapter, verse };
 };
-

@@ -47,6 +47,7 @@ function ScriptureTable({
   if (
     reference &&
     reference.verse &&
+    books &&
     books[0] &&
   ((books[0].chapters &&
 		books[0].chapters[reference.chapter]) ||
@@ -134,7 +135,7 @@ function ScriptureTable({
         );
         return row;
       }),
-    [_referenceIds, books, open, renderOffscreen, reference, filter, columns]
+    [_referenceIds, books, open, renderOffscreen, reference, filter, columns],
   );
 
   useEffect(() => {
@@ -174,13 +175,13 @@ function ScriptureTable({
 
 ScriptureTable.propTypes = {
   titles: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
+    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   ).isRequired,
   books: PropTypes.arrayOf(
     PropTypes.shape({
       headers: PropTypes.array.isRequired,
       chapters: PropTypes.object.isRequired,
-    })
+    }),
   ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({

@@ -66,13 +66,13 @@ export const selectionsFromQuoteAndString = ({
   occurrence,
 }) => {
   let string = normalizeString(rawString);
-  // Calculate hasEllipsis before normalizing quote.
-  let subquotes = quote.split('…').map(normalizeString);
+  // Calculate hasAmpersand before normalizing quote.
+  let subquotes = quote.split('&').map(normalizeString);
   let selections = [];
-  const hasEllipsis = subquotes.length > 1;
+  const hasAmpersand = subquotes.length > 1;
   quote = normalizeString(quote);
 
-  if (hasEllipsis && occurrence === -1) {
+  if (hasAmpersand && occurrence === -1) {
     return [];
   }
 
@@ -106,7 +106,7 @@ export const selectionsFromQuoteAndString = ({
     });
 
     subSelections.forEach((subSelection) => selections.push(subSelection));
-    /** Adding the previous subquote to account for repeated ellipsis words i.e. Θεοῦ…Θεοῦ */
+    /** Adding the previous subquote to account for repeated ampersand words i.e. Θεοῦ&Θεοῦ */
     precedingText += subquote;
   });
   return selections;
@@ -133,24 +133,24 @@ export const getCurrentOccurrenceFromPrecedingText = (
 
 /**
  * This function will return the text in between
- * to ellipsis (inclusive of the container words) given the occurrence
+ * to ampersand (inclusive of the container words) given the occurrence
  *
  * @param {string} _string - The string to search
- * @param {*} quote - The substring which contains an ellipsis to search for
+ * @param {*} quote - The substring which contains an ampersand to search for
  * @param {*} occurrence - The occurrence of the quote to search for
  */
-export const getStringFromEllipsis = (_string, quote, occurrence) => {
-  const [lower, upper] = quote.split('…');
+export const getStringFromAmpersand = (_string, quote, occurrence) => {
+  const [lower, upper] = quote.split('&');
   const reg = new RegExp(
     '(?:.*?' +
-    lower +
-    '.*' +
-    upper +
-    `){${occurrence - 1}}.*?(` +
-    lower +
-    '.*' +
-    upper +
-    ').*'
+      lower +
+      '.*' +
+      upper +
+      `){${occurrence - 1}}.*?(` +
+      lower +
+      '.*' +
+      upper +
+      ').*'
   );
   const string = _string.slice(0);
   const matches = string.match(reg) || [];
@@ -228,18 +228,18 @@ export const generateSelection = ({
   const _entireText = normalizeString(entireText);
   // Getting the occurrences before the current token
   const precedingTokens = tokenizer(precedingText);
-  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (
+  let precedingOccurrencesInPreviousString = precedingTokens.reduce(function(
     n,
     val
   ) {
     return n + (val === selectedText);
   },
-    0);
+  0);
   // calculate this occurrence number by adding it to the preceding ones
   let occurrence = precedingOccurrencesInPreviousString + 1;
   // get the total occurrences from the verse
   const allTokens = tokenizer(_entireText);
-  let allOccurrences = allTokens.reduce(function (n, val) {
+  let allOccurrences = allTokens.reduce(function(n, val) {
     return n + (val === selectedText);
   }, 0);
 
@@ -260,7 +260,7 @@ export const spliceStringOnRanges = (string, ranges) => {
   let remainingString = string;
   // shift the range since the loop is destructive by working on the remainingString and not original string
   let rangeShift = 0; // start the range shift at the first character
-  ranges.forEach(function (range) {
+  ranges.forEach(function(range) {
     const firstCharacterPosition = range[0] - rangeShift; // original range start - the rangeShift
     const beforeSelection = remainingString.slice(0, firstCharacterPosition); // save all the text before the selection
     if (beforeSelection) {

@@ -17,7 +17,7 @@ function Component ({reference}) {
   const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
   const [books, setBooks] = React.useState([]);
-  const [quote, setQuote] = React.useState('Θεὸς…λόγος');
+  const [quote, setQuote] = React.useState('Θεὸς & λόγος');
   const [occurrence, setOccurrence] = React.useState(1);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const reference = {bookId: 'jhn', chapter: 1, verse: 1};
 
 //<Resources resourceLinks={resourceLinks} config={config} reference={reference} />
 const [ resources, setResources ] = React.useState( [] );
-const quote='Θεὸς…λόγος';
+const quote='Θεὸς & λόγος';
 const occurrence=1;
 <>
   <ResourcesContextProvider
