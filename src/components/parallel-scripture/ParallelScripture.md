@@ -34,7 +34,7 @@ function Component() {
   const [bookId, setBookId] = React.useState('3jn');
   const [chapter, setChapter] = React.useState(1);
   const [verse, setVerse] = React.useState(10);
-  const [quote, setQuote] = React.useState('καὶ & μὴ');
+  const [quote, setQuote] = React.useState('καὶ…μὴ');
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
@@ -113,13 +113,13 @@ const defaultResourceLinks = [
   'unfoldingWord/en/ult/v5/3jn',
   'unfoldingWord/en/ust/v5/3jn',
   'ru_gl/ru/rlob/master/3jn',
-  'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
+  // 'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
 ];
 
 const _resourceLinks = [...defaultResourceLinks];
 
 const reference = { bookId: '3jn', chapter: 1, verse: 1 };
-// const resourceLinks = [
+// const _resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',
 //   'unfoldingWord/en/ust/master',
