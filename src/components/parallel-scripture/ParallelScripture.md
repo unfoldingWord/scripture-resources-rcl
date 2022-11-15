@@ -33,8 +33,8 @@ import useEffect from 'use-deep-compare-effect';
 function Component() {
   const [bookId, setBookId] = React.useState('3jn');
   const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState(10);
-  const [quote, setQuote] = React.useState('καὶ…μὴ');
+  const [verse, setVerse] = React.useState('10-12');
+  const [quote, setQuote] = React.useState('καὶ & μὴ');
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
