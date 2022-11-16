@@ -12,6 +12,7 @@ import {
 import { Table, TableBody } from '@material-ui/core';
 import deepFreeze from 'deep-freeze';
 import { localString } from '../../core/localStrings';
+import { parseReferenceToList } from 'bible-reference-range'
 
 import { Row, Headers, Toolbar, ColumnsMenu } from '..';
 import { SelectionsContextProvider } from '../selections/Selections.context';
@@ -20,6 +21,33 @@ import {
   referenceIdFromReference,
   versesFromReferenceIdAndBooks,
 } from './helpers';
+
+/**
+ * helper function to get a reference array based on reference chunks
+ * -> requirement:
+ * each entry in the chunks array must have the following format:
+ * {chapter, verse, endChapter, endVerse}
+ * */
+const getRefArrayBasedOnChunks = (chunks) => {
+  const resArr = []
+  chunks?.forEach(chunk => {
+    // Skip verse ranges across chapters -> not yet implemented
+    // TBD: lg - would first have to get bookData here
+    if (!chunk.endChapter || chunk.endChapter === chunk.chapter) {
+      const ch = chunk.chapter
+      if (ch) {
+        if (chunk.endVerse) {
+          for (let i = chunk.verse; i <= chunk.endVerse; i++) {
+            resArr.push(`${ch}:${i}`)
+          }
+        } else if (chunk.verse) {
+          resArr.push(`${ch}:${chunk.verse}`)
+        }
+      }
+    }
+  })
+  return resArr
+}
 
 function ScriptureTable({
   title,
@@ -43,6 +71,7 @@ function ScriptureTable({
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
   let verseObjects = [];
+  let refArray = [];
 
   if (
     reference &&
@@ -55,12 +84,16 @@ function ScriptureTable({
 	    books[0].json.chapters[reference.chapter]) ))
   ) {
     const chapter = books[0].json ? books[0].json.chapters[reference.chapter] : books[0].chapters[reference.chapter];
-    const verse = chapter[reference.verse];
-    verseObjects = verse ? verse.verseObjects : [];
-    console.log(verseObjects);
-    console.log(reference);
-  } else {
-    console.log('no vrese objects');
+    const _verse = reference?.verse
+    if (_verse && (typeof _verse ==='string') 
+        && ((_verse.includes('-') || _verse.includes(',') || _verse.includes(';')))) {
+      const refStr = `${reference.chapter}:${_verse}`
+      const referenceChunks = parseReferenceToList(refStr)
+      refArray = getRefArrayBasedOnChunks(referenceChunks)
+    } else {
+      const verse = chapter[reference.verse];
+      verseObjects = verse ? verse.verseObjects : [];
+    }
   }
 
   useEffect(() => {
@@ -118,7 +151,11 @@ function ScriptureTable({
   let _referenceIds = referenceIds;
 
   if (filter && reference.chapter && reference.verse) {
-    _referenceIds = ['1:1','1:2'];//[referenceIdFromReference(reference)];
+    if (refArray.length>0) {
+      _referenceIds = refArray;
+    } else {
+      _referenceIds = [referenceIdFromReference(reference)];
+    }
   }
 
   const rows = useMemo(
@@ -191,7 +228,7 @@ ScriptureTable.propTypes = {
   reference: PropTypes.shape({
     bookId: PropTypes.string,
     chapter: PropTypes.number,
-    verse: PropTypes.number,
+    verse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.object,

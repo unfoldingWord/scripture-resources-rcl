@@ -33,7 +33,7 @@ import useEffect from 'use-deep-compare-effect';
 function Component() {
   const [bookId, setBookId] = React.useState('3jn');
   const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState('10-12');
+  const [verse, setVerse] = React.useState('1-2,5');
   const [quote, setQuote] = React.useState('καὶ & μὴ');
   const [occurrence, setOccurrence] = React.useState(-1);
 
@@ -118,7 +118,7 @@ const defaultResourceLinks = [
 
 const _resourceLinks = [...defaultResourceLinks];
 
-const reference = { bookId: '3jn', chapter: 1, verse: 1 };
+const reference = { bookId: '3jn', chapter: 1, verse: "1-2,5" };
 // const _resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',
@@ -151,7 +151,7 @@ import useEffect from "use-deep-compare-effect";
 function Component() {
   const [bookId, setBookId] = React.useState("3jn");
   const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState(10);
+  const [verse, setVerse] = React.useState("1-2,5");
   const [quote, setQuote] = React.useState("καὶ & μὴ");
   const [occurrence, setOccurrence] = React.useState(-1);
 
@@ -236,7 +236,7 @@ const defaultResourceLinks = [
 
 const _resourceLinks = [...defaultResourceLinks];
 
-const reference = { bookId: "3jn", chapter: 1, verse: 1 };
+const reference = { bookId: "3jn", chapter: 1, verse: "1-2,5" };
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',

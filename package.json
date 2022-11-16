@@ -1,7 +1,7 @@
 {
   "name": "scripture-resources-rcl",
   "description": "A React Component Library for Rendering Scripture Resources.",
-  "version": "5.3.4-alpha2",
+  "version": "5.3.4-alpha3",
   "homepage": "https://scripture-resources-rcl.netlify.com/",
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
     "gitea-react-toolkit": "2.2.1",
     "js-yaml-parser": "^1.0.0",
     "lodash": "^4.17.21",
+    "bible-reference-range": "^1.0.1",
     "markdown-translatable": "2.1.1",
     "nyc": "^15.0.0-beta.3",
     "prop-types": "^15.8.1",

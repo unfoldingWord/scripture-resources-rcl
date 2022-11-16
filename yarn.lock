@@ -5228,6 +5228,11 @@ bfj@6.1.1:
     hoopy "^0.1.2"
     tryer "^1.0.0"
 
+bible-reference-range@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/bible-reference-range/-/bible-reference-range-1.0.1.tgz#b577d20eeb1a62195c827d567063b27dcf033f8e"
+  integrity sha512-DpjJJaFe9SfqCnJ6E6Xiz3yJAL7UdoZx+daRL84j+NCBsMOV0HMCzNuF8vKf1m8VOy8qkGnxwKdwxQUOIgYL1Q==
+
 big.js@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-5.2.2.tgz"

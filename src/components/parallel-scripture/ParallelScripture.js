@@ -121,7 +121,7 @@ ParallelScripture.propTypes = {
   reference: PropTypes.shape({
     bookId: PropTypes.string,
     chapter: PropTypes.number,
-    verse: PropTypes.number,
+    verse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   /** pass the quote in */
   quote: PropTypes.string.isRequired,
