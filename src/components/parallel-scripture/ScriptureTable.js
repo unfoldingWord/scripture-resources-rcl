@@ -23,6 +23,20 @@ import {
 } from './helpers';
 
 /**
+ * helper function to check if the reference string starts with a chapter specification
+ * */
+ const startsWithChapterSpec = (refStr) => {
+  let retVal = false
+  const splitCh = ':'
+  if (refStr?.includes(splitCh)) {
+    const startsWith = refStr.substring(0, refStr.indexOf(splitCh))
+    const strLen = startsWith.length
+    retVal = /^\d+$/.test(startsWith) && (strLen > 0) && (strLen <= 3)
+  }
+  return retVal
+ }
+
+/**
  * helper function to get a reference array based on reference chunks
  * -> requirement:
  * each entry in the chunks array must have the following format:
@@ -30,6 +44,7 @@ import {
  * */
 const getRefArrayBasedOnChunks = (chunks) => {
   const resArr = []
+  console.log(chunks)
   chunks?.forEach(chunk => {
     // Skip verse ranges across chapters -> not yet implemented
     // TBD: lg - would first have to get bookData here
@@ -46,6 +61,7 @@ const getRefArrayBasedOnChunks = (chunks) => {
       }
     }
   })
+  console.log(resArr)
   return resArr
 }
 
@@ -86,8 +102,12 @@ function ScriptureTable({
     const chapter = books[0].json ? books[0].json.chapters[reference.chapter] : books[0].chapters[reference.chapter];
     const _verse = reference?.verse
     if (_verse && (typeof _verse ==='string') 
-        && ((_verse.includes('-') || _verse.includes(',') || _verse.includes(';')))) {
-      const refStr = `${reference.chapter}:${_verse}`
+        && ((_verse.includes('-') 
+        || _verse.includes(':') 
+        || _verse.includes(',') 
+        || _verse.includes(';')))) {
+      const refStr = startsWithChapterSpec(_verse) ? `${_verse}` : `${reference.chapter}:${_verse}`
+      console.log(refStr)
       const referenceChunks = parseReferenceToList(refStr)
       refArray = getRefArrayBasedOnChunks(referenceChunks)
     } else {
