@@ -4,8 +4,8 @@ To see highlighting appear, change the `-1` occurrence to 1;
 then click or tab out of field.
 
 To add resources to the RCL, please see the following sample paths:  
-`Door43-Catalog/hi/ulb/master/3jn`  
-`STR/hi/irv/master/3jn`  
+`Door43-Catalog/hi/ulb/master/1jn`  
+`STR/hi/irv/master/1jn`  
 To add resources to the app, please omit bookId from the end:  
 `Door43-Catalog/hi/ulb/master`  
 `STR/hi/irv/master`
@@ -15,7 +15,7 @@ To see highlighting appear, change the `-1` occurrence to 1;
 then click or tab out of field.
 
 To add resources to the RCL, please see the following sample paths:  
-`Door43-Catalog/hi/ulb/master/3jn`  
+`Door43-Catalog/hi/ulb/master/1jn`  
 `STR/hi/irv/master/3jn`  
 To add resources to the app, please omit bookId from the end:  
 `Door43-Catalog/hi/ulb/master`  
@@ -31,7 +31,7 @@ import {
 import useEffect from 'use-deep-compare-effect';
 
 function Component() {
-  const [bookId, setBookId] = React.useState('3jn');
+  const [bookId, setBookId] = React.useState('1jn');
   const [chapter, setChapter] = React.useState(1);
   const [verse, setVerse] = React.useState('1,2:5');
   const [quote, setQuote] = React.useState('καὶ & μὴ');
@@ -85,7 +85,7 @@ function Component() {
   );
 
   const component = React.useMemo(() => {
-    const reference = { bookId, chapter, verse };
+    const reference = { bookId, chapter, verse, verseRefArray: ['1:1','1:2','2:1'] };
     return (
       <ParallelScripture
         reference={reference}
@@ -109,17 +109,17 @@ function Component() {
 const config = { server: 'https://git.door43.org' };
 
 const defaultResourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/master/3jn',
-  'unfoldingWord/en/ult/v5/3jn',
-  'unfoldingWord/en/ust/v5/3jn',
-  'ru_gl/ru/rlob/master/3jn',
-  // 'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
+  'unfoldingWord/el-x-koine/ugnt/master/1jn',
+  'unfoldingWord/en/ult/v5/1jn',
+  'unfoldingWord/en/ust/v5/1jn',
+  'ru_gl/ru/rlob/master/1jn',
+  'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
 ];
 
 const _resourceLinks = [...defaultResourceLinks];
 
-const reference = { bookId: '3jn', chapter: 1, verse: '1,2:5' };
-// const _resourceLinks = [
+const reference = { bookId: '1jn', chapter: 1, verse: 1, verseRefArray: ['1:1','1:2','2:1']  };
+// const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',
 //   'unfoldingWord/en/ust/master',

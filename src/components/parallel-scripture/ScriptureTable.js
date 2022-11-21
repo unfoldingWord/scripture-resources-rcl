@@ -171,8 +171,8 @@ function ScriptureTable({
   let _referenceIds = referenceIds;
 
   if (filter && reference.chapter && reference.verse) {
-    if (refArray.length>0) {
-      _referenceIds = refArray;
+    if (reference?.verseRefArray.length>0) {
+      _referenceIds = reference?.verseRefArray;
     } else {
       _referenceIds = [referenceIdFromReference(reference)];
     }
@@ -248,7 +248,8 @@ ScriptureTable.propTypes = {
   reference: PropTypes.shape({
     bookId: PropTypes.string,
     chapter: PropTypes.number,
-    verse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    verse: PropTypes.number,
+    verseRefArray: PropTypes.arrayOf(PropTypes.string)
   }),
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.object,
