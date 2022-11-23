@@ -9,17 +9,6 @@ To add resources to the RCL, please see the following sample paths:
 To add resources to the app, please omit bookId from the end:  
 `Door43-Catalog/hi/ulb/master`  
 `STR/hi/irv/master`
-### Using Contexts
-
-To see highlighting appear, change the `-1` occurrence to 1;
-then click or tab out of field.
-
-To add resources to the RCL, please see the following sample paths:  
-`Door43-Catalog/hi/ulb/master/1jn`  
-`STR/hi/irv/master/1jn`  
-To add resources to the app, please omit bookId from the end:  
-`Door43-Catalog/hi/ulb/master`  
-`STR/hi/irv/master`
 
 ```js
 import { TextField } from '@material-ui/core';
@@ -155,6 +144,7 @@ const [resources, setResources] = React.useState([]);
   <Component />
 </ResourcesContextProvider>;
 ```
+
 ```js
 import { TextField } from "@material-ui/core";
 import {
