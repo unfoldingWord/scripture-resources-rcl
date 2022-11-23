@@ -12,58 +12,15 @@ import {
 import { Table, TableBody } from '@material-ui/core';
 import deepFreeze from 'deep-freeze';
 import { localString } from '../../core/localStrings';
-import { parseReferenceToList } from 'bible-reference-range'
 
 import { Row, Headers, Toolbar, ColumnsMenu } from '..';
 import { SelectionsContextProvider } from '../selections/Selections.context';
 import {
   referenceIdsFromBooks,
   referenceIdFromReference,
+  referenceIdsFromBcvQuery,
   versesFromReferenceIdAndBooks,
 } from './helpers';
-
-/**
- * helper function to check if the reference string starts with a chapter specification
- * */
- const startsWithChapterSpec = (refStr) => {
-  let retVal = false
-  const splitCh = ':'
-  if (refStr?.includes(splitCh)) {
-    const startsWith = refStr.substring(0, refStr.indexOf(splitCh))
-    const strLen = startsWith.length
-    retVal = /^\d+$/.test(startsWith) && (strLen > 0) && (strLen <= 3)
-  }
-  return retVal
- }
-
-/**
- * helper function to get a reference array based on reference chunks
- * -> requirement:
- * each entry in the chunks array must have the following format:
- * {chapter, verse, endChapter, endVerse}
- * */
-const getRefArrayBasedOnChunks = (chunks) => {
-  const resArr = []
-  console.log(chunks)
-  chunks?.forEach(chunk => {
-    // Skip verse ranges across chapters -> not yet implemented
-    // TBD: lg - would first have to get bookData here
-    if (!chunk.endChapter || chunk.endChapter === chunk.chapter) {
-      const ch = chunk.chapter
-      if (ch) {
-        if (chunk.endVerse) {
-          for (let i = chunk.verse; i <= chunk.endVerse; i++) {
-            resArr.push(`${ch}:${i}`)
-          }
-        } else if (chunk.verse) {
-          resArr.push(`${ch}:${chunk.verse}`)
-        }
-      }
-    }
-  })
-  console.log(resArr)
-  return resArr
-}
 
 function ScriptureTable({
   title,
@@ -87,7 +44,6 @@ function ScriptureTable({
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
   let verseObjects = [];
-  let refArray = [];
 
   if (
     reference &&
@@ -101,16 +57,7 @@ function ScriptureTable({
   ) {
     const chapter = books[0].json ? books[0].json.chapters[reference.chapter] : books[0].chapters[reference.chapter];
     const _verse = reference?.verse
-    if (_verse && (typeof _verse ==='string') 
-        && ((_verse.includes('-') 
-        || _verse.includes(':') 
-        || _verse.includes(',') 
-        || _verse.includes(';')))) {
-      const refStr = startsWithChapterSpec(_verse) ? `${_verse}` : `${reference.chapter}:${_verse}`
-      console.log(refStr)
-      const referenceChunks = parseReferenceToList(refStr)
-      refArray = getRefArrayBasedOnChunks(referenceChunks)
-    } else {
+    if (!reference?.bcvQuery) {
       const verse = chapter[reference.verse];
       verseObjects = verse ? verse.verseObjects : [];
     }
@@ -170,10 +117,10 @@ function ScriptureTable({
 
   let _referenceIds = referenceIds;
 
-  if (filter && reference.chapter && reference.verse) {
-    if (reference?.verseRefArray.length>0) {
-      _referenceIds = reference?.verseRefArray;
-    } else {
+  if (filter) {
+    if (reference?.bcvQuery) {
+      _referenceIds = referenceIdsFromBcvQuery(reference?.bcvQuery);
+    } else if (reference.chapter && reference.verse) {
       _referenceIds = [referenceIdFromReference(reference)];
     }
   }
@@ -249,7 +196,7 @@ ScriptureTable.propTypes = {
     bookId: PropTypes.string,
     chapter: PropTypes.number,
     verse: PropTypes.number,
-    verseRefArray: PropTypes.arrayOf(PropTypes.string)
+    bcvQuery: PropTypes.any
   }),
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.object,

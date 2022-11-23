@@ -9,17 +9,6 @@ To add resources to the RCL, please see the following sample paths:
 To add resources to the app, please omit bookId from the end:  
 `Door43-Catalog/hi/ulb/master`  
 `STR/hi/irv/master`
-### Using Contexts
-
-To see highlighting appear, change the `-1` occurrence to 1;
-then click or tab out of field.
-
-To add resources to the RCL, please see the following sample paths:  
-`Door43-Catalog/hi/ulb/master/1jn`  
-`STR/hi/irv/master/3jn`  
-To add resources to the app, please omit bookId from the end:  
-`Door43-Catalog/hi/ulb/master`  
-`STR/hi/irv/master`
 
 ```js
 import { TextField } from '@material-ui/core';
@@ -32,8 +21,6 @@ import useEffect from 'use-deep-compare-effect';
 
 function Component() {
   const [bookId, setBookId] = React.useState('1jn');
-  const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState('1,2:5');
   const [quote, setQuote] = React.useState('καὶ & μὴ');
   const [occurrence, setOccurrence] = React.useState(-1);
 
@@ -47,20 +34,6 @@ function Component() {
             variant="outlined"
             defaultValue={bookId}
             onBlur={(event) => setBookId(event.target.value)}
-          />
-          <TextField
-            id="chapter"
-            label="Chapter"
-            variant="outlined"
-            defaultValue={chapter}
-            onBlur={(event) => setChapter(parseInt(event.target.value))}
-          />
-          <TextField
-            id="verse"
-            label="Verse"
-            variant="outlined"
-            defaultValue={verse}
-            onBlur={(event) => setVerse(parseInt(event.target.value))}
           />
         </div>
         <div style={{ padding: '1em 0' }}>
@@ -81,11 +54,27 @@ function Component() {
         </div>
       </form>
     ),
-    [bookId, chapter, verse, quote, occurrence]
+    [bookId, quote, occurrence]
   );
 
+  const bcvQuery = {
+    book: {
+      "1jn": {
+        ch: {
+          1: { 
+            v: { 
+              1: { },
+              2: { },
+            }
+          },
+          2: { v: { 5: { } } },
+        },
+      },
+    },
+  }
+
   const component = React.useMemo(() => {
-    const reference = { bookId, chapter, verse, verseRefArray: ['1:1','1:2','2:1'] };
+    const reference = { bookId, bcvQuery };
     return (
       <ParallelScripture
         reference={reference}
@@ -95,7 +84,7 @@ function Component() {
         height="250px"
       />
     );
-  }, [bookId, chapter, verse, quote, occurrence]);
+  }, [bookId, quote, occurrence]);
 
   return (
     <>
@@ -118,7 +107,23 @@ const defaultResourceLinks = [
 
 const _resourceLinks = [...defaultResourceLinks];
 
-const reference = { bookId: '1jn', chapter: 1, verse: 1, verseRefArray: ['1:1','1:2','2:1']  };
+const bcvQuery = {
+  book: {
+    "1jn": {
+      ch: {
+        1: { 
+          v: { 
+            1: { },
+            2: { },
+          }
+        },
+        2: { v: { 5: { } } },
+      },
+    },
+  },
+}
+
+const reference = { bookId: '1jn', bcvQuery };
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',
@@ -139,6 +144,7 @@ const [resources, setResources] = React.useState([]);
   <Component />
 </ResourcesContextProvider>;
 ```
+
 ```js
 import { TextField } from "@material-ui/core";
 import {
@@ -149,9 +155,7 @@ import {
 import useEffect from "use-deep-compare-effect";
 
 function Component() {
-  const [bookId, setBookId] = React.useState("3jn");
-  const [chapter, setChapter] = React.useState(1);
-  const [verse, setVerse] = React.useState("1-2,5");
+  const [bookId, setBookId] = React.useState("1jn");
   const [quote, setQuote] = React.useState("καὶ & μὴ");
   const [occurrence, setOccurrence] = React.useState(-1);
 
@@ -165,20 +169,6 @@ function Component() {
             variant="outlined"
             defaultValue={bookId}
             onBlur={(event) => setBookId(event.target.value)}
-          />
-          <TextField
-            id="chapter"
-            label="Chapter"
-            variant="outlined"
-            defaultValue={chapter}
-            onBlur={(event) => setChapter(parseInt(event.target.value))}
-          />
-          <TextField
-            id="verse"
-            label="Verse"
-            variant="outlined"
-            defaultValue={verse}
-            onBlur={(event) => setVerse(parseInt(event.target.value))}
           />
         </div>
         <div style={{ padding: "1em 0" }}>
@@ -199,11 +189,27 @@ function Component() {
         </div>
       </form>
     ),
-    [bookId, chapter, verse, quote, occurrence]
+    [bookId, quote, occurrence]
   );
 
+  const bcvQuery = {
+    book: {
+      "1jn": {
+        ch: {
+          1: { 
+            v: { 
+                1: {},
+                2: {},
+                5: {}
+              }
+            },
+        },
+      },
+    },
+  }
+
   const component = React.useMemo(() => {
-    const reference = { bookId, chapter, verse };
+    const reference = { bookId, bcvQuery };
     return (
       <ParallelScripture
         reference={reference}
@@ -213,7 +219,7 @@ function Component() {
         height="250px"
       />
     );
-  }, [bookId, chapter, verse, quote, occurrence]);
+  }, [bookId, quote, occurrence]);
 
   return (
     <>
@@ -227,16 +233,32 @@ function Component() {
 const config = { server: "https://git.door43.org" };
 
 const defaultResourceLinks = [
-  "unfoldingWord/el-x-koine/ugnt/master/3jn",
-  "unfoldingWord/en/ult/v5/3jn",
-  "unfoldingWord/en/ust/v5/3jn",
-  "ru_gl/ru/rlob/master/3jn",
+  "unfoldingWord/el-x-koine/ugnt/master/1jn",
+  "unfoldingWord/en/ult/v5/1jn",
+  "unfoldingWord/en/ust/v5/1jn",
+  "ru_gl/ru/rlob/master/1jn",
   "https://git.door43.org/unfoldingWord/en_ust/src/branch/master",
 ];
 
 const _resourceLinks = [...defaultResourceLinks];
 
-const reference = { bookId: "3jn", chapter: 1, verse: "1-2,5" };
+const bcvQuery = {
+  book: {
+    "1jn": {
+      ch: {
+        1: { 
+          v: { 
+              1: {},
+              2: {},
+              5: {}
+            }
+          },
+      },
+    },
+  },
+}
+
+const reference = { bookId: "1jn", bcvQuery };
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',

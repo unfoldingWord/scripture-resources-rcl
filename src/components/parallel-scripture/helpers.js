@@ -131,30 +131,21 @@ export const dataFromBooks = ({ books }) => {
   return data;
 };
 
-export const dataFromReference = ({ books, reference }) => {
-  const referenceId = referenceIdFromReference(reference);
-  let row = { referenceId };
-
-  books.forEach((_, index) => {
-    const chapterData = books[index].chapters[reference.chapter];
-    const verseData = chapterData[reference.verse];
-
-    if (!verseData) {
-      const verseKeys = Object.keys(chapterData);
-      const range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
-      verse = chapterData[range];
-    }
-
-    if (verse) {
-      row[index] = JSON.stringify({ referenceId, ...verse });
-    }
-  });
-
-  const data = [row];
-  return data;
-};
-
 export const referenceIdFromReference = (reference) => reference.chapter + ':' + reference.verse;
+
+export const referenceIdsFromBcvQuery = (bcvQuery) => {
+  const resArray = []
+  if (bcvQuery?.book) {
+    Object.entries(bcvQuery?.book).forEach(([bookKey, { ch }]) => {
+      Object.entries(ch).forEach(([chNum, { v }]) => {
+        Object.entries(v).forEach(([vNum, { vObj }]) => {
+          resArray.push(`${chNum}:${vNum}`);
+        })
+      })
+    })
+  }
+  return resArray
+}
 
 export const referenceFromReferenceId = (referenceId) => {
   const [chapter, verse] = referenceId.split(':');

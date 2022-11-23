@@ -29,7 +29,7 @@ export const Verses = ({
       if (verseKeys.length>0) {
         const verseText = verses[verseKeys[0]].verseObjects.map(verseObject => verseObject.text).join('');
         const hebrew = isHebrew(verseText);
-        setDir((hebrew) ? 'rtl' : 'auto');
+        // setDir((hebrew) ? 'rtl' : 'auto');
       }
     }
   }, [verses, direction]);
@@ -39,7 +39,7 @@ export const Verses = ({
     Object.keys(verses).forEach((verseKey, index) => {
       const {verseObjects} = verses[verseKey];
       const verseText = verseObjects.map(verseObject => verseObject.text).join('');
-      console.log("verseText", verseText);
+      // console.log("verseText", verseText);
       const hebrew = isHebrew(verseText);
       let _dir = direction || 'auto';
       if (hebrew) {
