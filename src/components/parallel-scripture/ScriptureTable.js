@@ -195,7 +195,7 @@ ScriptureTable.propTypes = {
   reference: PropTypes.shape({
     bookId: PropTypes.string,
     chapter: PropTypes.number,
-    verse: PropTypes.number,
+    verse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     bcvQuery: PropTypes.any
   }),
   /** bypass rendering only when visible */

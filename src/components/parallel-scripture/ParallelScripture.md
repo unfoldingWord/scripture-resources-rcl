@@ -74,7 +74,7 @@ function Component() {
   }
 
   const component = React.useMemo(() => {
-    const reference = { bookId, bcvQuery };
+    const reference = { bookId, chapter: 1, verse: "1-2,2:5", bcvQuery };
     return (
       <ParallelScripture
         reference={reference}
@@ -123,7 +123,7 @@ const bcvQuery = {
   },
 }
 
-const reference = { bookId: '1jn', bcvQuery };
+const reference = { bookId: '1jn', chapter: 1, verse: "1-2,2:5", bcvQuery };
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',
@@ -209,7 +209,7 @@ function Component() {
   }
 
   const component = React.useMemo(() => {
-    const reference = { bookId, bcvQuery };
+    const reference = { bookId, chapter: 1, verse: "1-2,5", bcvQuery };
     return (
       <ParallelScripture
         reference={reference}
@@ -258,7 +258,7 @@ const bcvQuery = {
   },
 }
 
-const reference = { bookId: "1jn", bcvQuery };
+const reference = { bookId: "1jn", chapter: 1, verse: "1-2,5", bcvQuery };
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',

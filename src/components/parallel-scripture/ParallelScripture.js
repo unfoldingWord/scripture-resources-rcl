@@ -85,11 +85,12 @@ function ParallelScripture({
       let ref = '';
 
       if (reference) {
-        if (reference.bcvQuery) {
-          const refList = referenceIdsFromBcvQuery(reference.bcvQuery)
-          ref = String(refList)
-        } else if (reference.chapter && reference.verse) {
+        if (reference.chapter && reference.verse) {
           ref = reference.chapter + ':' + reference.verse;
+        } else if (reference.verse) {
+          ref = reference.verse;
+        } else if (reference.bcvQuery) {
+          ref = String(referenceIdsFromBcvQuery(reference.bcvQuery))
         } else if (reference.chapter) {
           ref = reference.chapter;
         }
