@@ -64,10 +64,11 @@ export const selectionsFromQuoteAndString = ({
   quote,
   string: rawString,
   occurrence,
-}) => {
+  }) => {
   let string = normalizeString(rawString);
   // Calculate hasAmpersand before normalizing quote.
-  let subquotes = quote.split('&').map(normalizeString);
+  let _subquotes = quote.replace(/( ?… ?)+/g, " & ") //replace elipse with '&'
+  let subquotes = _subquotes.split('&').map(normalizeString);
   let selections = [];
   const hasAmpersand = subquotes.length > 1;
   quote = normalizeString(quote);
