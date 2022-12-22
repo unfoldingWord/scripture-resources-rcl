@@ -11,10 +11,14 @@ function useSelections({
   occurrence,
   quote,
   onQuote,
-  verseObjects,
+  hasSingleVerse,
+  verseObjectsArray,
 }) {
 
+  const verseObjects = (verseObjectsArray && verseObjectsArray.length > 0) ? verseObjectsArray[0] : []
+
   useEffect(() => {
+    console.log(quote)
     
     const _selections = helpers.selectionsFromQuote({
       quote,
@@ -22,15 +26,19 @@ function useSelections({
       occurrence,
     });
 
+    console.log(hasSingleVerse)
+    console.log(_selections)
     update(_selections);
-  }, [quote, occurrence, verseObjects]);
+  }, [quote, occurrence, verseObjectsArray]);
 
   useEffect(() => {
     if (verseObjects && onQuote) {
       const _quote = helpers.quoteFromVerse({selections, verseObjects});
+      console.log(_quote)
+
       onQuote(_quote);
     }
-  }, [selections, onQuote, verseObjects]);
+  }, [selections, onQuote, verseObjectsArray]);
 
   const update = useCallback((_selections) => {
     // the "parsify" function is expecting an array of stringified objects
@@ -60,7 +68,7 @@ function useSelections({
   const areSelected = (words) => helpers.areSelected({words, selections});
 
   const addSelection = (word) => {
-    let _selections = helpers.addSelection({word, selections});
+    let _selectileons = helpers.addSelection({word, selections});
     update(_selections);
   };
 
@@ -79,6 +87,7 @@ function useSelections({
     update(_selections);
   };
 
+  console.log(selections)
   return {
     state: selections,
     actions: {
@@ -100,8 +109,10 @@ useSelections.propTypes = {
   onSelections: PropTypes.func.isRequired,
   /** the quote to be selected */
   quote: PropTypes.string.isRequired,
-  /** the verses where quote may be found */
-  verseObjects: PropTypes.array,
+  /** indicate single verse in verseObjectsArray (or else multiple verses) **/
+  hasSingleVerse: PropTypes.bool,
+  /** all verses where quote may be found */
+  verseObjectsArray: PropTypes.array,
   /** if quote occurs mulitple times, this is the occurence of the one selected */
   occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   /** action taken when quote is provided */
