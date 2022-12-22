@@ -21,7 +21,7 @@ import useEffect from 'use-deep-compare-effect';
 
 function Component() {
   const [bookId, setBookId] = React.useState('1jn');
-  const [quote, setQuote] = React.useState('καὶ & μὴ');
+  const [quote, setQuote] = React.useState('καὶ');
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
@@ -156,7 +156,7 @@ import useEffect from "use-deep-compare-effect";
 
 function Component() {
   const [bookId, setBookId] = React.useState("1jn");
-  const [quote, setQuote] = React.useState("καὶ & μὴ");
+  const [quote, setQuote] = React.useState("καὶ & χεῖρες");
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(

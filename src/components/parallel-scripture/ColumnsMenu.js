@@ -59,7 +59,7 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
   const menuItems = columns.map((col, index) => (
     <MenuItem key={col.id}>
-      <Grid container justify='space-between'>
+      <Grid container justifyContent='space-between'>
         <Grid item>
           <div>
             <FormControlLabel
