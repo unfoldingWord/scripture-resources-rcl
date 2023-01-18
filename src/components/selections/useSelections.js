@@ -8,33 +8,87 @@ import * as helpers from './helpers';
 function useSelections({
   selections,
   onSelections,
-  occurrence,
+  occurrence: currentOccurrenceValue ,
   quote,
   onQuote,
   hasSingleVerse,
   verseObjectsArray,
 }) {
 
-  const verseObjects = (verseObjectsArray && verseObjectsArray.length > 0) ? verseObjectsArray[0] : []
+  // const verseObjects = (verseObjectsArray && verseObjectsArray.length > 1) ? verseObjectsArray[1] : (verseObjectsArray && verseObjectsArray.length > 0) ? verseObjectsArray[0] : []
+  
+  // console.log(verseObjects)
 
   useEffect(() => {
     console.log(quote)
     
-    const _selections = helpers.selectionsFromQuote({
-      quote,
-      verseObjects,
-      occurrence,
-    });
+    const _selectionsArray = [];
+    verseObjectsArray.forEach(verseObjects => {
+      _selectionsArray.push(helpers.selectionsFromQuote({
+        quote,
+        verseObjects,
+        occurrence: -1,
+      }));
+    }); 
+    let _selections =[];
+    // let i = 1;
+    // const occurences = _selectionsArray.flat(1).length
+    if(currentOccurrenceValue === -1){
+    _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
+    }else{
+      _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
+      _selections = _selections.slice(currentOccurrenceValue-1,currentOccurrenceValue)
+    }
+    console.log(currentOccurrenceValue)
+    // const testSelection = _selections.slice(0,1)
+    // // console.log("hey hi", _selectionsArray);
+    // // _selectionsArray.flat(1).forEach((selection) => {
+    // //   console.log(occurrence);
+    // //   if(currentOccurrenceValue === -1){
+    // //     _selections.push([selection])
+    // //   }
+    // // }) 
+    //   console.log("hey hi", _selections);
+    // _selections.push(_selectionsArray[0][0])
+    // _selectionsArray.flat(1).forEach((selection) => _selections.push({
+    //   text:"καὶ",
+    //   occurrence:i++,
+    //   occurrences:5
+    // }))  
+  //   let updatedSelections = [];
+  //   _selectionsArray?.flat(1).forEach((selection) => {
+  //     let selectionObject = JSON.parse(selection)
+  //     console.log(JSON.parse(selection))
+  //     updatedSelections.push([JSON.stringify({
+  //     text: selectionObject.text,
+  //     occurrence:i++,
+  //     occurrences:_selectionsArray.flat(1).length
+  //   })])
+  // }) 
+    // console.log(updatedSelections)
+    // console.log(testSelection) //make occurences: 8 and set counter for occurence like 1,2,3,4,5,6,7,8 (rewrite the object)
+    update(_selections)
+  }, [quote, currentOccurrenceValue, verseObjectsArray]);
 
-    console.log(hasSingleVerse)
-    console.log(_selections)
-    update(_selections);
-  }, [quote, occurrence, verseObjectsArray]);
+  // useEffect(() => {
+  //   console.log(quote)
+    
+  //   const _selections = helpers.selectionsFromQuote({
+  //     quote,
+  //     verseObjects,
+  //     occurrence,
+  //   });
+
+  //   console.log(hasSingleVerse)
+  //   console.log(_selections)
+  //   update(_selections);
+  // }, [quote, occurrence, verseObjectsArray]);
 
   useEffect(() => {
-    if (verseObjects && onQuote) {
+    console.log(verseObjectsArray)
+    if (verseObjectsArray && onQuote) {
       const _quote = helpers.quoteFromVerse({selections, verseObjects});
-      console.log(_quote)
+      console.log("_quote",_quote)
 
       onQuote(_quote);
     }

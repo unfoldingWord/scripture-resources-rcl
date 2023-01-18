@@ -30,10 +30,16 @@ export const selectionsFromQuoteAndVerseObjects = ({
   occurrence,
 }) => {
   let selections = [];
-  if (quote && verseObjects.length > 0) {
-    const string = verseObjectsToString(verseObjects);
-    selections = selectionsFromQuoteAndString({ quote, string, occurrence });
-  }
+  let string = [];
+  // if (quote && verseObjects.length > 0) {
+  //   for (let i=0; i < verseObjects.length; i++) {
+    string = verseObjectsToString(verseObjects);
+  // }
+  console.log(string)
+  console.log(quote)
+  selections = selectionsFromQuoteAndString({ quote, string, occurrence });
+  console.log(selections)
+  // }
   return selections;
 };
 
