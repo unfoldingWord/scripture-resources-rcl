@@ -6,8 +6,9 @@ import {
   AlignedWordsObject,
 } from '.';
 
-function MilestoneObject ({
+function MilestoneObject({
   originalWords,
+  verseKey,
   verseObject: {
     tag,
     children,
@@ -26,7 +27,8 @@ function MilestoneObject ({
   let component;
   if(type === 'quote'){
     component = children.map((child, index) =>
-        <VerseObject
+      <VerseObject
+          verseKey={verseKey}
           key={index}
           verseObject={child}
           disableWordPopover={disableWordPopover}
@@ -39,6 +41,7 @@ function MilestoneObject ({
       case 'k':
         component = children.map((child, index) =>
           <VerseObject
+            verseKey={verseKey}
             key={index}
             verseObject={child}
             disableWordPopover={disableWordPopover}
@@ -61,6 +64,7 @@ function MilestoneObject ({
         if (children.length === 1 && children[0].type === 'milestone') {
           component = (
             <VerseObject
+              verseKey={verseKey}
               verseObject={children[0]}
               originalWords={_originalWords}
               disableWordPopover={disableWordPopover}
@@ -71,6 +75,7 @@ function MilestoneObject ({
         } else {
           component = (
             <AlignedWordsObject
+              verseKey={verseKey}
               originalWords={_originalWords}
               children={children}
               disableWordPopover={disableWordPopover}

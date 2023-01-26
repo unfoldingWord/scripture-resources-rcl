@@ -12,6 +12,7 @@ import {
 } from '.';
 
 function VerseObject({
+  verseKey,
   verseObject,
   originalWords = [],
   paragraphs,
@@ -33,6 +34,7 @@ function VerseObject({
         if(verseObject.children){
           component = (
             <MilestoneObject
+              verseKey={verseKey}
               verseObject={verseObject}
               originalWords={originalWords}
               disableWordPopover={disableWordPopover}
@@ -48,6 +50,7 @@ function VerseObject({
     case 'milestone':
       component = (
         <MilestoneObject
+          verseKey={verseKey}
           verseObject={verseObject}
           originalWords={originalWords}
           disableWordPopover={disableWordPopover}
@@ -60,6 +63,7 @@ function VerseObject({
       if (verseObject.strong) {
         component = (
           <AlignedWordsObject
+            verseKey={verseKey}
             children={[verseObject]}
             originalWords={[verseObject]}
             disableWordPopover={disableWordPopover}

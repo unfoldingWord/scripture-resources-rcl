@@ -12,7 +12,7 @@ export function SelectionsContextProvider({
     quote,
     onQuote,
     hasSingleVerse,
-    verseObjectsArray,
+    verseObjectsMap,
     children,
 }) {
   
@@ -23,7 +23,7 @@ export function SelectionsContextProvider({
       quote: quote,
       onQuote: onQuote,
       hasSingleVerse: hasSingleVerse,
-      verseObjectsArray: verseObjectsArray,
+      verseObjectsMap: verseObjectsMap,
   });
 
   return (
@@ -40,10 +40,10 @@ SelectionsContextProvider.propTypes = {
   onSelections: PropTypes.func.isRequired,
   /** the quote to be selected */
   quote: PropTypes.string.isRequired,
-  /** indicate single verse in verseObjectsArray (or else multiple verses) **/
+  /** indicate single verse in verseObjectsMap (or else multiple verses) **/
   hasSingleVerse: PropTypes.bool,
   /** all verses where quote may be found */
-  verseObjectsArray: PropTypes.array,
+  verseObjectsMap: PropTypes.array,
   /** if quote occurs mulitple times, this is the occurence of the one selected */
   occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   /** action taken when quote is provided */
