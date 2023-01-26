@@ -43,7 +43,7 @@ function ScriptureTable({
   const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
-  let verseObjectsArray = [];
+  let verseObjectsMap = new Map();
 
   if (
     reference &&
@@ -61,8 +61,10 @@ function ScriptureTable({
     if (!reference?.bcvQuery) {
       const verse = chapter[reference.verse];
       const _verseObjects = verse ? verse.verseObjects : []
-      verseObjectsArray.push(_verseObjects)
-} else {
+      const ref = `${reference.chapter}:${reference.verse}`;
+      if(!verseObjectsMap.has(ref)) verseObjectsMap.set(ref,[]);
+      verseObjectsMap.get(ref).push(_verseObjects)
+    } else {
       const bookObjList = reference?.bcvQuery.book
       const bookResult = bookObjList ? Object.values(bookObjList)[0] : {}
       Object.entries(bookResult?.ch).forEach(([chapter, { v }]) => {
@@ -70,7 +72,9 @@ function ScriptureTable({
           if (vEntry) {
             const vObj = book.chapters[chapter][verse]
             const _verseObjects = vObj ? vObj.verseObjects : [];
-            verseObjectsArray.push(_verseObjects)
+            const ref = `${chapter}:${verse}`;
+            if(!verseObjectsMap.has(ref)) verseObjectsMap.set(ref,[]);
+            verseObjectsMap.get(ref).push(_verseObjects)
           }
         })
       })
@@ -179,7 +183,7 @@ function ScriptureTable({
       // onQuote={onQuote} // disable until round trip is working
       occurrence={occurrence}
       hasSingleVerse={!reference?.bcvQuery}
-      verseObjectsArray={verseObjectsArray}
+      verseObjectsMap={verseObjectsMap}
       selections={selections}
       onSelections={setSelections}
     >
