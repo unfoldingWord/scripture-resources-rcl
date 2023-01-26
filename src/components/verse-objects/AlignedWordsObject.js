@@ -12,6 +12,7 @@ import { WordObject, OriginalWordObject } from '.';
 
 function AlignedWordsObject({
   children,
+  verseKey,
   originalWords,
   disableWordPopover,
   getLexiconData,
@@ -36,7 +37,8 @@ function AlignedWordsObject({
       state: selections,
       actions: { areSelected, addSelections, removeSelections },
     } = _selectionsContext;
-    selected = areSelected(originalWords);
+    selected = areSelected(originalWords, verseKey);
+    // console.log({originalWords});
   }
 
   const words = children.map((verseObject, index) => (

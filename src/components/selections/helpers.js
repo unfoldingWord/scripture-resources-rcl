@@ -69,7 +69,10 @@ export const isSelected = ({ word, selections }) => {
   return selected;
 };
 
-export const areSelected = ({ words, selections }) => {
+export const areSelected = ({ words, selections, ref }) => {
+  console.log({ ref, words, selections })
+  const highlights = selections.get(ref)
+  if (!highlights) return false;
   let selected = false;
   const _selections = words.map((word) => selectionFromWord(word));
 
@@ -80,10 +83,10 @@ export const areSelected = ({ words, selections }) => {
     let _occ = _selection.occurrence;
     let _occs = _selection.occurrences;
 
-    for (let i = 0; i < selections.length; i++) {
-      const text = selections[i].text; //already normalized.
-      const occ = selections[i].occurrence;
-      const occs = selections[i].occurrences;
+    for (let i = 0; i < highlights.length; i++) {
+      const text = highlights[i].text; //already normalized.
+      const occ = highlights[i].occurrence;
+      const occs = highlights[i].occurrences;
 
       if (text === _text && occ === _occ && occs === _occs) {
         selected = true;

@@ -12,40 +12,49 @@ function useSelections({
   quote,
   onQuote,
   hasSingleVerse,
-  verseObjectsArray,
+  verseObjectsMap,
 }) {
 
-  // const verseObjects = (verseObjectsArray && verseObjectsArray.length > 1) ? verseObjectsArray[1] : (verseObjectsArray && verseObjectsArray.length > 0) ? verseObjectsArray[0] : []
+  // const verseObjects = (verseObjectsMap && verseObjectsMap.length > 1) ? verseObjectsMap[1] : (verseObjectsMap && verseObjectsMap.length > 0) ? verseObjectsMap[0] : []
   
   
   useEffect(() => {
-    console.log(verseObjectsArray)
-    console.log(quote)
-    
-    const _selectionsArray = [];
-    verseObjectsArray.forEach(verseObjects => {
-      const selectionsFromQuote = helpers.selectionsFromQuote({
+    const _selectionsMap = new Map()
+    verseObjectsMap.forEach((verseObjectsArray, ref) => {
+      const verseObjects = verseObjectsArray.flat(1);
+      const selectionsFromQuotes = helpers.selectionsFromQuote({
         quote,
         verseObjects,
         occurrence: -1,
       })
-      console.log({selectionsFromQuote})
-      _selectionsArray.push(selectionsFromQuote);
-    }); 
-    let _selections =[];
+      _selectionsMap.set(ref, selectionsFromQuotes);
+    });
+    // verseObjectsMap.forEach((verseObjects) => {
+    //   _selectionsArray.push(helpers.selectionsFromQuote({
+    //     quote,
+    //     verseObjects,
+    //     occurrence: -1,
+    //   }));
+    // }); 
+    let _selections = new Map();
     // let i = 1;
     // const occurences = _selectionsArray.flat(1).length
-    if(currentOccurrenceValue === -1){
-    _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
+    if (currentOccurrenceValue === -1) {
+      // _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
+      _selections = _selectionsMap;
     }else{
-      _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
-      console.log({_selections})
-      _selections = _selections.slice(currentOccurrenceValue-1,currentOccurrenceValue)
-      _selections.unshift({})
-      console.log({_selections})
+      // _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
+      // _selections = _selections.slice(currentOccurrenceValue-1,currentOccurrenceValue)
+      _selections = new Map();
+      let occurrences = 0;
+      _selectionsMap.forEach((verseObjectsArray, ref) => {
+        const selections = verseObjectsArray.filter(() => {
+          occurrences++
+          return occurrences === currentOccurrenceValue;
+        })
+        _selections.set(ref, selections);
+      })
     }
-    console.log(quote)
-    console.log(_selections)
     // const testSelection = _selections.slice(0,1)
     // // console.log("hey hi", _selectionsArray);
     // // _selectionsArray.flat(1).forEach((selection) => {
@@ -74,7 +83,7 @@ function useSelections({
     // console.log(updatedSelections)
     // console.log(testSelection) //make occurences: 8 and set counter for occurence like 1,2,3,4,5,6,7,8 (rewrite the object)
     update(_selections)
-  }, [quote, currentOccurrenceValue, verseObjectsArray]);
+  }, [quote, currentOccurrenceValue, verseObjectsMap]);
 
   // useEffect(() => {
   //   console.log(quote)
@@ -88,17 +97,16 @@ function useSelections({
   //   console.log(hasSingleVerse)
   //   console.log(_selections)
   //   update(_selections);
-  // }, [quote, occurrence, verseObjectsArray]);
+  // }, [quote, occurrence, verseObjectsMap]);
 
   useEffect(() => {
-    console.log(verseObjectsArray)
-    if (verseObjectsArray && onQuote) {
+    if (verseObjectsMap && onQuote) {
       const _quote = helpers.quoteFromVerse({selections, verseObjects});
       console.log("_quote",_quote)
 
       onQuote(_quote);
     }
-  }, [selections, onQuote, verseObjectsArray]);
+  }, [selections, onQuote, verseObjectsMap]);
 
   const update = useCallback((_selections) => {
     // the "parsify" function is expecting an array of stringified objects
@@ -108,16 +116,19 @@ function useSelections({
     // not strings. This causes the parse to fail. At present, it is
     // unknown where the mixed bag of an array is created.
     // So let's deal with it here.
-    let _selectionsParsified = [];
-    for (let i=0; i < _selections.length; i++) {
-      try {
-        let x = JSON.parse(_selections[i]);
-        _selectionsParsified.push(x);
-      } catch (error) {
-        _selectionsParsified.push(_selections[i]);
+    let _selectionsParsified = new Map();
+    _selections.forEach((verseObjectsArray, ref) => {
+      const _verseObjectsArray = []
+      for (let i=0; i < verseObjectsArray.length; i++) {
+        try {
+          let x = JSON.parse(verseObjectsArray[i]);
+          _verseObjectsArray.push(x);
+        } catch (error) {
+          _verseObjectsArray.push(verseObjectsArray[i]);
+        }
       }
-
-    }
+      _selectionsParsified.set(ref, _verseObjectsArray)
+    })
     //const __selections = _selections && deepFreeze(parsify(_selections));
     const __selections = _selections && deepFreeze(_selectionsParsified);
     onSelections(__selections);
@@ -125,10 +136,10 @@ function useSelections({
 
   const isSelected = (word) => helpers.isSelected({word, selections});
 
-  const areSelected = (words) => helpers.areSelected({words, selections});
+  const areSelected = (words, ref) => helpers.areSelected({words, selections, ref});
 
   const addSelection = (word) => {
-    let _selectileons = helpers.addSelection({word, selections});
+    let _selections = helpers.addSelection({word, selections});
     update(_selections);
   };
 
@@ -147,7 +158,6 @@ function useSelections({
     update(_selections);
   };
 
-  console.log(selections)
   return {
     state: selections,
     actions: {
@@ -169,10 +179,10 @@ useSelections.propTypes = {
   onSelections: PropTypes.func.isRequired,
   /** the quote to be selected */
   quote: PropTypes.string.isRequired,
-  /** indicate single verse in verseObjectsArray (or else multiple verses) **/
+  /** indicate single verse in verseObjectsMap (or else multiple verses) **/
   hasSingleVerse: PropTypes.bool,
   /** all verses where quote may be found */
-  verseObjectsArray: PropTypes.array,
+  verseObjectsMap: PropTypes.array,
   /** if quote occurs mulitple times, this is the occurence of the one selected */
   occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   /** action taken when quote is provided */
