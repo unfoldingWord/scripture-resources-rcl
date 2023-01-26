@@ -17,18 +17,20 @@ function useSelections({
 
   // const verseObjects = (verseObjectsArray && verseObjectsArray.length > 1) ? verseObjectsArray[1] : (verseObjectsArray && verseObjectsArray.length > 0) ? verseObjectsArray[0] : []
   
-  // console.log(verseObjects)
-
+  
   useEffect(() => {
+    console.log(verseObjectsArray)
     console.log(quote)
     
     const _selectionsArray = [];
     verseObjectsArray.forEach(verseObjects => {
-      _selectionsArray.push(helpers.selectionsFromQuote({
+      const selectionsFromQuote = helpers.selectionsFromQuote({
         quote,
         verseObjects,
         occurrence: -1,
-      }));
+      })
+      console.log({selectionsFromQuote})
+      _selectionsArray.push(selectionsFromQuote);
     }); 
     let _selections =[];
     // let i = 1;
@@ -37,9 +39,13 @@ function useSelections({
     _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
     }else{
       _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
+      console.log({_selections})
       _selections = _selections.slice(currentOccurrenceValue-1,currentOccurrenceValue)
+      _selections.unshift({})
+      console.log({_selections})
     }
-    console.log(currentOccurrenceValue)
+    console.log(quote)
+    console.log(_selections)
     // const testSelection = _selections.slice(0,1)
     // // console.log("hey hi", _selectionsArray);
     // // _selectionsArray.flat(1).forEach((selection) => {
