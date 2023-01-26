@@ -22,7 +22,6 @@ function useSelections({
   useEffect(() => {
     const _selectionsMap = new Map()
     verseObjectsMap.forEach((verseObjectsArray, ref) => {
-      console.log({ verseObjectsArray, ref });
       const verseObjects = verseObjectsArray.flat(1);
       const selectionsFromQuotes = helpers.selectionsFromQuote({
         quote,
@@ -31,8 +30,6 @@ function useSelections({
       })
       _selectionsMap.set(ref, selectionsFromQuotes);
     });
-
-    console.log({_selectionsMap})
     // verseObjectsMap.forEach((verseObjects) => {
     //   _selectionsArray.push(helpers.selectionsFromQuote({
     //     quote,
@@ -162,7 +159,6 @@ function useSelections({
     update(_selections);
   };
 
-  console.log(selections)
   return {
     state: selections,
     actions: {
