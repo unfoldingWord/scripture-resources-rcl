@@ -101,9 +101,8 @@ function useSelections({
 
   useEffect(() => {
     if (verseObjectsMap && onQuote) {
-      const _quote = helpers.quoteFromVerse({selections, verseObjects});
+      const _quote = helpers.quoteFromVerse({selections, verseObjectsMap});
       console.log("_quote",_quote)
-
       onQuote(_quote);
     }
   }, [selections, onQuote, verseObjectsMap]);
@@ -134,27 +133,27 @@ function useSelections({
     onSelections(__selections);
   }, [onSelections]);
 
-  const isSelected = (word) => helpers.isSelected({word, selections});
+  const isSelected = (word, ref) => helpers.isSelected({word, selections, ref});
 
   const areSelected = (words, ref) => helpers.areSelected({words, selections, ref});
 
-  const addSelection = (word) => {
-    let _selections = helpers.addSelection({word, selections});
+  const addSelection = (word, ref) => {
+    let _selections = helpers.addSelection({word, selections, ref});
     update(_selections);
   };
 
-  const addSelections = (words) => {
-    let _selections = helpers.addSelections({words, selections});
+  const addSelections = (words, ref) => {
+    let _selections = helpers.addSelections({words, selections, ref});
     update(_selections);
   };
 
-  const removeSelection = (word) => {
-    const _selections = helpers.removeSelection({word, selections});
+  const removeSelection = (word, ref) => {
+    const _selections = helpers.removeSelection({word, selections, ref});
     update(_selections);
   };
 
-  const removeSelections = (words) => {
-    let _selections = helpers.removeSelections({words, selections});
+  const removeSelections = (words, ref) => {
+    let _selections = helpers.removeSelections({words, selections, ref});
     update(_selections);
   };
 

@@ -19,20 +19,25 @@ export const selectionsFromQuote = ({ quote, verseObjects, occurrence }) => {
   return selections;
 };
 
-export const quoteFromVerse = ({ selections, verseObjects }) => {
-  let quotedWords = new Array(verseObjects.length);
-  const _selections = selections.map((selection) => JSON.parse(selection).text);
+export const quoteFromVerse = ({ selections, verseObjectsMap }) => {
+  let quotedWords = new Array();
+  const _selections = Array.from(selections, ([ref, refSelections]) => {
+    return refSelections.map((selection) => {
+      return selection?.text
+    })
+  }).flat(1)
 
-  verseObjects.forEach((verseObject, index) => {
-    const { type, text } = verseObject;
-
-    if (type === "word") {
-      const match = _selections.includes(text);
-      const quotedWord = match ? text : "&";
-      quotedWords.push(quotedWord);
-    }
+  verseObjectsMap.forEach((verseObjects, ref) => {
+    const _verseObjects = verseObjects.flat(1);
+    _verseObjects.forEach((verseObject, index) => {
+      const { type, text } = verseObject;
+      if (type === "word") {
+        const match = _selections.includes(text);
+        const quotedWord = match ? text : "&";
+        quotedWords.push(quotedWord);
+      }
+    });
   });
-
   const quote = quotedWords
     .join(" ")
     .replace(/( ?… ?)+/g, " & ")
@@ -63,14 +68,13 @@ export const selectionFromWord = (word) => {
   return selection;
 };
 
-export const isSelected = ({ word, selections }) => {
+export const isSelected = ({ word, selections, ref }) => {
   const selection = selectionFromWord(word);
-  const selected = selections.includes(selection);
+  const selected = selections.get(ref).includes(selection);
   return selected;
 };
 
 export const areSelected = ({ words, selections, ref }) => {
-  console.log({ ref, words, selections })
   const highlights = selections.get(ref)
   if (!highlights) return false;
   let selected = false;
@@ -97,35 +101,43 @@ export const areSelected = ({ words, selections, ref }) => {
   return selected;
 };
 
-export const addSelection = ({ word, selections }) => {
-  let _selections = new Set(selections);
+export const addSelection = ({ word, selections, ref}) => {
+  const newSelections = new Map(selections);
+  let _selections = new Set(newSelections.get(ref));
   const selection = selectionFromWord(word);
   _selections.add(selection);
-  return [..._selections];
+  newSelections.set(ref, [..._selections]);
+  return newSelections;
 };
 
-export const addSelections = ({ words, selections }) => {
-  let _selections = new Set(selections);
-
+export const addSelections = ({ words, selections, ref }) => {
+  const newSelections = new Map(selections);
+  const _selections = new Set(newSelections.get(ref));
   words.forEach((word) => {
     const selection = selectionFromWord(word);
     _selections.add(selection);
   });
-  return [..._selections];
+  newSelections.set(ref, [..._selections]);
+  return newSelections;
 };
 
-export const removeSelection = ({ word, selections }) => {
+export const removeSelection = ({ word, selections, ref }) => {
+  const newSelections = new Map(selections);
+  const selectionsArray = newSelections.get(ref);
   const selection = selectionFromWord(word);
-  const selectionStringified = selections.map((_selection) =>
+  const selectionStringified = selectionsArray.map((_selection) =>
     selectionFromWord(_selection)
   );
   const _selections = new Set(selectionStringified);
   _selections.delete(selection);
-  return [..._selections];
+  newSelections.set(ref, [..._selections]);
+  return newSelections;
 };
 
-export const removeSelections = ({ words, selections }) => {
-  const selectionStringified = selections.map((selection) =>
+export const removeSelections = ({ words, selections, ref }) => {
+  const newSelections = new Map(selections);
+  const selectionsArray = newSelections.get(ref);
+  const selectionStringified = selectionsArray.map((selection) =>
     selectionFromWord(selection)
   );
   const _selections = new Set(selectionStringified);
@@ -134,7 +146,8 @@ export const removeSelections = ({ words, selections }) => {
     const selection = selectionFromWord(word);
     _selections.delete(selection);
   });
-  return [..._selections];
+  newSelections.set(ref, [..._selections]);
+  return newSelections;
 };
 
 export default {
