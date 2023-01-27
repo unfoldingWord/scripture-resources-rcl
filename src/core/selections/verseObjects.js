@@ -10,6 +10,35 @@ import tokenizer from 'string-punctuation-tokenizer';
  * @param {array} verseObjects - source array of nested verseObjects
  * @param {array} flat - output array that will be filled with flattened verseObjects
  */
+export const flattenVerseObjectsMap = (verseObjectsMap, flatMap = new Map()) => {
+  let _verseObjectsMap = new Map(Array.from(verseObjectsMap)); 
+
+  console.log({verseObjectsMap,_verseObjectsMap})
+  _verseObjectsMap.forEach((verseObjects, ref) => {
+    const _verseObjects = verseObjects?.flat(1) || [];
+    while (_verseObjects.length > 0) {
+      const object = _verseObjects.shift();
+      if (object) {
+        if (object.type === 'milestone') { // get children of milestone
+          const _flat = flattenVerseObjectsMap(object.children);
+          _flat.forEach(_object => flat.push(_object));
+        } else {
+          const _flatArray = flatMap.get(ref) || [];
+          _flatArray.push(object);
+          flatMap.set(ref,_flatArray);
+        }
+      }
+    }
+  })
+  
+  return flatMap;
+};
+
+/**
+ * @description flatten verse objects from nested format to flat array
+ * @param {array} verseObjects - source array of nested verseObjects
+ * @param {array} flat - output array that will be filled with flattened verseObjects
+ */
 export const flattenVerseObjects = (verseObjects, flat = []) => {
   let _verseObjects = [...verseObjects];
   while (_verseObjects.length > 0) {
@@ -24,12 +53,16 @@ export const flattenVerseObjects = (verseObjects, flat = []) => {
     }
   }
   return flat;
-};
+}
 
-export const verseObjectsToString = (verseObjects) => {
-  const flattenedVerseObjects = flattenVerseObjects(verseObjects);
-  const string = flattenedVerseObjects.map(verseObject => verseObject.text).join(' ');
-  return string;
+export const verseObjectsToString = (verseObjectsMap) => {
+  const flattenedVerseObjectsMap = flattenVerseObjectsMap(verseObjectsMap);
+  const stringMap = new Map();
+  flattenedVerseObjectsMap.forEach((verseObjects, ref) => {
+    const string = verseObjects.map(verseObject => verseObject.text).join(' ');
+    stringMap.set(ref, string);
+  })
+  return stringMap;
 };
 
 /**

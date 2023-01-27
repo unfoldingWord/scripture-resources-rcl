@@ -16,72 +16,13 @@ function useSelections({
 }) {
 
   // const verseObjects = (verseObjectsMap && verseObjectsMap.length > 1) ? verseObjectsMap[1] : (verseObjectsMap && verseObjectsMap.length > 0) ? verseObjectsMap[0] : []
-  
-  
+
   useEffect(() => {
-    const _selectionsMap = new Map()
-    verseObjectsMap.forEach((verseObjectsArray, ref) => {
-      const verseObjects = verseObjectsArray.flat(1);
-      const selectionsFromQuotes = helpers.selectionsFromQuote({
+    const _selections =  helpers.selectionsFromQuote({
         quote,
-        verseObjects,
-        occurrence: -1,
+        verseObjectsMap,
+        occurrence: currentOccurrenceValue,
       })
-      _selectionsMap.set(ref, selectionsFromQuotes);
-    });
-    // verseObjectsMap.forEach((verseObjects) => {
-    //   _selectionsArray.push(helpers.selectionsFromQuote({
-    //     quote,
-    //     verseObjects,
-    //     occurrence: -1,
-    //   }));
-    // }); 
-    let _selections = new Map();
-    // let i = 1;
-    // const occurences = _selectionsArray.flat(1).length
-    if (currentOccurrenceValue === -1) {
-      // _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
-      _selections = _selectionsMap;
-    }else{
-      // _selectionsArray.flat(1).forEach((selection) => _selections.push([selection])) 
-      // _selections = _selections.slice(currentOccurrenceValue-1,currentOccurrenceValue)
-      _selections = new Map();
-      let occurrences = 0;
-      _selectionsMap.forEach((verseObjectsArray, ref) => {
-        const selections = verseObjectsArray.filter(() => {
-          occurrences++
-          return occurrences === currentOccurrenceValue;
-        })
-        _selections.set(ref, selections);
-      })
-    }
-    // const testSelection = _selections.slice(0,1)
-    // // console.log("hey hi", _selectionsArray);
-    // // _selectionsArray.flat(1).forEach((selection) => {
-    // //   console.log(occurrence);
-    // //   if(currentOccurrenceValue === -1){
-    // //     _selections.push([selection])
-    // //   }
-    // // }) 
-    //   console.log("hey hi", _selections);
-    // _selections.push(_selectionsArray[0][0])
-    // _selectionsArray.flat(1).forEach((selection) => _selections.push({
-    //   text:"καὶ",
-    //   occurrence:i++,
-    //   occurrences:5
-    // }))  
-  //   let updatedSelections = [];
-  //   _selectionsArray?.flat(1).forEach((selection) => {
-  //     let selectionObject = JSON.parse(selection)
-  //     console.log(JSON.parse(selection))
-  //     updatedSelections.push([JSON.stringify({
-  //     text: selectionObject.text,
-  //     occurrence:i++,
-  //     occurrences:_selectionsArray.flat(1).length
-  //   })])
-  // }) 
-    // console.log(updatedSelections)
-    // console.log(testSelection) //make occurences: 8 and set counter for occurence like 1,2,3,4,5,6,7,8 (rewrite the object)
     update(_selections)
   }, [quote, currentOccurrenceValue, verseObjectsMap]);
 

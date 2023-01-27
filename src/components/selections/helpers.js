@@ -6,18 +6,23 @@ import {
 // const stringify = (array) => array.map(object => JSON.stringify(object));
 //export const parsify = (array) => array.map(string => JSON.parse(string));
 
-export const selectionsFromQuote = ({ quote, verseObjects, occurrence }) => {
-  let selections = [];
+export const selectionsFromQuote = ({ quote, verseObjectsMap, occurrence }) => {
+  let selections = new Map();
 
-  if (quote && verseObjects && occurrence) {
-    selections = selectionsFromQuoteAndVerseObjects({
+  if (quote && verseObjectsMap && occurrence) {
+    selectionsFromQuoteAndVerseObjects({
       quote,
-      verseObjects,
+      verseObjectsMap,
       occurrence,
-    }).map((selection) => JSON.stringify(selection));
+    }).forEach((verseObjects, ref) => {
+      const newVerseObjects = verseObjects.map((selection) => JSON.stringify(selection));
+      selections.set(ref, newVerseObjects)
+    })
   }
   return selections;
 };
+
+
 
 export const quoteFromVerse = ({ selections, verseObjectsMap }) => {
   let quotedWords = new Array();
