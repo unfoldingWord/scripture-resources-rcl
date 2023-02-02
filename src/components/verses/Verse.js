@@ -60,6 +60,7 @@ export const Verse = ({
             disableWordPopover={disableWordPopover}
             getLexiconData={getLexiconData}
             translate={translate}
+            reference={reference}
           />
         </>
       );
@@ -72,7 +73,7 @@ export const Verse = ({
     if (update) update(_reference);
     /** WARN: ReferenceSelectedContext is not part of useCallback dependencies! */
   }, [update]);
-  
+
   const verseText = verseObjects.map(verseObject => verseObject.text).join('');
   const hebrew = isHebrew(verseText);
   let _dir = direction || 'auto';

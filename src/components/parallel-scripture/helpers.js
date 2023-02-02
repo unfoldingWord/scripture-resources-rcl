@@ -66,7 +66,7 @@ export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
       // headers: []
       // [[Prototype]]: Object
       // response: {data: {…},
-      // 
+      //
       // So doing a bit of manipulation to provide the expected shape
       // that does not have the "json" and "response" intermediate attributes
       let _chapters;
@@ -138,7 +138,7 @@ export const referenceIdsFromBcvQuery = (bcvQuery) => {
   if (bcvQuery?.book) {
     Object.entries(bcvQuery?.book).forEach(([bookKey, { ch }]) => {
       Object.entries(ch).forEach(([chNum, { v }]) => {
-        Object.entries(v).forEach(([vNum, { vObj }]) => {
+        Object.entries(v).forEach(([vNum]) => {
           resArray.push(`${chNum}:${vNum}`);
         })
       })

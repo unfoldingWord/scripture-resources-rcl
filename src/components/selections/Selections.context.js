@@ -13,15 +13,17 @@ export function SelectionsContextProvider({
     onQuote,
     verseObjects,
     children,
+    reference
 }) {
 
   let {state, actions} = useSelections({
-      selections: selections,
-      onSelections: onSelections,
-      occurrence: occurrence,
-      quote: quote,
-      onQuote: onQuote,
-      verseObjects: verseObjects,
+      selections,
+      onSelections,
+      occurrence,
+      quote,
+      onQuote,
+      verseObjects,
+      reference
   });
 
   return (
@@ -44,6 +46,8 @@ SelectionsContextProvider.propTypes = {
   occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   /** action taken when quote is provided */
   onQuote: PropTypes.func,
+  /** reference */
+  reference: PropTypes.object,
 };
 
 export default SelectionsContextProvider;

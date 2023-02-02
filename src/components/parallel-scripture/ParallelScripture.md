@@ -1,13 +1,10 @@
 ### Using Contexts
 
-To see highlighting appear, change the `-1` occurrence to 1;
-then click or tab out of field.
-
-To add resources to the RCL, please see the following sample paths:  
-`Door43-Catalog/hi/ulb/master/1jn`  
-`STR/hi/irv/master/1jn`  
-To add resources to the app, please omit bookId from the end:  
-`Door43-Catalog/hi/ulb/master`  
+To add resources to the RCL, please see the following sample paths:
+`Door43-Catalog/hi/ulb/master/1jn`
+`STR/hi/irv/master/1jn`
+To add resources to the app, please omit bookId from the end:
+`Door43-Catalog/hi/ulb/master`
 `STR/hi/irv/master`
 
 ```js
@@ -22,7 +19,7 @@ import useEffect from 'use-deep-compare-effect';
 function Component() {
   const [bookId, setBookId] = React.useState('1jn');
   const [quote, setQuote] = React.useState('καὶ & μὴ');
-  const [occurrence, setOccurrence] = React.useState(-1);
+  const [occurrence, setOccurrence] = React.useState(1);
 
   const form = React.useMemo(
     () => (
@@ -61,8 +58,8 @@ function Component() {
     book: {
       "1jn": {
         ch: {
-          1: { 
-            v: { 
+          1: {
+            v: {
               1: { },
               2: { },
             }
@@ -111,8 +108,8 @@ const bcvQuery = {
   book: {
     "1jn": {
       ch: {
-        1: { 
-          v: { 
+        1: {
+          v: {
             1: { },
             2: { },
           }
@@ -157,7 +154,7 @@ import useEffect from "use-deep-compare-effect";
 function Component() {
   const [bookId, setBookId] = React.useState("1jn");
   const [quote, setQuote] = React.useState("καὶ & μὴ");
-  const [occurrence, setOccurrence] = React.useState(-1);
+  const [occurrence, setOccurrence] = React.useState(1);
 
   const form = React.useMemo(
     () => (
@@ -196,8 +193,8 @@ function Component() {
     book: {
       "1jn": {
         ch: {
-          1: { 
-            v: { 
+          1: {
+            v: {
                 1: {},
                 2: {},
                 5: {}
@@ -246,8 +243,8 @@ const bcvQuery = {
   book: {
     "1jn": {
       ch: {
-        1: { 
-          v: { 
+        1: {
+          v: {
               1: {},
               2: {},
               5: {}

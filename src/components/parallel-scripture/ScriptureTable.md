@@ -1,9 +1,8 @@
 ### Using a Context
 
 ```js
-import {ScriptureTable, 
+import {ScriptureTable,
   ResourcesContext, ResourcesContextProvider,
-  SelectionsContext, SelectionsContextProvider,
 } from "scripture-resources-rcl";
 import useEffect from 'use-deep-compare-effect';
 
@@ -82,7 +81,7 @@ const occurrence=1;
   <ResourcesContextProvider
     reference={reference}
     resources={resources}
-    resourceLinks={resourceLinks} 
+    resourceLinks={resourceLinks}
     onResources={setResources}
     config={config}
   >
@@ -108,27 +107,45 @@ import bhd_tit from '../mocks/bhd_tit.usfm.js';
 const titles = [
   'UGNT - Greek',
   'English - ULT (aligned)',
-  'Hindi - IRV (aligned)',
-  'Hindi - ULB',
-  'Bhadrawahi - ULB',
+ 'Hindi - IRV (aligned)',
+ 'Hindi - ULB',
+ 'Bhadrawahi - ULB',
 ];
 
 const books = [
   usfmJS.toJSON(ugnt_tit),
   usfmJS.toJSON(en_aligned_tit),
-  usfmJS.toJSON(hi_aligned_tit),
-  usfmJS.toJSON(hi_tit),
-  usfmJS.toJSON(bhd_tit),
+ usfmJS.toJSON(hi_aligned_tit),
+ usfmJS.toJSON(hi_tit),
+ usfmJS.toJSON(bhd_tit),
 ];
+
+const bcvQuery = {
+  book: {
+    "tit": {
+      ch: {
+        1: {
+          v: {
+            1: { },
+            2: { },
+            3: { },
+          }
+        },
+      },
+    },
+  },
+}
+
 
 const reference = {
   bookId: 'tit',
   chapter: 1,
-  verse: 3,
+  verse: '1-3',
+  bcvQuery
 };
 
 const [component, setComponent] = React.useState(<></>)
-const [quote, setQuote] = React.useState("τοῦ σωτῆρος ἡμῶν θεοῦ");
+const [quote, setQuote] = React.useState("χρόνων αἰωνίων & καιροῖς ἰδίοις");
 const [occurrence, setOccurrence] = React.useState(1);
 
 React.useEffect(() => {

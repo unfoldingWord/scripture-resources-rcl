@@ -22,6 +22,7 @@ function MilestoneObject ({
   disableWordPopover,
   getLexiconData,
   translate,
+  reference,
 }) {
   let component;
   if(type === 'quote'){
@@ -32,20 +33,22 @@ function MilestoneObject ({
           disableWordPopover={disableWordPopover}
           getLexiconData={getLexiconData}
           translate={translate}
+          reference={reference}
         />
       );
   }else{
     switch (tag) {
       case 'k':
-        component = children.map((child, index) =>
+        component = children.map((child, index) => (
           <VerseObject
             key={index}
             verseObject={child}
             disableWordPopover={disableWordPopover}
             getLexiconData={getLexiconData}
             translate={translate}
+            reference={reference}
           />
-        );
+        ));
         break;
       case 'zaln':
         const originalWord = {
@@ -66,6 +69,7 @@ function MilestoneObject ({
               disableWordPopover={disableWordPopover}
               getLexiconData={getLexiconData}
               translate={translate}
+              reference={reference}
             />
           );
         } else {
@@ -76,6 +80,7 @@ function MilestoneObject ({
               disableWordPopover={disableWordPopover}
               getLexiconData={getLexiconData}
               translate={translate}
+              reference={reference}
             />
           );
         }
@@ -111,6 +116,8 @@ MilestoneObject.propTypes = {
   getLexiconData: PropTypes.func,
   /** optional function for localization */
   translate: PropTypes.func,
+  /** reference for verse (bookId, chapter, verse) */
+  reference: PropTypes.object,
 };
 
 export default MilestoneObject;

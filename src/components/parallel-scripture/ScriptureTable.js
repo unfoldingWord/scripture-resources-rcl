@@ -20,6 +20,7 @@ import {
   referenceIdFromReference,
   referenceIdsFromBcvQuery,
   versesFromReferenceIdAndBooks,
+  referenceFromReferenceId,
 } from './helpers';
 
 function ScriptureTable({
@@ -56,10 +57,19 @@ function ScriptureTable({
 	    books[0].json.chapters[reference.chapter]) ))
   ) {
     const chapter = books[0].json ? books[0].json.chapters[reference.chapter] : books[0].chapters[reference.chapter];
-    const _verse = reference?.verse
     if (!reference?.bcvQuery) {
       const verse = chapter[reference.verse];
       verseObjects = verse ? verse.verseObjects : [];
+    } else {
+      const referenceIds = referenceIdsFromBcvQuery(reference?.bcvQuery);
+      for (const referenceId of referenceIds) {
+        const reference = referenceFromReferenceId(referenceId);
+        const chapter = books[0].json
+          ? books[0].json.chapters[reference.chapter]
+          : books[0].chapters[reference.chapter];
+        const verse = chapter[reference.verse];
+        verseObjects.push(verse ? verse.verseObjects : []);
+      }
     }
   }
 
@@ -167,6 +177,7 @@ function ScriptureTable({
       verseObjects={verseObjects}
       selections={selections}
       onSelections={setSelections}
+      reference={reference}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
       <div id="wrapY" className={classes.wrapY} style={{ maxHeight: height }}>

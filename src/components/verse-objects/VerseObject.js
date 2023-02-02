@@ -19,6 +19,7 @@ function VerseObject({
   disableWordPopover,
   getLexiconData,
   translate,
+  reference,
 }) {
   const { type } = verseObject;
   let component;
@@ -38,6 +39,7 @@ function VerseObject({
               disableWordPopover={disableWordPopover}
               getLexiconData={getLexiconData}
               translate={translate}
+              reference={reference}
             />
           );
         }else{
@@ -53,6 +55,7 @@ function VerseObject({
           disableWordPopover={disableWordPopover}
           getLexiconData={getLexiconData}
           translate={translate}
+          reference={reference}
         />
       );
       break;
@@ -65,6 +68,7 @@ function VerseObject({
             disableWordPopover={disableWordPopover}
             getLexiconData={getLexiconData}
             translate={translate}
+            reference={reference}
           />
         );
       } else {
@@ -121,6 +125,8 @@ VerseObject.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** optional function to lookup lexicon data */
   getLexiconData: PropTypes.func,
+  /** reference for verse (bookId, chapter, verse) */
+  reference: PropTypes.object,
   /** optional function for localization */
   translate: PropTypes.func,
 };

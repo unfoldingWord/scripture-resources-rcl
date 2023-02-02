@@ -1,19 +1,25 @@
 import {
   selectionsFromQuoteAndVerseObjects,
   normalizeString,
-} from "../../core/selections/selections";
+} from '../../core/selections/selections';
 
 // const stringify = (array) => array.map(object => JSON.stringify(object));
 //export const parsify = (array) => array.map(string => JSON.parse(string));
 
-export const selectionsFromQuote = ({ quote, verseObjects, occurrence }) => {
+export const selectionsFromQuote = ({
+  quote,
+  verseObjects,
+  occurrence,
+  reference = {chapter: 100, verse: 100},
+}) => {
   let selections = [];
 
-  if (quote && verseObjects && occurrence) {
+  if ((quote && verseObjects && occurrence)) {
     selections = selectionsFromQuoteAndVerseObjects({
       quote,
       verseObjects,
       occurrence,
+      reference,
     }).map((selection) => JSON.stringify(selection));
   }
   return selections;
@@ -26,19 +32,19 @@ export const quoteFromVerse = ({ selections, verseObjects }) => {
   verseObjects.forEach((verseObject, index) => {
     const { type, text } = verseObject;
 
-    if (type === "word") {
+    if (type === 'word') {
       const match = _selections.includes(text);
-      const quotedWord = match ? text : "&";
+      const quotedWord = match ? text : '&';
       quotedWords.push(quotedWord);
     }
   });
 
   const quote = quotedWords
-    .join(" ")
-    .replace(/( ?… ?)+/g, " & ")
-    .replace(/(^[… ]+|[… ]+…)/g, "")
-    .replace(/( ?& ?)+/g, " & ")
-    .replace(/(^[& ]+|[& ]+$)/g, "");
+    .join(' ')
+    .replace(/( ?… ?)+/g, ' & ')
+    .replace(/(^[… ]+|[… ]+…)/g, '')
+    .replace(/( ?& ?)+/g, ' & ')
+    .replace(/(^[& ]+|[& ]+$)/g, '');
   return quote;
 };
 
@@ -69,7 +75,7 @@ export const isSelected = ({ word, selections }) => {
   return selected;
 };
 
-export const areSelected = ({ words, selections }) => {
+export const areSelected = ({ words, selections, reference = {chapter:100, verse:100} }) => {
   let selected = false;
   const _selections = words.map((word) => selectionFromWord(word));
 
@@ -79,13 +85,20 @@ export const areSelected = ({ words, selections }) => {
     let _text = normalizeString(_selection.text);
     let _occ = _selection.occurrence;
     let _occs = _selection.occurrences;
+    let {chapter: _ch = 1, verse: _v = 1} = reference;
 
     for (let i = 0; i < selections.length; i++) {
       const text = selections[i].text; //already normalized.
       const occ = selections[i].occurrence;
       const occs = selections[i].occurrences;
-
-      if (text === _text && occ === _occ && occs === _occs) {
+      const { chapter: ch = 1, verse: v = 1 } = selections[i].reference;
+      if (
+        text === _text &&
+        occ === _occ &&
+        occs === _occs &&
+        parseInt(ch) === parseInt(_ch) &&
+        parseInt(v) === parseInt(_v)
+      ) {
         selected = true;
         break;
       }
