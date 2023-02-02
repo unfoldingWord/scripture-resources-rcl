@@ -28,11 +28,11 @@ export const selectionsFromQuoteAndVerseObjects = ({
   quote,
   verseObjects,
   occurrence,
-  reference,
+  reference={chapter:100, verse: 100},
 }) => {
   let selections = [];
   if (quote && verseObjects.length > 0) {
-    if (reference.bcvQuery) {
+    if (reference?.bcvQuery) {
       const referenceArr = referenceIdsFromBcvQuery(reference.bcvQuery);
       const _verseObjects = verseObjects.reduce(
         (prev, curr) => [...prev, ...curr],

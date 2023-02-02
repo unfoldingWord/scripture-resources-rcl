@@ -29,7 +29,7 @@ describe('selectionHelpers.selectionsFromQuoteAndVerseObjects PHP', () => {
     generateTest('php/2-1-7');
   })
 })
-  
+
 const normalizedText = (arr) => arr.map( obj => {
 return {
     ...obj,
@@ -146,7 +146,7 @@ function generateTest(fileName) {
   }
 
   const { verseObjects } = books[bookName].chapters[chapter][verse];
-  const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence });
+  const selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjects, occurrence, reference: {chapter, verse} });
 
   // log details to console if there is a miscompare of data
   if (!deepEqual(selections, expected)) {

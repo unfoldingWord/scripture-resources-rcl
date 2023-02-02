@@ -6,7 +6,6 @@ import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
 import { mount } from 'enzyme';
 import React from 'react';
 import path from 'path';
-import { normalizeString } from "../src/core/selections/selections";
 
 const UGNT_BOOKS = {
   'tit': ugnt_tit,
