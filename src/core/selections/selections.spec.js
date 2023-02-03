@@ -29,7 +29,7 @@ describe("selectionsFromQuoteAndString", () => {
     expect(output).toStrictEqual(normalizedText(expected));
   });
 
-  it("all occurrences -1", () => {
+  it("a2", () => {
     const input = {
       quote: "καὶ",
       string:
@@ -134,7 +134,7 @@ describe("selectionsFromQuoteAndString", () => {
     expect(output).toStrictEqual(normalizedText(expected));
   });
 
-  it("ampersand: second occurrence of repeated quote", () => {
+  it("a3", () => {
     const input = {
       quote: "ὁ λόγος & Θεόν",
       string:

@@ -28,7 +28,7 @@ export const selectionsFromQuoteAndVerseObjects = ({
   quote,
   verseObjects,
   occurrence,
-  reference={chapter:100, verse: 100},
+  reference = { chapter: 100, verse: 100 },
 }) => {
   let selections = [];
   if (quote && verseObjects.length > 0) {
@@ -40,7 +40,6 @@ export const selectionsFromQuoteAndVerseObjects = ({
       );
       const string = verseObjectsToString(_verseObjects);
       selections = selectionsFromQuoteAndString({ quote, string, occurrence });
-      console.log({ selections });
       const newSelections = [];
       for (let id = 0; id < selections.length; id++) {
         const sel = { ...selections[id] };
@@ -130,15 +129,14 @@ export const selectionsFromQuoteAndString = ({
   }
 
   if (occurrence === -1 && subquotes.length === 1) {
-    const occurrences = occurrencesInString(string, quote);
+    const occurrences = occurrencesInString(string, quote); // TODO getPrecedingOccurrences(string, quote)
     subquotes = new Array(occurrences).fill(quote);
   }
 
   let precedingOccurrences = 0;
   let precedingText = '';
-  subquotes.forEach((subquote) => {
+  subquotes.forEach((subquote, index) => {
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
-    const index = precedingOccurrences + 1;
     const currentOccurrence = getCurrentOccurrenceFromPrecedingText(
       occurrence,
       index,
@@ -153,7 +151,6 @@ export const selectionsFromQuoteAndString = ({
 
     const subSelections = subSelectionsFromSubquote({
       subquote,
-      index,
       precedingText,
       string,
     });
@@ -224,7 +221,6 @@ export const subSelectionsFromSubquote = ({
       selectedText: _selectedText,
       precedingText: _precedingText + precedingTextInSubselections,
       entireText: string,
-      subSelections,
     });
 
     subSelections.push(subSelection);
