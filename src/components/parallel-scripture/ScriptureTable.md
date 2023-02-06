@@ -11,7 +11,7 @@ import usfmJS from 'usfm-js';
 function Component ({reference}) {
 
   const resourcesContext = React.useContext(ResourcesContext);
-  const resources = resourcesContext.state;
+  const resources = resourcesContext.state.resources;
 
   const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
@@ -32,12 +32,8 @@ function Component ({reference}) {
         return _title;
       });
       setTitles(_titles);
-      const promises = resources.map((resource, index) => resource.project.file() );
-      Promise.all(promises).then(files => {
-        const start = performance.now();
-        const _books = files.map(file => usfmJS.toJSON(file));
-        const end = performance.now();
-        console.log(`USFM parsing books took: ${(end - start).toFixed(3)}ms`);
+      const promises = resources.map((resource, index) => resource.project.parseUsfm() );
+      Promise.all(promises).then(_books => {
         setBooks(_books);
       });
     }
@@ -65,7 +61,7 @@ function Component ({reference}) {
 
 const resourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/v0.8',
-  'unfoldingWord/en/ult/v5',
+    'unfoldingWord/en/ult/v5',
   'unfoldingWord/en/ust/v5',
 ];
 

@@ -194,20 +194,28 @@ function ScriptureTable({
 
 ScriptureTable.propTypes = {
   titles: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
   ).isRequired,
   books: PropTypes.arrayOf(
-    PropTypes.shape({
-      headers: PropTypes.array.isRequired,
-      chapters: PropTypes.object.isRequired,
-    }),
+    PropTypes.oneOfType([
+      PropTypes.shape({
+        headers: PropTypes.array.isRequired,
+        chapters: PropTypes.object.isRequired,
+      }),
+      PropTypes.shape({
+        json: PropTypes.shape({
+          headers: PropTypes.array.isRequired,
+          chapters: PropTypes.object.isRequired,
+        }),
+      }),
+    ])
   ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({
     bookId: PropTypes.string,
     chapter: PropTypes.number,
     verse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    bcvQuery: PropTypes.any
+    bcvQuery: PropTypes.any,
   }),
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.object,
