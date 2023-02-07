@@ -8,29 +8,30 @@ import * as helpers from './helpers';
 function useSelections({
   selections,
   onSelections,
-  occurrence,
+  occurrence: currentOccurrenceValue ,
   quote,
   onQuote,
-  verseObjects,
+  hasSingleVerse,
+  verseObjectsMap,
 }) {
 
-  useEffect(() => {
-    
-    const _selections = helpers.selectionsFromQuote({
-      quote,
-      verseObjects,
-      occurrence,
-    });
-
-    update(_selections);
-  }, [quote, occurrence, verseObjects]);
+  // const verseObjects = (verseObjectsMap && verseObjectsMap.length > 1) ? verseObjectsMap[1] : (verseObjectsMap && verseObjectsMap.length > 0) ? verseObjectsMap[0] : []
 
   useEffect(() => {
-    if (verseObjects && onQuote) {
-      const _quote = helpers.quoteFromVerse({selections, verseObjects});
+    const _selections =  helpers.selectionsFromQuote({
+        quote,
+        verseObjectsMap,
+        occurrence: currentOccurrenceValue,
+      })
+    update(_selections)
+  }, [quote, currentOccurrenceValue, verseObjectsMap]);
+
+  useEffect(() => {
+    if (verseObjectsMap && onQuote) {
+      const _quote = helpers.quoteFromVerse({selections, verseObjectsMap});
       onQuote(_quote);
     }
-  }, [selections, onQuote, verseObjects]);
+  }, [selections, onQuote, verseObjectsMap]);
 
   const update = useCallback((_selections) => {
     // the "parsify" function is expecting an array of stringified objects
@@ -40,42 +41,45 @@ function useSelections({
     // not strings. This causes the parse to fail. At present, it is
     // unknown where the mixed bag of an array is created.
     // So let's deal with it here.
-    let _selectionsParsified = [];
-    for (let i=0; i < _selections.length; i++) {
-      try {
-        let x = JSON.parse(_selections[i]);
-        _selectionsParsified.push(x);
-      } catch (error) {
-        _selectionsParsified.push(_selections[i]);
+    let _selectionsParsified = new Map();
+    _selections.forEach((verseObjectsArray, ref) => {
+      const _verseObjectsArray = []
+      for (let i=0; i < verseObjectsArray.length; i++) {
+        try {
+          let x = JSON.parse(verseObjectsArray[i]);
+          _verseObjectsArray.push(x);
+        } catch (error) {
+          _verseObjectsArray.push(verseObjectsArray[i]);
+        }
       }
-
-    }
+      _selectionsParsified.set(ref, _verseObjectsArray)
+    })
     //const __selections = _selections && deepFreeze(parsify(_selections));
     const __selections = _selections && deepFreeze(_selectionsParsified);
     onSelections(__selections);
   }, [onSelections]);
 
-  const isSelected = (word) => helpers.isSelected({word, selections});
+  const isSelected = (word, ref) => helpers.isSelected({word, selections, ref});
 
-  const areSelected = (words) => helpers.areSelected({words, selections});
+  const areSelected = (words, ref) => helpers.areSelected({words, selections, ref});
 
-  const addSelection = (word) => {
-    let _selections = helpers.addSelection({word, selections});
+  const addSelection = (word, ref) => {
+    let _selections = helpers.addSelection({word, selections, ref});
     update(_selections);
   };
 
-  const addSelections = (words) => {
-    let _selections = helpers.addSelections({words, selections});
+  const addSelections = (words, ref) => {
+    let _selections = helpers.addSelections({words, selections, ref});
     update(_selections);
   };
 
-  const removeSelection = (word) => {
-    const _selections = helpers.removeSelection({word, selections});
+  const removeSelection = (word, ref) => {
+    const _selections = helpers.removeSelection({word, selections, ref});
     update(_selections);
   };
 
-  const removeSelections = (words) => {
-    let _selections = helpers.removeSelections({words, selections});
+  const removeSelections = (words, ref) => {
+    let _selections = helpers.removeSelections({words, selections, ref});
     update(_selections);
   };
 
@@ -100,8 +104,10 @@ useSelections.propTypes = {
   onSelections: PropTypes.func.isRequired,
   /** the quote to be selected */
   quote: PropTypes.string.isRequired,
-  /** the verses where quote may be found */
-  verseObjects: PropTypes.array,
+  /** indicate single verse in verseObjectsMap (or else multiple verses) **/
+  hasSingleVerse: PropTypes.bool,
+  /** all verses where quote may be found */
+  verseObjectsMap: PropTypes.array,
   /** if quote occurs mulitple times, this is the occurence of the one selected */
   occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   /** action taken when quote is provided */

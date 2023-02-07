@@ -43,7 +43,7 @@ function ScriptureTable({
   const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
-  let verseObjects = [];
+  let verseObjectsMap = new Map();
 
   if (
     reference &&
@@ -55,11 +55,29 @@ function ScriptureTable({
   ((books[0].json.chapters &&
 	    books[0].json.chapters[reference.chapter]) ))
   ) {
-    const chapter = books[0].json ? books[0].json.chapters[reference.chapter] : books[0].chapters[reference.chapter];
+    const book = books[0].json ? books[0].json : books[0];
+    const chapter = book.chapters[reference.chapter]
     const _verse = reference?.verse
     if (!reference?.bcvQuery) {
       const verse = chapter[reference.verse];
-      verseObjects = verse ? verse.verseObjects : [];
+      const _verseObjects = verse ? verse.verseObjects : []
+      const ref = `${reference.chapter}:${reference.verse}`;
+      if(!verseObjectsMap.has(ref)) verseObjectsMap.set(ref,[]);
+      verseObjectsMap.get(ref).push(_verseObjects)
+    } else {
+      const bookObjList = reference?.bcvQuery.book
+      const bookResult = bookObjList ? Object.values(bookObjList)[0] : {}
+      Object.entries(bookResult?.ch).forEach(([chapter, { v }]) => {
+        Object.entries(v).forEach(([verse, vEntry]) => {
+          if (vEntry) {
+            const vObj = book.chapters[chapter][verse]
+            const _verseObjects = vObj ? vObj.verseObjects : [];
+            const ref = `${chapter}:${verse}`;
+            if(!verseObjectsMap.has(ref)) verseObjectsMap.set(ref,[]);
+            verseObjectsMap.get(ref).push(_verseObjects)
+          }
+        })
+      })
     }
   }
 
@@ -164,7 +182,8 @@ function ScriptureTable({
       quote={quote}
       // onQuote={onQuote} // disable until round trip is working
       occurrence={occurrence}
-      verseObjects={verseObjects}
+      hasSingleVerse={!reference?.bcvQuery}
+      verseObjectsMap={verseObjectsMap}
       selections={selections}
       onSelections={setSelections}
     >
@@ -187,8 +206,8 @@ ScriptureTable.propTypes = {
   ).isRequired,
   books: PropTypes.arrayOf(
     PropTypes.shape({
-      headers: PropTypes.array.isRequired,
-      chapters: PropTypes.object.isRequired,
+      headers: PropTypes.array,
+      chapters: PropTypes.object,
     }),
   ).isRequired,
   /** the reference to scroll into view */

@@ -4,8 +4,8 @@ To see highlighting appear, change the `-1` occurrence to 1;
 then click or tab out of field.
 
 To add resources to the RCL, please see the following sample paths:  
-`Door43-Catalog/hi/ulb/master/1jn`  
-`STR/hi/irv/master/1jn`  
+`Door43-Catalog/hi/ulb/master/php`  
+`STR/hi/irv/master/php`  
 To add resources to the app, please omit bookId from the end:  
 `Door43-Catalog/hi/ulb/master`  
 `STR/hi/irv/master`
@@ -20,8 +20,8 @@ import {
 import useEffect from 'use-deep-compare-effect';
 
 function Component() {
-  const [bookId, setBookId] = React.useState('1jn');
-  const [quote, setQuote] = React.useState('καὶ & μὴ');
+  const [bookId, setBookId] = React.useState('php');
+  const [quote, setQuote] = React.useState('καὶ');
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
@@ -59,7 +59,7 @@ function Component() {
 
   const bcvQuery = {
     book: {
-      "1jn": {
+      "php": {
         ch: {
           1: { 
             v: { 
@@ -67,7 +67,11 @@ function Component() {
               2: { },
             }
           },
-          2: { v: { 5: { } } },
+          2: { 
+            v: { 
+             5: {}
+            } 
+          },
         },
       },
     },
@@ -98,10 +102,9 @@ function Component() {
 const config = { server: 'https://git.door43.org' };
 
 const defaultResourceLinks = [
-  'unfoldingWord/el-x-koine/ugnt/master/1jn',
-  'unfoldingWord/en/ult/v5/1jn',
-  'unfoldingWord/en/ust/v5/1jn',
-  'ru_gl/ru/rlob/master/1jn',
+  'unfoldingWord/el-x-koine/ugnt/master/php',
+  'unfoldingWord/en/ult/v5/php',
+  'unfoldingWord/en/ust/v5/php',
   'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
 ];
 
@@ -109,7 +112,7 @@ const _resourceLinks = [...defaultResourceLinks];
 
 const bcvQuery = {
   book: {
-    "1jn": {
+    "php": {
       ch: {
         1: { 
           v: { 
@@ -123,7 +126,7 @@ const bcvQuery = {
   },
 }
 
-const reference = { bookId: '1jn', chapter: 1, verse: "1-2,2:5", bcvQuery };
+const reference = { bookId: 'php', chapter: 1, verse: "1-2,2:5", bcvQuery };
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',
@@ -156,7 +159,7 @@ import useEffect from "use-deep-compare-effect";
 
 function Component() {
   const [bookId, setBookId] = React.useState("1jn");
-  const [quote, setQuote] = React.useState("καὶ & μὴ");
+  const [quote, setQuote] = React.useState("καὶ & χεῖρες");
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(

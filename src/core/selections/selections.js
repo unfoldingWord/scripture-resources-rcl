@@ -26,14 +26,13 @@ export const getRegexForWord = (string) => {
  */
 export const selectionsFromQuoteAndVerseObjects = ({
   quote,
-  verseObjects,
+  verseObjectsMap,
   occurrence,
 }) => {
-  let selections = [];
-  if (quote && verseObjects.length > 0) {
-    const string = verseObjectsToString(verseObjects);
-    selections = selectionsFromQuoteAndString({ quote, string, occurrence });
-  }
+  let selections = new Map();
+  let stringMap = new Map();
+    stringMap = verseObjectsToString(verseObjectsMap);
+  selections = selectionsFromQuoteAndString({ quote, stringMap, occurrence });
   return selections;
 };
 
@@ -62,57 +61,73 @@ export const getPrecedingOccurrences = (string, subquote) => {
  */
 export const selectionsFromQuoteAndString = ({
   quote,
-  string: rawString,
+  stringMap: rawStringMap,
   occurrence,
   }) => {
-  let string = normalizeString(rawString);
+  let stringMap = new Map();
+  rawStringMap.forEach((rawString,ref)=> {
+    const string = normalizeString(rawString);
+    stringMap.set(ref, string);
+  })
   // Calculate hasAmpersand before normalizing quote.
   let _subquotes = quote.replace(/( ?… ?)+/g, " & ") //replace elipse with '&'
   let subquotes = _subquotes.split('&').map(normalizeString);
-  let selections = [];
+  let selections = new Map();
   const hasAmpersand = subquotes.length > 1;
   quote = normalizeString(quote);
-
+  
   if (hasAmpersand && occurrence === -1) {
-    return [];
+    return new Map();
   }
 
-  if (occurrence === -1 && subquotes.length === 1) {
-    const occurrences = occurrencesInString(string, quote);
-    subquotes = new Array(occurrences).fill(quote);
-  }
+  let occurrenceCount = 0;
+  stringMap.forEach((string, ref) => {
+    if (subquotes.length === 1) {
+      const occurrences = occurrencesInString(string, quote);
+      subquotes = new Array(occurrences).fill(quote);
+    }
 
-  let precedingOccurrences = 0;
-  let precedingText = '';
-  subquotes.forEach((subquote) => {
-    precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
-    const index = precedingOccurrences + 1;
-    const currentOccurrence = getCurrentOccurrenceFromPrecedingText(
-      occurrence,
-      index,
-      precedingOccurrences
-    );
-    precedingText = getPrecedingText(
-      string,
-      subquote,
-      currentOccurrence,
-      precedingOccurrences
-    );
+    let precedingOccurrences = 0;
+    let precedingText = '';
 
-    const subSelections = subSelectionsFromSubquote({
-      subquote,
-      index,
-      precedingText,
-      string,
+    subquotes.forEach((subquote) => {
+      precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
+
+      const index = precedingOccurrences + 1;
+      const currentOccurrence = getCurrentOccurrenceFromPrecedingText(
+        occurrence,
+        index,
+        precedingOccurrences
+      );
+
+      precedingText = getPrecedingText(
+        string,
+        subquote,
+        currentOccurrence,
+        precedingOccurrences
+      );
+
+      occurrenceCount++;
+
+      if(hasAmpersand || occurrenceCount === occurrence || occurrence === -1 ){
+        const subSelections = subSelectionsFromSubquote({
+          subquote,
+          index,
+          precedingText,
+          string,
+        });
+        const _selections = selections.get(ref) || []
+        subSelections.forEach((subSelection) => _selections.push(subSelection));
+        selections.set(ref, _selections);
+      }
+
+      /** Adding the previous subquote to account for repeated ampersand words i.e. Θεοῦ&Θεοῦ */
+      precedingText += subquote;
     });
-
-    subSelections.forEach((subSelection) => selections.push(subSelection));
-    /** Adding the previous subquote to account for repeated ampersand words i.e. Θεοῦ&Θεοῦ */
-    precedingText += subquote;
-  });
+  })
+    
   return selections;
-};
-
+}
 /**
  * This function gets the correct amount of occurrences to provide the function getPrecedingText
  *
@@ -553,8 +568,8 @@ export const checkSelectionOccurrences = (string, selections) => {
  * @see http://stackoverflow.com/questions/4009756/how-to-count-string-occurrence-in-string/7924240#7924240
  * modified to fit our use cases, return zero for '' substring, and no use case for overlapping.
  */
-export const occurrencesInString = (string, subString) => {
- return getPrecedingOccurrences(string, subString);
+export const occurrencesInString = (stringMap, subString) => {
+ return getPrecedingOccurrences(stringMap, subString);
 };
 
 const tokenizer = (text) => {

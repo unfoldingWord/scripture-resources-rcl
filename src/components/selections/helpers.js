@@ -6,33 +6,43 @@ import {
 // const stringify = (array) => array.map(object => JSON.stringify(object));
 //export const parsify = (array) => array.map(string => JSON.parse(string));
 
-export const selectionsFromQuote = ({ quote, verseObjects, occurrence }) => {
-  let selections = [];
+export const selectionsFromQuote = ({ quote, verseObjectsMap, occurrence }) => {
+  let selections = new Map();
 
-  if (quote && verseObjects && occurrence) {
-    selections = selectionsFromQuoteAndVerseObjects({
+  if (quote && verseObjectsMap && occurrence) {
+    selectionsFromQuoteAndVerseObjects({
       quote,
-      verseObjects,
+      verseObjectsMap,
       occurrence,
-    }).map((selection) => JSON.stringify(selection));
+    }).forEach((verseObjects, ref) => {
+      const newVerseObjects = verseObjects.map((selection) => JSON.stringify(selection));
+      selections.set(ref, newVerseObjects)
+    })
   }
   return selections;
 };
 
-export const quoteFromVerse = ({ selections, verseObjects }) => {
-  let quotedWords = new Array(verseObjects.length);
-  const _selections = selections.map((selection) => JSON.parse(selection).text);
 
-  verseObjects.forEach((verseObject, index) => {
-    const { type, text } = verseObject;
 
-    if (type === "word") {
-      const match = _selections.includes(text);
-      const quotedWord = match ? text : "&";
-      quotedWords.push(quotedWord);
-    }
+export const quoteFromVerse = ({ selections, verseObjectsMap }) => {
+  let quotedWords = new Array();
+  const _selections = Array.from(selections, ([ref, refSelections]) => {
+    return refSelections.map((selection) => {
+      return selection?.text
+    })
+  }).flat(1)
+
+  verseObjectsMap.forEach((verseObjects, ref) => {
+    const _verseObjects = verseObjects.flat(1);
+    _verseObjects.forEach((verseObject, index) => {
+      const { type, text } = verseObject;
+      if (type === "word") {
+        const match = _selections.includes(text);
+        const quotedWord = match ? text : "&";
+        quotedWords.push(quotedWord);
+      }
+    });
   });
-
   const quote = quotedWords
     .join(" ")
     .replace(/( ?… ?)+/g, " & ")
@@ -63,13 +73,15 @@ export const selectionFromWord = (word) => {
   return selection;
 };
 
-export const isSelected = ({ word, selections }) => {
+export const isSelected = ({ word, selections, ref }) => {
   const selection = selectionFromWord(word);
-  const selected = selections.includes(selection);
+  const selected = selections.get(ref).includes(selection);
   return selected;
 };
 
-export const areSelected = ({ words, selections }) => {
+export const areSelected = ({ words, selections, ref }) => {
+  const highlights = selections.get(ref)
+  if (!highlights) return false;
   let selected = false;
   const _selections = words.map((word) => selectionFromWord(word));
 
@@ -80,10 +92,10 @@ export const areSelected = ({ words, selections }) => {
     let _occ = _selection.occurrence;
     let _occs = _selection.occurrences;
 
-    for (let i = 0; i < selections.length; i++) {
-      const text = selections[i].text; //already normalized.
-      const occ = selections[i].occurrence;
-      const occs = selections[i].occurrences;
+    for (let i = 0; i < highlights.length; i++) {
+      const text = highlights[i].text; //already normalized.
+      const occ = highlights[i].occurrence;
+      const occs = highlights[i].occurrences;
 
       if (text === _text && occ === _occ && occs === _occs) {
         selected = true;
@@ -94,35 +106,43 @@ export const areSelected = ({ words, selections }) => {
   return selected;
 };
 
-export const addSelection = ({ word, selections }) => {
-  let _selections = new Set(selections);
+export const addSelection = ({ word, selections, ref}) => {
+  const newSelections = new Map(selections);
+  let _selections = new Set(newSelections.get(ref));
   const selection = selectionFromWord(word);
   _selections.add(selection);
-  return [..._selections];
+  newSelections.set(ref, [..._selections]);
+  return newSelections;
 };
 
-export const addSelections = ({ words, selections }) => {
-  let _selections = new Set(selections);
-
+export const addSelections = ({ words, selections, ref }) => {
+  const newSelections = new Map(selections);
+  const _selections = new Set(newSelections.get(ref));
   words.forEach((word) => {
     const selection = selectionFromWord(word);
     _selections.add(selection);
   });
-  return [..._selections];
+  newSelections.set(ref, [..._selections]);
+  return newSelections;
 };
 
-export const removeSelection = ({ word, selections }) => {
+export const removeSelection = ({ word, selections, ref }) => {
+  const newSelections = new Map(selections);
+  const selectionsArray = newSelections.get(ref);
   const selection = selectionFromWord(word);
-  const selectionStringified = selections.map((_selection) =>
+  const selectionStringified = selectionsArray.map((_selection) =>
     selectionFromWord(_selection)
   );
   const _selections = new Set(selectionStringified);
   _selections.delete(selection);
-  return [..._selections];
+  newSelections.set(ref, [..._selections]);
+  return newSelections;
 };
 
-export const removeSelections = ({ words, selections }) => {
-  const selectionStringified = selections.map((selection) =>
+export const removeSelections = ({ words, selections, ref }) => {
+  const newSelections = new Map(selections);
+  const selectionsArray = newSelections.get(ref);
+  const selectionStringified = selectionsArray.map((selection) =>
     selectionFromWord(selection)
   );
   const _selections = new Set(selectionStringified);
@@ -131,7 +151,8 @@ export const removeSelections = ({ words, selections }) => {
     const selection = selectionFromWord(word);
     _selections.delete(selection);
   });
-  return [..._selections];
+  newSelections.set(ref, [..._selections]);
+  return newSelections;
 };
 
 export default {

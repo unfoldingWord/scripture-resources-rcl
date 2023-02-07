@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { VerseObject } from '.';
 
 export const VerseObjects = ({
+  verseKey,
   verseObjects,
   paragraphs,
   showUnsupported,
@@ -14,6 +15,7 @@ export const VerseObjects = ({
   const verseObjectComponents = verseObjects.map((verseObject, index) =>
     <VerseObject
       key={index}
+      verseKey={verseKey}
       verseObject={verseObject}
       paragraphs={paragraphs}
       showUnsupported={showUnsupported}

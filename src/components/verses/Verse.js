@@ -55,6 +55,7 @@ export const Verse = ({
           {verseNumber}
           <VerseObjects
             verseObjects={verseObjects}
+            verseKey={verseKey}
             paragraphs={paragraphs}
             showUnsupported={showUnsupported}
             disableWordPopover={disableWordPopover}

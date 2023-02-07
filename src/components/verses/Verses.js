@@ -39,7 +39,6 @@ export const Verses = ({
     Object.keys(verses).forEach((verseKey, index) => {
       const {verseObjects} = verses[verseKey];
       const verseText = verseObjects.map(verseObject => verseObject.text).join('');
-      // console.log("verseText", verseText);
       const hebrew = isHebrew(verseText);
       let _dir = direction || 'auto';
       if (hebrew) {
