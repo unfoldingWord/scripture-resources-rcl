@@ -26,24 +26,9 @@ function useSelections({
     update(_selections)
   }, [quote, currentOccurrenceValue, verseObjectsMap]);
 
-  // useEffect(() => {
-  //   console.log(quote)
-    
-  //   const _selections = helpers.selectionsFromQuote({
-  //     quote,
-  //     verseObjects,
-  //     occurrence,
-  //   });
-
-  //   console.log(hasSingleVerse)
-  //   console.log(_selections)
-  //   update(_selections);
-  // }, [quote, occurrence, verseObjectsMap]);
-
   useEffect(() => {
     if (verseObjectsMap && onQuote) {
       const _quote = helpers.quoteFromVerse({selections, verseObjectsMap});
-      console.log("_quote",_quote)
       onQuote(_quote);
     }
   }, [selections, onQuote, verseObjectsMap]);

@@ -31,15 +31,8 @@ export const selectionsFromQuoteAndVerseObjects = ({
 }) => {
   let selections = new Map();
   let stringMap = new Map();
-  // if (quote && verseObjects.length > 0) {
-  //   for (let i=0; i < verseObjects.length; i++) {
     stringMap = verseObjectsToString(verseObjectsMap);
-  // }
-  console.log(stringMap)
-  console.log(quote)
   selections = selectionsFromQuoteAndString({ quote, stringMap, occurrence });
-  console.log(selections)
-  // }
   return selections;
 };
 

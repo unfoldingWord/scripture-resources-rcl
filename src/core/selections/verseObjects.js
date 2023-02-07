@@ -13,7 +13,6 @@ import tokenizer from 'string-punctuation-tokenizer';
 export const flattenVerseObjectsMap = (verseObjectsMap, flatMap = new Map()) => {
   let _verseObjectsMap = new Map(Array.from(verseObjectsMap)); 
 
-  console.log({verseObjectsMap,_verseObjectsMap})
   _verseObjectsMap.forEach((verseObjects, ref) => {
     const _verseObjects = verseObjects?.flat(1) || [];
     while (_verseObjects.length > 0) {

@@ -38,7 +38,6 @@ function AlignedWordsObject({
       actions: { areSelected, addSelections, removeSelections },
     } = _selectionsContext;
     selected = areSelected(originalWords, verseKey);
-    // console.log({originalWords});
   }
 
   const words = children.map((verseObject, index) => (
