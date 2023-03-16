@@ -75,22 +75,19 @@ export const selectionsFromQuoteAndString = ({
   let selections = new Map();
   const hasAmpersand = subquotes.length > 1;
   quote = normalizeString(quote);
-  
-  if (hasAmpersand && occurrence === -1) {
-    return new Map();
-  }
 
   let occurrenceCount = 0;
   stringMap.forEach((string, ref) => {
     let occurrences;
-    if (subquotes.length === 1) {
+    let _subquotes = subquotes;
+    if (_subquotes.length === 1) {
       occurrences = occurrencesInString(string, quote);
-      subquotes = new Array(occurrences || 1).fill(quote);
+      _subquotes = new Array(occurrences || 1).fill(quote);
     }
     let precedingOccurrences = 0;
     let precedingText = '';
 
-    subquotes.forEach((subquote) => {
+    _subquotes.forEach((subquote) => {
       precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
 
       const index = precedingOccurrences + 1;
@@ -110,6 +107,7 @@ export const selectionsFromQuoteAndString = ({
       if(occurrences){
         occurrenceCount++;
       }
+      
       if(hasAmpersand || occurrenceCount === occurrence || occurrence === -1 ){
         const subSelections = subSelectionsFromSubquote({
           subquote,
