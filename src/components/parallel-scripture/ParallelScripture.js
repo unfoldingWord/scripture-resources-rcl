@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useEffectDeep from 'use-deep-compare-effect';
+import { useDeepCompareEffectNoCheck } from 'use-deep-compare-effect';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { referenceIdsFromBcvQuery } from './helpers';
@@ -27,7 +27,7 @@ function ParallelScripture({
   useEffect(() => {
     setOpen(_open);
   }, [_open]);
-  useEffectDeep(() => {
+  useDeepCompareEffectNoCheck(() => {
     const _titles = resources.map((resource) => {
       let _title = `Error: ${resource.resourceLink}`;
 
@@ -80,7 +80,7 @@ function ParallelScripture({
   const currentProject = resources && resources[0] && resources[0]?.project;
   const currentProjectTitle = currentProject?.title;
 
-  useEffectDeep(() => {
+  useDeepCompareEffectNoCheck(() => {
     if (currentProjectTitle) {
       let ref = '';
 

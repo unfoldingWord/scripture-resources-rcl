@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
-import useEffect  from 'use-deep-compare-effect';
+import { useDeepCompareEffectNoCheck }  from 'use-deep-compare-effect';
 
 import * as helpers from './helpers';
 
@@ -17,7 +17,7 @@ function useSelections({
 
   // const verseObjects = (verseObjectsMap && verseObjectsMap.length > 1) ? verseObjectsMap[1] : (verseObjectsMap && verseObjectsMap.length > 0) ? verseObjectsMap[0] : []
 
-  useEffect(() => {
+  useDeepCompareEffectNoCheck(() => {
     const _selections =  helpers.selectionsFromQuote({
         quote,
         verseObjectsMap,
@@ -26,7 +26,7 @@ function useSelections({
     update(_selections)
   }, [quote, currentOccurrenceValue, verseObjectsMap]);
 
-  useEffect(() => {
+  useDeepCompareEffectNoCheck(() => {
     if (verseObjectsMap && onQuote) {
       const _quote = helpers.quoteFromVerse({selections, verseObjectsMap});
       onQuote(_quote);
