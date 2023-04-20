@@ -90,14 +90,12 @@ export const areSelected = ({ words, selections, ref }) => {
     const _selection = JSON.parse(selection);
     let _text = normalizeString(_selection.text);
     let _occ = _selection.occurrence;
-    let _occs = _selection.occurrences;
 
     for (let i = 0; i < highlights.length; i++) {
       const text = highlights[i].text; //already normalized.
       const occ = highlights[i].occurrence;
-      const occs = highlights[i].occurrences;
 
-      if (text === _text && occ === _occ && occs === _occs) {
+      if (text === _text && occ === _occ) {
         selected = true;
         break;
       }
