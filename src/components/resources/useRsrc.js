@@ -26,6 +26,7 @@ function useRsrc({
     setLoadingContent(null);
     setFetchResponse(null);
     setResource({});
+    console.log(`useRsrc() - fetching resource for: ${resourceTag}`);
     resourceFromResourceLink({
       resourceLink,
       reference,
