@@ -287,8 +287,11 @@ export const parseBook = async ({ project }) => {
   console.log('parseBook usfmJS.toJSON');
   const response = (await project.file()) || '';
   const usfm = getResponseData(response);
-  const json = usfmJS.toJSON(usfm);
-  return { json, response };
+
+  if (usfm) {
+    const json = usfmJS.toJSON(usfm);
+    return {json, response};
+  }
 };
 
 export const chapterListFromBcvQuery = (bcvQuery) => {
