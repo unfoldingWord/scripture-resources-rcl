@@ -22,11 +22,15 @@ function useRsrc({
    * use returned resource if resource link has not changed after fetch
    * @param {object} resource
    * @param {string} _resourceLink - requested resource link
+   * @param {string} resourceTag - identifier for resource fetched
    */
-  function setResource(resource, _resourceLink) {
+  function setResource(resource, _resourceLink, resourceTag) {
     if (resourceLink !== _resourceLink) {
       console.log(`useRsrc - fetched resource link changed from ${_resourceLink} to ${resourceLink} - ignoring`);
     } else {
+      if (resource) { // if successful loading resource, we move to getting content
+        setLoadingContent(resourceTag);
+      }
       _setResource(resource);
       setLoadingResource(null); // done
     }
@@ -50,11 +54,7 @@ function useRsrc({
       }).then((_resource) => {
         let __resource = _resource && deepFreeze(_resource);
         __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found (is null)
-
-        if (_resource) { // if successful loading resource, we move to getting content
-          setLoadingContent(resourceTag);
-        }
-        setResource(__resource, requestResourceLink);
+        setResource(__resource, requestResourceLink, resourceTag);
       }).catch(error => {
         console.warn(`useRsrc() - error fetching resource for: ${resourceTag}`, error);
         setLoadingResource(null); // done
