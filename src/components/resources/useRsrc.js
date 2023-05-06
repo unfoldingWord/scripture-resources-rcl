@@ -10,7 +10,7 @@ function useRsrc({
   config, reference, resourceLink, options = {},
 }) {
   const [bibleRef, setBibleRef] = useState({});
-  const [resource, _setResource] = useState({});
+  const [resource, setResource] = useState({});
   const [content, setContent] = useState(null);
   const [loadingResource, setLoadingResource] = useState(null); // flag for when loading resource
   const [loadingContent, setLoadingContent] = useState(null); // flag for when loading content from resource
@@ -18,34 +18,15 @@ function useRsrc({
   const [fetchResponse, setFetchResponse] = useState(null);
   const [triggeredReloadCount, setReloadCount] = useState(0);
 
-  /**
-   * use returned resource if resource link has not changed after fetch
-   * @param {object} resource
-   * @param {string} _resourceLink - requested resource link
-   * @param {string} resourceTag - identifier for resource fetched
-   */
-  function setResource(resource, _resourceLink, resourceTag) {
-    if (resourceLink !== _resourceLink) {
-      console.log(`useRsrc - fetched resource link changed from ${_resourceLink} to ${resourceLink} - ignoring`);
-    } else {
-      if (resource) { // if successful loading resource, we move to getting content
-        setLoadingContent(resourceTag);
-      }
-      _setResource(resource);
-      setLoadingResource(null); // done
-    }
-  }
-  
   useEffect(() => {
     if (resourceLink) {
       const resourceTag = JSON.stringify({
         resourceLink, reference, config,
       });
-      const requestResourceLink = resourceLink;
       setLoadingResource(resourceTag);
       setLoadingContent(null);
       setFetchResponse(null);
-      _setResource({});
+      setResource({});
       console.log(`useRsrc() - fetching resource for: ${resourceTag}`);
       resourceFromResourceLink({
         resourceLink,
@@ -54,7 +35,12 @@ function useRsrc({
       }).then((_resource) => {
         let __resource = _resource && deepFreeze(_resource);
         __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found (is null)
-        setResource(__resource, requestResourceLink, resourceTag);
+
+        if (_resource) { // if successful loading resource, we move to getting content
+          setLoadingContent(resourceTag);
+        }
+        setResource(__resource);
+        setLoadingResource(null); // done
       }).catch(error => {
         console.warn(`useRsrc() - error fetching resource for: ${resourceTag}`, error);
         setLoadingResource(null); // done

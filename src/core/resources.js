@@ -290,7 +290,13 @@ export const parseBook = async ({ project }) => {
 
   if (usfm) {
     const json = usfmJS.toJSON(usfm);
+    // embed the fetch url and file name in returned data so response can be verified as related to the latest request
+    const { name, url } = response?.data || {};
+    json.name = name;
+    json.url = url;
     return {json, response};
+  } else {
+    console.warn(`resources.parseBook() - empty usfm`, response);
   }
 };
 
