@@ -258,7 +258,7 @@ export const extendProject = ({
           : projectId;
 
       console.log(
-        `fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(
+        `extendProject() - fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(
           3,
         )}ms`,
       );
