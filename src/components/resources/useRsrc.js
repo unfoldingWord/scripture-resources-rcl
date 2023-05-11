@@ -20,8 +20,9 @@ function useRsrc({
 
   useEffect(() => {
     if (resourceLink) {
+      const { chapter, verse, projectId } = reference;
       const resourceTag = JSON.stringify({
-        resourceLink, reference, config,
+        resourceLink, reference: { chapter, verse, projectId }, config,
       });
       setLoadingResource(resourceTag);
       setLoadingContent(null);
