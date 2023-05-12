@@ -284,7 +284,7 @@ export function getResponseData(response) {
 }
 
 export const parseBook = async ({ project }) => {
-  console.log('parseBook usfmJS.toJSON');
+  // console.log('parseBook usfmJS.toJSON', project);
   const response = (await project.file()) || '';
   const usfm = getResponseData(response);
 
