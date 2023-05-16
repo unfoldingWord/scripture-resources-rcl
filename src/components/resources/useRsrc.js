@@ -19,30 +19,34 @@ function useRsrc({
   const [triggeredReloadCount, setReloadCount] = useState(0);
 
   useEffect(() => {
-    const resourceTag = JSON.stringify({
-      resourceLink, reference, config,
-    });
-    setLoadingResource(resourceTag);
-    setLoadingContent(null);
-    setFetchResponse(null);
-    setResource({});
-    resourceFromResourceLink({
-      resourceLink,
-      reference,
-      config,
-    }).then((_resource) => {
-      let __resource = _resource && deepFreeze(_resource);
-      __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found (is null)
+    if (resourceLink) {
+      const { chapter, verse, projectId } = reference;
+      const resourceTag = JSON.stringify({
+        resourceLink, reference: { chapter, verse, projectId }, config,
+      });
+      setLoadingResource(resourceTag);
+      setLoadingContent(null);
+      setFetchResponse(null);
+      setResource({});
+      console.log(`useRsrc() - fetching resource for: ${resourceTag}`);
+      resourceFromResourceLink({
+        resourceLink,
+        reference,
+        config,
+      }).then((_resource) => {
+        let __resource = _resource && deepFreeze(_resource);
+        __resource = __resource || {}; //TRICKY prevents 'use-deep-compare-effect' from crashing when resource not found (is null)
 
-      if (_resource) { // if successful loading resource, we move to getting content
-        setLoadingContent(resourceTag);
-      }
-      setResource(__resource);
-      setLoadingResource(null); // done
-    }).catch(error => {
-      console.warn(`useRsrc() - error fetching resource for: ${resourceTag}`, error);
-      setLoadingResource(null); // done
-    });
+        if (_resource) { // if successful loading resource, we move to getting content
+          setLoadingContent(resourceTag);
+        }
+        setResource(__resource);
+        setLoadingResource(null); // done
+      }).catch(error => {
+        console.warn(`useRsrc() - error fetching resource for: ${resourceTag}`, error);
+        setLoadingResource(null); // done
+      });
+    }
   }, [resourceLink, reference, config, triggeredReloadCount]);
 
   useEffect(() => {

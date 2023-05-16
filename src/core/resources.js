@@ -258,7 +258,7 @@ export const extendProject = ({
           : projectId;
 
       console.log(
-        `fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(
+        `extendProject() - fetch & parse ${resourceLink} ${identifier}: ${(end - start).toFixed(
           3,
         )}ms`,
       );
@@ -284,11 +284,20 @@ export function getResponseData(response) {
 }
 
 export const parseBook = async ({ project }) => {
-  console.log('parseBook usfmJS.toJSON');
+  // console.log('parseBook usfmJS.toJSON', project);
   const response = (await project.file()) || '';
   const usfm = getResponseData(response);
-  const json = usfmJS.toJSON(usfm);
-  return { json, response };
+
+  if (usfm) {
+    const json = usfmJS.toJSON(usfm);
+    // embed the fetch url and file name in returned data so response can be verified as related to the latest request
+    const { name, url } = response?.data || {};
+    json.name = name;
+    json.url = url;
+    return {json, response};
+  } else {
+    console.warn(`resources.parseBook() - empty usfm`, response);
+  }
 };
 
 export const chapterListFromBcvQuery = (bcvQuery) => {

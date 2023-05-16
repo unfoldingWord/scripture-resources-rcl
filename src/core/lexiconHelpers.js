@@ -28,16 +28,20 @@ export const getWordObjects = (verseObjects) => {
   for (let i = 0, l = verseObjects.length; i < l; i++) {
     const verseObject = verseObjects[i];
 
-    if (verseObject.type === 'word') {
-      words.push(verseObject);
-    }
-
-    if (verseObject.type === 'milestone') {
-      if (verseObject.children) {
-        // Handle children of type milestone
-        const subWords = getWordObjects(verseObject.children);
-        words = words.concat(subWords);
+    try {
+      if (verseObject.type === 'word') {
+        words.push(verseObject);
       }
+
+      if (verseObject.type === 'milestone') {
+        if (verseObject.children) {
+          // Handle children of type milestone
+          const subWords = getWordObjects(verseObject.children);
+          words = words.concat(subWords);
+        }
+      }
+    } catch (e) {
+     console.warn(`lexiconHelpers.getWordObjects - error in item ${i} content: ${verseObject}`, e);
     }
   }
 
