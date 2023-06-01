@@ -70,6 +70,7 @@ export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
       // So doing a bit of manipulation to provide the expected shape
       // that does not have the "json" and "response" intermediate attributes
       let _chapters;
+      console.log({ book });
       if ( book.chapters ) {
         _chapters = book.chapters;
       } else if ( book.json.chapters ) {

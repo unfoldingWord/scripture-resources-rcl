@@ -1,4 +1,4 @@
-### Using Contexts
+## Using Contexts
 
 To see highlighting appear, change the `-1` occurrence to 1;
 then click or tab out of field.
@@ -19,240 +19,240 @@ import {
 } from 'scripture-resources-rcl';
 import useEffect from 'use-deep-compare-effect';
 
+// Required parameters
+const bookId = "tit";
+const occurrence = -1;
+const defaultQuote = "ἐφανέρωσεν & τὸν λόγον αὐτοῦ"
+
 const bcvQuery = {
   book: {
-    "psa": {
+    [bookId]: {
       ch: {
-        6: { 
-          v: { 
-            8: { },
-            9: { },
+        1: {
+          v: {
+            3: {}
           }
         }
       },
     },
   },
 }
-const _bookId = "psa"
+const path = { ot: "hbo/uhb", nt: "el-x-koine/ugnt" };
+const defaultResourceLinks = [
+  `unfoldingWord/${path.nt}/master/${bookId}`,
+  `unfoldingWord/en/ult/master/${bookId}`,
+  `https://git.door43.org/unfoldingWord/en_ust/src/branch/master`,
+];
 
+// Usage
 function Component() {
-  const [bookId, setBookId] = React.useState(_bookId);
-  const [quote, setQuote] = React.useState("יְ֝הוָ֗ה & יְ֭הוָה & יְ֝הוָ֗ה");
-  const [occurrence, setOccurrence] = React.useState(-1);
+  const [quote, setQuote] = React.useState(defaultQuote);
+  const [resources, setResources] = React.useState([]);
+  const [resourceLinks, setResourceLinks] = React.useState(defaultResourceLinks);
+  const reference = { bookId, chapter: 1, verse: "3", bcvQuery };
+  const config = { server: 'https://git.door43.org' };
 
-  const form = React.useMemo(
-    () => (
-      <form noValidate autoComplete="off">
-        <div style={{ padding: '1em 0' }}>
-          <TextField
-            id="bookId"
-            label="BookId"
-            variant="outlined"
-            defaultValue={bookId}
-            onBlur={(event) => setBookId(event.target.value)}
-          />
-        </div>
-        <div style={{ padding: '1em 0' }}>
-          <TextField
-            id="quote"
-            label="Quote"
-            variant="outlined"
-            defaultValue={quote}
-            onBlur={(event) => setQuote(event.target.value)}
-          />
-          <TextField
-            id="occurrence"
-            label="Occurrence"
-            variant="outlined"
-            defaultValue={occurrence}
-            onBlur={(event) => setOccurrence(parseInt(event.target.value))}
-          />
-        </div>
-      </form>
-    ),
-    [bookId, quote, occurrence]
-  );
-
-  const component = React.useMemo(() => {
-    const reference = { bookId, chapter: 6, verse: "8-9", bcvQuery };
-    return (
-      <ParallelScripture
+  return (
+    <ResourcesContextProvider
+      reference={reference}
+      defaultResourceLinks={defaultResourceLinks}
+      resourceLinks={resourceLinks}
+      onResourceLinks={setResourceLinks}
+      resources={resources}
+      onResources={setResources}
+      config={config}
+    >
+      <p>Quote: {quote}</p>
+      <p>Occurrence: {occurrence}</p>
+       <ParallelScripture
         reference={reference}
         quote={quote}
         onQuote={setQuote}
         occurrence={occurrence}
         height="250px"
-      />
-    );
-  }, [bookId, quote, occurrence]);
-
-  return (
-    <>
-      {form}
-      {component}
-      <p>Quote: {quote}</p>
-      <p>Occurrence: {occurrence}</p>
-    </>
+        />
+    </ResourcesContextProvider>
   );
 }
-const config = { server: 'https://git.door43.org' };
 
-const defaultResourceLinks = [
-  'unfoldingWord/hbo/uhb/master/psa',
-  'unfoldingWord/en/ult/v5/psa',
-  'unfoldingWord/en/ust/v5/psa',
-  'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
-];
-
-const _resourceLinks = [...defaultResourceLinks];
-
-
-const reference = { bookId: 'psa', chapter: 6, verse: "8-9", bcvQuery };
-
-const [resourceLinks, setResourceLinks] = React.useState(_resourceLinks);
-const [resources, setResources] = React.useState([]);
-<ResourcesContextProvider
-  reference={reference}
-  resourceLinks={resourceLinks}
-  defaultResourceLinks={defaultResourceLinks}
-  onResourceLinks={setResourceLinks}
-  resources={resources}
-  onResources={setResources}
-  config={config}
->
-  <Component />
-</ResourcesContextProvider>;
+<Component/>
 ```
 
+## ParallelScripture Playground
+
+A dynamic example
+
 ```js
-import { TextField } from "@material-ui/core";
+import { TextField,Select,InputLabel,FormControl,MenuItem } from '@material-ui/core';
 import {
   ParallelScripture,
-  ResourcesContext,
   ResourcesContextProvider,
-} from "scripture-resources-rcl";
-import useEffect from "use-deep-compare-effect";
+} from 'scripture-resources-rcl';
 
-function Component() {
-  const [bookId, setBookId] = React.useState("psa");
-  const [quote, setQuote] = React.useState("יְ֝הוָ֗ה & יְ֭הוָה & יְ֝הוָ֗ה");
-  const [occurrence, setOccurrence] = React.useState(-1);
+// DEFAULT VALUES
+const defaults = {
+  bookId: "tit",
+  lang: "nt", //ot or nt
+  chapter: "1",
+  verse: "3",
+  quote: "ἐφανέρωσεν & τὸν λόγον αὐτοῦ",
+  occurrence: -1
+}
 
-  const form = React.useMemo(
-    () => (
-      <form noValidate autoComplete="off">
-        <div style={{ padding: "1em 0" }}>
-          <TextField
-            id="bookId"
-            label="BookId"
-            variant="outlined"
-            defaultValue={bookId}
-            onBlur={(event) => setBookId(event.target.value)}
-          />
-        </div>
-        <div style={{ padding: "1em 0" }}>
-          <TextField
-            id="quote"
-            label="Quote"
-            variant="outlined"
-            defaultValue={quote}
-            onBlur={(event) => setQuote(event.target.value)}
-          />
-          <TextField
-            id="occurrence"
-            label="Occurrence"
-            variant="outlined"
-            defaultValue={occurrence}
-            onBlur={(event) => setOccurrence(parseInt(event.target.value))}
-          />
-        </div>
-      </form>
-    ),
-    [bookId, quote, occurrence]
-  );
+// Constants
+const path = { ot: "hbo/uhb", nt: "el-x-koine/ugnt" };
+const config = { server: 'https://git.door43.org' };
 
-  const bcvQuery = {
+function Component({ }) {
+  const [bookId, setBookId] = React.useState(defaults.bookId);
+  const [lang,setLang] = React.useState(defaults.lang); //ot or nt
+  const [chapter, setChapter] = React.useState(defaults.chapter);
+  const [verse, setVerse] = React.useState(defaults.verse);
+  const [quote, setQuote] = React.useState(defaults.quote);
+  const [occurrence, setOccurrence] = React.useState(defaults.occurrence);
+  const [resources, setResources] = React.useState([]);
+
+  const verseObject = React.useMemo(() => verse.split(/,/).reduce((v,st) => {
+    const span = st.split("-");
+    if(span.length > 1) for(let i = Number(span[0]); i <= Number(span[1]); i++) v[i] = {}
+    if(span.length === 1) v[Number(span[0])] = {}
+    return v
+  },{}), [verse])
+
+  const bcvQuery = React.useMemo(() => ({
     book: {
-      "psa": {
+      [bookId]: {
         ch: {
-          6: { 
-            v: { 
-                8: {},
-                9: {},
-              }
-            },
+          [Number(chapter)]: {
+            v: verseObject
+          }
         },
       },
     },
-  }
+  }), [bookId,chapter,verse]);
 
-  const component = React.useMemo(() => {
-    const reference = { bookId, chapter: 6, verse: "8-9", bcvQuery };
-    return (
-      <ParallelScripture
-        reference={reference}
-        quote={quote}
-        onQuote={setQuote}
-        occurrence={occurrence}
-        height="250px"
-      />
-    );
-  }, [bookId, quote, occurrence]);
+  const reference = React.useMemo(() => ({ bookId, chapter: Number(chapter), verse, bcvQuery }), [bookId, bcvQuery, chapter, verse]);
+
+  const defaultResourceLinks = React.useMemo(() => [
+    `unfoldingWord/${path[lang]}/master/${bookId}`,
+    `unfoldingWord/en/ult/master/${bookId}`,
+    `https://git.door43.org/unfoldingWord/en_ust/src/branch/master`,
+  ],[bookId,lang,path]);
+
+  const [resourceLinks, setResourceLinks] = React.useState(defaultResourceLinks);
+  React.useEffect(() => { setResourceLinks(defaultResourceLinks) },[defaultResourceLinks]);
 
   return (
-    <>
-      {form}
-      {component}
-      <p>Quote: {quote}</p>
-      <p>Occurrence: {occurrence}</p>
-    </>
+    <ResourcesContextProvider
+      reference={reference}
+      resourceLinks={resourceLinks}
+      defaultResourceLinks={defaultResourceLinks}
+      onResourceLinks={setResourceLinks}
+      resources={resources}
+      onResources={setResources}
+      config={config}
+    >         
+      <ExampleUiForm
+        bookId={bookId}
+        onChangeBookId={setBookId}
+        quote={quote}
+        onChangeQuote={setQuote}
+        occurrence={occurrence}
+        onChangeOccurrence={setOccurrence}
+        lang={lang}
+        onChangeLang={setLang}
+        chapter={chapter}
+        onChangeChapter={setChapter}
+        verse={verse}
+        onChangeVerse={setVerse}
+      />
+      <ParallelScripture
+      reference={reference}
+      quote={quote}
+      onQuote={setQuote}
+      occurrence={occurrence}
+      height="250px"
+      />
+    </ResourcesContextProvider>
   );
 }
-const config = { server: "https://git.door43.org" };
 
-const defaultResourceLinks = [
-  "unfoldingWord/el-x-koine/ugnt/master/psa",
-  "unfoldingWord/en/ult/v5/psa",
-  "unfoldingWord/en/ust/v5/psa",
-  "ru_gl/ru/rlob/master/psa",
-  "https://git.door43.org/unfoldingWord/en_ust/src/branch/master",
-];
-
-const _resourceLinks = [...defaultResourceLinks];
-
-const bcvQuery = {
-  book: {
-    "psa": {
-      ch: {
-        6: { 
-          v: { 
-              8: {},
-              9: {}
-            }
-          },
-      },
-    },
-  },
+// A sample form to allow users to play with different parameters 
+const ExampleUiForm = ({
+  bookId,
+  onChangeBookId,
+  quote,
+  onChangeQuote,
+  occurrence,
+  onChangeOccurrence,
+  lang,
+  onChangeLang,
+  chapter,
+  onChangeChapter,
+  verse,
+  onChangeVerse,
+}) => {
+  return (
+    <>
+      <form noValidate autoComplete="off">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "1em", padding: '1em 0' }}>
+          <TextField
+            id="bookId"
+            label="BookId"
+            variant="outlined"
+            defaultValue={bookId}
+            onBlur={(event) => onChangeBookId(event.target.value)}
+          />
+          <FormControl variant="outlined">
+            <InputLabel id="demo-simple-select-label">Original Language</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={lang}
+              onChange={(e) => onChangeLang(e.target.value)}
+            >
+              <MenuItem value={"ot"}>Hebrew</MenuItem>
+              <MenuItem value={"nt"}>Greek</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            id="chapter"
+            label="chapter"
+            variant="outlined"
+            defaultValue={chapter}
+            onBlur={(event) => onChangeChapter(Number(event.target.value))}
+            fullWidth
+          />
+          <TextField
+            id="verse"
+            label="verse"
+            variant="outlined"
+            defaultValue={verse}
+            onBlur={(event) => onChangeVerse(event.target.value)}
+            fullWidth
+          />
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "1em",padding: '1em 0' }}>
+          <TextField
+            id="quote"
+            label="Quote"
+            variant="outlined"
+            defaultValue={quote}
+            onBlur={(event) => onChangeQuote(event.target.value)}
+            fullWidth
+          />
+          <TextField
+            id="occurrence"
+            label="Occurrence"
+            variant="outlined"
+            defaultValue={occurrence}
+            onBlur={(event) => onChangeOccurrence(parseInt(event.target.value))}
+          />
+        </div>
+      </form>
+    </>
+  )
 }
 
-const reference = { bookId: "psa", chapter: 6, verse: "8-9", bcvQuery };
-// const resourceLinks = [
-//   'unfoldingWord/hbo/uhb/master',
-//   'unfoldingWord/en/ult/master',
-//   'unfoldingWord/en/ust/master',
-// ];
-
-const [resourceLinks, setResourceLinks] = React.useState(_resourceLinks);
-const [resources, setResources] = React.useState([]);
-<ResourcesContextProvider
-  reference={reference}
-  resourceLinks={resourceLinks}
-  defaultResourceLinks={defaultResourceLinks}
-  onResourceLinks={setResourceLinks}
-  resources={resources}
-  onResources={setResources}
-  config={config}
->
-  <Component />
-</ResourcesContextProvider>;
+<Component/>
 ```
