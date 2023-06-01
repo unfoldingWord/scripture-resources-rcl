@@ -19,9 +19,25 @@ import {
 } from 'scripture-resources-rcl';
 import useEffect from 'use-deep-compare-effect';
 
+const bcvQuery = {
+  book: {
+    "psa": {
+      ch: {
+        6: { 
+          v: { 
+            8: { },
+            9: { },
+          }
+        }
+      },
+    },
+  },
+}
+const _bookId = "psa"
+
 function Component() {
-  const [bookId, setBookId] = React.useState('deu');
-  const [quote, setQuote] = React.useState('מֹשֶׁ֔ה בֵּאֵ֛ר אֶת־הַ⁠תּוֹרָ֥ה הַ⁠זֹּ֖את לֵ⁠אמֹֽר׃ & יְהוָ֧ה אֱלֹהֵ֛י⁠נוּ דִּבֶּ֥ר אֵלֵ֖י⁠נוּ בְּ⁠חֹרֵ֣ב לֵ⁠אמֹ֑ר');
+  const [bookId, setBookId] = React.useState(_bookId);
+  const [quote, setQuote] = React.useState("יְ֝הוָ֗ה & יְ֭הוָה & יְ֝הוָ֗ה");
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
@@ -57,24 +73,8 @@ function Component() {
     [bookId, quote, occurrence]
   );
 
-  const bcvQuery = {
-    book: {
-      "deu": {
-        ch: {
-          1: { 
-            v: { 
-              5: { },
-              6: { },
-            }
-          },
-
-        },
-      },
-    },
-  }
-
   const component = React.useMemo(() => {
-    const reference = { bookId, chapter: 1, verse: "5-6", bcvQuery };
+    const reference = { bookId, chapter: 6, verse: "8-9", bcvQuery };
     return (
       <ParallelScripture
         reference={reference}
@@ -98,35 +98,16 @@ function Component() {
 const config = { server: 'https://git.door43.org' };
 
 const defaultResourceLinks = [
-  'unfoldingWord/hbo/uhb/master/deu',
-  'unfoldingWord/en/ult/v5/deu',
-  'unfoldingWord/en/ust/v5/deu',
+  'unfoldingWord/hbo/uhb/master/psa',
+  'unfoldingWord/en/ult/v5/psa',
+  'unfoldingWord/en/ust/v5/psa',
   'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
 ];
 
 const _resourceLinks = [...defaultResourceLinks];
 
-const bcvQuery = {
-  book: {
-    "deu": {
-      ch: {
-        1: { 
-          v: { 
-            5: { },
-            6: { },
-          }
-        }
-      },
-    },
-  },
-}
 
-const reference = { bookId: 'deu', chapter: 1, verse: "5-6", bcvQuery };
-// const resourceLinks = [
-//   'unfoldingWord/hbo/uhb/master',
-//   'unfoldingWord/en/ult/master',
-//   'unfoldingWord/en/ust/master',
-// ];
+const reference = { bookId: 'psa', chapter: 6, verse: "8-9", bcvQuery };
 
 const [resourceLinks, setResourceLinks] = React.useState(_resourceLinks);
 const [resources, setResources] = React.useState([]);
@@ -153,8 +134,8 @@ import {
 import useEffect from "use-deep-compare-effect";
 
 function Component() {
-  const [bookId, setBookId] = React.useState("1jn");
-  const [quote, setQuote] = React.useState("καὶ & χεῖρες");
+  const [bookId, setBookId] = React.useState("psa");
+  const [quote, setQuote] = React.useState("יְ֝הוָ֗ה & יְ֭הוָה & יְ֝הוָ֗ה");
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
@@ -192,13 +173,12 @@ function Component() {
 
   const bcvQuery = {
     book: {
-      "1jn": {
+      "psa": {
         ch: {
-          1: { 
+          6: { 
             v: { 
-                1: {},
-                2: {},
-                5: {}
+                8: {},
+                9: {},
               }
             },
         },
@@ -207,7 +187,7 @@ function Component() {
   }
 
   const component = React.useMemo(() => {
-    const reference = { bookId, chapter: 1, verse: "1-2,5", bcvQuery };
+    const reference = { bookId, chapter: 6, verse: "8-9", bcvQuery };
     return (
       <ParallelScripture
         reference={reference}
@@ -231,10 +211,10 @@ function Component() {
 const config = { server: "https://git.door43.org" };
 
 const defaultResourceLinks = [
-  "unfoldingWord/el-x-koine/ugnt/master/1jn",
-  "unfoldingWord/en/ult/v5/1jn",
-  "unfoldingWord/en/ust/v5/1jn",
-  "ru_gl/ru/rlob/master/1jn",
+  "unfoldingWord/el-x-koine/ugnt/master/psa",
+  "unfoldingWord/en/ult/v5/psa",
+  "unfoldingWord/en/ust/v5/psa",
+  "ru_gl/ru/rlob/master/psa",
   "https://git.door43.org/unfoldingWord/en_ust/src/branch/master",
 ];
 
@@ -242,13 +222,12 @@ const _resourceLinks = [...defaultResourceLinks];
 
 const bcvQuery = {
   book: {
-    "1jn": {
+    "psa": {
       ch: {
-        1: { 
+        6: { 
           v: { 
-              1: {},
-              2: {},
-              5: {}
+              8: {},
+              9: {}
             }
           },
       },
@@ -256,7 +235,7 @@ const bcvQuery = {
   },
 }
 
-const reference = { bookId: "1jn", chapter: 1, verse: "1-2,5", bcvQuery };
+const reference = { bookId: "psa", chapter: 6, verse: "8-9", bcvQuery };
 // const resourceLinks = [
 //   'unfoldingWord/hbo/uhb/master',
 //   'unfoldingWord/en/ult/master',

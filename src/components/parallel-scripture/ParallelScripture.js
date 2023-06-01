@@ -100,7 +100,7 @@ function ParallelScripture({
       setTitle(__title);
     }
   }, [reference, currentProjectTitle]);
-
+  console.log({ books, reference });
   return (
     (title && titles && books && (
       <ScriptureTable

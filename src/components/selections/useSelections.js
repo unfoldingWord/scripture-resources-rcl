@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import { useDeepCompareEffectNoCheck }  from 'use-deep-compare-effect';
-
+import { getQuoteMatchesInBookRef } from "uw-quote-helpers";
 import * as helpers from './helpers';
 
 function useSelections({
@@ -11,27 +11,30 @@ function useSelections({
   occurrence: currentOccurrenceValue ,
   quote,
   onQuote,
-  hasSingleVerse,
-  verseObjectsMap,
+  refString,
+  bookObject,
 }) {
 
-  // const verseObjects = (verseObjectsMap && verseObjectsMap.length > 1) ? verseObjectsMap[1] : (verseObjectsMap && verseObjectsMap.length > 0) ? verseObjectsMap[0] : []
-
   useDeepCompareEffectNoCheck(() => {
-    const _selections =  helpers.selectionsFromQuote({
-        quote,
-        verseObjectsMap,
-        occurrence: currentOccurrenceValue,
-      })
+    const _selections = bookObject ? getQuoteMatchesInBookRef({
+      quote,
+      ref: refString,
+      bookObject,
+      occurrence: currentOccurrenceValue,
+      isOrigLang: true
+    }) : [];
+    console.log({ _selections });
     update(_selections)
-  }, [quote, currentOccurrenceValue, verseObjectsMap]);
+  }, [quote, currentOccurrenceValue, bookObject]);
 
   useDeepCompareEffectNoCheck(() => {
-    if (verseObjectsMap && onQuote) {
-      const _quote = helpers.quoteFromVerse({selections, verseObjectsMap});
+    if (bookObject && onQuote) {
+      console.log({ selections });
+      const _quote = helpers.quoteFromVerse({selections, bookObject});
+      console.log({ _quote });
       onQuote(_quote);
     }
-  }, [selections, onQuote, verseObjectsMap]);
+  }, [selections, onQuote, bookObject]);
 
   const update = useCallback((_selections) => {
     // the "parsify" function is expecting an array of stringified objects
@@ -99,15 +102,15 @@ function useSelections({
 
 useSelections.propTypes = {
   /** words in a selection */
-  selections: PropTypes.array,
+  selections: PropTypes.instanceOf(Map),
   /** action taken after a selection is made */
   onSelections: PropTypes.func.isRequired,
   /** the quote to be selected */
   quote: PropTypes.string.isRequired,
-  /** indicate single verse in verseObjectsMap (or else multiple verses) **/
-  hasSingleVerse: PropTypes.bool,
-  /** all verses where quote may be found */
-  verseObjectsMap: PropTypes.array,
+  /** all chapter-verses where quote may be found */
+  bookObject: PropTypes.object,
+  /** string chapter-verse reference. i.e. 1:5-6 */
+  refString: PropTypes.string,
   /** if quote occurs mulitple times, this is the occurence of the one selected */
   occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   /** action taken when quote is provided */
