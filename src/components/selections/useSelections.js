@@ -8,7 +8,7 @@ import * as helpers from './helpers';
 function useSelections({
   selections,
   onSelections,
-  occurrence: currentOccurrenceValue ,
+  occurrence: currentOccurrenceValue,
   quote,
   onQuote,
   refString,

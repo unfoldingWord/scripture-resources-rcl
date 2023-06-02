@@ -16783,10 +16783,10 @@ uuid@^8.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
-uw-quote-helpers@^0.0.1-beta.22:
-  version "0.0.1-beta.22"
-  resolved "https://registry.yarnpkg.com/uw-quote-helpers/-/uw-quote-helpers-0.0.1-beta.22.tgz#6579c226402ad811ab48e066e68c35e498c0876c"
-  integrity sha512-0sythgNGdEjISl1nmNah4RKjMea9GRctlvfJrpl0KY7F0ivHKaHXqpTQNhiQ+LD8QWMe21cbrb97P0J4qwCazg==
+uw-quote-helpers@^0.0.1-beta.23:
+  version "0.0.1-beta.23"
+  resolved "https://registry.yarnpkg.com/uw-quote-helpers/-/uw-quote-helpers-0.0.1-beta.23.tgz#a5bce3b221b30dd6bfd47edf6883197d94e74ac7"
+  integrity sha512-9l3WYBOiNdEYCIe0TyDst1Az5FNWlR3y3e554p+aq1jhirRstRgC/PWobs2tJ0H0Ect55/YrPgVhaaBbrYfPvg==
   dependencies:
     bible-reference-range "^1.1.0"
     string-punctuation-tokenizer "^2.2.0"
