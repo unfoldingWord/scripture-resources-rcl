@@ -23,17 +23,6 @@ function Component () {
 const quote = "אֵ֣לֶּה הַ⁠דְּבָרִ֗ים";
 const occurrence = 1;
 
-"1:1": [
-    {
-        "text": "אֵ֣לֶּה",
-        "tag": "w",
-        "type": "word",
-        "lemma": "אֵלֶּה",
-        "strong": "H0428",
-        "morph": "He,Pdxcp"
-    },
-]
-
 const bookObject = {
     "1": {
         "1": {
