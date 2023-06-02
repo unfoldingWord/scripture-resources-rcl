@@ -20,157 +20,120 @@ function Component () {
 };
 
 
-const quote = "ὁ λόγος,";
+const quote = "אֵ֣לֶּה הַ⁠דְּבָרִ֗ים";
 const occurrence = 1;
-const verseObjects = [
-  {
-    "text": "ἐν",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "ἀρχῇ",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "ἦν",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "ὁ",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "λόγος",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": ", "
-  },
-  {
-    "text": "καὶ",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "ὁ",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "λόγος",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "ἦν",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "πρὸς",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "τὸν",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "Θεόν",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": ", "
-  },
-  {
-    "text": "καὶ",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "Θεὸς",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "ἦν",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "ὁ",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": " "
-  },
-  {
-    "text": "λόγος",
-    "type": "word",
-  },
-  {
-    "type": "text",
-    "text": ".\n\n"
-  }
-];
+
+const bookObject = {
+    "1": {
+        "1": {
+            "verseObjects": [
+                {
+                    "text": "אֵ֣לֶּה",
+                    "tag": "w",
+                    "type": "word",
+                    "lemma": "אֵלֶּה",
+                    "strong": "H0428",
+                    "morph": "He,Pdxcp"
+                },
+                {
+                    "type": "text",
+                    "text": " "
+                },
+                {
+                    "text": "הַ⁠דְּבָרִ֗ים",
+                    "tag": "w",
+                    "type": "word",
+                    "lemma": "דָּבָר",
+                    "strong": "d:H1697",
+                    "morph": "He,Td:Ncmpa"
+                },
+                {
+                    "type": "text",
+                    "text": " "
+                },
+                {
+                    "text": "אֲשֶׁ֨ר",
+                    "tag": "w",
+                    "type": "word",
+                    "lemma": "אֲשֶׁר",
+                    "strong": "H0834a",
+                    "morph": "He,Tr"
+                },
+                {
+                    "type": "text",
+                    "text": " "
+                },
+                {
+                    "text": "דִּבֶּ֤ר",
+                    "tag": "w",
+                    "type": "word",
+                    "lemma": "דָבַר",
+                    "strong": "H1696",
+                    "morph": "He,Vpp3ms"
+                },
+                {
+                    "type": "text",
+                    "text": " "
+                },
+                {
+                    "text": "מֹשֶׁה֙",
+                    "tag": "w",
+                    "type": "word",
+                    "lemma": "מֹשֶׁה",
+                    "strong": "H4872",
+                    "morph": "He,Np"
+                },
+                {
+                    "type": "text",
+                    "text": " "
+                },
+                {
+                    "text": "אֶל",
+                    "tag": "w",
+                    "type": "word",
+                    "lemma": "אֵל",
+                    "strong": "H0413",
+                    "morph": "He,R"
+                },
+                {
+                    "type": "text",
+                    "text": "־"
+                },
+                {
+                    "text": "כָּל",
+                    "tag": "w",
+                    "type": "word",
+                    "lemma": "כֹּל",
+                    "strong": "H3605",
+                    "morph": "He,Ncmsc"
+                },
+                {
+                    "type": "text",
+                    "text": "־"
+                },
+                {
+                    "text": "יִשְׂרָאֵ֔ל",
+                    "tag": "w",
+                    "type": "word",
+                    "lemma": "יִשְׂרָאֵל",
+                    "strong": "H3478",
+                    "morph": "He,Np"
+                }
+            ]
+        },
+    },
+}
 
 const [ selections, setSelections ] = React.useState([]);
 
 <div style={{height: '250px', overflow: 'auto'}}>
   <SelectionsContextProvider
-    selections={selections} 
+    selections={selections}
     onSelections={setSelections}
     quote={quote}
-    //onQuote=
     occurrence={occurrence}
-    verseObjects={verseObjects}
+    refString={`1:1`}
+    bookObject={bookObject}
   >
     <Component />
   </SelectionsContextProvider>

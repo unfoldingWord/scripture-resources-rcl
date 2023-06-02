@@ -22,9 +22,7 @@ export const selectionsFromQuote = ({ quote, verseObjectsMap, occurrence }) => {
   return selections;
 };
 
-
-
-export const quoteFromVerse = ({ selections, verseObjectsMap }) => {
+export const quoteFromVerse = ({ selections, bookObject }) => {
   let quotedWords = new Array();
   const _selections = Array.from(selections, ([ref, refSelections]) => {
     return refSelections.map((selection) => {
@@ -32,9 +30,10 @@ export const quoteFromVerse = ({ selections, verseObjectsMap }) => {
     })
   }).flat(1)
 
-  verseObjectsMap.forEach((verseObjects, ref) => {
-    const _verseObjects = verseObjects.flat(1);
-    _verseObjects.forEach((verseObject, index) => {
+  Object.values(bookObject).forEach((chapter) => {
+    Object.values(chapter).forEach((verse) => {
+      const _verseObjects = verse.verseObjects.flat(1);
+      _verseObjects.forEach((verseObject, index) => {
       const { type, text } = verseObject;
       if (type === "word") {
         const match = _selections.includes(text);
@@ -42,7 +41,8 @@ export const quoteFromVerse = ({ selections, verseObjectsMap }) => {
         quotedWords.push(quotedWord);
       }
     });
-  });
+    })
+  })
   const quote = quotedWords
     .join(" ")
     .replace(/( ?… ?)+/g, " & ")
@@ -92,7 +92,7 @@ export const areSelected = ({ words, selections, ref }) => {
     let _occ = _selection.occurrence;
 
     for (let i = 0; i < highlights.length; i++) {
-      const text = highlights[i].text; //already normalized.
+      const text = normalizeString(highlights[i].text); //already normalized.
       const occ = highlights[i].occurrence;
 
       if (text === _text && occ === _occ) {
