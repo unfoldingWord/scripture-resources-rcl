@@ -92,7 +92,7 @@ export const areSelected = ({ words, selections, ref }) => {
     let _occ = _selection.occurrence;
 
     for (let i = 0; i < highlights.length; i++) {
-      const text = highlights[i].text; //already normalized.
+      const text = normalizeString(highlights[i].text); //already normalized.
       const occ = highlights[i].occurrence;
 
       if (text === _text && occ === _occ) {
