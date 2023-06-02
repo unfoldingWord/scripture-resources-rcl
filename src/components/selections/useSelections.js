@@ -23,15 +23,12 @@ function useSelections({
       occurrence: currentOccurrenceValue,
       isOrigLang: true
     }) : [];
-    console.log({ _selections });
     update(_selections)
   }, [quote, currentOccurrenceValue, bookObject]);
 
   useDeepCompareEffectNoCheck(() => {
     if (bookObject && onQuote) {
-      console.log({ selections });
-      const _quote = helpers.quoteFromVerse({selections, bookObject});
-      console.log({ _quote });
+      t _quote = helpers.quoteFromVerse({selections, bookObject});
       onQuote(_quote);
     }
   }, [selections, onQuote, bookObject]);
