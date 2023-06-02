@@ -28,7 +28,7 @@ function useSelections({
 
   useDeepCompareEffectNoCheck(() => {
     if (bookObject && onQuote) {
-      t _quote = helpers.quoteFromVerse({selections, bookObject});
+      _quote = helpers.quoteFromVerse({selections, bookObject});
       onQuote(_quote);
     }
   }, [selections, onQuote, bookObject]);
