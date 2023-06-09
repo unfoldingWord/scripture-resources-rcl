@@ -2,6 +2,7 @@ import {
   selectionsFromQuoteAndVerseObjects,
   normalizeString,
 } from "../../core/selections/selections";
+import { doesReferenceContain } from "bible-reference-range";
 
 // const stringify = (array) => array.map(object => JSON.stringify(object));
 //export const parsify = (array) => array.map(string => JSON.parse(string));
@@ -80,8 +81,14 @@ export const isSelected = ({ word, selections, ref }) => {
 };
 
 export const areSelected = ({ words, selections, ref }) => {
-  const highlights = selections.get(ref)
-  if (!highlights) return false;
+  let highlights = [];
+
+  for (let [currentRef, selection] of selections) { 
+    const containsReference = doesReferenceContain(ref, currentRef);
+    if (containsReference) highlights = highlights.concat(selection);
+  }
+
+  if (!highlights.length) return false;
   let selected = false;
   const _selections = words.map((word) => selectionFromWord(word));
 
