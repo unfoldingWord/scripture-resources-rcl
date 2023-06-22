@@ -16,14 +16,18 @@ function useSelections({
 }) {
 
   useDeepCompareEffectNoCheck(() => {
-    const _selections = bookObject ? getQuoteMatchesInBookRef({
-      quote,
-      ref: refString,
-      bookObject,
-      occurrence: currentOccurrenceValue,
-      isOrigLang: true
-    }) : [];
-    update(_selections)
+    try {
+      const _selections = bookObject ? getQuoteMatchesInBookRef({
+        quote,
+        ref: refString,
+        bookObject,
+        occurrence: currentOccurrenceValue,
+        isOrigLang: true
+      }) : [];
+      update(_selections)
+    } catch (error) {
+      console.error(`Selections broken:\n`, error);
+    }
   }, [quote, currentOccurrenceValue, bookObject]);
 
   useDeepCompareEffectNoCheck(() => {
