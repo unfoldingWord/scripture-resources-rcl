@@ -145,7 +145,7 @@ function ScriptureTable({
       // onQuote={onQuote} // disable until round trip is working
       occurrence={occurrence}
       hasSingleVerse={!reference?.bcvQuery}
-      bookObject={books?.[0]?.json?.chapters}
+      bookObject={books?.[2]?.json?.chapters}
       refString={`${reference?.chapter}:${reference?.verse}`}
       selections={selections}
       onSelections={setSelections}

@@ -7,6 +7,7 @@ import { ResourcesContext } from '../resources/Resources.context';
 import { ScriptureTable } from '../../';
 import { License } from '../license';
 import { localString } from '../../core/localStrings';
+import {arrayMoveImmutable} from 'array-move';
 
 function ParallelScripture({
   reference,
@@ -23,7 +24,7 @@ function ParallelScripture({
 
   const { state } = React.useContext(ResourcesContext);
   const { resources, books } = state;
-
+  
   useEffect(() => {
     setOpen(_open);
   }, [_open]);
@@ -103,8 +104,8 @@ function ParallelScripture({
   return (
     (title && titles && books && (
       <ScriptureTable
-        titles={titles}
-        books={books}
+        titles={arrayMoveImmutable(titles, 0, 3)}
+        books={arrayMoveImmutable(books, 0, 3)}
         title={title}
         reference={reference}
         height={height}
