@@ -14,6 +14,7 @@ function useResources({
   config,
   onResources,
   onResourceLinks = () => { },
+  ORIGINAL_LANG_POSITION,
 }) {
   const [projectIdentifier, setProjectIdentifier] = useState();
   const [usfmJsonArray, setUsfmJsonArray] = useState();
@@ -99,7 +100,7 @@ function useResources({
   }, [parseUsfm, projectIdentifier]);
 
   return {
-    state: { resources, books },
+    state: { resources, books, resourceLinks, ORIGINAL_LANG_POSITION},
     actions: {
       addResourceLink,
       isDefaultResourceLink,

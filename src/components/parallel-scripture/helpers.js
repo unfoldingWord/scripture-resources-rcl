@@ -45,7 +45,7 @@ export const rangeFromVerseAndVerseKeys = (({ verseKeys, verseKey }) => {
   return range;
 });
 
-export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
+export const versesFromReferenceIdAndBooks = ({ referenceId, books, defaultOriginalLangPostion }) => {
   // console.log("versesFromReferenceIdAndBooks() referenceId,books=", referenceId,books)
   const versesData = books.map((book, index) => {
     const reference = referenceFromReferenceId(referenceId);
@@ -89,7 +89,7 @@ export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
         verseData = chapterData[range];
       }
 
-      if (index === 0 && verseData && verseData.verseObjects && verseData.verseObjects.length) {
+      if (index === defaultOriginalLangPostion && verseData && verseData.verseObjects && verseData.verseObjects.length) {
         const _verseData = { ...verseData };
         _verseData.verseObjects = occurrenceInjectVerseObjects(_verseData.verseObjects);
         verseData = _verseData;

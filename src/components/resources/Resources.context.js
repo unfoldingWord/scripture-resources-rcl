@@ -15,6 +15,7 @@ export function ResourcesContextProvider({
   config,
   onResources,
   children,
+  ORIGINAL_LANG_POSITION
 }) {
   const val = useResources({
     resources: resources || [],
@@ -25,6 +26,7 @@ export function ResourcesContextProvider({
     reference,
     config,
     onResources,
+    ORIGINAL_LANG_POSITION
   });
 
   return (

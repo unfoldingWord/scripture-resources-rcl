@@ -13,6 +13,8 @@ function Component ({reference}) {
 
   const resourcesContext = React.useContext(ResourcesContext);
   const resources = resourcesContext.state;
+  const resourceLinks = resourcesContext.state;
+  const defaultOriginalLangPostion = resources.resourceLinks.length - 1;
 
   const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
@@ -58,6 +60,7 @@ function Component ({reference}) {
           onQuote={setQuote}
           occurrence={occurrence}
           height='250px'
+          defaultOriginalLangPostion={defaultOriginalLangPostion}
         />
       </div>
     </>
@@ -99,18 +102,18 @@ const occurrence=1;
 import {ScriptureTable} from "scripture-resources-rcl";
 import usfmJS from 'usfm-js';
 
-import ugnt_tit from '../mocks/ugnt_tit.usfm.js';
 import en_aligned_tit from '../mocks/en_aligned_tit.usfm.js';
 import hi_aligned_tit from '../mocks/hi_aligned_tit.usfm.js';
 import hi_tit from '../mocks/hi_tit.usfm.js';
 import bhd_tit from '../mocks/bhd_tit.usfm.js';
+import ugnt_tit from '../mocks/ugnt_tit.usfm.js';
 
 const titles = [
-  'UGNT - Greek',
   'English - ULT (aligned)',
   'Hindi - IRV (aligned)',
   'Hindi - ULB',
   'Bhadrawahi - ULB',
+  'UGNT - Greek',
 ];
 
 const books = [
@@ -126,6 +129,7 @@ const reference = {
   chapter: 1,
   verse: 3,
 };
+const defaultOriginalLangPostion = 0;
 
 const [component, setComponent] = React.useState(<></>)
 const [quote, setQuote] = React.useState("τοῦ σωτῆρος ἡμῶν θεοῦ");
@@ -142,6 +146,7 @@ React.useEffect(() => {
       onQuote={setQuote}
       occurrence={occurrence}
       height='250px'
+      defaultOriginalLangPostion={defaultOriginalLangPostion}
     />
   );
 }, []);
