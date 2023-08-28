@@ -24,7 +24,7 @@ function ParallelScripture({
 
   const { state } = React.useContext(ResourcesContext);
   const { resources, books, resourceLinks, ORIGINAL_LANG_POSITION } = state;
-  const defaultOriginalLangPostion = ORIGINAL_LANG_POSITION == true? ORIGINAL_LANG_POSITION - 1 : resourceLinks?.length - 1 // ("-1" becoz array starts from 0)
+  const defaultOriginalLangPostion = ORIGINAL_LANG_POSITION == 0 ? resourceLinks?.length - 1 : ORIGINAL_LANG_POSITION - 1 // ("-1" becoz array starts from 0)
   
   console.log({defaultOriginalLangPostion, ORIGINAL_LANG_POSITION, resourceLinks})
 
