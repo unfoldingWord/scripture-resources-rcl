@@ -24,6 +24,11 @@ const bookId = "tit";
 const occurrence = -1;
 const defaultQuote = "ἐφανέρωσεν & τὸν λόγον αὐτοῦ"
 
+// for changing the postion of resource in scripture RCL
+// to display the orginal language to first, ORIGINAL_LANG_POSITION = 1 also read line no 46
+// default "0" - orignal language will be displayed last 
+const ORIGINAL_LANG_POSITION = 0;
+
 const bcvQuery = {
   book: {
     [bookId]: {
@@ -38,10 +43,12 @@ const bcvQuery = {
   },
 }
 const path = { ot: "hbo/uhb", nt: "el-x-koine/ugnt" };
+// To change the position of scripture resource in the panel, move the elements in different index in allResourceLinks
+// eg move "originalLink" to the last index to move hebrew / greek to last 
 const defaultResourceLinks = [
-  `unfoldingWord/${path.nt}/master/${bookId}`,
   `unfoldingWord/en/ult/master/${bookId}`,
   `https://git.door43.org/unfoldingWord/en_ust/src/branch/master`,
+  `unfoldingWord/${path.nt}/master/${bookId}`,
 ];
 
 // Usage
@@ -61,6 +68,7 @@ function Component() {
       resources={resources}
       onResources={setResources}
       config={config}
+      ORIGINAL_LANG_POSITION = {ORIGINAL_LANG_POSITION}
     >
       <p>Quote: {quote}</p>
       <p>Occurrence: {occurrence}</p>
@@ -119,6 +127,11 @@ function Component({ }) {
     return v
   },{}), [verse])
 
+  // for changing the postion of resource in scripture RCL
+// to display the orginal language to first, ORIGINAL_LANG_POSITION = 1 also read line no 46
+  // default "0" - orignal language will be displayed last 
+  const ORIGINAL_LANG_POSITION = 0;
+
   const bcvQuery = React.useMemo(() => ({
     book: {
       [bookId]: {
@@ -134,9 +147,9 @@ function Component({ }) {
   const reference = React.useMemo(() => ({ bookId, chapter: Number(chapter), verse, bcvQuery }), [bookId, bcvQuery, chapter, verse]);
 
   const defaultResourceLinks = React.useMemo(() => [
-    `unfoldingWord/${path[lang]}/master/${bookId}`,
     `unfoldingWord/en/ult/master/${bookId}`,
     `https://git.door43.org/unfoldingWord/en_ust/src/branch/master`,
+    `unfoldingWord/${path[lang]}/master/${bookId}`,
   ],[bookId,lang,path]);
 
   const [resourceLinks, setResourceLinks] = React.useState(defaultResourceLinks);
@@ -151,6 +164,7 @@ function Component({ }) {
       resources={resources}
       onResources={setResources}
       config={config}
+      ORIGINAL_LANG_POSITION = {ORIGINAL_LANG_POSITION}
     >         
       <ExampleUiForm
         bookId={bookId}

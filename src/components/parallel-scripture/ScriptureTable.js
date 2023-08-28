@@ -34,6 +34,7 @@ function ScriptureTable({
   renderOffscreen = {},
   open = true,
   onOpen,
+  defaultOriginalLangPostion,
 }) {
   const classes = useStyles();
   const [filter, setFilter] = useState(!!reference);
@@ -107,8 +108,8 @@ function ScriptureTable({
 
   const rows = useMemo(
     () => () =>
-      _referenceIds.map((referenceId) => {
-        const verses = versesFromReferenceIdAndBooks({ referenceId, books });
+    _referenceIds.map((referenceId) => {
+      const verses = versesFromReferenceIdAndBooks({ referenceId, books, defaultOriginalLangPostion});
 
         const row = (
           <Row
@@ -145,7 +146,7 @@ function ScriptureTable({
       // onQuote={onQuote} // disable until round trip is working
       occurrence={occurrence}
       hasSingleVerse={!reference?.bcvQuery}
-      bookObject={books?.[0]?.json?.chapters}
+      bookObject={books?.[defaultOriginalLangPostion]?.json?.chapters}
       refString={`${reference?.chapter}:${reference?.verse}`}
       selections={selections}
       onSelections={setSelections}
