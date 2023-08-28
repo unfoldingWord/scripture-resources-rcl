@@ -35,7 +35,6 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "array-move": "^4.0.0",
     "bible-reference-range": "^1.1.0",
     "deep-freeze": "^0.0.1",
     "gitea-react-toolkit": "2.2.1",

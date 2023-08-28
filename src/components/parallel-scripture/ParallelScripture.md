@@ -25,7 +25,7 @@ const occurrence = -1;
 const defaultQuote = "ἐφανέρωσεν & τὸν λόγον αὐτοῦ"
 
 // for changing the postion of resource in scripture RCL
-// to display the orginal language to first ORIGINAL_LANG_POSITION to first = 1 also read line no 46
+// to display the orginal language to first, ORIGINAL_LANG_POSITION = 1 also read line no 46
 // default "0" - orignal language will be displayed last 
 const ORIGINAL_LANG_POSITION = 0;
 
@@ -128,7 +128,7 @@ function Component({ }) {
   },{}), [verse])
 
   // for changing the postion of resource in scripture RCL
-  // to display the orginal language to first ORIGINAL_LANG_POSITION to first = 1 also read line no 46
+// to display the orginal language to first, ORIGINAL_LANG_POSITION = 1 also read line no 46
   // default "0" - orignal language will be displayed last 
   const ORIGINAL_LANG_POSITION = 0;
 

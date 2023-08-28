@@ -7,7 +7,6 @@ import { ResourcesContext } from '../resources/Resources.context';
 import { ScriptureTable } from '../../';
 import { License } from '../license';
 import { localString } from '../../core/localStrings';
-import {arrayMoveImmutable} from 'array-move';
 
 function ParallelScripture({
   reference,
@@ -107,8 +106,8 @@ function ParallelScripture({
   return (
     (title && titles && books && (
       <ScriptureTable
-        titles= {titles}
-        books= {books} 
+        titles={titles}
+        books={books}
         title={title}
         reference={reference}
         height={height}
