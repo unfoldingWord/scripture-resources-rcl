@@ -14,7 +14,7 @@ function Component ({reference}) {
   const resourcesContext = React.useContext(ResourcesContext);
   const resources = resourcesContext.state;
   const resourceLinks = resourcesContext.state;
-  const defaultOriginalLangPostion = resources.resourceLinks.length - 1;
+  const _ORIGINAL_LANG_POSITION = resources.resourceLinks.length - 1;
 
   const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
@@ -60,7 +60,7 @@ function Component ({reference}) {
           onQuote={setQuote}
           occurrence={occurrence}
           height='250px'
-          defaultOriginalLangPostion={defaultOriginalLangPostion}
+          _ORIGINAL_LANG_POSITION={_ORIGINAL_LANG_POSITION}
         />
       </div>
     </>
@@ -129,7 +129,7 @@ const reference = {
   chapter: 1,
   verse: 3,
 };
-const defaultOriginalLangPostion = 0;
+const _ORIGINAL_LANG_POSITION = 0;
 
 const [component, setComponent] = React.useState(<></>)
 const [quote, setQuote] = React.useState("τοῦ σωτῆρος ἡμῶν θεοῦ");
@@ -146,7 +146,7 @@ React.useEffect(() => {
       onQuote={setQuote}
       occurrence={occurrence}
       height='250px'
-      defaultOriginalLangPostion={defaultOriginalLangPostion}
+      _ORIGINAL_LANG_POSITION={_ORIGINAL_LANG_POSITION}
     />
   );
 }, []);
