@@ -574,7 +574,7 @@ export const occurrencesInString = (stringMap, subString) => {
 const tokenizer = (text) => {
   return tokenize({
     text: text,
-    greedy: true,
+    includePunctuation: false,
     normalize: true,
   });
 };
