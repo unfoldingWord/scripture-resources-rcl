@@ -1,7 +1,7 @@
 {
   "name": "scripture-resources-rcl",
   "description": "A React Component Library for Rendering Scripture Resources.",
-  "version": "5.5.5",
+  "version": "5.5.6",
   "homepage": "https://scripture-resources-rcl.netlify.com/",
   "repository": {
     "type": "git",
@@ -18,8 +18,8 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "nyc:report": "nyc report --reporter=json-summary --reporter=text",
-    "test": "nyc start-test 6060 cypress:run && npm run nyc:report",
-    "test:unit": "jest",
+    "test": "jest",
+    "test:e2e": "nyc start-test 6060 cypress:run && npm run nyc:report",
     "create-coverage-badge": "bash scripts/create-badge-json.sh"
   },
   "eslintConfig": {
