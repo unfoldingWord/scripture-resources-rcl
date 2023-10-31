@@ -9,22 +9,18 @@ module.exports = {
         {
           "text": "εἴ",
           "occurrence": 1,
-          "occurrences": 4
         },
         {
           "text": "εἴ",
           "occurrence": 2,
-          "occurrences": 4
         },
         {
           "text": "εἴ",
           "occurrence": 3,
-          "occurrences": 4
         },
         {
           "text": "εἴ",
           "occurrence": 4,
-          "occurrences": 4
         }
       ]
 }

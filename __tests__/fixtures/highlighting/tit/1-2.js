@@ -4,5 +4,5 @@ module.exports = {
     verse:2,
     quote:"ἐπ’ ἐλπίδι ζωῆς αἰωνίου",
     occurrence:1,
-    expected: [{"text":"ἐπ’","occurrence":1,"occurrences":1},{"text":"ἐλπίδι","occurrence":1,"occurrences":1},{"text":"ζωῆς","occurrence":1,"occurrences":1},{"text":"αἰωνίου","occurrence":1,"occurrences":1}]
+    expected: [{"text":"ἐπ’","occurrence":1},{"text":"ἐλπίδι","occurrence":1},{"text":"ζωῆς","occurrence":1},{"text":"αἰωνίου","occurrence":1}]
   }

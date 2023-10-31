@@ -9,12 +9,10 @@ module.exports = {
         {
           "text": "εἴ",
           "occurrence": 2,
-          "occurrences": 4
         },
         {
           "text": "τι",
           "occurrence": 1,
-          "occurrences": 1
         },
       ]
 }

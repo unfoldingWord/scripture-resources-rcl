@@ -3,6 +3,7 @@ import xre from 'xregexp';
 import _ from 'lodash';
 import { tokenize } from 'string-punctuation-tokenizer';
 import { verseObjectsToString } from './verseObjects';
+import { getQuoteMatchesInBookRef } from 'uw-quote-helpers';
 
 /**
  * This function takes a search string and create a regex search string to match a whole word
@@ -26,14 +27,24 @@ export const getRegexForWord = (string) => {
  */
 export const selectionsFromQuoteAndVerseObjects = ({
   quote,
-  verseObjectsMap,
+  verseObjects,
   occurrence,
 }) => {
-  let selections = new Map();
-  let stringMap = new Map();
-    stringMap = verseObjectsToString(verseObjectsMap);
-  selections = selectionsFromQuoteAndString({ quote, stringMap, occurrence });
-  return selections;
+  return getQuoteMatchesInBookRef(
+    {
+      quote,
+      ref: "1:1",
+      bookObject: {
+        "1": {
+          "1": {
+            verseObjects
+          }
+        }
+      },
+      isOrigLang: true,
+      occurrence,
+    }
+  ).get("1:1");
 };
 
 /**
@@ -59,11 +70,28 @@ export const getPrecedingOccurrences = (string, subquote) => {
  * @param {number} occurrence - The occurence to match
  * @returns {[]} - The quotes we found
  */
+
+
 export const selectionsFromQuoteAndString = ({
   quote,
-  stringMap: rawStringMap,
+  string,
   occurrence,
-  }) => {
+}) => {
+  return getQuoteMatchesInBookRef(
+    {
+      quote,
+      ref: "1:1",
+      bookObject: {
+        "1": {
+          "1": {
+            verseObjects: normalizeString(string).split(" ").map(word => ({ text: word }))
+          }
+        }
+      },
+      isOrigLang: true,
+      occurrence,
+    }
+  ).get("1:1");
   let stringMap = new Map();
   rawStringMap.forEach((rawString,ref)=> {
     const string = normalizeString(rawString);

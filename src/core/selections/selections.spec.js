@@ -22,9 +22,9 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "ἐν", occurrence: 1, occurrences: 1 },
-      { text: "ἀρχῇ", occurrence: 1, occurrences: 1 },
-      { text: "ἦν", occurrence: 1, occurrences: 3 },
+      { text: "ἐν", occurrence: 1 },
+      { text: "ἀρχῇ", occurrence: 1 },
+      { text: "ἦν", occurrence: 1 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -38,14 +38,14 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "καὶ", occurrence: 1, occurrences: 3 },
-      { text: "καὶ", occurrence: 2, occurrences: 3 },
-      { text: "καὶ", occurrence: 3, occurrences: 3 },
+      { text: "καὶ", occurrence: 1 },
+      { text: "καὶ", occurrence: 2 },
+      { text: "καὶ", occurrence: 3 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
 
-  it("skip -1 with ampersand", () => {
+  it("don't skip -1 with ampersand", () => {
     const input = {
       quote: "καὶ & μὴ",
       string:
@@ -53,7 +53,16 @@ describe("selectionsFromQuoteAndString", () => {
       occurrence: -1,
     };
     const output = selectionsFromQuoteAndString(input);
-    const expected = [];
+    const expected = [
+      {
+        "occurrence": 1,
+        "text": "καὶ",
+      },
+      {
+        "occurrence": 1,
+        "text": "μὴ",
+      },
+    ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
 
@@ -66,8 +75,8 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "Θεοῦ", occurrence: 1, occurrences: 2 },
-      { text: "Θεοῦ", occurrence: 2, occurrences: 2 },
+      { text: "Θεοῦ", occurrence: 1 },
+      { text: "Θεοῦ", occurrence: 2 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -81,8 +90,8 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "Θεὸς", occurrence: 1, occurrences: 1 },
-      { text: "λόγος", occurrence: 3, occurrences: 3 },
+      { text: "Θεὸς", occurrence: 1 },
+      { text: "λόγος", occurrence: 3 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -96,8 +105,8 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "Θεὸς", occurrence: 2, occurrences: 2 },
-      { text: "λόγος", occurrence: 3, occurrences: 3 },
+      { text: "Θεὸς", occurrence: 2 },
+      { text: "λόγος", occurrence: 3 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -111,9 +120,9 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "ὁ", occurrence: 1, occurrences: 3 },
-      { text: "λόγος", occurrence: 1, occurrences: 3 },
-      { text: "πρὸς", occurrence: 1, occurrences: 1 },
+      { text: "ὁ", occurrence: 1 },
+      { text: "λόγος", occurrence: 1 },
+      { text: "πρὸς", occurrence: 1 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -127,9 +136,9 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "ὁ", occurrence: 1, occurrences: 3 },
-      { text: "λόγος", occurrence: 1, occurrences: 3 },
-      { text: "Θεόν", occurrence: 1, occurrences: 1 },
+      { text: "ὁ", occurrence: 1 },
+      { text: "λόγος", occurrence: 1 },
+      { text: "Θεόν", occurrence: 1 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -139,13 +148,13 @@ describe("selectionsFromQuoteAndString", () => {
       quote: "ὁ λόγος & Θεόν",
       string:
         "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
-      occurrence: 2,
+      occurrence: -1,
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "ὁ", occurrence: 2, occurrences: 3 },
-      { text: "λόγος", occurrence: 2, occurrences: 3 },
-      { text: "Θεόν", occurrence: 1, occurrences: 1 },
+      { text: "ὁ", occurrence: 1 },
+      { text: "λόγος", occurrence: 1 },
+      { text: "Θεόν", occurrence: 1 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -159,8 +168,8 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "ὁ", occurrence: 1, occurrences: 3 },
-      { text: "λόγος", occurrence: 1, occurrences: 3 },
+      { text: "ὁ", occurrence: 1 },
+      { text: "λόγος", occurrence: 1 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -174,8 +183,8 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "ὁ", occurrence: 2, occurrences: 3 },
-      { text: "λόγος", occurrence: 2, occurrences: 3 },
+      { text: "ὁ", occurrence: 2 },
+      { text: "λόγος", occurrence: 2 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -189,8 +198,8 @@ describe("selectionsFromQuoteAndString", () => {
     };
     const output = selectionsFromQuoteAndString(input);
     const expected = [
-      { text: "ὁ", occurrence: 3, occurrences: 3 },
-      { text: "λόγος", occurrence: 3, occurrences: 3 },
+      { text: "ὁ", occurrence: 3 },
+      { text: "λόγος", occurrence: 3 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });

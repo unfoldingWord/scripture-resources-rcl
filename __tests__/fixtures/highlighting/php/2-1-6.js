@@ -9,7 +9,6 @@ module.exports = {
         {
           "text": "τι",
           "occurrence": 1,
-          "occurrences": 1
         },
       ]
 }
