@@ -99,11 +99,11 @@ import {
 
 // DEFAULT VALUES
 const defaults = {
-  bookId: "tit",
+  bookId: "mat",
   lang: "nt", //ot or nt
-  chapter: "1",
-  verse: "3",
-  quote: "ἐφανέρωσεν & τὸν λόγον αὐτοῦ",
+  chapter: "12",
+  verse: "25",
+  quote: "πᾶσα βασιλεία μερισθεῖσα καθ’ ἑαυτῆς ἐρημοῦται, καὶ πᾶσα πόλις ἢ οἰκία μερισθεῖσα καθ’ ἑαυτῆς οὐ σταθήσεται",
   occurrence: -1
 }
 
