@@ -17,7 +17,7 @@ function useSelections({
 
   useDeepCompareEffectNoCheck(() => {
     try {
-      const _selections = bookObject ? getQuoteMatchesInBookRef({
+      const _selections = quote && refString && bookObject ? getQuoteMatchesInBookRef({
         quote,
         ref: refString,
         bookObject,
@@ -28,7 +28,7 @@ function useSelections({
     } catch (error) {
       console.error(`Selections broken:\n`, error);
     }
-  }, [quote, currentOccurrenceValue, bookObject]);
+  }, [quote, currentOccurrenceValue, bookObject, refString]);
 
   useDeepCompareEffectNoCheck(() => {
     if (bookObject && onQuote) {
