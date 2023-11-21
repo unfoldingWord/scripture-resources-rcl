@@ -108,11 +108,11 @@ useSelections.propTypes = {
   onSelections: PropTypes.func.isRequired,
   /** the quote to be selected */
   quote: PropTypes.string.isRequired,
-  /** all chapter-verses where quote may be found */
+  /** all chapter-verses where quote may be found - note this is original language bible */
   bookObject: PropTypes.object,
   /** string chapter-verse reference. i.e. 1:5-6 */
   refString: PropTypes.string,
-  /** if quote occurs mulitple times, this is the occurence of the one selected */
+  /** if quote occurs mulitple times, this is the occurrence of the one selected */
   occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   /** action taken when quote is provided */
   onQuote: PropTypes.func,
