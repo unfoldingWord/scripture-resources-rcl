@@ -31,7 +31,7 @@ export const selectionsFromQuoteAndVerseObjects = ({
 }) => {
   let selections = new Map();
   let stringMap = new Map();
-    stringMap = verseObjectsToString(verseObjectsMap);
+  stringMap = verseObjectsToString(verseObjectsMap);
   selections = selectionsFromQuoteAndString({ quote, stringMap, occurrence });
   return selections;
 };
