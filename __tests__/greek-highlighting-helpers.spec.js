@@ -5,6 +5,7 @@ import deepEqual from 'deep-equal';
 import ugnt_tit from './fixtures/books/ugnt_tit.js';
 import ugnt_3jn from './fixtures/books/ugnt_3jn.js';
 import ugnt_php from './fixtures/books/ugnt_php.js';
+import { flattenVerseObjects } from "../src/core";
 
 describe('selectionHelpers.selectionsFromQuoteAndVerseObjects PHP', () => {
   it('should have all words highlighted PHP 2:1', () => {
@@ -146,9 +147,10 @@ function generateTest(fileName) {
   }
 
   const { verseObjects } = books[bookName].chapters[chapter][verse];
+  const _verseObjects = flattenVerseObjects(verseObjects);
   const verseObjectsMap = new Map();
   let ref = `${chapter}:${verse}`;
-  verseObjectsMap.set(ref, verseObjects);
+  verseObjectsMap.set(ref, _verseObjects);
   const selections_ = selectionsFromQuoteAndVerseObjects({ quote, verseObjectsMap, occurrence });
   const selections = selections_.get(ref) || [];
 
