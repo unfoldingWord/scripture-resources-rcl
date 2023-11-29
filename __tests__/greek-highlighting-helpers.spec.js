@@ -149,8 +149,8 @@ function generateTest(fileName) {
   const verseObjectsMap = new Map();
   let ref = `${chapter}:${verse}`;
   verseObjectsMap.set(ref, verseObjects);
-  let selections = selectionsFromQuoteAndVerseObjects({ quote, verseObjectsMap, occurrence });
-  selections = selections.get(ref);
+  const selections_ = selectionsFromQuoteAndVerseObjects({ quote, verseObjectsMap, occurrence });
+  const selections = selections_.get(ref) || [];
 
   // log details to console if there is a miscompare of data
   if (!deepEqual(selections, expected)) {
