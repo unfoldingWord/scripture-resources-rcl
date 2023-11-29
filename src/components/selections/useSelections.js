@@ -108,7 +108,7 @@ useSelections.propTypes = {
   onSelections: PropTypes.func.isRequired,
   /** the quote to be selected */
   quote: PropTypes.string.isRequired,
-  /** all chapter-verses where quote may be found - note this is original language bible */
+  /** all chapter-verses where quote may be found - note this is either original language bible or aligned bible */
   bookObject: PropTypes.object,
   /** string chapter-verse reference. i.e. 1:5-6 */
   refString: PropTypes.string,
