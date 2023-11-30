@@ -11,7 +11,9 @@ export default function tsvToJson(tsv){
       const currentline = lines[i].split('\t');
 
       for (let j = 0; j < headers.length; j++) {
-        obj[headers[j]] = currentline[j];
+        // Use empty string if the column value is undefined. 
+        // If last element in tsv is empty, will be undefined
+        obj[headers[j]] = currentline[j] !== undefined ? currentline[j] : "";
       }
 
       result.push(obj);
