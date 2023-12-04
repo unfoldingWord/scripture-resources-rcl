@@ -1,0 +1,14 @@
+.yalc/
+.vscode/
+.idea/
+.editorconfig
+**/__tests__/
+coverage/
+cypress/
+node_modules/
+scripts/
+src/
+styleguide.config.js
+styleguide.styles.js
+styleguide/
+yalc.lock

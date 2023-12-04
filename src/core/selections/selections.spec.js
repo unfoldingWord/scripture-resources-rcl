@@ -1,8 +1,8 @@
 import {
-  selectionsFromQuoteAndString,
   generateSelection,
   getPrecedingText,
   normalizeString,
+  selectionsFromQuoteAndString,
 } from "./selections";
 
 const normalizedText = (arr) => arr.map( obj => {
@@ -12,15 +12,23 @@ const normalizedText = (arr) => arr.map( obj => {
   }
 })
 
+function createStringMap(ref, rawString) {
+  const stringMap = new Map();
+  stringMap.set(ref, rawString);
+  return stringMap;
+}
+
 describe("selectionsFromQuoteAndString", () => {
+  const ref = '1:2';
+
   it("phrase at beginning", () => {
     const input = {
       quote: "ἐν ἀρχῇ ἦν",
-      string:
-        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+      stringMap: createStringMap(ref,
+          "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος."),
       occurrence: 1,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
       { text: "ἐν", occurrence: 1, occurrences: 1 },
       { text: "ἀρχῇ", occurrence: 1, occurrences: 1 },
@@ -32,11 +40,11 @@ describe("selectionsFromQuoteAndString", () => {
   it("all occurrences -1", () => {
     const input = {
       quote: "καὶ",
-      string:
-        "διὰ τοῦτο, ἐὰν ἔλθω, ὑπομνήσω αὐτοῦ τὰ ἔργα, ἃ ποιεῖ, λόγοις πονηροῖς φλυαρῶν ἡμᾶς; καὶ μὴ ἀρκούμενος ἐπὶ τούτοις, οὔτε αὐτὸς ἐπιδέχεται τοὺς ἀδελφοὺς, καὶ τοὺς βουλομένους κωλύει, καὶ ἐκ τῆς ἐκκλησίας ἐκβάλλει.",
+      stringMap: createStringMap(ref,
+        "διὰ τοῦτο, ἐὰν ἔλθω, ὑπομνήσω αὐτοῦ τὰ ἔργα, ἃ ποιεῖ, λόγοις πονηροῖς φλυαρῶν ἡμᾶς; καὶ μὴ ἀρκούμενος ἐπὶ τούτοις, οὔτε αὐτὸς ἐπιδέχεται τοὺς ἀδελφοὺς, καὶ τοὺς βουλομένους κωλύει, καὶ ἐκ τῆς ἐκκλησίας ἐκβάλλει."),
       occurrence: -1,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
       { text: "καὶ", occurrence: 1, occurrences: 3 },
       { text: "καὶ", occurrence: 2, occurrences: 3 },
@@ -48,23 +56,34 @@ describe("selectionsFromQuoteAndString", () => {
   it("skip -1 with ampersand", () => {
     const input = {
       quote: "καὶ & μὴ",
-      string:
-        "διὰ τοῦτο, ἐὰν ἔλθω, ὑπομνήσω αὐτοῦ τὰ ἔργα, ἃ ποιεῖ, λόγοις πονηροῖς φλυαρῶν ἡμᾶς; καὶ μὴ ἀρκούμενος ἐπὶ τούτοις, οὔτε αὐτὸς ἐπιδέχεται τοὺς ἀδελφοὺς, καὶ τοὺς βουλομένους κωλύει, καὶ ἐκ τῆς ἐκκλησίας ἐκβάλλει.",
+      stringMap: createStringMap(ref,
+          "διὰ τοῦτο, ἐὰν ἔλθω, ὑπομνήσω αὐτοῦ τὰ ἔργα, ἃ ποιεῖ, λόγοις πονηροῖς φλυαρῶν ἡμᾶς; καὶ μὴ ἀρκούμενος ἐπὶ τούτοις, οὔτε αὐτὸς ἐπιδέχεται τοὺς ἀδελφοὺς, καὶ τοὺς βουλομένους κωλύει, καὶ ἐκ τῆς ἐκκλησίας ἐκβάλλει."),
       occurrence: -1,
     };
-    const output = selectionsFromQuoteAndString(input);
-    const expected = [];
+    const output = selectionsFromQuoteAndString(input).get(ref);
+    const expected = [
+      {
+        "occurrence": 1,
+        "occurrences": 3,
+        "text": "καὶ"
+      },
+      {
+        "occurrence": 1,
+        "occurrences": 1,
+        "text": "μὴ"
+      }
+    ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
 
   it("ampersand: repeated word", () => {
     const input = {
       quote: "Θεοῦ & Θεοῦ",
-      string:
-        "Παῦλος, δοῦλος Θεοῦ, ἀπόστολος δὲ Ἰησοῦ Χριστοῦ, κατὰ πίστιν ἐκλεκτῶν Θεοῦ, καὶ ἐπίγνωσιν ἀληθείας, τῆς κατ’ εὐσέβειαν",
+      stringMap: createStringMap(ref,
+        "Παῦλος, δοῦλος Θεοῦ, ἀπόστολος δὲ Ἰησοῦ Χριστοῦ, κατὰ πίστιν ἐκλεκτῶν Θεοῦ, καὶ ἐπίγνωσιν ἀληθείας, τῆς κατ’ εὐσέβειαν"),
       occurrence: 1,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
       { text: "Θεοῦ", occurrence: 1, occurrences: 2 },
       { text: "Θεοῦ", occurrence: 2, occurrences: 2 },
@@ -75,11 +94,11 @@ describe("selectionsFromQuoteAndString", () => {
   it("ampersand: repeating ending word preceding first.", () => {
     const input = {
       quote: "Θεὸς & λόγος",
-      string:
-        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+      stringMap: createStringMap(ref,
+        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος."),
       occurrence: 1,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
       { text: "Θεὸς", occurrence: 1, occurrences: 1 },
       { text: "λόγος", occurrence: 3, occurrences: 3 },
@@ -90,14 +109,14 @@ describe("selectionsFromQuoteAndString", () => {
   it("ampersand: repeating ending word preceding first.", () => {
     const input = {
       quote: "Θεὸς & λόγος",
-      string:
-        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ Θεὸς ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+      stringMap: createStringMap(ref,
+        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ Θεὸς ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος."),
       occurrence: 2,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
-      { text: "Θεὸς", occurrence: 2, occurrences: 2 },
-      { text: "λόγος", occurrence: 3, occurrences: 3 },
+      { text: "Θεὸς", occurrence: 1, occurrences: 2 },
+      { text: "λόγος", occurrence: 2, occurrences: 3 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
   });
@@ -105,11 +124,11 @@ describe("selectionsFromQuoteAndString", () => {
   it("ampersand: simple, short", () => {
     const input = {
       quote: "ὁ λόγος & πρὸς",
-      string:
-        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+      stringMap: createStringMap(ref,
+        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος."),
       occurrence: 1,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
       { text: "ὁ", occurrence: 1, occurrences: 3 },
       { text: "λόγος", occurrence: 1, occurrences: 3 },
@@ -121,11 +140,11 @@ describe("selectionsFromQuoteAndString", () => {
   it("ampersand: first occurrence of repeated quote", () => {
     const input = {
       quote: "ὁ λόγος & Θεόν",
-      string:
-        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+      stringMap: createStringMap(ref,
+        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος."),
       occurrence: 1,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
       { text: "ὁ", occurrence: 1, occurrences: 3 },
       { text: "λόγος", occurrence: 1, occurrences: 3 },
@@ -137,14 +156,14 @@ describe("selectionsFromQuoteAndString", () => {
   it("ampersand: second occurrence of repeated quote", () => {
     const input = {
       quote: "ὁ λόγος & Θεόν",
-      string:
-        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+      stringMap: createStringMap(ref,
+        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος."),
       occurrence: 2,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
-      { text: "ὁ", occurrence: 2, occurrences: 3 },
-      { text: "λόγος", occurrence: 2, occurrences: 3 },
+      { text: "ὁ", occurrence: 1, occurrences: 3 },
+      { text: "λόγος", occurrence: 1, occurrences: 3 },
       { text: "Θεόν", occurrence: 1, occurrences: 1 },
     ];
     expect(output).toStrictEqual(normalizedText(expected));
@@ -153,11 +172,11 @@ describe("selectionsFromQuoteAndString", () => {
   it("repeated phrase: first occurrence", () => {
     const input = {
       quote: "ὁ λόγος",
-      string:
-        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+      stringMap: createStringMap(ref,
+        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος."),
       occurrence: 1,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
       { text: "ὁ", occurrence: 1, occurrences: 3 },
       { text: "λόγος", occurrence: 1, occurrences: 3 },
@@ -168,11 +187,11 @@ describe("selectionsFromQuoteAndString", () => {
   it("repeated phrase: second occurrence", () => {
     const input = {
       quote: "ὁ λόγος",
-      string:
-        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+      stringMap: createStringMap(ref,
+        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος."),
       occurrence: 2,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
       { text: "ὁ", occurrence: 2, occurrences: 3 },
       { text: "λόγος", occurrence: 2, occurrences: 3 },
@@ -183,11 +202,11 @@ describe("selectionsFromQuoteAndString", () => {
   it("repeated phrase: last occurrence", () => {
     const input = {
       quote: "ὁ λόγος",
-      string:
-        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος.",
+      stringMap: createStringMap(ref,
+        "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν Θεόν, καὶ Θεὸς ἦν ὁ λόγος."),
       occurrence: 3,
     };
-    const output = selectionsFromQuoteAndString(input);
+    const output = selectionsFromQuoteAndString(input).get(ref);
     const expected = [
       { text: "ὁ", occurrence: 3, occurrences: 3 },
       { text: "λόγος", occurrence: 3, occurrences: 3 },

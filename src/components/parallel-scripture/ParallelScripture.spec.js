@@ -1,9 +1,6 @@
 import React from "react";
 import { TextField } from "@material-ui/core";
-import {
-  ParallelScripture,
-  ResourcesContextProvider,
-} from "scripture-resources-rcl";
+import { resourceFromResourceLink } from "../../core";
 
 // To do: Implement a new strategy for how to test functional components 
 // - probably by using React Testing Library instead of Enzyme
