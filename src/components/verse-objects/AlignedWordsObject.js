@@ -10,8 +10,6 @@ import { default as WordLexiconDetails } from 'tc-ui-toolkit/lib/WordLexiconDeta
 import { SelectionsContext } from '../selections/Selections.context';
 import { WordObject, OriginalWordObject } from '.';
 
-const intervalBeforePopup = 500;  // delay 1/2 sec. before showing popup
-
 function AlignedWordsObject({
   children,
   verseKey,
@@ -21,26 +19,14 @@ function AlignedWordsObject({
   translate,
 }) {
   const classes = useStyles();
-  const [popupPosition, setPopupPosition] = useState(null);
-  const [readyToShow, setReadyToShow] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpen = (event) => {
-    setReadyToShow(false); // make sure cleared
-
-    if (!event.buttons) { // only show popup if buttons not depressed (i.e. not selection text)
-      setPopupPosition(event.currentTarget); // save the anchor element for positioning
-
-      delay(intervalBeforePopup).then(() => {
-        setReadyToShow(true);
-      });
-    } else { // if dragging make position for popup is cleared
-      setPopupPosition(null);
-    }
+    setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
-    setPopupPosition(null);
-    setReadyToShow(false);
+    setAnchorEl(null);
   };
 
   let selected;
@@ -100,8 +86,8 @@ function AlignedWordsObject({
   }
 
   if (!disableWordPopover) {
-    const openPopup = readyToShow && Boolean(popupPosition);
-    const id = openPopup ? 'popover' : undefined;
+    const open = Boolean(anchorEl);
+    const id = open ? 'popover' : undefined;
     const _originalWords = originalWords.map((verseObject, index) => getOriginalWordObject(index, verseObject));
 
     component = (
@@ -111,14 +97,14 @@ function AlignedWordsObject({
           aria-haspopup="true"
           onMouseEnter={handleOpen}
           onMouseLeave={handleClose}
-          className={openPopup ? classes.open : classes.closed}
+          className={open ? classes.open : classes.closed}
         >
           {words}
         </span>
         <Popover
           id={id}
-          open={openPopup}
-          anchorEl={popupPosition}
+          open={open}
+          anchorEl={anchorEl}
           onClose={handleClose}
           className={classes.popover}
           classes={{ paper: classes.paper }}
@@ -163,12 +149,6 @@ const useStyles = makeStyles((theme) => ({
 // fallback translate function
 function translate_(key) {
   return key;
-}
-
-function delay(ms) {
-  return new Promise((resolve) =>
-      setTimeout(resolve, ms),
-  )
 }
 
 export default AlignedWordsObject;
