@@ -16694,10 +16694,10 @@ use@^3.1.0:
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
   integrity sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
 
-usfm-js@^3.4.3-beta.6:
-  version "3.4.3-beta.6"
-  resolved "https://registry.yarnpkg.com/usfm-js/-/usfm-js-3.4.3-beta.6.tgz#5021d333e32c7c3bc04ec00973d6220822ae1a50"
-  integrity sha512-y47CzK+jhde/jESbB+cOa+a6BVM6PHMtjYTgeSV7aGTWCCgSoVJONfF/lBgoOW1T78602yQ6RMkvN+k86eKYiA==
+usfm-js@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/usfm-js/-/usfm-js-3.4.3.tgz#dffa5a00cdbf7c02df89f6e876136df6aa532361"
+  integrity sha512-c5d2dzmSnEfFSPfMXnnycIPwdw8ryBsb2r2CUEwiXpsUMm+gDmhFz5GGOufYP5rGGVwAssHdSM8oOkcaHz+Hwg==
   dependencies:
     lodash.clonedeep "^4.5.0"
 
