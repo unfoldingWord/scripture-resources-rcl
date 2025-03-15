@@ -28,6 +28,21 @@ export const resourceFromResourceLink = async ({
   config,
 }) => {
   let manifestHttpResponse = null;
+  // Create a resource request ID for tracing
+  const resourceRequestId = `res_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+
+  // Log the resource request
+  console.log(`[${resourceRequestId}] 🔍 RESOURCE REQUEST:`, {
+    resourceLink,
+    reference,
+    config: {
+      server: config?.server,
+      timeout: config?.timeout,
+      // Don't log sensitive information
+      token: config?.token ? '[REDACTED]' : undefined,
+    },
+    timestamp: new Date().toISOString(),
+  });
 
   try {
     const resource = parseResourceLink({
@@ -38,6 +53,53 @@ export const resourceFromResourceLink = async ({
     resource.fullResponse = true;
     const { manifest, response } = await getResourceManifest(resource);
     manifestHttpResponse = response;
+    
+    // Check if we got an error response from getResourceManifest
+    if (response && response.error) {
+      const errorDetails = {
+        resourceRequestId,
+        timestamp: new Date().toISOString(),
+        type: 'manifest_fetch_error',
+        status: response.status,
+        statusText: response.statusText,
+        message: response.message,
+        resourceLink,
+        requestId: response.requestId, // Include the original request ID if available
+        request: {
+          resourceLink,
+          reference,
+        },
+        response: {
+          ...response,
+          // Don't include large data objects
+          data: response.data ? '[DATA OBJECT]' : undefined,
+        }
+      };
+      
+      // Log the detailed error information
+      console.group(`[${resourceRequestId}] 🔴 RESOURCE MANIFEST ERROR`);
+      console.error(`Error fetching manifest: ${response.message || 'Unknown error'}`);
+      console.error(`Resource Link: ${resourceLink}`);
+      console.error(`Status: ${response.status || 'Unknown'}`);
+      console.error(`Status Text: ${response.statusText || 'Unknown'}`);
+      console.error('Complete error details:', errorDetails);
+      console.groupEnd();
+      
+      return {
+        manifestHttpResponse: response,
+        error: true,
+        errorDetails: {
+          type: 'manifest_fetch_error',
+          status: response.status,
+          statusText: response.statusText,
+          message: response.message,
+          resourceLink,
+          resourceRequestId,
+          requestId: response.requestId // Include the original request ID
+        }
+      };
+    }
+    
     const projects = manifest.projects.map((project) =>
       extendProject({
         project,
@@ -59,14 +121,61 @@ export const resourceFromResourceLink = async ({
       project,
       manifestHttpResponse,
     };
+    
+    // Log successful resource loading
+    console.log(`[${resourceRequestId}] ✅ RESOURCE LOADED SUCCESSFULLY:`, {
+      resourceLink,
+      projectId,
+      projectsCount: projects.length,
+      timestamp: new Date().toISOString(),
+    });
+    
     return _resource;
   } catch (e) {
     const errorMessage =
       'scripture-resources-rcl: resources.js: Cannot load resource [' +
       resourceLink +
       ']';
-    console.error(errorMessage, e);
-    return { manifestHttpResponse };
+    
+    const errorDetails = {
+      resourceRequestId,
+      timestamp: new Date().toISOString(),
+      type: 'resource_load_error',
+      message: errorMessage,
+      originalError: e.message,
+      resourceLink,
+      stack: e.stack,
+      manifestHttpResponse: manifestHttpResponse ? {
+        status: manifestHttpResponse.status,
+        statusText: manifestHttpResponse.statusText,
+        message: manifestHttpResponse.message,
+        requestId: manifestHttpResponse.requestId,
+      } : undefined
+    };
+    
+    // Log the detailed error information
+    console.group(`[${resourceRequestId}] 🔴 RESOURCE LOAD ERROR`);
+    console.error(`Error loading resource: ${e.message}`);
+    console.error(`Resource Link: ${resourceLink}`);
+    console.error(`Original Error: ${errorMessage}`);
+    console.error('Complete error details:', errorDetails);
+    console.error('Error stack trace:', e.stack);
+    console.groupEnd();
+    
+    // Return a more detailed error object
+    return { 
+      manifestHttpResponse,
+      error: true,
+      errorDetails: {
+        type: 'resource_load_error',
+        message: errorMessage,
+        originalError: e.message,
+        resourceLink,
+        stack: e.stack,
+        resourceRequestId,
+        requestId: manifestHttpResponse?.requestId // Include the original request ID if available
+      }
+    };
   }
 };
 
@@ -174,6 +283,25 @@ export const getResourceManifest = async ({
   ref = ref || tag; // fallback to using tag if ref not given
   const repository = `${languageId}_${resourceId}`;
   const path = 'manifest.yaml';
+  
+  // Create a manifest request ID for tracing
+  const manifestRequestId = `manifest_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+  
+  // Log the manifest request
+  console.log(`[${manifestRequestId}] 🔍 MANIFEST REQUEST:`, {
+    username,
+    repository,
+    path,
+    ref,
+    config: {
+      server: config?.server,
+      timeout: config?.timeout,
+      // Don't log sensitive information
+      token: config?.token ? '[REDACTED]' : undefined,
+    },
+    timestamp: new Date().toISOString(),
+  });
+  
   const response = await getFile({
     username,
     repository,
@@ -183,9 +311,136 @@ export const getResourceManifest = async ({
     fullResponse,
     doRefFetch,
   });
+  
+  // Check if we got an error response from getFile
+  if (response && response.error) {
+    const errorDetails = {
+      manifestRequestId,
+      timestamp: new Date().toISOString(),
+      type: 'manifest_fetch_error',
+      status: response.status,
+      statusText: response.statusText,
+      message: response.message,
+      repository,
+      languageId,
+      resourceId,
+      requestId: response.requestId, // Include the original request ID if available
+      request: {
+        username,
+        repository,
+        path,
+        ref,
+      },
+      response: {
+        ...response,
+        // Don't include large data objects
+        data: response.data ? '[DATA OBJECT]' : undefined,
+      }
+    };
+    
+    // Log the detailed error information
+    console.group(`[${manifestRequestId}] 🔴 MANIFEST FETCH ERROR`);
+    console.error(`Error fetching manifest: ${response.message || 'Unknown error'}`);
+    console.error(`Repository: ${repository}`);
+    console.error(`Status: ${response.status || 'Unknown'}`);
+    console.error(`Status Text: ${response.statusText || 'Unknown'}`);
+    console.error('Complete error details:', errorDetails);
+    console.groupEnd();
+    
+    return fullResponse ? { 
+      manifest: null, 
+      response: {
+        ...response,
+        repository,
+        languageId,
+        resourceId,
+        manifestRequestId,
+      } 
+    } : null;
+  }
+  
   const yaml = getResponseData(response);
-  const manifest = yaml ? YAML.safeLoad(yaml) : null;
-  return fullResponse ? { manifest, response } : manifest;
+  
+  // Check if we couldn't parse the YAML
+  if (!yaml) {
+    const errorDetails = {
+      manifestRequestId,
+      timestamp: new Date().toISOString(),
+      type: 'manifest_parse_error',
+      status: response.status || 0,
+      statusText: 'Invalid manifest format',
+      message: 'Could not parse manifest YAML',
+      repository,
+      languageId,
+      resourceId,
+      requestId: response.requestId, // Include the original request ID if available
+    };
+    
+    // Log the detailed error information
+    console.group(`[${manifestRequestId}] 🔴 MANIFEST PARSE ERROR`);
+    console.error(`Error parsing manifest YAML`);
+    console.error(`Repository: ${repository}`);
+    console.error('Complete error details:', errorDetails);
+    console.groupEnd();
+    
+    const errorResponse = {
+      error: true,
+      status: response.status || 0,
+      statusText: 'Invalid manifest format',
+      message: 'Could not parse manifest YAML',
+      repository,
+      languageId,
+      resourceId,
+      manifestRequestId,
+      requestId: response.requestId, // Include the original request ID
+    };
+    return fullResponse ? { manifest: null, response: errorResponse } : null;
+  }
+  
+  try {
+    const manifest = YAML.safeLoad(yaml);
+    
+    // Log successful manifest loading
+    console.log(`[${manifestRequestId}] ✅ MANIFEST LOADED SUCCESSFULLY:`, {
+      repository,
+      timestamp: new Date().toISOString(),
+    });
+    
+    return fullResponse ? { manifest, response } : manifest;
+  } catch (error) {
+    const errorDetails = {
+      manifestRequestId,
+      timestamp: new Date().toISOString(),
+      type: 'yaml_parse_error',
+      message: error.message || 'Failed to parse manifest YAML',
+      repository,
+      languageId,
+      resourceId,
+      stack: error.stack,
+      requestId: response.requestId, // Include the original request ID if available
+    };
+    
+    // Log the detailed error information
+    console.group(`[${manifestRequestId}] 🔴 YAML PARSE ERROR`);
+    console.error(`Error parsing manifest YAML: ${error.message}`);
+    console.error(`Repository: ${repository}`);
+    console.error('Complete error details:', errorDetails);
+    console.error('Error stack trace:', error.stack);
+    console.groupEnd();
+    
+    const errorResponse = {
+      error: true,
+      status: response.status || 0,
+      statusText: 'YAML parse error',
+      message: error.message || 'Failed to parse manifest YAML',
+      repository,
+      languageId,
+      resourceId,
+      manifestRequestId,
+      requestId: response.requestId, // Include the original request ID
+    };
+    return fullResponse ? { manifest: null, response: errorResponse } : null;
+  }
 };
 
 export const getResourceProjectFile = async ({
@@ -351,6 +606,7 @@ export const getFile = async ({
   fullResponse,
 }) => {
   let url;
+  const serverUrl = config?.server || '';
 
   if (ref) {
     url = path.join('api/v1/repos', username, repository, 'contents', urlPath) + `?ref=${ref}`;
@@ -360,16 +616,109 @@ export const getFile = async ({
     url = path.join(username, repository, 'raw/branch/master', urlPath);
   }
 
+  // Create a request ID for tracing this specific request
+  const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+  
+  // Log the request details
+  console.log(`[${requestId}] 🔍 REQUEST DETAILS:`, {
+    url: `${serverUrl}/${url}`,
+    method: 'GET',
+    username,
+    repository,
+    path: urlPath,
+    tag,
+    ref,
+    config: {
+      server: config?.server,
+      timeout: config?.timeout,
+      // Don't log sensitive information like tokens
+      token: config?.token ? '[REDACTED]' : undefined,
+    },
+    timestamp: new Date().toISOString(),
+  });
+
   try {
     const _config = { ...config }; // prevents gitea-react-toolkit from modifying object
+    const fullUrl = `${serverUrl}/${url}`;
+    
+    // Log that we're making the request
+    console.log(`[${requestId}] Making request to: ${fullUrl}`);
+    
     const response = await get({
       url,
       config: _config,
       fullResponse,
     });
+    
+    // Log successful response (but not the full data which could be large)
+    console.log(`[${requestId}] ✅ RESPONSE SUCCESS:`, {
+      status: response?.status || 200,
+      statusText: response?.statusText || 'OK',
+      dataSize: response?.data ? JSON.stringify(response.data).length : 0,
+      headers: response?.headers,
+    });
+    
     return response;
   } catch (error) {
-    console.error(error);
-    return null;
+    // Create a detailed error log with all request and response information
+    const errorDetails = {
+      requestId,
+      timestamp: new Date().toISOString(),
+      request: {
+        url: `${serverUrl}/${url}`,
+        method: 'GET',
+        username,
+        repository,
+        path: urlPath,
+        tag,
+        ref,
+      },
+      response: {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        headers: error.response?.headers,
+        data: error.response?.data,
+      },
+      error: {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      }
+    };
+    
+    // Log the detailed error information
+    console.group(`[${requestId}] 🔴 DETAILED REQUEST ERROR`);
+    console.error(`Error fetching file: ${error.message}`);
+    console.error(`Request URL: ${serverUrl}/${url}`);
+    console.error(`Status: ${error.response?.status || 'Unknown'}`);
+    console.error(`Status Text: ${error.response?.statusText || 'Unknown'}`);
+    console.error('Complete error details:', errorDetails);
+    console.groupEnd();
+    
+    // Return a structured error object with HTTP status information and request details
+    return { 
+      error: true, 
+      status: error.response?.status || 0,
+      statusText: error.response?.statusText || 'Unknown error',
+      message: error.message || 'Failed to fetch file',
+      url: `${serverUrl}/${url}`,
+      repository,
+      path: urlPath,
+      requestId, // Include the request ID for tracing in logs
+      requestDetails: {
+        username,
+        repository,
+        path: urlPath,
+        tag,
+        ref,
+        timestamp: new Date().toISOString(),
+      },
+      responseDetails: error.response ? {
+        status: error.response.status,
+        statusText: error.response.statusText,
+        data: error.response.data,
+        headers: error.response.headers,
+      } : undefined
+    };
   }
 };
