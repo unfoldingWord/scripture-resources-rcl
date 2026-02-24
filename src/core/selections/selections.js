@@ -571,6 +571,16 @@ export const occurrencesInString = (stringMap, subString) => {
  return getPrecedingOccurrences(stringMap, subString);
 };
 
+
+/**
+ * Splits a given text into an array of tokens.
+ *
+ * This function takes a string input and processes it using the `tokenize` utility.
+ * It removes punctuation and normalizes the text as part of the tokenization process.
+ *
+ * @param {string} text - The input text to be tokenized.
+ * @returns {object[]} An array of normalized tokens extracted from the input text.
+ */
 const tokenizer = (text) => {
   return tokenize({
     text: text,
@@ -579,6 +589,16 @@ const tokenizer = (text) => {
   });
 };
 
+/**
+ * Normalizes a given string by tokenizing it and joining the tokens with a single space.
+ *
+ * This function processes the input string using a tokenizer, which divides the string
+ * into meaningful tokens. It then concatenates the tokens with a single space character,
+ * ensuring consistent spacing and structure.
+ *
+ * @param {string} string - The input string to be normalized.
+ * @returns {string} The normalized string with tokens joined by a single space.
+ */
 export const normalizeString = (string) => {
   const normalized = tokenizer(string).join(' ');
   return normalized;
