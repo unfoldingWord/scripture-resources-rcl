@@ -4,6 +4,7 @@ import deepFreeze from 'deep-freeze';
 import { useDeepCompareEffectNoCheck }  from 'use-deep-compare-effect';
 import { getQuoteMatchesInBookRef } from "uw-quote-helpers";
 import * as helpers from './helpers';
+import {getWordObjects} from "../../core";
 
 function useSelections({
   selections,
@@ -14,6 +15,12 @@ function useSelections({
   refString,
   bookObject,
 }) {
+  // // TODO - use this
+  // const [selectionsFound, setSelectionsFound] = useState([]); // use to flag when selections are found in current verse
+
+  useDeepCompareEffectNoCheck(() => {
+    setSelectionsFound([]); // whenever reference changes, reset selections found
+  }, [refString]);
 
   useDeepCompareEffectNoCheck(() => {
     try {
@@ -25,6 +32,44 @@ function useSelections({
         isOrigLang: true
       }) : [];
       update(_selections)
+      
+      if (quote) {
+        const selectedWords = Array.from(_selections.values())
+          .flatMap(items => items.map(item => item.text))
+          .filter(Boolean); // removes undefined/null/empty strings if any
+        
+        let selectedIndex = 0;
+        const quoteWords = [];
+        const quoteParts = tokenizeQuote(quote);
+        for (let i = 0; i < quoteParts.length; i++) {
+          const word = quoteParts[i];
+          const wordObjects = getWordObjects(word);
+          if (wordObjects) {
+            quoteWords.push(wordObjects);
+          }
+        }
+        
+        let allQuoteWordsFound = true;
+        for (const word of quoteWords) {
+          // skip over empty selections
+          while (!selectedWords[selectedIndex]) {
+            selectedIndex++;
+            if (selectedIndex >= selectedWords.length) {
+              allQuoteWordsFound = false;
+              break;
+            }
+          }
+          
+          if (word.word !== selectedWords[selectedIndex]) {
+            allQuoteWordsFound = false;
+          }
+          
+          if (!allQuoteWordsFound) {
+            break;
+          }
+        }
+      }
+      
     } catch (error) {
       console.error(`Selections broken:\n`, error);
     }
