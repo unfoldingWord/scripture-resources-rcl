@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import { useDeepCompareEffectNoCheck }  from 'use-deep-compare-effect';
-import { getQuoteMatchesInBookRef } from "uw-quote-helpers";
+import { getQuoteMatchesInBookRef, tokenizeQuote } from "uw-quote-helpers";
 import * as helpers from './helpers';
 import {getWordObjects} from "../../core";
 
@@ -18,9 +18,9 @@ function useSelections({
   // // TODO - use this
   // const [selectionsFound, setSelectionsFound] = useState([]); // use to flag when selections are found in current verse
 
-  useDeepCompareEffectNoCheck(() => {
-    setSelectionsFound([]); // whenever reference changes, reset selections found
-  }, [refString]);
+  // useDeepCompareEffectNoCheck(() => {
+  //   setSelectionsFound([]); // whenever reference changes, reset selections found
+  // }, [refString]);
 
   useDeepCompareEffectNoCheck(() => {
     try {
@@ -31,7 +31,7 @@ function useSelections({
         occurrence: currentOccurrenceValue,
         isOrigLang: true
       }) : [];
-      update(_selections)
+      update(_selections);
       
       if (quote) {
         const selectedWords = Array.from(_selections.values())
