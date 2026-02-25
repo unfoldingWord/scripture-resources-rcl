@@ -48,7 +48,10 @@ function AlignedWordsObject({
 
   if (_selectionsContext) {
     const {
-      state: selections,
+      state: {
+        allQuoteWordsFound,
+        selections
+      },
       actions: { areSelected, addSelections, removeSelections },
     } = _selectionsContext;
     selected = areSelected(originalWords, verseKey);

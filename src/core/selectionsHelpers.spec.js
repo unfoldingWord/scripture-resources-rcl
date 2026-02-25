@@ -10,21 +10,53 @@ const selections_jos_17_11 = {
     {text: 'וּ⁠בְנוֹתֶ֑י⁠הָ', occurrence: 1}
   ]
 };
+
+const selections_jos_17_11_longer = {
+  '17:11': [
+    {text: 'וּ֠⁠בְנוֹתֶי⁠הָ', occurrence: 1},
+    {text: 'וּ⁠בְנוֹתֶ֜י⁠הָ', occurrence: 1},
+    {text: 'וּ⁠בְנוֹתֶ֗י⁠הָ', occurrence: 1},
+    {text: 'וּ⁠בְנֹתֶ֔י⁠הָ', occurrence: 1},
+    {text: 'וּ⁠בְנֹתֶ֔י⁠הָ', occurrence: 2},
+    {text: 'וּ⁠בְנוֹתֶ֑י⁠הָ', occurrence: 1},
+    {text: 'וּ⁠בְנוֹתֶ֑י⁠הָ', occurrence: 2}
+  ]
+};
+
+const selections_jos_17_11_shorter = {
+  '17:11': [
+    {text: 'וּ⁠בְנוֹתֶ֜י⁠הָ', occurrence: 1},
+    {text: 'וּ⁠בְנוֹתֶ֗י⁠הָ', occurrence: 1},
+    {text: 'וּ⁠בְנֹתֶ֔י⁠הָ', occurrence: 1},
+    {text: 'וּ⁠בְנֹתֶ֔י⁠הָ', occurrence: 2},
+    {text: 'וּ⁠בְנוֹתֶ֑י⁠הָ', occurrence: 1}
+  ]
+};
+
 const quote_jos_17_12 = "וּ֠⁠בְנוֹתֶי⁠הָ & וּ⁠בְנוֹתֶ֜י⁠הָ & וּ⁠בְנוֹתֶ֗י⁠הָ & וּ⁠בְנֹתֶ֔י⁠הָ & וּ⁠בְנֹתֶ֔י⁠הָ & וּ⁠בְנוֹתֶ֑י⁠הָ";
 
-const other = "וּ֠⁠בְנוֹתֶי⁠הָ & וּ⁠בְנוֹתֶ֜י⁠הָ & וּ⁠בְנוֹתֶ֗י⁠הָ & וּ⁠בְנֹתֶ֔י⁠הָ & וּ⁠בְנֹתֶ֔י⁠הָ & וּ⁠בְנוֹתֶ֑י⁠הָ"
+const quote_jos_17_12_mismatch = "וּ֠⁠בְנוֹתֶי⁠הָ & וּ⁠בְנוֹתֶ֜י⁠הָ & וּ⁠בְנוֹתֶ֗י⁠הָ & וּ⁠בְנֹתֶ֔י⁠הָ & וּ⁠בְנֹתֶ֔י⁠הָ & וּ⁠בְנֹתֶ֔י⁠ה";
 
 describe('Testing areAllQuoteWordsFound', () => {
   it('test single part quote with empty selection', () => {
     generateTest('tit/1-1', {}, false);
-  })
+  });
   it('test multipart quote with empty selection', () => {
     generateTest(quote_jos_17_12, {}, false);
-  })
+  });
   it('test multipart quote with perfect selection', () => {
     generateTest(quote_jos_17_12, selections_jos_17_11, true);
-  })
-})
+  });
+  it('test multipart quote with shorter selection word count', () => {
+    generateTest(quote_jos_17_12, selections_jos_17_11_shorter, false);
+  });
+  it('test multipart quote with longer selection word count', () => {
+    generateTest(quote_jos_17_12, selections_jos_17_11_longer, false);
+  });
+  it('test multipart impertect quote with selection', () => {
+    generateTest(quote_jos_17_12_mismatch, selections_jos_17_11, false);
+  });
+});
 
 /**
  * Generates and evaluates a test based on the provided quote, selections, and expected outcome.

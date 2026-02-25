@@ -4,7 +4,6 @@ import deepFreeze from 'deep-freeze';
 import { useDeepCompareEffectNoCheck }  from 'use-deep-compare-effect';
 import { getQuoteMatchesInBookRef } from "uw-quote-helpers";
 import * as helpers from './helpers';
-import {getWordObjects} from "../../core";
 
 function useSelections({
   selections,
@@ -27,7 +26,6 @@ function useSelections({
         isOrigLang: true
       }) : [];
       update(_selections);
-
       const _allQuoteWordsFound = areAllQuoteWordsFound(quote, _selections);
 
       if (allQuoteWordsFound !== _allQuoteWordsFound) {
@@ -97,7 +95,10 @@ function useSelections({
   };
 
   return {
-    state: selections,
+    state: {
+      allQuoteWordsFound,
+      selections
+    },
     actions: {
       update,
       isSelected,

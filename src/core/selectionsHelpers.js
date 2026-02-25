@@ -19,6 +19,11 @@ export function areAllQuoteWordsFound(quote, _selections) {
     const quoteTokens = tokenizer(quote);
     const quoteWords = quoteTokens.filter(token => (token.type === 'word'));
 
+    if (quoteWords.length != selectedWords.length) {
+      console.log(`Word count different quoteWords.length=${quoteWords.length}: selectedWords.length=${selectedWords.length}`);
+      return false;
+    }
+    
     for (const word of quoteWords) {
       if (word.token !== selectedWords[selectedIndex]) {
         console.log(`Word mismatch at index ${selectedIndex}: Expected '${word.token}', got '${selectedWords[selectedIndex]}'`);
@@ -32,5 +37,6 @@ export function areAllQuoteWordsFound(quote, _selections) {
       selectedIndex++;
     }
   }
+  
   return _allQuoteWordsFound;
 }
