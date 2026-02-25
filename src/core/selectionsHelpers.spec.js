@@ -1,8 +1,10 @@
 import {
   areAllQuoteWordsFound,
-  areAllQuoteWordsFoundInOriginal, areAllQuoteWordsFoundInTarget,
+  areAllQuoteWordsFoundInOriginal,
+  areAllSelectedWordsAlignedInTarget,
   getQuoteTokenArray,
-  getSelectionsAsArray
+  getSelectionsAsTokenArray,
+  getSelectionsAsWordArray
 } from "./selectionsHelpers";
 
 const selections_jos_17_11 = {
@@ -1058,21 +1060,28 @@ describe('Testing areAllQuoteWordsFoundInOriginal', () => {
   });
 });
 
-describe('Testing findTargetWordInAlignment', () => {
+describe('Testing areAllSelectedWordsAlignedInTarget', () => {
   it('test multipart quote with perfect selection', () => {
-    generateTestQuotesFoundInTarget(quote_jos_17_11, targetVersesForRef_jos_17_11, true);
+    generateTestSelectedWordsFoundInTarget(selections_jos_17_11, targetVersesForRef_jos_17_11, true);
   });
-})
+});
+
+describe('Testing areAllQuoteWordsFound', () => {
+  it('test multipart quote with perfect selection', () => {
+    generateTestAreAllQuoteWordsFound(quote_jos_17_11, selections_jos_17_11, targetVersesForRef_jos_17_11, true);
+  });
+});
+
 
 /**
- * Generates and evaluates a test based on the provided quote, selections, and expected outcome.
+ * Converts a given selections object or Map into a Map.
  *
- * @param {string} quote - The text to be evaluated to check if all its words are found.
- * @param {Object|Map} selections - A collection of verse objects mapped by references, provided either as a plain object or a Map.
- * @param {boolean} expected - The expected result of the evaluation, indicating whether all words in the quote are found in the selections.
- * @return {void} This method does not return any value; it validates the test result internally.
+ * @param {Object|Map} selections - The input data representing selections. This can be a plain object
+ *                                   with key-value pairs or an instance of Map where keys are references
+ *                                   and values are arrays of verse objects.
+ * @return {Map} A new Map instance containing the converted selections data.
  */
-function generateTestQuotesFoundInOriginal(quote, selections, expected) {
+function getSelectionsAsMap(selections) {
   // Convert selections object to Map
   const selectionsMap = new Map();
 
@@ -1087,9 +1096,13 @@ function generateTestQuotesFoundInOriginal(quote, selections, expected) {
       selectionsMap.set(key, value);
     });
   }
+  return selectionsMap;
+}
 
+function generateTestQuotesFoundInOriginal(quote, selections, expected) {
+  const selectionsMap = getSelectionsAsMap(selections);
   const quoteTokenArray = getQuoteTokenArray(quote);
-  const selectionsAsArray = getSelectionsAsArray(selectionsMap);
+  const selectionsAsArray = getSelectionsAsWordArray(selectionsMap);
   const found = areAllQuoteWordsFoundInOriginal(quoteTokenArray, selectionsAsArray);
 
   const matchedExpected = found == expected;
@@ -1099,9 +1112,10 @@ function generateTestQuotesFoundInOriginal(quote, selections, expected) {
   expect(matchedExpected).toBeTruthy();
 }
 
-function generateTestQuotesFoundInTarget(quote, targetVerseObjects, expected) {
-  const quoteTokenArray = getQuoteTokenArray(quote);
-  const found = areAllQuoteWordsFoundInTarget(quoteTokenArray, targetVerseObjects);
+function generateTestSelectedWordsFoundInTarget(selections, targetVerseObjects, expected) {
+  const selectionsMap = getSelectionsAsMap(selections);
+  const selectionsAsArray = getSelectionsAsTokenArray(selectionsMap);
+  const found = areAllSelectedWordsAlignedInTarget(selectionsAsArray, targetVerseObjects);
 
   const matchedExpected = found == expected;
   if (!matchedExpected) {
@@ -1109,3 +1123,15 @@ function generateTestQuotesFoundInTarget(quote, targetVerseObjects, expected) {
   }
   expect(matchedExpected).toBeTruthy();
 }
+
+function generateTestAreAllQuoteWordsFound(quote, selections, targetVerseObjects, expected) {
+  const selectionsMap = getSelectionsAsMap(selections);
+  const found = areAllQuoteWordsFound(quote, selectionsMap, targetVerseObjects);
+
+  const matchedExpected = found == expected;
+  if (!matchedExpected) {
+    console.error(`areAllQuoteWordsFoundInTarget() - Test failed for quote: ${quote}, expected: ${expected}, found: ${found}`, selections);
+  }
+  expect(matchedExpected).toBeTruthy();
+}
+
