@@ -573,7 +573,7 @@ export const occurrencesInString = (stringMap, subString) => {
 
 
 /**
- * Splits a given text into an array of tokens.
+ * Splits a given text into an array of tokens with normalization.  Response is not verbose (words only).
  *
  * This function takes a string input and processes it using the `tokenize` utility.
  * It removes punctuation and normalizes the text as part of the tokenization process.

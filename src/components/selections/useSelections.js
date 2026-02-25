@@ -1,48 +1,78 @@
-import {useCallback, useState} from "react";
+import { useCallback, useState, useRef } from "react";
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import { useDeepCompareEffectNoCheck }  from 'use-deep-compare-effect';
 import { getQuoteMatchesInBookRef } from "uw-quote-helpers";
 import * as helpers from './helpers';
+import { areAllQuoteWordsFound } from "../../core/selectionsHelpers";
 
+/**
+ * Manages word-level selections within a text reference, providing methods for retrieving, updating, and verifying selection state.
+ *
+ * @function
+ * @name useSelections
+ * @param {Object} options - Configuration object for handling selections.
+ * @param {Map<string, Array>} options.selections - A map of references to the selected words or objects within those references.
+ * @param {Function} options.onSelections - A callback function invoked to update the selection state with a deep-frozen map of selections.
+ * @param {number} options.occurrence - The current occurrence value for locating specific matches within a text reference.
+ * @param {string} options.quote - The quoted text to be used for matching within the book reference.
+ * @param {Function} options.onQuote - A callback function to handle derived quotes based on the current selection and book content.
+ * @param {string} options.refString - A string identifying the specific reference in the text (e.g., chapter and verse).
+ * @param {Object} options.originalBookObjects - A structured representation of the book content used for matching and referencing selections.
+ * @param {Object} options.targetBookObjects - A structured representation of the book content used for matching and referencing selections.
+ * @returns {Object} - An object containing the state and actions for managing selections.
+ * @returns {Object} returns.state - The state object.
+ * @returns {boolean} returns.state.allQuoteWordsFound - A flag indicating whether all words from the quote are found within the current selections.
+ * @returns {Map<string, Array>} returns.state.selections - A map of references to the selected words or verse objects.
+ * @returns {Object} returns.actions - The actions object.
+ * @returns {Function} returns.actions.update - Updates the current selections with the provided map of verse objects.
+ * @returns {Function} returns.actions.isSelected - Determines if a specific word within a reference is selected.
+ * @returns {Function} returns.actions.areSelected - Determines if multiple words within a reference are selected.
+ * @returns {Function} returns.actions.addSelection - Adds a single word to the selections for a given reference.
+ * @returns {Function} returns.actions.addSelections - Adds multiple words to the selections for a given reference.
+ * @returns {Function} returns.actions.removeSelection - Removes a single word from the selections for a given reference.
+ * @returns {Function} returns.actions.removeSelections - Removes multiple words from the selections for a given reference.
+ */
 function useSelections({
-  selections,
-  onSelections,
-  occurrence: currentOccurrenceValue,
-  quote,
-  onQuote,
-  refString,
-  bookObject,
+ originalBookObjects,
+ highlightOnlyCompleteQuotes = false,
+ occurrence: currentOccurrenceValue,
+ onSelections,
+ onQuote,
+ quote,
+ refString,
+ selections,
+ targetVersesForRef,
 }) {
-  const [allQuoteWordsFound, setAllQuoteWordsFound] = useState([]); // use to flag when all the selections are found in current verse
+  const allQuoteWordsFound = useRef(false); // used to flag when all the selections are found in current verse
 
   useDeepCompareEffectNoCheck(() => {
     try {
-      const _selections = quote && refString && bookObject ? getQuoteMatchesInBookRef({
+      const _selections = quote && refString && originalBookObjects ? getQuoteMatchesInBookRef({
         quote,
         ref: refString,
-        bookObject,
+        bookObject: originalBookObjects,
         occurrence: currentOccurrenceValue,
         isOrigLang: true
       }) : [];
       update(_selections);
       const _allQuoteWordsFound = areAllQuoteWordsFound(quote, _selections);
 
-      if (allQuoteWordsFound !== _allQuoteWordsFound) {
-        setAllQuoteWordsFound(_allQuoteWordsFound);
+      if (allQuoteWordsFound.current !== _allQuoteWordsFound) {
+        allQuoteWordsFound.current = _allQuoteWordsFound;
       }
-      
+  
     } catch (error) {
       console.error(`Selections broken:\n`, error);
     }
-  }, [quote, currentOccurrenceValue, bookObject, refString]);
+  }, [quote, currentOccurrenceValue, originalBookObjects, refString]);
 
   useDeepCompareEffectNoCheck(() => {
-    if (bookObject && onQuote) {
-      const _quote = helpers.quoteFromVerse({selections, bookObject});
+    if (originalBookObjects && onQuote) {
+      const _quote = helpers.quoteFromVerse({selections, bookObject: originalBookObjects});
       onQuote(_quote);
     }
-  }, [selections, onQuote, bookObject]);
+  }, [selections, onQuote, originalBookObjects]);
 
   const update = useCallback((_selections) => {
     // the "parsify" function is expecting an array of stringified objects
@@ -72,7 +102,22 @@ function useSelections({
 
   const isSelected = (word, ref) => helpers.isSelected({word, selections, ref});
 
-  const areSelected = (words, ref) => helpers.areSelected({words, selections, ref});
+  /**
+   * Determines whether specific words are selected within a given reference and selection context.
+   *
+   * @function
+   * @name areSelected
+   * @param {Array<string>} words - The list of words to check for selection.
+   * @param {Object} ref - The reference context associated with the selection operation.
+   * @returns {boolean} - Returns true if the specified words are selected, otherwise false.
+   */
+  const areSelected = (words, ref) => {
+    if (highlightOnlyCompleteQuotes && !allQuoteWordsFound.current) {
+      return false;
+    }
+    const wordsAreSelected = helpers.areSelected({words, selections, ref});
+    return wordsAreSelected;
+  };
 
   const addSelection = (word, ref) => {
     let _selections = helpers.addSelection({word, selections, ref});
@@ -96,7 +141,7 @@ function useSelections({
 
   return {
     state: {
-      allQuoteWordsFound,
+      allQuoteWordsFound: allQuoteWordsFound.current,
       selections
     },
     actions: {

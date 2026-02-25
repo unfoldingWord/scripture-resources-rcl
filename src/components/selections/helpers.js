@@ -63,6 +63,17 @@ export const quoteFromVerse = ({ selections, bookObject }) => {
 //   }
 // };
 
+/**
+ * Creates a JSON string representing a selection object from the provided word object.
+ * The selection object includes the text content, occurrence index, and total occurrences.
+ *
+ * @param {Object} word - The input object containing properties related to a word.
+ * @param {string} word.content - The content of the word. If unavailable, the `text` property will be used instead.
+ * @param {string} word.text - The fallback text of the word if `content` is not defined.
+ * @param {string|number} word.occurrence - The occurrence index of the word in string or numeric format.
+ * @param {string|number} word.occurrences - The total number of occurrences of the word in string or numeric format.
+ * @returns {string} A JSON string representing the selection object with the properties `text`, `occurrence`, and `occurrences`.
+ */
 export const selectionFromWord = (word) => {
   const { content, text, occurrence, occurrences } = word;
   const selectionObject = {
@@ -80,6 +91,19 @@ export const isSelected = ({ word, selections, ref }) => {
   return selected;
 };
 
+/**
+ * Determines whether words are selected based on a reference and selections.
+ *
+ * The function processes a list of words and checks their match against a set of
+ * highlights determined by provided selections and references. It utilizes reference
+ * containment logic and selection comparisons based on text and occurrence.
+ *
+ * @param {Object} params - The input parameters.
+ * @param {Array} params.words - The array of words to be checked.
+ * @param {Map} params.selections - A map where each key is a reference and the value is an array of selection objects.
+ * @param {Object} params.ref - The reference object to be checked against the selections.
+ * @returns {boolean} - Returns `true` if the words are selected; otherwise, `false`.
+ */
 export const areSelected = ({ words, selections, ref }) => {
   let highlights = [];
 
