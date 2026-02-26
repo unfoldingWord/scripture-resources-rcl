@@ -1,7 +1,5 @@
-import {getWordObjects} from "./lexiconHelpers";
 import {tokenizer} from "./selections/tokenizer";
 import {normalizeString} from "./selections/selections";
-import targetVerseObject from "../../__tests__/fixtures/highlighting/php/2-1";
 
 const extraOptions = {
   includePunctuation: false,
@@ -72,22 +70,23 @@ export function findTargetWordInAlignment(children) {
 /**
  * Finds the alignment for a given original word within a set of verse objects.
  *
- * @param {Array} verseObjects - The array of verse objects to search through. Each object may contain tags, content, and nested children.
+ * @param {Array} targetVerseObjects - The array of verse objects to search through. Each object may contain tags, content, and nested children.
  * @param {Object} selectedWord - The original word to match in the verse objects. Must have a `token` property.
  * @param {Object|null} stats - Optional statistics object containing an `occurrence` property. Tracks the current word occurrence count.
  * @return {boolean|*} Returns the alignment found within the verse objects, or `false` if no alignment is found.
  */
-export function findAlignmentForOriginal(verseObjects, selectedWord) {
-  if (! verseObjects || !verseObjects.length) {
+export function findAlignmentForOriginal(targetVerseObjects, selectedWord) {
+  if (! targetVerseObjects || !targetVerseObjects.length) {
     return false;
   }
 
-  for (let i = 0, l = verseObjects.length; i < l; i++) {
-    const verseObject = verseObjects[i];
+  for (let i = 0, l = targetVerseObjects.length; i < l; i++) {
+    const verseObject = targetVerseObjects[i];
 
     try {
       if (verseObject.tag === 'zaln') {
-        const tokenMatch = (selectedWord.text == verseObject.content);
+        const targetWord = normalizeString(verseObject.content); // get normalized target word
+        const tokenMatch = (selectedWord.text == targetWord);
         if (tokenMatch) {
           if (selectedWord.occurrence == verseObject.occurrence) {
             const foundAlignment = findTargetWordInAlignment(verseObject.children);
@@ -104,7 +103,7 @@ export function findAlignmentForOriginal(verseObjects, selectedWord) {
       }
       
     } catch (e) {
-      console.warn(`findAlignmentForOriginal - error in content: ${verseObjects}`, e);
+      console.warn(`findAlignmentForOriginal - error in content: ${targetVerseObjects}`, e);
     }
   }
 
@@ -129,8 +128,8 @@ export function areAllSelectedWordsAlignedInTarget(selectedWords, targetVerseObj
     };
     let quoteWordFound = false;
     for (const verseData of targetVerseObjects || []) {
-      const verseObjects = verseData && verseData.verseData && verseData.verseData.verseObjects;
-      const found = findAlignmentForOriginal(verseObjects, word);
+      const targetVerseObjects = verseData && verseData.verseData && verseData.verseData.verseObjects;
+      const found = findAlignmentForOriginal(targetVerseObjects, word);
       if (found) {
         quoteWordFound = true;
         break;
@@ -213,7 +212,8 @@ export function areAllQuoteWordsFound(quote, selections, targetVerseObjects) {
     _allQuoteWordsFound = areAllQuoteWordsFoundInOriginal(quoteWords, selectedWordsAsArray, _allQuoteWordsFound);
   }
   
-  if (quote && _allQuoteWordsFound) { // now double check that target words are aligned
+  if (quote && _allQuoteWordsFound && targetVerseObjects) { // only check if we have quote and doing target language bible
+    // now double check that target words are aligned
     const selectionsAsArray = getSelectionsAsTokenArray(selections);
     _allQuoteWordsFound = areAllSelectedWordsAlignedInTarget(selectionsAsArray, targetVerseObjects);
   }

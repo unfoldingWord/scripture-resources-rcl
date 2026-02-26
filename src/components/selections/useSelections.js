@@ -56,7 +56,7 @@ function useSelections({
         isOrigLang: true
       }) : [];
       update(_selections);
-      const _allQuoteWordsFound = areAllQuoteWordsFound(quote, _selections);
+      const _allQuoteWordsFound = areAllQuoteWordsFound(quote, _selections, targetVersesForRef);
 
       if (allQuoteWordsFound.current !== _allQuoteWordsFound) {
         allQuoteWordsFound.current = _allQuoteWordsFound;
@@ -65,7 +65,7 @@ function useSelections({
     } catch (error) {
       console.error(`Selections broken:\n`, error);
     }
-  }, [quote, currentOccurrenceValue, originalBookObjects, refString]);
+  }, [quote, currentOccurrenceValue, originalBookObjects, refString, targetVersesForRef]);
 
   useDeepCompareEffectNoCheck(() => {
     if (originalBookObjects && onQuote) {
@@ -112,10 +112,10 @@ function useSelections({
    * @returns {boolean} - Returns true if the specified words are selected, otherwise false.
    */
   const areSelected = (words, ref) => {
-    if (highlightOnlyCompleteQuotes && !allQuoteWordsFound.current) {
+    const wordsAreSelected = helpers.areSelected({words, selections, ref});
+    if (wordsAreSelected && highlightOnlyCompleteQuotes && !allQuoteWordsFound.current) {
       return false;
     }
-    const wordsAreSelected = helpers.areSelected({words, selections, ref});
     return wordsAreSelected;
   };
 
@@ -138,6 +138,10 @@ function useSelections({
     let _selections = helpers.removeSelections({words, selections, ref});
     update(_selections);
   };
+  
+  const handleChangedVerse = (reference, verseObjects ) => {
+    console.log('Changed Verse', reference, verseObjects);
+  };
 
   return {
     state: {
@@ -145,13 +149,14 @@ function useSelections({
       selections
     },
     actions: {
-      update,
-      isSelected,
-      areSelected,
       addSelection,
       addSelections,
+      areSelected,
+      handleChangedVerse,
+      isSelected,
       removeSelection,
       removeSelections,
+      update,
     },
   };
 };

@@ -1085,8 +1085,8 @@ describe('Testing areAllQuoteWordsFound', () => {
   it('test multipart quote with no selection', () => {
     generateTestAreAllQuoteWordsFound(quote_jos_17_11, null, targetVersesForRef_jos_17_11, false);
   });
-  it('test multipart quote with perfect selection, but no target alignments', () => {
-    generateTestAreAllQuoteWordsFound(quote_jos_17_11, selections_jos_17_11, null, false);
+  it('test multipart quote with perfect selection, but no target alignments, skip checking target alignments', () => {
+    generateTestAreAllQuoteWordsFound(quote_jos_17_11, selections_jos_17_11, null, true);
   });  
   it('test multipart quote with perfect selection', () => {
     generateTestAreAllQuoteWordsFound(quote_jos_17_11, selections_jos_17_11, targetVersesForRef_jos_17_11, true);
