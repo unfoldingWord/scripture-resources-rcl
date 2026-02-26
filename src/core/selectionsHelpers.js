@@ -22,15 +22,15 @@ export function areAllQuoteWordsFoundInOriginal(quoteWords, selectedWords) {
   let _allQuoteWordsFound = true;
 
   if ((quoteWords.length != selectedWords.length) || !selectedWords.length) {
-    // TODO: for debug only
-    console.log(`Word count different quoteWords.length=${quoteWords.length}: selectedWords.length=${selectedWords.length}`);
+    // NOTE: for debug only
+    // console.log(`Word count different quoteWords.length=${quoteWords.length}: selectedWords.length=${selectedWords.length}`);
     _allQuoteWordsFound = false;
   } else {
     for (const word of quoteWords) {
       const selectedWord = selectedWords[selectedIndex];
       if (word.token !== selectedWord) {
-        // TODO: for debug only
-        console.log(`Word mismatch at index ${selectedIndex}: Expected '${word.token}', got '${selectedWord}'`);
+        // NOTE: for debug only
+        // console.log(`Word mismatch at index ${selectedIndex}: Expected '${word.token}', got '${selectedWord}'`);
         _allQuoteWordsFound = false;
       }
 
@@ -128,7 +128,7 @@ export function areAllSelectedWordsAlignedInTarget(selectedWords, targetVerseObj
       occurrence: 0
     };
     let quoteWordFound = false;
-    for (const verseData of targetVerseObjects) {
+    for (const verseData of targetVerseObjects || []) {
       const verseObjects = verseData && verseData.verseData && verseData.verseData.verseObjects;
       const found = findAlignmentForOriginal(verseObjects, word);
       if (found) {
@@ -154,10 +154,13 @@ export function areAllSelectedWordsAlignedInTarget(selectedWords, targetVerseObj
  * @return {Array<string>} An array of normalized and non-empty string values extracted from the selections.
  */
 export function getSelectionsAsWordArray(selections) {
-  const selectedWords = Array.from(selections.values())
-    .flatMap(items => items.map(item => normalizeString(item.text)))
-    .filter(Boolean); // removes undefined/null/empty strings if any
-  return selectedWords;
+  if (selections) {
+    const selectedWords = Array.from(selections.values())
+      .flatMap(items => items.map(item => normalizeString(item.text)))
+      .filter(Boolean); // removes undefined/null/empty strings if any
+    return selectedWords;
+  }
+  return [];
 }
 
 /**
@@ -168,15 +171,18 @@ export function getSelectionsAsWordArray(selections) {
  * @return {Array} - Returns an array of normalized token objects
  */
 export function getSelectionsAsTokenArray(selections) {
-  const selectedWords = Array.from(selections.values())
-    .flatMap(items => items.map(item => {
-      const newItem = {
-        ...item,
-        text: normalizeString(item.text)
-      };
-      return newItem;
-    }));
-  return selectedWords;
+  if (selections) {
+    const selectedWords = Array.from(selections.values())
+      .flatMap(items => items.map(item => {
+        const newItem = {
+          ...item,
+          text: normalizeString(item.text)
+        };
+        return newItem;
+      }));
+    return selectedWords;
+  }
+  return [];
 }
 
 /**
@@ -186,7 +192,7 @@ export function getSelectionsAsTokenArray(selections) {
  * @return {Array} An array of token objects, where each token represents a word from the input quote.
  */
 export function getQuoteTokenArray(quote) {
-  const quoteTokens = tokenizer(quote, extraOptions);
+  const quoteTokens = tokenizer(quote || '', extraOptions);
   const quoteWords = quoteTokens.filter(token => (token.type === 'word'));
   return quoteWords;
 }

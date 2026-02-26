@@ -1037,6 +1037,12 @@ const targetVersesForRef_jos_17_11 = [
 ];
 
 describe('Testing areAllQuoteWordsFoundInOriginal', () => {
+  it('test no quote with selection but not normalized', () => {
+    generateTestQuotesFoundInOriginal(null, selections_jos_17_10, false);
+  });
+  it('test single multiword part quote with no selection', () => {
+    generateTestQuotesFoundInOriginal(quote_jos_17_10, null, false);
+  });
   it('test single multiword part quote with selection but not normalized', () => {
     generateTestQuotesFoundInOriginal(quote_jos_17_10, selections_jos_17_10, true);
   });
@@ -1061,12 +1067,27 @@ describe('Testing areAllQuoteWordsFoundInOriginal', () => {
 });
 
 describe('Testing areAllSelectedWordsAlignedInTarget', () => {
-  it('test multipart quote with perfect selection', () => {
+  it('test aligned target', () => {
     generateTestSelectedWordsFoundInTarget(selections_jos_17_11, targetVersesForRef_jos_17_11, true);
+  });
+  it('test target with no selection', () => {
+    generateTestSelectedWordsFoundInTarget(null, targetVersesForRef_jos_17_11, true);
+  });
+  it('test selection with no target', () => {
+    generateTestSelectedWordsFoundInTarget(selections_jos_17_11, null, false);
   });
 });
 
 describe('Testing areAllQuoteWordsFound', () => {
+  it('test no quote with perfect selection', () => {
+    generateTestAreAllQuoteWordsFound(null, selections_jos_17_11, targetVersesForRef_jos_17_11, true);
+  });
+  it('test multipart quote with no selection', () => {
+    generateTestAreAllQuoteWordsFound(quote_jos_17_11, null, targetVersesForRef_jos_17_11, false);
+  });
+  it('test multipart quote with perfect selection, but no target alignments', () => {
+    generateTestAreAllQuoteWordsFound(quote_jos_17_11, selections_jos_17_11, null, false);
+  });  
   it('test multipart quote with perfect selection', () => {
     generateTestAreAllQuoteWordsFound(quote_jos_17_11, selections_jos_17_11, targetVersesForRef_jos_17_11, true);
   });
@@ -1085,17 +1106,20 @@ function getSelectionsAsMap(selections) {
   // Convert selections object to Map
   const selectionsMap = new Map();
 
-  // If selections is a plain object
-  if (selections && typeof selections === 'object' && !(selections instanceof Map)) {
-    Object.entries(selections).forEach(([ref, verseObjectsArray]) => {
-      selectionsMap.set(ref, verseObjectsArray);
-    });
-  } else if (selections instanceof Map) {
-    // If it's already a Map, just copy it
-    selections.forEach((value, key) => {
-      selectionsMap.set(key, value);
-    });
+  if (selections) {
+    // If selections is a plain object
+    if (selections && typeof selections === 'object' && !(selections instanceof Map)) {
+      Object.entries(selections).forEach(([ref, verseObjectsArray]) => {
+        selectionsMap.set(ref, verseObjectsArray);
+      });
+    } else if (selections instanceof Map) {
+      // If it's already a Map, just copy it
+      selections.forEach((value, key) => {
+        selectionsMap.set(key, value);
+      });
+    }
   }
+  
   return selectionsMap;
 }
 
@@ -1119,7 +1143,7 @@ function generateTestSelectedWordsFoundInTarget(selections, targetVerseObjects, 
 
   const matchedExpected = found == expected;
   if (!matchedExpected) {
-    console.error(`areAllQuoteWordsFoundInTarget() - Test failed for quote: ${quote}, expected: ${expected}, found: ${found}`, selections);
+    console.error(`areAllQuoteWordsFoundInTarget() - Test failed, expected: ${expected}, found: ${found}`, selections);
   }
   expect(matchedExpected).toBeTruthy();
 }
