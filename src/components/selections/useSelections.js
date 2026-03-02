@@ -45,6 +45,8 @@ function useSelections({
  targetVersesForRef,
 }) {
   const allQuoteWordsFound = useRef(false); // used to flag when all the selections are found in current verse
+  const _targetVersesForRef = useRef(null); // used to flag when all the selections are found in current verse
+  const _currentSelections = useRef(null); // used to flag when all the selections are found in current verse
 
   useDeepCompareEffectNoCheck(() => {
     try {
@@ -56,6 +58,8 @@ function useSelections({
         isOrigLang: true
       }) : [];
       update(_selections);
+      _currentSelections.current = _selections;
+      _targetVersesForRef.current = targetVersesForRef;
       const _allQuoteWordsFound = areAllQuoteWordsFound(quote, _selections, targetVersesForRef);
 
       if (allQuoteWordsFound.current !== _allQuoteWordsFound) {
@@ -141,6 +145,33 @@ function useSelections({
   
   const handleChangedVerse = (reference, verseObjects ) => {
     console.log('Changed Verse', reference, verseObjects);
+    const targetVersesForRef_ = _targetVersesForRef.current || [];
+    const newTarget = [
+      ...targetVersesForRef_,
+    ];
+    
+    for (let i=0; i < newTarget.length; i++) {
+      const targetVerse = newTarget[i];
+      // noinspection EqualityComparisonWithCoercionJS
+      if (targetVerse && reference.chapter == targetVerse.chapter && reference.verse == targetVerse.verse) {
+        const newTargetVerse = {
+          ...targetVerse,
+          verseData: {verseObjects},
+        };
+        newTarget[i] = newTargetVerse;
+
+        const selections_ = _currentSelections.current;
+        
+        _targetVersesForRef.current = newTarget;
+        const _allQuoteWordsFound = areAllQuoteWordsFound(quote, selections_, newTarget);
+
+        if (allQuoteWordsFound.current !== _allQuoteWordsFound) {
+          allQuoteWordsFound.current = _allQuoteWordsFound;
+        }
+
+        update(selections_);
+      }
+    }
   };
 
   return {
