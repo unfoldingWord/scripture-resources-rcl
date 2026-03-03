@@ -45,8 +45,8 @@ function useSelections({
  targetVersesForRef,
 }) {
   const allQuoteWordsFound = useRef(false); // used to flag when all the selections are found in current verse
-  const _targetVersesForRef = useRef(null); // used to flag when all the selections are found in current verse
-  const _currentSelections = useRef(null); // used to flag when all the selections are found in current verse
+  const _targetVersesForRef = useRef(null); // used to save the latest target verses for reference
+  const _currentSelections = useRef(null); // used to save the latest selections for reference
 
   useDeepCompareEffectNoCheck(() => {
     try {
@@ -144,7 +144,7 @@ function useSelections({
   };
   
   const handleChangedVerse = (reference, verseObjects ) => {
-    console.log('Changed Verse', reference, verseObjects);
+    // console.log('handleChangedVerse - Changed Verse', reference, verseObjects);
     const targetVersesForRef_ = _targetVersesForRef.current || [];
     const newTarget = [
       ...targetVersesForRef_,
