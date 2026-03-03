@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
+import React, { createContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { useSelections } from '..';
@@ -6,26 +6,30 @@ import { useSelections } from '..';
 export const SelectionsContext = createContext();
 
 export function SelectionsContextProvider({
-    selections,
-    onSelections,
-    occurrence,
-    quote,
-    onQuote,
-    bookObject,
-    refString,
-    children,
+  children,
+  highlightOnlyCompleteQuotes,
+  occurrence,
+  onQuote,
+  onSelections,
+  originalBookObjects,
+  quote,
+  refString,
+  selections,
+  targetVersesForRef
 }) {
   
   let {state, actions} = useSelections({
-    selections: selections,
-    onSelections: onSelections,
+    highlightOnlyCompleteQuotes,
     occurrence: occurrence,
-    quote: quote,
     onQuote: onQuote,
-    bookObject,
+    onSelections: onSelections,
+    originalBookObjects,
+    quote: quote,
     refString,
+    selections: selections,
+    targetVersesForRef
   });
-
+  
   return (
     <SelectionsContext.Provider value={{state, actions}}>
       {children}
